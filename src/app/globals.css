@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+      Arial, sans-serif;
+    --font-outfit: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+      Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+      "Liberation Mono", monospace;
+
+    --background: 48 20% 96%;
+    --foreground: 240 25% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 25% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 25% 14%;
+    --primary: 16 79% 54%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 28% 14%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 48 15% 92%;
+    --muted-foreground: 240 10% 40%;
+    --accent: 16 79% 54%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 10% 88%;
+    --input: 240 10% 88%;
+    --ring: 16 79% 54%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 28% 8%;
+    --foreground: 48 20% 96%;
+    --card: 240 28% 12%;
+    --card-foreground: 48 20% 96%;
+    --popover: 240 28% 12%;
+    --popover-foreground: 48 20% 96%;
+    --primary: 16 79% 54%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 48 20% 96%;
+    --secondary-foreground: 240 28% 14%;
+    --muted: 240 15% 18%;
+    --muted-foreground: 240 10% 65%;
+    --accent: 16 79% 54%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 15% 20%;
+    --input: 240 15% 20%;
+    --ring: 16 79% 54%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  }
+
+  ::selection {
+    @apply bg-brand-orange/30 text-brand-night;
+  }
+}
+
+@layer components {
+  .container-tight {
+    @apply mx-auto w-full max-w-6xl px-6;
+  }
+
+  .container-wide {
+    @apply mx-auto w-full max-w-[1400px] px-6;
+  }
+
+  .heading-display {
+    @apply font-display font-bold tracking-tight;
+    font-feature-settings: "ss01" 1;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-semibold text-white shadow-lg shadow-brand-orange/30 transition-all duration-300 hover:bg-brand-orange-dark hover:shadow-xl hover:shadow-brand-orange/40 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-brand-night/20 bg-transparent px-7 py-3.5 font-semibold text-brand-night transition-all duration-300 hover:border-brand-night hover:bg-brand-night hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-night focus-visible:ring-offset-2;
+  }
+
+  .btn-ghost-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/5 px-7 py-3.5 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-night;
+    }
+
+  .section-label {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange;
+  }
+
+  .section-label-light {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-white/90 backdrop-blur-sm;
+  }
+
+  /* Subtle industrial grid backdrop */
+  .bg-industrial-grid {
+    background-image:
+      linear-gradient(rgba(26, 26, 46, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 26, 46, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .bg-industrial-grid-dark {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+}
+
+@layer utilities {
+  .text-shadow-lg {
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  }
+
+  .mask-fade-y {
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  }
+
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+}
