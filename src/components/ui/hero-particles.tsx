@@ -228,30 +228,30 @@ export function HeroParticles() {
     state.height = h;
     state.dpr = dpr;
 
-    // Lighter particle count — more airy, less dense
-    const count = Math.min(900, Math.floor((w * h) / 600));
+    // Dense particle field — most are ultra-fine dust for fluid feel
+    const count = Math.min(1500, Math.floor((w * h) / 350));
     const targets = generateTargets(w, h, count);
     state.targets = targets;
 
-    // Init particles — bimodal: 70% micro-dust, 30% grains
+    // Init particles — 80% ultra-fine dust, 20% visible grains
     state.particles = targets.map((t) => {
-      const isDust = Math.random() < 0.7;
+      const isDust = Math.random() < 0.8;
       const baseSize = isDust
-        ? 0.3 + Math.random() * 0.9   // dust: 0.3-1.2px
-        : 1.5 + Math.random() * 2.0;  // grain: 1.5-3.5px
+        ? 0.2 + Math.random() * 0.8   // dust: 0.2-1.0px — ultra fine
+        : 1.2 + Math.random() * 1.8;  // grain: 1.2-3.0px
       return {
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: (Math.random() - 0.5) * 1.5,
         tx: t.x,
         ty: t.y,
         size: baseSize,
         baseSize,
         opacity: isDust
-          ? 0.1 + Math.random() * 0.25   // dust: ethereal
-          : 0.3 + Math.random() * 0.35,  // grain: visible but not heavy
-        orbitRadius: isDust ? Math.random() * 4 : Math.random() * 2,
+          ? 0.08 + Math.random() * 0.2    // dust: very subtle
+          : 0.25 + Math.random() * 0.35,  // grain: present but elegant
+        orbitRadius: isDust ? Math.random() * 5 : Math.random() * 2,
         orbitSpeed: 0.01 + Math.random() * 0.03,
         orbitAngle: Math.random() * Math.PI * 2,
         attraction: isDust
@@ -378,9 +378,9 @@ export function HeroParticles() {
         state.textAlpha = Math.max(state.textAlpha - 1 / 30, 0);
       }
 
-      // ── Clear with trail — balanced: enough trail for atmosphere, not muddy ──
+      // ── Clear with trail — very low alpha = long smoky trails = fluid cloud ──
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const trailAlpha = 0.12 + scrollFactor * 0.35;
+      const trailAlpha = 0.045 + scrollFactor * 0.4;
       ctx!.fillStyle = `rgba(26,26,46,${trailAlpha})`;
       ctx!.fillRect(0, 0, w, h);
 
@@ -410,26 +410,37 @@ export function HeroParticles() {
       // Mouse speed for spray intensity
       const mSpeed = Math.sqrt(mouse.vx * mouse.vx + mouse.vy * mouse.vy);
 
+      // Flow field time factor (shared by all particles = coherent streams)
+      const flowTime = frameTime * 0.008;
+
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        // Turbulence — fake Perlin via layered sin waves (cheap, no lib)
-        const turb = 0.015 * (1 - p.mass);
-        const tx1 = Math.sin(frameTime * 0.013 + p.turbSeed) * turb;
-        const ty1 = Math.cos(frameTime * 0.011 + p.turbSeed * 1.3) * turb;
-        const tx2 = Math.sin(frameTime * 0.007 + p.turbSeed * 2.1) * turb * 0.5;
-        const ty2 = Math.cos(frameTime * 0.009 + p.turbSeed * 0.7) * turb * 0.5;
-        const turbX = tx1 + tx2;
-        const turbY = ty1 + ty2;
 
-        // Micro-gravity — dust floats, grains settle
-        const gravity = p.isDust ? -0.003 * (1 - p.mass) : 0.005 * p.mass;
+        // Flow field — spatial coherence: nearby particles share the same flow
+        // This is what makes it look like a FLUID instead of random dots
+        const fx = p.x / 120; // spatial frequency
+        const fy = p.y / 120;
+        const flowAngle =
+          Math.sin(fx * 1.3 + flowTime) * Math.cos(fy * 0.9 + flowTime * 0.7) * Math.PI +
+          Math.sin(fx * 0.7 - flowTime * 0.5) * 0.5;
+        const flowStrength = 0.025 * (1 - p.mass * 0.5); // dust flows more
+        const flowX = Math.cos(flowAngle) * flowStrength;
+        const flowY = Math.sin(flowAngle) * flowStrength;
+
+        // Per-particle micro-jitter (very small, on top of flow)
+        const jitter = 0.005 * (1 - p.mass);
+        const jx = Math.sin(frameTime * 0.02 + p.turbSeed) * jitter;
+        const jy = Math.cos(frameTime * 0.017 + p.turbSeed * 1.3) * jitter;
+
+        // Micro-gravity — dust floats, grains settle gently
+        const gravity = p.isDust ? -0.002 * (1 - p.mass) : 0.003 * p.mass;
 
         // Phase-specific behavior
         if (phase === PHASE_SCATTER) {
-          p.vx += (Math.random() - 0.5) * 0.08 + turbX;
-          p.vy += (Math.random() - 0.5) * 0.08 + gravity + turbY;
-          p.vx *= 0.985;
-          p.vy *= 0.985;
+          p.vx += flowX + jx;
+          p.vy += flowY + gravity + jy;
+          p.vx *= 0.993;
+          p.vy *= 0.993;
 
           // Mouse attract — spray cone effect
           if (mouse.active) {
@@ -455,8 +466,8 @@ export function HeroParticles() {
           const attrForce = p.attraction * ramp;
           const dx = p.tx - p.x;
           const dy = p.ty - p.y;
-          p.vx += dx * attrForce + turbX * 0.5;
-          p.vy += dy * attrForce + turbY * 0.5;
+          p.vx += dx * attrForce + flowX * 0.6;
+          p.vy += dy * attrForce + flowY * 0.6;
           // Dust damps slower (floats in longer)
           p.vx *= p.isDust ? 0.94 : 0.91;
           p.vy *= p.isDust ? 0.94 : 0.91;
@@ -478,8 +489,8 @@ export function HeroParticles() {
           const oy = p.ty + Math.sin(p.orbitAngle) * p.orbitRadius;
           // Dust drifts around target more loosely
           const stiffness = p.isDust ? 0.05 : 0.1;
-          const dx = ox - p.x + turbX * 3;
-          const dy = oy - p.y + turbY * 3;
+          const dx = ox - p.x + flowX * 4;
+          const dy = oy - p.y + flowY * 4;
           p.vx += dx * stiffness;
           p.vy += dy * stiffness;
           p.vx *= 0.85;
@@ -508,8 +519,8 @@ export function HeroParticles() {
           const pulseX = p.tx + (dirX / len) * pulse;
           const pulseY = p.ty + (dirY / len) * pulse;
 
-          const dx = pulseX - p.x + turbX;
-          const dy = pulseY - p.y + turbY;
+          const dx = pulseX - p.x + flowX;
+          const dy = pulseY - p.y + flowY;
           p.vx += dx * 0.08;
           p.vy += dy * 0.08;
           p.vx *= 0.85;
@@ -567,6 +578,25 @@ export function HeroParticles() {
           ctx!.fill();
         }
       }
+      ctx!.globalAlpha = 1;
+
+      // ── Additive glow pass — THE cinematic secret sauce ──
+      // Re-draw a subset of particles with additive blending = luminous where dense
+      ctx!.globalCompositeOperation = "lighter";
+      for (let i = 0; i < particles.length; i += 3) { // every 3rd particle
+        const p = particles[i];
+        if (p.isDust) continue; // only grains glow
+        const glowSize = p.baseSize * 3.5;
+        const glowAlpha = p.opacity * scrollOpacity * 0.06;
+        if (glowAlpha < 0.005) continue;
+        const color = getBreathingColor(p.x, p.y, now, w, h);
+        ctx!.globalAlpha = glowAlpha;
+        ctx!.fillStyle = color;
+        ctx!.beginPath();
+        ctx!.arc(p.x, p.y, glowSize, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+      ctx!.globalCompositeOperation = "source-over";
       ctx!.globalAlpha = 1;
 
       // ── Cursor glow — powder spray nozzle (desktop only) ──
