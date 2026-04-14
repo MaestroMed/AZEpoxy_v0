@@ -118,9 +118,15 @@ function generateTargets(
   ctx.fillStyle = "#fff";
   // Use multiple fallback fonts — canvas font may not have Outfit loaded yet
   ctx.font = `900 ${fontSize}px "Outfit", "Arial Black", "Helvetica Neue", Impact, sans-serif`;
-  ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText("AZ", w / 2, h / 2 - fontSize * 0.05);
+  // Desktop (>1024): align right. Mobile: center.
+  if (w > 1024) {
+    ctx.textAlign = "right";
+    ctx.fillText("AZ", w * 0.88, h * 0.45);
+  } else {
+    ctx.textAlign = "center";
+    ctx.fillText("AZ", w / 2, h / 2 - fontSize * 0.05);
+  }
 
   const imageData = ctx.getImageData(0, 0, w, h);
   const pixels = imageData.data;
@@ -249,8 +255,8 @@ export function HeroParticles() {
         size: baseSize,
         baseSize,
         opacity: isDust
-          ? 0.08 + Math.random() * 0.2    // dust: very subtle
-          : 0.25 + Math.random() * 0.35,  // grain: present but elegant
+          ? 0.12 + Math.random() * 0.25   // dust: visible but fine
+          : 0.35 + Math.random() * 0.4,   // grain: crisp, defined
         orbitRadius: isDust ? Math.random() * 5 : Math.random() * 2,
         orbitSpeed: 0.01 + Math.random() * 0.03,
         orbitAngle: Math.random() * Math.PI * 2,
@@ -378,28 +384,30 @@ export function HeroParticles() {
         state.textAlpha = Math.max(state.textAlpha - 1 / 30, 0);
       }
 
-      // ── Clear with trail — very low alpha = long smoky trails = fluid cloud ──
+      // ── Clear — no smear trails, clean render each frame ──
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const trailAlpha = 0.045 + scrollFactor * 0.4;
-      ctx!.fillStyle = `rgba(26,26,46,${trailAlpha})`;
+      // Blend bg: slightly warm dark (not pure night) for depth
+      const bgR = 20, bgG = 22, bgB = 38;
+      const clearAlpha = 0.35 + scrollFactor * 0.5;
+      ctx!.fillStyle = `rgba(${bgR},${bgG},${bgB},${clearAlpha})`;
       ctx!.fillRect(0, 0, w, h);
 
-      // ── Grid background (fades on scroll) ──
-      const gridAlpha = Math.max(0, 0.04 - scrollFactor * 0.08);
-      if (gridAlpha > 0.001) {
-        ctx!.strokeStyle = `rgba(255,255,255,${gridAlpha})`;
-        ctx!.lineWidth = 0.5;
-        const gridSize = 60;
-        ctx!.beginPath();
-        for (let x = 0; x < w; x += gridSize) {
-          ctx!.moveTo(x, 0);
-          ctx!.lineTo(x, h);
-        }
-        for (let y = 0; y < h; y += gridSize) {
-          ctx!.moveTo(0, y);
-          ctx!.lineTo(w, y);
-        }
-        ctx!.stroke();
+      // ── Ambient glow — warm breathing background gradient ──
+      {
+        const breathColor = getGlobalBreathColor(now);
+        // Subtle ambient pool of light that follows the RAL cycle
+        // Positioned where the AZ letterform sits
+        const glowX = w > 1024 ? w * 0.75 : w * 0.5;
+        const glowY = h * 0.45;
+        const ambientGrad = ctx!.createRadialGradient(
+          glowX, glowY, 0,
+          glowX, glowY, Math.min(w, h) * 0.55
+        );
+        ambientGrad.addColorStop(0, breathColor.replace("rgb", "rgba").replace(")", ",0.06)"));
+        ambientGrad.addColorStop(0.5, breathColor.replace("rgb", "rgba").replace(")", ",0.02)"));
+        ambientGrad.addColorStop(1, "rgba(0,0,0,0)");
+        ctx!.fillStyle = ambientGrad;
+        ctx!.fillRect(0, 0, w, h);
       }
 
       // ── Update & draw particles ──
@@ -410,8 +418,8 @@ export function HeroParticles() {
       // Mouse speed for spray intensity
       const mSpeed = Math.sqrt(mouse.vx * mouse.vx + mouse.vy * mouse.vy);
 
-      // Flow field time factor (shared by all particles = coherent streams)
-      const flowTime = frameTime * 0.008;
+      // Flow field — faster for more energy
+      const flowTime = frameTime * 0.015;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
@@ -423,7 +431,7 @@ export function HeroParticles() {
         const flowAngle =
           Math.sin(fx * 1.3 + flowTime) * Math.cos(fy * 0.9 + flowTime * 0.7) * Math.PI +
           Math.sin(fx * 0.7 - flowTime * 0.5) * 0.5;
-        const flowStrength = 0.025 * (1 - p.mass * 0.5); // dust flows more
+        const flowStrength = 0.045 * (1 - p.mass * 0.5); // stronger currents
         const flowX = Math.cos(flowAngle) * flowStrength;
         const flowY = Math.sin(flowAngle) * flowStrength;
 
@@ -642,13 +650,15 @@ export function HeroParticles() {
       }
 
       // ── Overlay text on canvas ──
-      // "ÉPOXY" + tagline (formed/pulse)
+      // "ÉPOXY" + tagline (formed/pulse) — positioned with the letterform
       if (state.textAlpha > 0.01) {
         const ta = state.textAlpha * scrollOpacity;
         const textScale = Math.min(w / 100, h / 60, 8);
-        const epoxySize = Math.round(textScale * 16);
-        const taglineSize = Math.round(Math.max(10, textScale * 5));
-        const baseY = h / 2 + textScale * 30;
+        const epoxySize = Math.round(textScale * 14);
+        const taglineSize = Math.round(Math.max(9, textScale * 4.5));
+        // Align with letterform position
+        const textX = w > 1024 ? w * 0.78 : w / 2;
+        const baseY = h * 0.45 + textScale * 28;
 
         ctx!.textAlign = "center";
         ctx!.textBaseline = "top";
@@ -656,15 +666,15 @@ export function HeroParticles() {
         // "ÉPOXY" — breathes with the RAL cycle
         const epoxyColor = getGlobalBreathColor(now);
         ctx!.font = `300 ${epoxySize}px "Outfit", "Helvetica Neue", sans-serif`;
-        ctx!.fillStyle = epoxyColor.replace("rgb", "rgba").replace(")", `,${ta * 0.7})`);
+        ctx!.fillStyle = epoxyColor.replace("rgb", "rgba").replace(")", `,${ta * 0.5})`);
         ctx!.letterSpacing = "0.3em";
-        ctx!.fillText("ÉPOXY", w / 2, baseY);
+        ctx!.fillText("ÉPOXY", textX, baseY);
         ctx!.letterSpacing = "0px";
 
         // Tagline
         ctx!.font = `300 ${taglineSize}px "Inter", system-ui, sans-serif`;
-        ctx!.fillStyle = `rgba(255,255,255,${ta * 0.4})`;
-        ctx!.fillText("THERMOLAQUAGE POUDRE · ÎLE-DE-FRANCE", w / 2, baseY + epoxySize + 8);
+        ctx!.fillStyle = `rgba(255,255,255,${ta * 0.3})`;
+        ctx!.fillText("THERMOLAQUAGE POUDRE · ÎLE-DE-FRANCE", textX, baseY + epoxySize + 6);
       }
 
       // Metrics bottom
@@ -677,7 +687,8 @@ export function HeroParticles() {
           ctx!.textBaseline = "bottom";
           const metricsColor = getGlobalBreathColor(now);
           ctx!.fillStyle = metricsColor.replace("rgb", "rgba").replace(")", `,${metricsAlpha})`);
-          ctx!.fillText("200°C  ·  120μm  ·  0 COV", w / 2, h - h * 0.06);
+          const metricsX = w > 1024 ? w * 0.78 : w / 2;
+          ctx!.fillText("200°C  ·  120μm  ·  0 COV", metricsX, h - h * 0.06);
         }
       }
 
