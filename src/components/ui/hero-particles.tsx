@@ -57,6 +57,13 @@ interface Particle {
   orbitAngle: number;
   attraction: number;
   depth: number;
+  // Powder enhancements
+  isDust: boolean;         // true = micro-dust (70%), false = grain (30%)
+  turbSeed: number;        // unique seed for turbulence offset
+  shimmerSpeed: number;    // per-particle opacity pulse speed
+  shimmerPhase: number;    // starting phase for shimmer
+  mass: number;            // affects gravity (lighter dust floats more)
+  hasGlow: boolean;        // ~10% of grains get soft glow halo
 }
 
 // ── Generate letterform target points ────────────────────────────────────────
@@ -141,7 +148,7 @@ export function HeroParticles() {
   const [isTouch, setIsTouch] = useState(false);
   const stateRef = useRef({
     particles: [] as Particle[],
-    mouse: { x: -9999, y: -9999, active: false },
+    mouse: { x: -9999, y: -9999, px: -9999, py: -9999, vx: 0, vy: 0, active: false },
     phase: PHASE_SCATTER,
     phaseFrame: 0,
     frame: 0,
@@ -194,24 +201,40 @@ export function HeroParticles() {
     const targets = generateTargets(w, h, count);
     state.targets = targets;
 
-    // Init particles
-    state.particles = targets.map((t) => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2,
-      tx: t.x,
-      ty: t.y,
-      size: 0.8 + Math.random() * 2.5,
-      baseSize: 0.8 + Math.random() * 2.5,
-      opacity: 0.3 + Math.random() * 0.5,
-      colorOffset: Math.random(),
-      orbitRadius: Math.random() * 3,
-      orbitSpeed: 0.01 + Math.random() * 0.03,
-      orbitAngle: Math.random() * Math.PI * 2,
-      attraction: 0.01 + Math.random() * 0.03,
-      depth: 0.3 + Math.random() * 0.7,
-    }));
+    // Init particles — bimodal: 70% micro-dust, 30% grains
+    state.particles = targets.map((t) => {
+      const isDust = Math.random() < 0.7;
+      const baseSize = isDust
+        ? 0.3 + Math.random() * 0.9   // dust: 0.3-1.2px
+        : 1.5 + Math.random() * 2.0;  // grain: 1.5-3.5px
+      return {
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        tx: t.x,
+        ty: t.y,
+        size: baseSize,
+        baseSize,
+        opacity: isDust
+          ? 0.15 + Math.random() * 0.35  // dust: subtler
+          : 0.4 + Math.random() * 0.45,  // grain: bolder
+        colorOffset: Math.random(),
+        orbitRadius: isDust ? Math.random() * 4 : Math.random() * 2,
+        orbitSpeed: 0.01 + Math.random() * 0.03,
+        orbitAngle: Math.random() * Math.PI * 2,
+        attraction: isDust
+          ? 0.008 + Math.random() * 0.02   // dust arrives slower
+          : 0.015 + Math.random() * 0.035,
+        depth: 0.3 + Math.random() * 0.7,
+        isDust,
+        turbSeed: Math.random() * 1000,
+        shimmerSpeed: 0.02 + Math.random() * 0.04,
+        shimmerPhase: Math.random() * Math.PI * 2,
+        mass: isDust ? 0.2 + Math.random() * 0.3 : 0.6 + Math.random() * 0.4,
+        hasGlow: !isDust && Math.random() < 0.12,
+      };
+    });
 
     state.phase = PHASE_SCATTER;
     state.phaseFrame = 0;
@@ -249,8 +272,14 @@ export function HeroParticles() {
     // ── Mouse / Touch ──
     const onMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      state.mouse.x = e.clientX - rect.left;
-      state.mouse.y = e.clientY - rect.top;
+      const nx = e.clientX - rect.left;
+      const ny = e.clientY - rect.top;
+      state.mouse.vx = nx - state.mouse.x;
+      state.mouse.vy = ny - state.mouse.y;
+      state.mouse.px = state.mouse.x;
+      state.mouse.py = state.mouse.y;
+      state.mouse.x = nx;
+      state.mouse.y = ny;
       state.mouse.active = true;
       state.hintVisible = false;
     };
@@ -319,14 +348,14 @@ export function HeroParticles() {
         state.textAlpha = Math.max(state.textAlpha - 1 / 30, 0);
       }
 
-      // ── Clear with trail ──
+      // ── Clear with trail — lower alpha = longer trails = more powder cloud ──
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const trailAlpha = 0.15 + scrollFactor * 0.3;
+      const trailAlpha = 0.08 + scrollFactor * 0.35;
       ctx!.fillStyle = `rgba(26,26,46,${trailAlpha})`;
       ctx!.fillRect(0, 0, w, h);
 
       // ── Grid background (fades on scroll) ──
-      const gridAlpha = Math.max(0, 0.06 - scrollFactor * 0.12);
+      const gridAlpha = Math.max(0, 0.04 - scrollFactor * 0.08);
       if (gridAlpha > 0.001) {
         ctx!.strokeStyle = `rgba(255,255,255,${gridAlpha})`;
         ctx!.lineWidth = 0.5;
@@ -347,42 +376,61 @@ export function HeroParticles() {
       const mouseRadius = 180;
       const mouseRadiusSq = mouseRadius * mouseRadius;
       const scrollOpacity = 1 - scrollFactor * 0.8;
+      const frameTime = state.frame;
+      // Mouse speed for spray intensity
+      const mSpeed = Math.sqrt(mouse.vx * mouse.vx + mouse.vy * mouse.vy);
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
+        // Turbulence — fake Perlin via layered sin waves (cheap, no lib)
+        const turb = 0.015 * (1 - p.mass);
+        const tx1 = Math.sin(frameTime * 0.013 + p.turbSeed) * turb;
+        const ty1 = Math.cos(frameTime * 0.011 + p.turbSeed * 1.3) * turb;
+        const tx2 = Math.sin(frameTime * 0.007 + p.turbSeed * 2.1) * turb * 0.5;
+        const ty2 = Math.cos(frameTime * 0.009 + p.turbSeed * 0.7) * turb * 0.5;
+        const turbX = tx1 + tx2;
+        const turbY = ty1 + ty2;
+
+        // Micro-gravity — dust floats, grains settle
+        const gravity = p.isDust ? -0.003 * (1 - p.mass) : 0.005 * p.mass;
 
         // Phase-specific behavior
         if (phase === PHASE_SCATTER) {
-          // Brownian motion
-          p.vx += (Math.random() - 0.5) * 0.1;
-          p.vy += (Math.random() - 0.5) * 0.1 - 0.02;
-          p.vx *= 0.98;
-          p.vy *= 0.98;
+          p.vx += (Math.random() - 0.5) * 0.08 + turbX;
+          p.vy += (Math.random() - 0.5) * 0.08 + gravity + turbY;
+          p.vx *= 0.985;
+          p.vy *= 0.985;
 
-          // Mouse attract in scatter
+          // Mouse attract — spray cone effect
           if (mouse.active) {
             const dx = mouse.x - p.x;
             const dy = mouse.y - p.y;
             const distSq = dx * dx + dy * dy;
             if (distSq < mouseRadiusSq && distSq > 1) {
               const dist = Math.sqrt(distSq);
+              // Base attraction
               const force = 0.8 / dist;
               p.vx += dx * force * 0.02;
               p.vy += dy * force * 0.02;
+              // Spray: fast cursor movement flings nearby particles along cursor direction
+              if (mSpeed > 3 && dist < 100) {
+                const sprayForce = Math.min(mSpeed * 0.004, 0.15) * (1 - dist / 100);
+                p.vx += mouse.vx * sprayForce * (p.isDust ? 1.5 : 0.8);
+                p.vy += mouse.vy * sprayForce * (p.isDust ? 1.5 : 0.8);
+              }
             }
           }
         } else if (phase === PHASE_ATTRACT) {
-          // Ramp attraction
           const ramp = Math.min(pf / 120, 1);
           const attrForce = p.attraction * ramp;
           const dx = p.tx - p.x;
           const dy = p.ty - p.y;
-          p.vx += dx * attrForce;
-          p.vy += dy * attrForce;
-          p.vx *= 0.92;
-          p.vy *= 0.92;
+          p.vx += dx * attrForce + turbX * 0.5;
+          p.vy += dy * attrForce + turbY * 0.5;
+          // Dust damps slower (floats in longer)
+          p.vx *= p.isDust ? 0.94 : 0.91;
+          p.vy *= p.isDust ? 0.94 : 0.91;
 
-          // Mouse distortion
           if (mouse.active) {
             const mdx = mouse.x - p.x;
             const mdy = mouse.y - p.y;
@@ -395,18 +443,18 @@ export function HeroParticles() {
             }
           }
         } else if (phase === PHASE_FORMED) {
-          // Orbit around target
           p.orbitAngle += p.orbitSpeed;
           const ox = p.tx + Math.cos(p.orbitAngle) * p.orbitRadius;
           const oy = p.ty + Math.sin(p.orbitAngle) * p.orbitRadius;
-          const dx = ox - p.x;
-          const dy = oy - p.y;
-          p.vx += dx * 0.08;
-          p.vy += dy * 0.08;
+          // Dust drifts around target more loosely
+          const stiffness = p.isDust ? 0.05 : 0.1;
+          const dx = ox - p.x + turbX * 3;
+          const dy = oy - p.y + turbY * 3;
+          p.vx += dx * stiffness;
+          p.vy += dy * stiffness;
           p.vx *= 0.85;
           p.vy *= 0.85;
 
-          // Mouse repulse then return
           if (mouse.active) {
             const mdx = mouse.x - p.x;
             const mdy = mouse.y - p.y;
@@ -414,12 +462,13 @@ export function HeroParticles() {
             if (mdSq < mouseRadiusSq && mdSq > 1) {
               const md = Math.sqrt(mdSq);
               const force = (mouseRadius - md) / mouseRadius;
-              p.vx -= mdx / md * force * 1.5;
-              p.vy -= mdy / md * force * 1.5;
+              // Dust is blown further by cursor
+              const blowMult = p.isDust ? 2.0 : 1.2;
+              p.vx -= mdx / md * force * blowMult;
+              p.vy -= mdy / md * force * blowMult;
             }
           }
         } else if (phase === PHASE_PULSE) {
-          // Pulse: expand/contract from center
           const cx = w / 2;
           const cy = h / 2;
           const pulse = Math.sin(pf * 0.05) * 2.5;
@@ -429,17 +478,17 @@ export function HeroParticles() {
           const pulseX = p.tx + (dirX / len) * pulse;
           const pulseY = p.ty + (dirY / len) * pulse;
 
-          const dx = pulseX - p.x;
-          const dy = pulseY - p.y;
+          const dx = pulseX - p.x + turbX;
+          const dy = pulseY - p.y + turbY;
           p.vx += dx * 0.08;
           p.vy += dy * 0.08;
           p.vx *= 0.85;
           p.vy *= 0.85;
 
-          // Kick at end of pulse → back to scatter
           if (pf > PHASE_DURATIONS[PHASE_PULSE] - 10) {
-            p.vx += (Math.random() - 0.5) * 3;
-            p.vy += (Math.random() - 0.5) * 3;
+            const kick = p.isDust ? 4 : 2.5;
+            p.vx += (Math.random() - 0.5) * kick;
+            p.vy += (Math.random() - 0.5) * kick;
           }
         }
 
@@ -464,59 +513,83 @@ export function HeroParticles() {
           const mdSq = mdx * mdx + mdy * mdy;
           if (mdSq < mouseRadiusSq) {
             const proximity = 1 - Math.sqrt(mdSq) / mouseRadius;
-            drawSize = p.baseSize * (1 + proximity * 0.5);
+            drawSize = p.baseSize * (1 + proximity * 0.6);
           }
         }
 
-        // Draw particle
+        // Shimmer — per-particle opacity pulse
+        const shimmer = 1 + Math.sin(frameTime * p.shimmerSpeed + p.shimmerPhase) * 0.25;
         const color = getParticleColor(p.colorOffset, now);
-        const alpha = p.opacity * scrollOpacity;
+        const alpha = p.opacity * scrollOpacity * shimmer;
         if (alpha < 0.01) continue;
 
-        ctx!.beginPath();
-        ctx!.arc(p.x, p.y, drawSize, 0, Math.PI * 2);
-        ctx!.fillStyle = color;
+        // Draw glow halo first for select grains (cheap radial gradient)
+        if (p.hasGlow && alpha > 0.1) {
+          const glowR = drawSize * 4;
+          const grad = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR);
+          grad.addColorStop(0, color.replace("rgb", "rgba").replace(")", `,${alpha * 0.2})`));
+          grad.addColorStop(1, "rgba(0,0,0,0)");
+          ctx!.fillStyle = grad;
+          ctx!.globalAlpha = 1;
+          ctx!.beginPath();
+          ctx!.arc(p.x, p.y, glowR, 0, Math.PI * 2);
+          ctx!.fill();
+        }
+
+        // Draw particle — dust as fillRect (faster), grains as arc
         ctx!.globalAlpha = alpha;
-        ctx!.fill();
+        ctx!.fillStyle = color;
+        if (p.isDust && drawSize < 1.2) {
+          // Square pixel dust — faster than arc for tiny particles
+          const s = drawSize * 2;
+          ctx!.fillRect(p.x - drawSize, p.y - drawSize, s, s);
+        } else {
+          ctx!.beginPath();
+          ctx!.arc(p.x, p.y, drawSize, 0, Math.PI * 2);
+          ctx!.fill();
+        }
       }
       ctx!.globalAlpha = 1;
 
-      // ── Cursor glow (desktop only) ──
+      // ── Cursor glow — powder spray nozzle (desktop only) ──
       if (mouse.active && !("ontouchstart" in window)) {
         const cursorColor = getParticleColor(0, now);
+        // Spray cone glow — intensity scales with cursor speed
+        const sprayIntensity = Math.min(mSpeed / 20, 1);
+        const glowRadius = 100 + sprayIntensity * 60;
+        const glowAlpha = 0.08 + sprayIntensity * 0.1;
+
         const grad = ctx!.createRadialGradient(
           mouse.x, mouse.y, 0,
-          mouse.x, mouse.y, 120
+          mouse.x, mouse.y, glowRadius
         );
-        grad.addColorStop(0, cursorColor.replace("rgb", "rgba").replace(")", ",0.12)"));
+        grad.addColorStop(0, cursorColor.replace("rgb", "rgba").replace(")", `,${glowAlpha})`));
+        grad.addColorStop(0.4, cursorColor.replace("rgb", "rgba").replace(")", `,${glowAlpha * 0.3})`));
         grad.addColorStop(1, "rgba(0,0,0,0)");
         ctx!.fillStyle = grad;
         ctx!.beginPath();
-        ctx!.arc(mouse.x, mouse.y, 120, 0, Math.PI * 2);
+        ctx!.arc(mouse.x, mouse.y, glowRadius, 0, Math.PI * 2);
         ctx!.fill();
 
-        // Crosshair
-        ctx!.strokeStyle = cursorColor.replace("rgb", "rgba").replace(")", ",0.15)");
-        ctx!.lineWidth = 1;
+        // Crosshair — thinner, subtler
+        ctx!.strokeStyle = cursorColor.replace("rgb", "rgba").replace(")", ",0.12)");
+        ctx!.lineWidth = 0.5;
         ctx!.beginPath();
-        // top
-        ctx!.moveTo(mouse.x, mouse.y - 20);
-        ctx!.lineTo(mouse.x, mouse.y - 8);
-        // bottom
-        ctx!.moveTo(mouse.x, mouse.y + 8);
-        ctx!.lineTo(mouse.x, mouse.y + 20);
-        // left
-        ctx!.moveTo(mouse.x - 20, mouse.y);
-        ctx!.lineTo(mouse.x - 8, mouse.y);
-        // right
-        ctx!.moveTo(mouse.x + 8, mouse.y);
-        ctx!.lineTo(mouse.x + 20, mouse.y);
+        ctx!.moveTo(mouse.x, mouse.y - 18);
+        ctx!.lineTo(mouse.x, mouse.y - 6);
+        ctx!.moveTo(mouse.x, mouse.y + 6);
+        ctx!.lineTo(mouse.x, mouse.y + 18);
+        ctx!.moveTo(mouse.x - 18, mouse.y);
+        ctx!.lineTo(mouse.x - 6, mouse.y);
+        ctx!.moveTo(mouse.x + 6, mouse.y);
+        ctx!.lineTo(mouse.x + 18, mouse.y);
         ctx!.stroke();
 
-        // Center dot
+        // Center dot — pulses with spray
+        const dotSize = 1.5 + sprayIntensity * 1.5;
         ctx!.beginPath();
-        ctx!.arc(mouse.x, mouse.y, 2, 0, Math.PI * 2);
-        ctx!.fillStyle = cursorColor.replace("rgb", "rgba").replace(")", ",0.6)");
+        ctx!.arc(mouse.x, mouse.y, dotSize, 0, Math.PI * 2);
+        ctx!.fillStyle = cursorColor.replace("rgb", "rgba").replace(")", ",0.5)");
         ctx!.fill();
       }
 
