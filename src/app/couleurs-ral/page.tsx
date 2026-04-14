@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Palette, Sparkles } from "lucide-react";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
-import { CTABand } from "@/components/ui/cta-band";
+import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import Link from "next/link";
 import { RAL_FAMILIES, POPULAR_RAL } from "@/lib/ral-colors";
@@ -249,7 +249,7 @@ export default function CouleursRalPage() {
       </section>
 
       {/* ── Section 6 — CTA Band ────────────────────────────────────── */}
-      <CTABand
+      <CtaBand
         title="Besoin d'aide pour choisir ?"
         description="Echantillons gratuits sur demande. Envoyez-nous votre reference RAL ou decrivez l'effet souhaite, nous preparons un echantillon test sur metal."
         primaryLabel="Demander un echantillon"
