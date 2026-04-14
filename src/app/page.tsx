@@ -24,6 +24,7 @@ import { StatCounter } from "@/components/ui/stat-counter";
 import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { ProcessStep } from "@/components/ui/process-step";
 import { CtaBand } from "@/components/ui/cta-band";
+import { HeroParticles } from "@/components/ui/hero-particles";
 
 export const metadata: Metadata = {
   title:
@@ -51,16 +52,13 @@ const SPECIALTY_BG: string[] = [
 export default function HomePage() {
   return (
     <>
-      {/* ── Section 1 — Hero (night bg) ────────────────────────────────── */}
-      <section className="relative isolate min-h-[100svh] overflow-hidden bg-brand-night text-white">
-        {/* Background layers */}
-        <div className="absolute inset-0 bg-gradient-night" />
-        <div className="absolute inset-0 bg-industrial-grid-dark opacity-40" />
-        <div className="absolute -left-40 top-1/3 h-[600px] w-[600px] rounded-full bg-brand-orange/25 blur-[140px]" />
-        <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-brand-orange/15 blur-[120px]" />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-brand-orange/10 via-transparent to-transparent" />
+      {/* ── Section 1 — Hero (night bg + particles) ───────────────────── */}
+      <section className="relative isolate h-[100svh] overflow-hidden bg-brand-night text-white">
+        {/* Layer 0: Canvas particles (or reduced-motion fallback) */}
+        <HeroParticles />
 
-        <div className="container-wide relative flex min-h-[100svh] flex-col justify-center pt-32 pb-20">
+        {/* Layer 1: HTML content (above canvas) */}
+        <div className="container-wide relative z-10 flex h-[100svh] flex-col justify-center pt-32 pb-20 pointer-events-none">
           <ScrollReveal>
             <div className="max-w-4xl">
               <span className="section-label-light">
@@ -84,7 +82,7 @@ export default function HomePage() {
                 atelier de 1 800 m² à Bruyères-sur-Oise.
               </p>
 
-              <div className="mt-10 flex flex-wrap gap-4">
+              <div className="mt-10 flex flex-wrap gap-4 pointer-events-auto">
                 <Link href="/devis" className="btn-primary">
                   Demander un devis gratuit
                   <ArrowRight className="h-4 w-4" />
@@ -98,7 +96,7 @@ export default function HomePage() {
 
           {/* Hero quick stats — animated counters */}
           <ScrollReveal delay={0.3}>
-            <div className="relative mt-20 grid grid-cols-2 gap-6 border-t border-white/10 pt-10 sm:grid-cols-4">
+            <div className="relative mt-auto grid grid-cols-2 gap-6 border-t border-white/10 pt-10 sm:grid-cols-4">
               <StatCounter value="200+" label="Couleurs RAL" dark />
               <StatCounter value="7" label="Mètres — cabine max" dark />
               <StatCounter value="48" label="Heures — express" dark />
