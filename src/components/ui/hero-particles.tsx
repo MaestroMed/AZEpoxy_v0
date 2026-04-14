@@ -5,13 +5,12 @@ import { useRef, useEffect, useState, useCallback } from "react";
 // ── RAL color cycle ──────────────────────────────────────────────────────────
 const RAL_CYCLE = [
   [0, 180, 216],   // #00b4d8 — cyan brand
-  [193, 18, 28],   // #c1121c — rouge 3020
+  [226, 83, 3],    // #e25303 — orange 2004
   [240, 202, 0],   // #f0ca00 — jaune 1023
   [0, 124, 176],   // #007cb0 — bleu 5015
-  [226, 83, 3],    // #e25303 — orange 2004
+  [193, 18, 28],   // #c1121c — rouge 3020
   [15, 67, 54],    // #0f4336 — vert 6005
   [187, 64, 119],  // #bb4077 — rose 4010
-  [56, 62, 66],    // #383e42 — gris 7016
   [255, 255, 255], // blanc
 ];
 
@@ -22,8 +21,42 @@ function lerpColor(a: number[], b: number[], t: number): string {
   return `rgb(${r},${g},${bl})`;
 }
 
-function getParticleColor(offset: number, globalTime: number): string {
-  const t = ((offset + globalTime * 0.00033) % 1 + 1) % 1;
+/**
+ * Color breathing: all particles share the SAME base color at any moment.
+ * A spatial wave (based on particle x/y position) adds a subtle offset
+ * so the color sweeps across the screen like light passing through powder.
+ *
+ * @param spatialOffset - tiny offset based on particle position (0 to ~0.06)
+ * @param globalTime - performance.now()
+ * @param w - viewport width for normalization
+ */
+function getBreathingColor(
+  px: number,
+  py: number,
+  globalTime: number,
+  w: number,
+  h: number
+): string {
+  // Global breath: slow cycle through RAL colors (~4s per color)
+  const breathSpeed = 0.00008;
+  const globalPhase = (globalTime * breathSpeed) % 1;
+
+  // Spatial wave: particles on the left/top shift slightly ahead
+  // Creates a "light sweep" effect across the powder cloud
+  const spatialWave = ((px / w) * 0.06 + (py / h) * 0.03);
+
+  const t = ((globalPhase + spatialWave) % 1 + 1) % 1;
+  const idx = t * RAL_CYCLE.length;
+  const i = Math.floor(idx);
+  const frac = idx - i;
+  const a = RAL_CYCLE[i % RAL_CYCLE.length];
+  const b = RAL_CYCLE[(i + 1) % RAL_CYCLE.length];
+  return lerpColor(a, b, frac);
+}
+
+// For cursor glow — just the global breath color, no spatial offset
+function getGlobalBreathColor(globalTime: number): string {
+  const t = ((globalTime * 0.00008) % 1 + 1) % 1;
   const idx = t * RAL_CYCLE.length;
   const i = Math.floor(idx);
   const frac = idx - i;
@@ -51,7 +84,6 @@ interface Particle {
   size: number;
   baseSize: number;
   opacity: number;
-  colorOffset: number;
   orbitRadius: number;
   orbitSpeed: number;
   orbitAngle: number;
@@ -63,7 +95,6 @@ interface Particle {
   shimmerSpeed: number;    // per-particle opacity pulse speed
   shimmerPhase: number;    // starting phase for shimmer
   mass: number;            // affects gravity (lighter dust floats more)
-  hasGlow: boolean;        // ~10% of grains get soft glow halo
 }
 
 // ── Generate letterform target points ────────────────────────────────────────
@@ -197,7 +228,8 @@ export function HeroParticles() {
     state.height = h;
     state.dpr = dpr;
 
-    const count = Math.min(1200, Math.floor((w * h) / 400));
+    // Lighter particle count — more airy, less dense
+    const count = Math.min(900, Math.floor((w * h) / 600));
     const targets = generateTargets(w, h, count);
     state.targets = targets;
 
@@ -217,9 +249,8 @@ export function HeroParticles() {
         size: baseSize,
         baseSize,
         opacity: isDust
-          ? 0.15 + Math.random() * 0.35  // dust: subtler
-          : 0.4 + Math.random() * 0.45,  // grain: bolder
-        colorOffset: Math.random(),
+          ? 0.1 + Math.random() * 0.25   // dust: ethereal
+          : 0.3 + Math.random() * 0.35,  // grain: visible but not heavy
         orbitRadius: isDust ? Math.random() * 4 : Math.random() * 2,
         orbitSpeed: 0.01 + Math.random() * 0.03,
         orbitAngle: Math.random() * Math.PI * 2,
@@ -232,7 +263,6 @@ export function HeroParticles() {
         shimmerSpeed: 0.02 + Math.random() * 0.04,
         shimmerPhase: Math.random() * Math.PI * 2,
         mass: isDust ? 0.2 + Math.random() * 0.3 : 0.6 + Math.random() * 0.4,
-        hasGlow: !isDust && Math.random() < 0.12,
       };
     });
 
@@ -348,9 +378,9 @@ export function HeroParticles() {
         state.textAlpha = Math.max(state.textAlpha - 1 / 30, 0);
       }
 
-      // ── Clear with trail — lower alpha = longer trails = more powder cloud ──
+      // ── Clear with trail — balanced: enough trail for atmosphere, not muddy ──
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const trailAlpha = 0.08 + scrollFactor * 0.35;
+      const trailAlpha = 0.12 + scrollFactor * 0.35;
       ctx!.fillStyle = `rgba(26,26,46,${trailAlpha})`;
       ctx!.fillRect(0, 0, w, h);
 
@@ -517,24 +547,12 @@ export function HeroParticles() {
           }
         }
 
-        // Shimmer — per-particle opacity pulse
-        const shimmer = 1 + Math.sin(frameTime * p.shimmerSpeed + p.shimmerPhase) * 0.25;
-        const color = getParticleColor(p.colorOffset, now);
+        // Shimmer — subtle per-particle opacity pulse (light catching grains)
+        const shimmer = 1 + Math.sin(frameTime * p.shimmerSpeed + p.shimmerPhase) * 0.15;
+        // Breathing color — unified RAL cycle with spatial wave
+        const color = getBreathingColor(p.x, p.y, now, w, h);
         const alpha = p.opacity * scrollOpacity * shimmer;
         if (alpha < 0.01) continue;
-
-        // Draw glow halo first for select grains (cheap radial gradient)
-        if (p.hasGlow && alpha > 0.1) {
-          const glowR = drawSize * 4;
-          const grad = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR);
-          grad.addColorStop(0, color.replace("rgb", "rgba").replace(")", `,${alpha * 0.2})`));
-          grad.addColorStop(1, "rgba(0,0,0,0)");
-          ctx!.fillStyle = grad;
-          ctx!.globalAlpha = 1;
-          ctx!.beginPath();
-          ctx!.arc(p.x, p.y, glowR, 0, Math.PI * 2);
-          ctx!.fill();
-        }
 
         // Draw particle — dust as fillRect (faster), grains as arc
         ctx!.globalAlpha = alpha;
@@ -553,7 +571,7 @@ export function HeroParticles() {
 
       // ── Cursor glow — powder spray nozzle (desktop only) ──
       if (mouse.active && !("ontouchstart" in window)) {
-        const cursorColor = getParticleColor(0, now);
+        const cursorColor = getGlobalBreathColor(now);
         // Spray cone glow — intensity scales with cursor speed
         const sprayIntensity = Math.min(mSpeed / 20, 1);
         const glowRadius = 100 + sprayIntensity * 60;
@@ -605,9 +623,10 @@ export function HeroParticles() {
         ctx!.textAlign = "center";
         ctx!.textBaseline = "top";
 
-        // "ÉPOXY"
+        // "ÉPOXY" — breathes with the RAL cycle
+        const epoxyColor = getGlobalBreathColor(now);
         ctx!.font = `300 ${epoxySize}px "Outfit", "Helvetica Neue", sans-serif`;
-        ctx!.fillStyle = `rgba(0,180,216,${ta * 0.8})`;
+        ctx!.fillStyle = epoxyColor.replace("rgb", "rgba").replace(")", `,${ta * 0.7})`);
         ctx!.letterSpacing = "0.3em";
         ctx!.fillText("ÉPOXY", w / 2, baseY);
         ctx!.letterSpacing = "0px";
@@ -626,7 +645,8 @@ export function HeroParticles() {
           ctx!.font = `300 ${metricSize}px ui-monospace, monospace`;
           ctx!.textAlign = "center";
           ctx!.textBaseline = "bottom";
-          ctx!.fillStyle = `rgba(0,180,216,${metricsAlpha})`;
+          const metricsColor = getGlobalBreathColor(now);
+          ctx!.fillStyle = metricsColor.replace("rgb", "rgba").replace(")", `,${metricsAlpha})`);
           ctx!.fillText("200°C  ·  120μm  ·  0 COV", w / 2, h - h * 0.06);
         }
       }
