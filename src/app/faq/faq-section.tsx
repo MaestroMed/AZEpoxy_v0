@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FAQS, FAQ_CATEGORIES } from "@/lib/faq-data";
-import { FaqAccordion } from "@/components/ui/faq-accordion";
+import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { cn } from "@/lib/utils";
 
@@ -63,7 +63,7 @@ export function FaqSection() {
         {/* Accordion */}
         <ScrollReveal delay={0.2}>
           <div className="mx-auto max-w-3xl">
-            <FaqAccordion items={filteredFaqs} />
+            <FAQAccordion items={filteredFaqs} />
           </div>
         </ScrollReveal>
       </div>

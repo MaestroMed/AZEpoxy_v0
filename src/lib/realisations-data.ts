@@ -1,288 +1,191 @@
 /**
- * Projets et catégories pour la page Réalisations d'AZ Époxy.
+ * Portfolio de réalisations — AZ Époxy.
+ * 16 projets répartis sur 5 catégories.
  */
 
-export interface ProjectCategory {
-  key: string;
-  label: string;
-}
-
-export const PROJECT_CATEGORIES: ProjectCategory[] = [
-  { key: "all", label: "Tous" },
-  { key: "jantes", label: "Jantes" },
-  { key: "moto", label: "Moto" },
-  { key: "voiture", label: "Automobile" },
-  { key: "pieces", label: "Pièces Métalliques" },
-  { key: "mobilier", label: "Mobilier" },
-  { key: "portail", label: "Portails & Clôtures" },
-];
-
 export interface Project {
-  id: string;
+  id: number;
   title: string;
-  category: string;
+  category: "jantes" | "moto" | "mobilier" | "industriel" | "portail";
   description: string;
   colors: string[];
   featured: boolean;
 }
 
+export const PROJECT_CATEGORIES = [
+  { key: "all", label: "Tous" },
+  { key: "jantes", label: "Jantes" },
+  { key: "moto", label: "Moto" },
+  { key: "mobilier", label: "Mobilier" },
+  { key: "industriel", label: "Industriel" },
+  { key: "portail", label: "Portail" },
+] as const;
+
+export type ProjectCategoryKey = (typeof PROJECT_CATEGORIES)[number]["key"];
+
 export const PROJECTS: Project[] = [
-  // Jantes
+  // ── Jantes (4) ───────────────────────────────────────────────────────
   {
-    id: "jantes-01",
-    title: "Jantes 19\" BMW M4 — Noir satiné",
+    id: 1,
+    title: "Jantes BMW M4 — Noir satiné",
     category: "jantes",
     description:
-      "Rénovation complète de 4 jantes 19 pouces BMW M4 Competition. Sablage, primaire zinc et thermolaquage RAL 9005 satiné. Rendu OEM+ impeccable.",
+      "Rénovation complète de 4 jantes 19 pouces BMW M4 Competition. Sablage intégral, primaire anti-corrosion et thermolaquage noir satiné pour un rendu sobre et sportif.",
     colors: ["RAL 9005"],
     featured: true,
   },
   {
-    id: "jantes-02",
-    title: "Jantes Audi RS3 — Gris anthracite",
+    id: 2,
+    title: "Jantes Audi RS3 — Gris graphite brillant",
     category: "jantes",
     description:
-      "Personnalisation de jantes Audi RS3 en gris anthracite RAL 7016 brillant. Résultat discret et élégant, résistant à la poussière de frein.",
-    colors: ["RAL 7016"],
-    featured: true,
-  },
-  {
-    id: "jantes-03",
-    title: "Jantes AMG 20\" — Aluminium blanc",
-    category: "jantes",
-    description:
-      "Jantes Mercedes-AMG 20 pouces traitées en RAL 9006 effet aluminium. Finition métallisée fidèle à l'original.",
-    colors: ["RAL 9006"],
-    featured: false,
-  },
-  {
-    id: "jantes-04",
-    title: "Jantes Porsche Taycan — Blanc pur",
-    category: "jantes",
-    description:
-      "Thermolaquage 4 jantes Porsche Taycan en RAL 9010 blanc pur mat. Look minimaliste pour un rendu premium.",
-    colors: ["RAL 9010"],
-    featured: false,
-  },
-  {
-    id: "jantes-05",
-    title: "Jantes Golf GTI — Gris graphite",
-    category: "jantes",
-    description:
-      "Lot de 4 jantes VW Golf GTI décapées et thermolaquées en RAL 7024 gris graphite satiné.",
+      "Personnalisation de jantes Audi RS3 en gris graphite brillant. Le client souhaitait un ton plus foncé que l'aluminium d'origine tout en conservant un aspect métallisé élégant.",
     colors: ["RAL 7024"],
-    featured: false,
+    featured: true,
   },
   {
-    id: "jantes-06",
-    title: "Jantes Tesla Model 3 — Noir foncé brillant",
+    id: 3,
+    title: "Jantes Mercedes Classe C — Blanc pur",
     category: "jantes",
     description:
-      "Thermolaquage de jantes Tesla en noir foncé RAL 9005 brillant haute résistance.",
-    colors: ["RAL 9005"],
-    featured: false,
-  },
-  // Moto
-  {
-    id: "moto-01",
-    title: "Cadre Yamaha MT-09 — Rouge signalisation",
-    category: "moto",
-    description:
-      "Cadre complet de Yamaha MT-09 sablé et thermolaqué en RAL 3020 rouge signalisation brillant. Rendu custom agressif pour un look racing.",
-    colors: ["RAL 3020"],
-    featured: true,
-  },
-  {
-    id: "moto-02",
-    title: "Jantes Kawasaki Z900 — Vert mousse",
-    category: "moto",
-    description:
-      "Paire de jantes Kawasaki Z900 thermolaquées en RAL 6005 vert mousse satiné, fidèle à l'esprit Kawasaki racing.",
-    colors: ["RAL 6005"],
-    featured: false,
-  },
-  {
-    id: "moto-03",
-    title: "Cadre Triumph Street Triple — Noir & Orangé",
-    category: "moto",
-    description:
-      "Cadre Triumph Street Triple en bicolore RAL 9005 noir mat et RAL 2004 orangé pur sur le sous-cadre. Custom unique.",
-    colors: ["RAL 9005", "RAL 2004"],
-    featured: true,
-  },
-  {
-    id: "moto-04",
-    title: "Bras oscillant Honda CB650R — Noir mat",
-    category: "moto",
-    description:
-      "Bras oscillant en aluminium Honda CB650R traité en noir mat RAL 9005. Discret et résistant.",
-    colors: ["RAL 9005"],
-    featured: false,
-  },
-  {
-    id: "moto-05",
-    title: "Jantes Ducati Monster — Jaune signalisation",
-    category: "moto",
-    description:
-      "Jantes Ducati Monster thermolaquées en RAL 1003 jaune signalisation brillant. Contraste spectaculaire avec le cadre rouge.",
-    colors: ["RAL 1003"],
-    featured: false,
-  },
-  {
-    id: "moto-06",
-    title: "Cadre Harley Sportster — Noir foncé satiné",
-    category: "moto",
-    description:
-      "Restauration complète du cadre Harley-Davidson Sportster en RAL 9005 noir foncé satiné. Finition digne d'une sortie d'usine.",
-    colors: ["RAL 9005"],
-    featured: false,
-  },
-  // Voiture
-  {
-    id: "voiture-01",
-    title: "Étriers Brembo 6 pistons — Rouge feu",
-    category: "voiture",
-    description:
-      "4 étriers Brembo 6 pistons décapés et thermolaqués en RAL 3000 rouge feu brillant. Finition haute température, résistante jusqu'à 200 °C en continu.",
-    colors: ["RAL 3000"],
-    featured: true,
-  },
-  {
-    id: "voiture-02",
-    title: "Arceau OMP — Blanc pur",
-    category: "voiture",
-    description:
-      "Arceau de sécurité OMP traité en RAL 9010 blanc pur brillant pour un véhicule de compétition track day.",
+      "Thermolaquage blanc pur sur jantes Mercedes 18 pouces pour un look épuré assorti à la carrosserie blanche du véhicule. Finition brillante haute résistance.",
     colors: ["RAL 9010"],
     featured: false,
   },
   {
-    id: "voiture-03",
-    title: "Cache moteur BMW M3 — Noir satiné",
-    category: "voiture",
+    id: 4,
+    title: "Jantes Golf GTI — Noir & rouge racing",
+    category: "jantes",
     description:
-      "Cache moteur en aluminium BMW M3 thermolaqué en RAL 9005 satiné. Rendu sobre et élégant sous le capot.",
-    colors: ["RAL 9005"],
+      "Réalisation bicolore : faces usinées en noir foncé, liserés et détails en rouge signalisation. Un traitement en deux cuissons pour un résultat impeccable.",
+    colors: ["RAL 9005", "RAL 3020"],
+    featured: false,
+  },
+
+  // ── Moto (3) ─────────────────────────────────────────────────────────
+  {
+    id: 5,
+    title: "Cadre Triumph Street Triple — Vert mousse",
+    category: "moto",
+    description:
+      "Sablage et thermolaquage du cadre et du sous-cadre d'une Triumph Street Triple. Teinte vert mousse choisie pour un style British racing discret et raffiné.",
+    colors: ["RAL 6005"],
+    featured: true,
+  },
+  {
+    id: 6,
+    title: "Jantes Ducati Monster — Rouge signalisation",
+    category: "moto",
+    description:
+      "Thermolaquage de jantes à bâtons Ducati Monster en rouge signalisation brillant. Résistance renforcée aux projections de chaîne et au nettoyeur haute pression.",
+    colors: ["RAL 3020"],
     featured: false,
   },
   {
-    id: "voiture-04",
-    title: "Barre anti-rapprochement — Bleu gentiane",
-    category: "voiture",
+    id: 7,
+    title: "Cadre & bras oscillant Yamaha MT-07 — Noir & or",
+    category: "moto",
     description:
-      "Barre anti-rapprochement en acier traitée en RAL 5010 bleu gentiane brillant. Esthétique et fonctionnel.",
-    colors: ["RAL 5010"],
-    featured: false,
+      "Projet custom complet : cadre en noir foncé mat, bras oscillant et platines en jaune signalisation brillant pour un contraste saisissant sur cette Yamaha MT-07.",
+    colors: ["RAL 9005", "RAL 1003"],
+    featured: true,
   },
+
+  // ── Mobilier (3) ─────────────────────────────────────────────────────
   {
-    id: "voiture-05",
-    title: "Étriers AP Racing — Jaune signalisation",
-    category: "voiture",
+    id: 8,
+    title: "Banquettes acier pour terrasse restaurant",
+    category: "mobilier",
     description:
-      "Étriers AP Racing thermolaqués en RAL 1003 jaune signalisation pour un look sportif distinctif.",
-    colors: ["RAL 1003"],
-    featured: false,
-  },
-  {
-    id: "voiture-06",
-    title: "Collecteur d'admission — Noir mat",
-    category: "voiture",
-    description:
-      "Collecteur d'admission en aluminium thermolaqué en RAL 9005 noir mat haute température.",
-    colors: ["RAL 9005"],
-    featured: false,
-  },
-  // Pièces métalliques
-  {
-    id: "pieces-01",
-    title: "Portail coulissant 5m — Gris anthracite",
-    category: "pieces",
-    description:
-      "Portail coulissant de 5 mètres en acier galvanisé, sablé et thermolaqué en RAL 7016 gris anthracite satiné. Résistance extérieur garantie.",
+      "Série de 12 structures de banquettes en tube acier pour la terrasse d'un restaurant parisien. Thermolaquage gris anthracite texturé, anti-UV et résistant aux intempéries.",
     colors: ["RAL 7016"],
     featured: true,
   },
   {
-    id: "pieces-02",
-    title: "Garde-corps balcon — Noir foncé",
-    category: "pieces",
+    id: 9,
+    title: "Table basse design — Effet corten Patina",
+    category: "mobilier",
     description:
-      "Ensemble de garde-corps pour balcon résidentiel en acier thermolaqué RAL 9005 brillant. 8 mètres linéaires traités.",
-    colors: ["RAL 9005"],
+      "Table basse en acier découpé au laser, thermolaquée avec la finition Patina « Corten Classique ». L'effet rouillé contraste avec le plateau en chêne massif.",
+    colors: [],
     featured: false,
   },
   {
-    id: "pieces-03",
-    title: "Mobilier terrasse restaurant — Gris clair",
-    category: "pieces",
+    id: 10,
+    title: "Étagères murales atelier — Blanc de sécurité",
+    category: "mobilier",
     description:
-      "Série de 20 tables et 80 chaises en acier pour terrasse de restaurant, thermolaquées en RAL 7035 gris clair satiné. Production série avec constance de teinte.",
+      "Lot de 8 étagères murales en cornières acier pour un concept-store. Thermolaquage blanc de sécurité mat pour un rendu épuré et lumineux dans l'espace de vente.",
+    colors: ["RAL 9016"],
+    featured: false,
+  },
+
+  // ── Industriel (3) ───────────────────────────────────────────────────
+  {
+    id: 11,
+    title: "Charpente métallique atelier 200 m²",
+    category: "industriel",
+    description:
+      "Sablage SA 2.5 et thermolaquage de l'ensemble de la charpente métallique d'un atelier artisanal. Système duplex métallisation zinc + poudre époxy gris clair pour une durabilité de 25 ans.",
     colors: ["RAL 7035"],
     featured: true,
   },
   {
-    id: "pieces-04",
-    title: "Escalier métallique hélicoïdal — Blanc pur",
-    category: "pieces",
+    id: 12,
+    title: "Garde-corps inox brossé — Immeuble Cergy",
+    category: "industriel",
     description:
-      "Escalier hélicoïdal en acier de 3 mètres de hauteur, sablé intégralement et thermolaqué en RAL 9010 blanc pur satiné.",
-    colors: ["RAL 9010"],
+      "Thermolaquage de 45 mètres linéaires de garde-corps en acier pour un immeuble résidentiel. Finition aluminium blanc métallisé reproduisant l'aspect de l'inox brossé à moindre coût.",
+    colors: ["RAL 9006"],
     featured: false,
   },
   {
-    id: "pieces-05",
-    title: "Structure pergola bioclimatique — Gris anthracite",
-    category: "pieces",
+    id: 13,
+    title: "Supports panneaux solaires — Anti-corrosion C4",
+    category: "industriel",
     description:
-      "Charpente de pergola bioclimatique en aluminium traitée en RAL 7016 gris anthracite mat. Pièces de 4 mètres traitées en cabine 7m.",
+      "Traitement anti-corrosion de 200 supports de panneaux photovoltaïques pour une ferme solaire en milieu rural. Métallisation zinc 200 µm + thermolaquage gris fenêtre conforme ISO 12944 C4.",
+    colors: ["RAL 7040"],
+    featured: false,
+  },
+
+  // ── Portail (3) ──────────────────────────────────────────────────────
+  {
+    id: 14,
+    title: "Portail coulissant 5 m — RAL 7016",
+    category: "portail",
+    description:
+      "Portail coulissant motorisé de 5 mètres en acier, thermolaqué gris anthracite. Sablage intégral de la structure rouillée puis application du système primaire zinc + poudre époxy.",
     colors: ["RAL 7016"],
     featured: false,
   },
   {
-    id: "pieces-06",
-    title: "Clôture barreaudée 12m — Vert mousse",
-    category: "pieces",
+    id: 15,
+    title: "Portail battant & clôture assortie — Vert mousse",
+    category: "portail",
     description:
-      "Clôture barreaudée de 12 mètres linéaires en acier, traitement complet sablage + thermolaquage RAL 6005 vert mousse satiné.",
+      "Ensemble portail battant 3,50 m + portillon piéton + 25 m de clôture barreaudée. Thermolaquage vert mousse satiné pour une intégration harmonieuse dans un environnement boisé.",
     colors: ["RAL 6005"],
     featured: false,
   },
-  // Mobilier
   {
-    id: "mobilier-01",
-    title: "Banc public design — Noir foncé satiné",
-    category: "mobilier",
-    description:
-      "Mobilier urbain : banc design en acier Corten sablé et thermolaqué en RAL 9005 noir foncé satiné. Résistance extérieur garantie.",
-    colors: ["RAL 9005"],
-    featured: false,
-  },
-  {
-    id: "mobilier-02",
-    title: "Étagère bibliothèque — Blanc de sécurité",
-    category: "mobilier",
-    description:
-      "Étagère en tube acier pour bibliothèque, thermolaquée en RAL 9016 blanc de sécurité mat. Finition douce au toucher.",
-    colors: ["RAL 9016"],
-    featured: false,
-  },
-  // Portails
-  {
-    id: "portail-01",
-    title: "Portail battant fer forgé — Noir foncé",
+    id: 16,
+    title: "Portail contemporain à lames — Noir foncé mat",
     category: "portail",
     description:
-      "Restauration d'un portail en fer forgé ancien. Sablage complet, primaire anti-corrosion et thermolaquage RAL 9005 brillant.",
+      "Portail design à lames horizontales en aluminium, thermolaqué noir foncé mat. Finition haut de gamme avec traitement anti-traces de doigts pour un entretien facilité.",
     colors: ["RAL 9005"],
-    featured: true,
-  },
-  {
-    id: "portail-02",
-    title: "Clôture résidentielle — Gris anthracite",
-    category: "portail",
-    description:
-      "Ensemble clôture + portillon résidentiel en acier soudé, traité en RAL 7016 gris anthracite satiné pour s'intégrer au bardage de la maison.",
-    colors: ["RAL 7016"],
     featured: false,
   },
 ];
+
+export function getProjectsByCategory(
+  category: ProjectCategoryKey,
+): Project[] {
+  if (category === "all") return PROJECTS;
+  return PROJECTS.filter((p) => p.category === category);
+}
+
+export function getFeaturedProjects(): Project[] {
+  return PROJECTS.filter((p) => p.featured);
+}

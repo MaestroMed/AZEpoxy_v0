@@ -16,7 +16,7 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
 import { ProcessStep } from "@/components/ui/process-step";
-import { FaqAccordion } from "@/components/ui/faq-accordion";
+import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 import { getServiceBySlug } from "@/lib/services-data";
@@ -245,7 +245,7 @@ export default function ThermolaquagePage() {
 
           <div className="mt-14">
             <ScrollReveal delay={0.1}>
-              <FaqAccordion items={service.faqs} />
+              <FAQAccordion items={service.faqs} />
             </ScrollReveal>
           </div>
         </div>

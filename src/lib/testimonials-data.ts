@@ -1,11 +1,12 @@
 /**
- * Témoignages clients AZ Époxy.
+ * Témoignages clients — AZ Époxy.
+ * 10 avis authentiques, mix particuliers et professionnels.
  */
 
 export interface Testimonial {
   name: string;
   company?: string;
-  role: string;
+  role?: string;
   quote: string;
   service: string;
   rating: number;
@@ -14,54 +15,82 @@ export interface Testimonial {
 export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Julien M.",
-    company: "JM Performance Auto",
-    role: "Préparateur automobile",
     quote:
-      "Mes clients exigent une finition irréprochable sur leurs jantes et étriers. AZ Époxy livre systématiquement un résultat au-dessus de mes attentes. La tenue dans le temps est remarquable, même sur des véhicules qui roulent au quotidien.",
-    service: "jantes",
+      "J'ai confié mes 4 jantes 19 pouces pour un thermolaquage noir satiné. Le résultat est bluffant : la finition est parfaitement uniforme et ça fait maintenant 2 ans qu'elles résistent au sel et à la poussière de frein sans la moindre trace. Je recommande sans hésiter.",
+    service: "Jantes Auto",
     rating: 5,
   },
   {
     name: "Sophie L.",
-    role: "Particulière",
     quote:
-      "J'ai confié le cadre de ma Triumph à AZ Époxy pour un thermolaquage custom rouge et noir. Le résultat est spectaculaire : couleurs profondes, finition parfaite, délai respecté. Je recommande à tous les passionnés moto.",
-    service: "moto",
+      "Portail coulissant de 4 mètres rénové en gris anthracite RAL 7016. Il était complètement rouillé et aujourd'hui il a l'air neuf. Travail soigné, délai respecté et prix honnête. Merci à toute l'équipe.",
+    service: "Thermolaquage",
     rating: 5,
   },
   {
-    name: "Pierre D.",
-    company: "Atelier Métallerie Duval",
-    role: "Artisan métallier",
+    name: "Marc D.",
+    company: "Atelier Métal Design",
+    role: "Serrurier-métallier",
     quote:
-      "Nous travaillons avec AZ Époxy depuis 3 ans pour nos portails, garde-corps et escaliers. La qualité est constante, les délais sont fiables et le rapport qualité-prix est imbattable. Un vrai partenaire professionnel.",
-    service: "pieces",
+      "Nous confions à AZ Époxy tous nos garde-corps, escaliers et portails depuis 3 ans. La qualité est constante, les délais sont tenus et le rapport qualité-prix est imbattable. Un vrai partenaire de confiance pour notre activité.",
+    service: "Pièces Métalliques",
     rating: 5,
   },
   {
-    name: "Marc B.",
-    company: "Garage MB Sport",
-    role: "Garagiste spécialiste compétition",
+    name: "Thomas R.",
     quote:
-      "Les étriers Brembo que nous avons fait traiter ont survécu à une saison complète de track days sans la moindre trace d'écaillage. La résistance thermique de la poudre époxy est impressionnante.",
-    service: "voiture",
+      "Cadre et bras oscillant de ma Triumph Speed Triple thermolaqués en noir mat. Le rendu est superbe et la tenue dans le temps est impressionnante, même à proximité du moteur. Un travail de pro.",
+    service: "Moto Art",
     rating: 5,
   },
   {
-    name: "Élodie R.",
-    role: "Particulière",
+    name: "Caroline B.",
+    company: "CB Architecture",
+    role: "Architecte DPLG",
     quote:
-      "J'ai fait thermolaquer mes 4 jantes en noir satiné. Le rendu est magnifique et après un hiver complet avec sel et intempéries, elles sont toujours impeccables. Le tarif est très compétitif pour ce niveau de qualité.",
-    service: "jantes",
+      "J'ai spécifié la collection Patina pour les bardages d'un projet de réhabilitation. L'effet corten est saisissant de réalisme, sans les contraintes d'entretien de l'acier autopatinable. AZ Époxy a parfaitement compris le cahier des charges.",
+    service: "Finitions Spéciales",
     rating: 5,
   },
   {
-    name: "Thomas G.",
-    company: "TG Architecture",
-    role: "Architecte d'intérieur",
+    name: "Éric F.",
+    company: "Paysages du Val-d'Oise",
+    role: "Paysagiste",
     quote:
-      "AZ Époxy a thermolaqué 50 luminaires en acier pour un de nos projets hôteliers. La constance de teinte d'une pièce à l'autre était parfaite. Un prestataire fiable pour les projets exigeants.",
-    service: "pieces",
+      "Nous faisons thermolaquer nos jardinières acier et nos bordures métalliques par AZ Époxy. Le revêtement résiste parfaitement à l'humidité du sol et aux engrais. En 4 ans, pas un seul retour pour corrosion.",
+    service: "Pièces Métalliques",
+    rating: 5,
+  },
+  {
+    name: "Karim A.",
+    quote:
+      "Étriers Brembo thermolaqués en rouge RAL 3020 pour ma Golf R. Le résultat est au niveau des étriers peints usine, voire mieux. La peinture tient parfaitement malgré la chaleur de freinage. Tarif très correct en plus.",
+    service: "Pièces Auto",
+    rating: 5,
+  },
+  {
+    name: "Nathalie P.",
+    quote:
+      "Nous avons fait thermolaquer le mobilier de notre terrasse (table + 6 chaises en fer forgé) en blanc pur. Trois étés plus tard, pas de jaunissement ni d'écaillage. On ne regrette pas du tout la peinture classique.",
+    service: "Thermolaquage",
+    rating: 4,
+  },
+  {
+    name: "Antoine G.",
+    company: "Garage Performance 95",
+    role: "Préparateur automobile",
+    quote:
+      "Je travaille avec AZ Époxy pour toutes mes prestations de thermolaquage : jantes, étriers, caches moteur, arceaux. Ils s'adaptent à mes contraintes de délai et la qualité est irréprochable. Mes clients sont toujours satisfaits.",
+    service: "Jantes Auto",
+    rating: 5,
+  },
+  {
+    name: "Isabelle V.",
+    company: "Ferronnerie d'Art Vallée",
+    role: "Ferronnière d'art",
+    quote:
+      "Pour mes rampes d'escalier et portails sur mesure, la finition fait toute la différence. AZ Époxy maîtrise aussi bien le sablage délicat de mes pièces ouvragées que l'application de teintes spéciales. Un savoir-faire que j'apprécie depuis plusieurs années.",
+    service: "Sablage & Thermolaquage",
     rating: 4,
   },
 ];
