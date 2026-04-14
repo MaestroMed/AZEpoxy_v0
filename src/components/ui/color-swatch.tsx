@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Plus, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ColorSwatchProps {
@@ -9,6 +10,8 @@ interface ColorSwatchProps {
   name: string;
   hex: string;
   size?: "sm" | "md" | "lg";
+  inCart?: boolean;
+  onToggleCart?: () => void;
 }
 
 const sizeClasses = {
@@ -22,6 +25,8 @@ export function ColorSwatch({
   name,
   hex,
   size = "md",
+  inCart,
+  onToggleCart,
 }: ColorSwatchProps) {
   const [copied, setCopied] = useState(false);
 
@@ -29,7 +34,6 @@ export function ColorSwatch({
     try {
       await navigator.clipboard.writeText(hex);
     } catch {
-      // Fallback for older browsers
       const textarea = document.createElement("textarea");
       textarea.value = hex;
       document.body.appendChild(textarea);
@@ -47,7 +51,7 @@ export function ColorSwatch({
       transition={{ duration: 0.2 }}
       onClick={handleClick}
       className={cn(
-        "relative w-full cursor-pointer overflow-hidden rounded-xl shadow-lg transition-shadow hover:shadow-xl",
+        "relative w-full cursor-pointer overflow-hidden rounded-xl shadow-lg transition-shadow hover:shadow-xl group",
         sizeClasses[size]
       )}
       style={{ backgroundColor: hex }}
@@ -66,6 +70,25 @@ export function ColorSwatch({
         className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"
         aria-hidden="true"
       />
+
+      {/* Cart toggle button */}
+      {onToggleCart && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleCart();
+          }}
+          className={cn(
+            "absolute top-1.5 right-1.5 z-10 flex h-6 w-6 items-center justify-center rounded-full transition-all",
+            inCart
+              ? "bg-brand-orange text-white scale-100"
+              : "bg-white/80 text-brand-night/60 scale-0 group-hover:scale-100 hover:bg-white"
+          )}
+          aria-label={inCart ? `Retirer ${code} de la sélection` : `Ajouter ${code} à la sélection`}
+        >
+          {inCart ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+        </button>
+      )}
 
       {/* Color info */}
       <div className="absolute inset-x-0 bottom-0 p-3">

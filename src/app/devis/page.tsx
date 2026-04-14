@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { DevisWizard } from "@/components/ui/devis-wizard";
@@ -80,7 +81,9 @@ export default function DevisPage() {
       <section className="bg-brand-cream bg-industrial-grid py-24">
         <div className="container-wide max-w-3xl mx-auto">
           <ScrollReveal>
-            <DevisWizard />
+            <Suspense fallback={<div className="h-96 animate-pulse rounded-2xl bg-white/50" />}>
+              <DevisWizard />
+            </Suspense>
           </ScrollReveal>
 
           {/* Reassurance — below wizard */}

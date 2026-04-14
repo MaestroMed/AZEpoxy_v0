@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Check, CircleDot, Bike, DoorOpen, Armchair, Factory, Package } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { POPULAR_RAL } from "@/lib/ral-colors";
+import { POPULAR_RAL, RAL_COLORS } from "@/lib/ral-colors";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { trackEvent } from "@/components/analytics/ga4";
 
@@ -70,6 +71,20 @@ export function DevisWizard() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [direction, setDirection] = useState(1);
+  const searchParams = useSearchParams();
+
+  // Pre-fill RAL from query param (e.g., /devis?ral=RAL 9005,RAL 7016)
+  useEffect(() => {
+    const ralParam = searchParams.get("ral");
+    if (ralParam) {
+      const codes = ralParam.split(",").filter((c) =>
+        RAL_COLORS.some((r) => r.code === c)
+      );
+      if (codes.length > 0) {
+        setData((d) => ({ ...d, selectedRal: codes.join(", ") }));
+      }
+    }
+  }, [searchParams]);
 
   const set = (field: keyof FormData, value: string | boolean) =>
     setData((d) => ({ ...d, [field]: value }));
