@@ -70,6 +70,9 @@ export function Header() {
           : "bg-transparent"
       )}
     >
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-[60] focus:rounded focus:bg-brand-orange focus:px-4 focus:py-2 focus:text-white">
+        Aller au contenu principal
+      </a>
       <div className="container-wide flex h-20 items-center justify-between">
         <Link href="/" className="group flex items-center gap-3">
           <div className="relative h-10 w-10 overflow-hidden rounded-md bg-gradient-ember shadow-lg shadow-brand-orange/40">

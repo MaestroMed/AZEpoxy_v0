@@ -1,112 +1,193 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Flame, Palette, Phone, Sparkles, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  Flame,
+  Palette,
+  Phone,
+  Sparkles,
+  ShieldCheck,
+  Wrench,
+  Target,
+  Award,
+  Users,
+} from "lucide-react";
 import { POPULAR_RAL } from "@/lib/ral-colors";
 import { SITE } from "@/lib/utils";
+import { SERVICES } from "@/lib/services-data";
+import { PROCESS_STEPS } from "@/lib/process-data";
+import { SPECIALTIES } from "@/lib/specialites-data";
+import { TESTIMONIALS } from "@/lib/testimonials-data";
 
-/**
- * NOTE: This is the homepage scaffold. The full 9-section immersive
- * homepage described in the brief is tracked in ULTRAPLAN.md. This
- * scaffold ships the hero, the RAL marquee, the stats band, and a CTA
- * footer — enough to validate the design system and let the rest of the
- * pages be built on top of a consistent look.
- */
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { StatCounter } from "@/components/ui/stat-counter";
+import { TestimonialCard } from "@/components/ui/testimonial-card";
+import { ProcessStep } from "@/components/ui/process-step";
+import { CtaBand } from "@/components/ui/cta-band";
+
+export const metadata: Metadata = {
+  title:
+    "AZ Époxy — Thermolaquage Poudre Époxy Professionnel | 200+ Couleurs RAL",
+  description:
+    "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL, cabine 7m, service express 48h, 0 COV. Devis gratuit sous 24h.",
+};
+
+/** Icon map for service cards */
+const SERVICE_ICONS: Record<string, typeof Flame> = {
+  thermolaquage: Flame,
+  sablage: Wrench,
+  metallisation: ShieldCheck,
+  finitions: Palette,
+};
+
+/** Background colours for specialty cards */
+const SPECIALTY_BG: string[] = [
+  "bg-brand-night",
+  "bg-brand-charcoal",
+  "bg-brand-orange/10",
+  "bg-[#12121F]",
+];
+
 export default function HomePage() {
   return (
     <>
-      {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
+      {/* ── Section 1 — Hero (night bg) ────────────────────────────────── */}
       <section className="relative isolate min-h-[100svh] overflow-hidden bg-brand-night text-white">
-        {/* Background: gradient night + ember glow + grid */}
+        {/* Background layers */}
         <div className="absolute inset-0 bg-gradient-night" />
         <div className="absolute inset-0 bg-industrial-grid-dark opacity-40" />
         <div className="absolute -left-40 top-1/3 h-[600px] w-[600px] rounded-full bg-brand-orange/25 blur-[140px]" />
         <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-brand-orange/15 blur-[120px]" />
-
-        {/* Subtle heat shimmer overlay */}
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-brand-orange/10 via-transparent to-transparent" />
 
         <div className="container-wide relative flex min-h-[100svh] flex-col justify-center pt-32 pb-20">
-          <div className="max-w-4xl">
-            <span className="section-label-light">
-              <Flame className="h-3 w-3" />
-              Thermolaquage poudre époxy · Île-de-France
-            </span>
-
-            <h1 className="heading-display mt-6 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-[clamp(3.5rem,7vw,7rem)]">
-              200°C.
-              <br />
-              <span className="bg-gradient-ember bg-clip-text text-transparent">
-                15 minutes.
+          <ScrollReveal>
+            <div className="max-w-4xl">
+              <span className="section-label-light">
+                <Flame className="h-3 w-3" />
+                Thermolaquage poudre époxy · Île-de-France
               </span>
-              <br />
-              Une protection à vie.
-            </h1>
 
-            <p className="mt-8 max-w-2xl text-balance text-lg text-white/70 sm:text-xl">
-              Finition premium par thermolaquage poudre époxy. 200+ couleurs
-              RAL, cabine 7 mètres, service express 48h, 0 COV.
-              Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.
-            </p>
+              <h1 className="heading-display mt-6 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-[clamp(3.5rem,7vw,7rem)]">
+                200°C.
+                <br />
+                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                  15 minutes.
+                </span>
+                <br />
+                Une protection à vie.
+              </h1>
 
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link href="/devis" className="btn-primary">
-                Demander un devis gratuit
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link href="/couleurs-ral" className="btn-ghost-light">
-                Voir nos 200+ couleurs
-              </Link>
-            </div>
-          </div>
+              <p className="mt-8 max-w-2xl text-balance text-lg text-white/70 sm:text-xl">
+                Finition premium par thermolaquage poudre époxy. 200+ couleurs
+                RAL, cabine 7 mètres, service express 48h, 0 COV. Depuis notre
+                atelier de 1 800 m² à Bruyères-sur-Oise.
+              </p>
 
-          {/* Stats overlay */}
-          <div className="relative mt-20 grid grid-cols-2 gap-6 border-t border-white/10 pt-10 sm:grid-cols-4">
-            {[
-              { value: "200+", label: "Couleurs RAL" },
-              { value: "7m", label: "Cabine max" },
-              { value: "48h", label: "Express" },
-              { value: "0 COV", label: "Sans solvant" },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div className="heading-display text-4xl text-white sm:text-5xl">
-                  {stat.value}
-                </div>
-                <div className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/50">
-                  {stat.label}
-                </div>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link href="/devis" className="btn-primary">
+                  Demander un devis gratuit
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link href="/couleurs-ral" className="btn-ghost-light">
+                  Voir nos 200+ couleurs
+                </Link>
               </div>
-            ))}
+            </div>
+          </ScrollReveal>
+
+          {/* Hero quick stats — animated counters */}
+          <ScrollReveal delay={0.3}>
+            <div className="relative mt-20 grid grid-cols-2 gap-6 border-t border-white/10 pt-10 sm:grid-cols-4">
+              <StatCounter value="200+" label="Couleurs RAL" dark />
+              <StatCounter value="7" label="Mètres — cabine max" dark />
+              <StatCounter value="48" label="Heures — express" dark />
+              <StatCounter value="0" label="COV — sans solvant" dark />
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ── Section 2 — Services Preview (cream bg) ────────────────────── */}
+      <section className="relative overflow-hidden bg-brand-cream py-24">
+        <div className="absolute inset-0 bg-industrial-grid opacity-30" />
+        <div className="container-wide relative">
+          <ScrollReveal>
+            <div className="mb-14 max-w-2xl">
+              <span className="section-label">
+                <Target className="h-3 w-3" />
+                Services
+              </span>
+              <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
+                4 expertises.
+                <br />
+                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                  Un seul atelier.
+                </span>
+              </h2>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            {SERVICES.map((service, i) => {
+              const Icon = SERVICE_ICONS[service.slug] ?? Flame;
+              return (
+                <ScrollReveal key={service.slug} delay={0.1 * i}>
+                  <Link
+                    href={`/services/${service.slug}`}
+                    className="group block rounded-2xl border border-brand-night/10 bg-white p-8 transition-all hover:shadow-lg"
+                  >
+                    <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-orange/10 text-brand-orange">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="heading-display text-xl text-brand-night">
+                      {service.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-brand-charcoal/70">
+                      {service.tagline}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange transition-colors group-hover:text-brand-night">
+                      En savoir plus
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </Link>
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ── Section 2 — RAL Marquee (placeholder for full picker) ────── */}
+      {/* ── Section 3 — RAL Marquee + Collections (night bg) ───────────── */}
       <section className="relative overflow-hidden bg-brand-cream py-24">
         <div className="container-wide">
-          <div className="mb-14 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <span className="section-label">
-                <Palette className="h-3 w-3" />
-                Nuancier RAL
-              </span>
-              <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
-                Plus de 200 teintes.
-                <br />
-                Et 4 collections signature.
-              </h2>
-              <p className="mt-4 max-w-xl text-brand-charcoal/70">
-                Nuancier RAL Classic complet, plus les collections premium
-                Adaptacolor : Patina (effets corten), Polaris (métalliques),
-                Dichroic (reflets irisés) et Sfera (anodisés cosmos).
-              </p>
+          <ScrollReveal>
+            <div className="mb-14 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+              <div className="max-w-2xl">
+                <span className="section-label">
+                  <Palette className="h-3 w-3" />
+                  Nuancier RAL
+                </span>
+                <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
+                  Plus de 200 teintes.
+                  <br />
+                  Et 4 collections signature.
+                </h2>
+                <p className="mt-4 max-w-xl text-brand-charcoal/70">
+                  Nuancier RAL Classic complet, plus les collections premium
+                  Adaptacolor : Patina (effets corten), Polaris (métalliques),
+                  Dichroic (reflets irisés) et Sfera (anodisés cosmos).
+                </p>
+              </div>
+              <Link
+                href="/couleurs-ral"
+                className="inline-flex items-center gap-2 rounded-full border border-brand-night/15 bg-white px-6 py-3 text-sm font-semibold text-brand-night transition-all hover:border-brand-night hover:bg-brand-night hover:text-white"
+              >
+                Explorer le nuancier
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-            <Link
-              href="/couleurs-ral"
-              className="inline-flex items-center gap-2 rounded-full border border-brand-night/15 bg-white px-6 py-3 text-sm font-semibold text-brand-night transition-all hover:border-brand-night hover:bg-brand-night hover:text-white"
-            >
-              Explorer le nuancier
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          </ScrollReveal>
 
           {/* Marquee */}
           <div className="mask-fade-x overflow-hidden">
@@ -131,7 +212,7 @@ export default function HomePage() {
                       </p>
                     </div>
                   </div>
-                )
+                ),
               )}
             </div>
           </div>
@@ -164,30 +245,116 @@ export default function HomePage() {
                 gradient: "from-amber-500 via-rose-500 to-purple-900",
               },
             ].map((c) => (
-              <Link
-                key={c.slug}
-                href={`/couleurs-ral/${c.slug}`}
-                className="group relative h-48 overflow-hidden rounded-2xl"
-              >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${c.gradient}`}
-                />
-                <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                <div className="relative flex h-full flex-col justify-end p-6 text-white">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-                    Collection
-                  </p>
-                  <p className="heading-display text-3xl">{c.label}</p>
-                  <p className="mt-1 text-sm text-white/80">{c.tagline}</p>
-                </div>
-              </Link>
+              <ScrollReveal key={c.slug} delay={0.05}>
+                <Link
+                  href={`/couleurs-ral/${c.slug}`}
+                  className="group relative block h-48 overflow-hidden rounded-2xl"
+                >
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${c.gradient}`}
+                  />
+                  <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div className="relative flex h-full flex-col justify-end p-6 text-white">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
+                      Collection
+                    </p>
+                    <p className="heading-display text-3xl">{c.label}</p>
+                    <p className="mt-1 text-sm text-white/80">{c.tagline}</p>
+                  </div>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Section 3 — Feature band (placeholder teaser) ────────────── */}
+      {/* ── Section 4 — Process 6 Steps (night bg) ─────────────────────── */}
+      <section className="relative overflow-hidden bg-brand-night py-24 text-white">
+        <div className="absolute inset-0 bg-industrial-grid-dark opacity-30" />
+        <div className="container-wide relative">
+          <ScrollReveal>
+            <div className="mb-14 text-center">
+              <span className="section-label-light">
+                <Wrench className="h-3 w-3" />
+                Notre procédé
+              </span>
+              <h2 className="heading-display mx-auto mt-4 max-w-2xl text-4xl text-white sm:text-5xl">
+                6 étapes.
+                <br />
+                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                  Zéro compromis.
+                </span>
+              </h2>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {PROCESS_STEPS.map((ps, i) => (
+              <ScrollReveal key={ps.step} delay={0.1 * i}>
+                {/* Dark-mode override wrapper for ProcessStep */}
+                <div className="[&_h3]:text-white [&_p]:text-white/60 [&_span]:text-brand-orange/30">
+                  <ProcessStep
+                    step={ps.step}
+                    title={ps.title}
+                    description={ps.description}
+                  />
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 5 — Specialties Showcase (cream bg) ────────────────── */}
+      <section className="relative overflow-hidden bg-brand-cream py-24">
+        <div className="absolute inset-0 bg-industrial-grid opacity-30" />
+        <div className="container-wide relative">
+          <ScrollReveal>
+            <div className="mb-14 max-w-2xl">
+              <span className="section-label">
+                <Award className="h-3 w-3" />
+                Spécialités
+              </span>
+              <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
+                Chaque pièce
+                <br />
+                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                  mérite l&apos;excellence.
+                </span>
+              </h2>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {SPECIALTIES.map((spec, i) => (
+              <ScrollReveal key={spec.slug} delay={0.1 * i}>
+                <Link
+                  href={`/specialites/${spec.slug}`}
+                  className="group relative block h-56 overflow-hidden rounded-2xl"
+                >
+                  {/* Card background */}
+                  <div
+                    className={`absolute inset-0 ${SPECIALTY_BG[i % SPECIALTY_BG.length]} transition-transform duration-500 group-hover:scale-105`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+                  {/* Content */}
+                  <div className="relative flex h-full flex-col justify-end p-6 text-white">
+                    <h3 className="heading-display text-2xl">{spec.title}</h3>
+                    <p className="mt-1 text-sm text-white/70">{spec.tagline}</p>
+                    <span className="mt-3 inline-block w-fit rounded-full bg-white/15 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
+                      À partir de {spec.priceFrom}
+                    </span>
+                  </div>
+                </Link>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 6 — Feature Band (night bg) ────────────────────────── */}
       <section className="relative overflow-hidden bg-brand-night py-24 text-white">
         <div className="absolute inset-0 bg-industrial-grid-dark opacity-30" />
         <div className="container-wide relative">
@@ -208,55 +375,97 @@ export default function HomePage() {
                 title: "Finitions signature",
                 desc: "Au-delà du RAL Classic : collections Patina, Polaris, Dichroic, Sfera du partenaire Adaptacolor.",
               },
-            ].map((f) => (
-              <div
-                key={f.title}
-                className="group rounded-2xl border border-white/10 bg-white/[0.02] p-8 transition-all hover:border-brand-orange/40 hover:bg-white/[0.04]"
-              >
-                <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-orange/15 text-brand-orange">
-                  <f.icon className="h-6 w-6" />
+            ].map((f, i) => (
+              <ScrollReveal key={f.title} delay={0.15 * i}>
+                <div className="group rounded-2xl border border-white/10 bg-white/[0.02] p-8 transition-all hover:border-brand-orange/40 hover:bg-white/[0.04]">
+                  <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-orange/15 text-brand-orange">
+                    <f.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="heading-display text-xl text-white">
+                    {f.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/60">
+                    {f.desc}
+                  </p>
                 </div>
-                <h3 className="heading-display text-xl text-white">
-                  {f.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/60">
-                  {f.desc}
-                </p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Section 9 — Final CTA (shortened) ────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-ember py-24 text-white">
-        <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay" />
-        <div className="container-tight relative text-center">
-          <h2 className="heading-display text-4xl text-balance sm:text-5xl">
-            Un projet ? Devis gratuit sous 24h.
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-white/80">
-            Jantes, moto, portails, mobilier, pièces industrielles — envoyez
-            vos photos, on vous rappelle avec un chiffrage.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/devis"
-              className="inline-flex items-center gap-2 rounded-full bg-brand-night px-8 py-4 font-semibold text-white shadow-xl transition-all hover:bg-brand-night-deep hover:-translate-y-0.5"
-            >
-              Demander un devis
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <a
-              href={SITE.phoneHref}
-              className="inline-flex items-center gap-2 rounded-full border-2 border-white/30 bg-white/10 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:border-white hover:bg-white/20"
-            >
-              <Phone className="h-4 w-4" />
-              {SITE.phone}
-            </a>
+      {/* ── Section 7 — Stats Band (cream bg) ──────────────────────────── */}
+      <section className="relative overflow-hidden bg-brand-cream py-24">
+        <div className="absolute inset-0 bg-industrial-grid opacity-30" />
+        <div className="container-wide relative">
+          <ScrollReveal>
+            <div className="mb-14 text-center">
+              <span className="section-label">
+                <Users className="h-3 w-3" />
+                En chiffres
+              </span>
+              <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
+                Notre atelier,
+                <br />
+                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                  en quelques chiffres.
+                </span>
+              </h2>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.2}>
+            <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+              <StatCounter value="1800" label="m² d'atelier" />
+              <StatCounter value="200+" label="couleurs RAL" />
+              <StatCounter value="15+" label="années d'expérience" />
+              <StatCounter value="2000+" label="projets réalisés" />
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ── Section 8 — Testimonials (night bg) ────────────────────────── */}
+      <section className="relative overflow-hidden bg-brand-night py-24 text-white">
+        <div className="absolute inset-0 bg-industrial-grid-dark opacity-30" />
+        <div className="container-wide relative">
+          <ScrollReveal>
+            <div className="mb-14 text-center">
+              <span className="section-label-light">
+                <Users className="h-3 w-3" />
+                Témoignages
+              </span>
+              <h2 className="heading-display mx-auto mt-4 max-w-2xl text-4xl text-white sm:text-5xl">
+                Ils nous font
+                <br />
+                confiance.
+              </h2>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            {TESTIMONIALS.slice(0, 3).map((t, i) => (
+              <ScrollReveal key={t.name} delay={0.15 * i}>
+                <TestimonialCard
+                  name={t.name}
+                  company={t.company}
+                  quote={t.quote}
+                  rating={t.rating}
+                  dark
+                />
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* ── Section 9 — Final CTA ──────────────────────────────────────── */}
+      <ScrollReveal>
+        <CtaBand
+          title="Un projet ? Devis gratuit sous 24h."
+          description="Jantes, moto, portails, mobilier, pièces industrielles — envoyez vos photos, on vous rappelle avec un chiffrage."
+        />
+      </ScrollReveal>
     </>
   );
 }

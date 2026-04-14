@@ -125,11 +125,39 @@ const PREMIUM_COLLECTIONS = [
   },
 ];
 
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Finitions Spéciales",
+  description:
+    "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium Adaptacolor : Patina, Polaris, Dichroic, Sfera. AZ Époxy, Bruyères-sur-Oise.",
+  provider: {
+    "@type": "LocalBusiness",
+    name: "AZ Époxy",
+    telephone: "+33971357496",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "23 Chemin du Bac des Aubins",
+      addressLocality: "Bruyères-sur-Oise",
+      postalCode: "95820",
+      addressCountry: "FR",
+    },
+  },
+  areaServed: "Île-de-France",
+  serviceType: "Finitions Spéciales",
+};
+
 export default function FinitionsPage() {
   const service = getServiceBySlug("finitions")!;
 
   return (
     <>
+      {/* ── Service Schema ───────────────────────────────────────────── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
       <PageHero
         label="Finitions"

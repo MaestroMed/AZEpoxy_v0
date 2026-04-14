@@ -162,9 +162,30 @@ export default function ContactPage() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
-              <div className="rounded-2xl bg-brand-charcoal/50 aspect-video flex items-center justify-center">
-                <p className="text-white/30 text-sm font-medium">
-                  Carte interactive
+              <div className="overflow-hidden rounded-2xl aspect-video">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2595.3!2d2.327!3d49.147!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s23+Chemin+du+Bac+des+Aubins%2C+95820+Bruy%C3%A8res-sur-Oise!5e0!3m2!1sfr!2sfr"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="AZ Époxy — 23 Chemin du Bac des Aubins, Bruyères-sur-Oise"
+                  className="h-full w-full"
+                />
+              </div>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <a
+                  href="https://www.google.com/maps/dir//23+Chemin+du+Bac+des+Aubins,+95820+Bruy%C3%A8res-sur-Oise"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-brand-orange hover:bg-brand-orange"
+                >
+                  Itinéraire Google Maps
+                </a>
+                <p className="flex items-center text-sm text-white/50">
+                  Accès poids lourds possible — Parking gratuit
                 </p>
               </div>
             </ScrollReveal>

@@ -88,11 +88,39 @@ const APPLICATIONS = [
   },
 ];
 
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Sablage & Grenaillage",
+  description:
+    "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 mètres. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.",
+  provider: {
+    "@type": "LocalBusiness",
+    name: "AZ Époxy",
+    telephone: "+33971357496",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "23 Chemin du Bac des Aubins",
+      addressLocality: "Bruyères-sur-Oise",
+      postalCode: "95820",
+      addressCountry: "FR",
+    },
+  },
+  areaServed: "Île-de-France",
+  serviceType: "Sablage",
+};
+
 export default function SablagePage() {
   const service = getServiceBySlug("sablage")!;
 
   return (
     <>
+      {/* ── Service Schema ───────────────────────────────────────────── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
       <PageHero
         label="Sablage"

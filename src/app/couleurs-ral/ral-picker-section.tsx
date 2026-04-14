@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback } from "react";
 import { RAL_COLORS, RAL_FAMILIES } from "@/lib/ral-colors";
 import { ColorSwatch } from "@/components/ui/color-swatch";
 import { ColorFilterBar } from "@/components/ui/color-filter-bar";
+import { trackEvent } from "@/components/analytics/ga4";
 
 export function RalPickerSection() {
   const [activeFamily, setActiveFamily] = useState<string | null>(null);
@@ -30,6 +31,7 @@ export function RalPickerSection() {
 
   const handleFamilyChange = useCallback((family: string | null) => {
     setActiveFamily(family);
+    trackEvent("color_filter", { family: family || "all" });
   }, []);
 
   const handleSearchChange = useCallback((q: string) => {

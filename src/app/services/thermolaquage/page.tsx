@@ -38,11 +38,39 @@ const FEATURE_ICONS = [
   <Droplets key="droplets" className="h-6 w-6" />,
 ];
 
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Thermolaquage Poudre Époxy",
+  description:
+    "Thermolaquage par poudre époxy professionnel : application électrostatique, cuisson à 200 °C, 200+ couleurs RAL, 0 COV. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.",
+  provider: {
+    "@type": "LocalBusiness",
+    name: "AZ Époxy",
+    telephone: "+33971357496",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "23 Chemin du Bac des Aubins",
+      addressLocality: "Bruyères-sur-Oise",
+      postalCode: "95820",
+      addressCountry: "FR",
+    },
+  },
+  areaServed: "Île-de-France",
+  serviceType: "Thermolaquage",
+};
+
 export default function ThermolaquagePage() {
   const service = getServiceBySlug("thermolaquage")!;
 
   return (
     <>
+      {/* ── Service Schema ───────────────────────────────────────────── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
       <PageHero
         label="Thermolaquage"

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { PROJECTS, PROJECT_CATEGORIES, type ProjectCategoryKey } from "@/lib/realisations-data";
+import { trackEvent } from "@/components/analytics/ga4";
 import { RAL_COLORS } from "@/lib/ral-colors";
 
 /** Resolve a RAL code to its hex color */
@@ -13,6 +14,11 @@ function ralToHex(code: string): string | undefined {
 
 export function PortfolioSection() {
   const [activeCategory, setActiveCategory] = useState<ProjectCategoryKey>("all");
+
+  const handleCategoryChange = (category: ProjectCategoryKey) => {
+    setActiveCategory(category);
+    trackEvent("realisation_filter", { category });
+  };
 
   const filtered =
     activeCategory === "all"
@@ -29,7 +35,7 @@ export function PortfolioSection() {
             return (
               <button
                 key={key}
-                onClick={() => setActiveCategory(key)}
+                onClick={() => handleCategoryChange(key)}
                 className={cn(
                   "flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-all",
                   activeCategory === key

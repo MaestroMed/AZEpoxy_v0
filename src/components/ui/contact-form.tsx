@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+import { PhotoUpload } from "@/components/ui/photo-upload";
+import { trackEvent } from "@/components/analytics/ga4";
 
 interface ContactFormProps {
   variant?: "simple" | "full";
@@ -12,20 +15,60 @@ const inputClass =
 
 const labelClass = "mb-1.5 block text-sm font-semibold text-brand-night";
 
-export function ContactForm({ variant = "simple" }: ContactFormProps) {
-  const [submitted, setSubmitted] = useState(false);
+type Status = "idle" | "loading" | "success" | "error";
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+export function ContactForm({ variant = "simple" }: ContactFormProps) {
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [photos, setPhotos] = useState<File[]>([]);
+  const formStartTracked = useRef(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setStatus("loading");
+    setErrorMsg("");
+
+    const form = e.currentTarget;
+
+    try {
+      if (variant === "full") {
+        // Devis: send as FormData (multipart) to support file uploads
+        const formData = new FormData(form);
+        // Remove the honeypot from visible data but keep it for the API
+        for (const photo of photos) {
+          formData.append("photos", photo);
+        }
+        const res = await fetch("/api/devis", { method: "POST", body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Erreur lors de l'envoi.");
+      } else {
+        // Contact: send as JSON
+        const formData = new FormData(form);
+        const body = Object.fromEntries(formData.entries());
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Erreur lors de l'envoi.");
+      }
+      trackEvent("form_submit", { variant });
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(
+        err instanceof Error
+          ? err.message
+          : "Erreur lors de l'envoi. Appelez-nous au 09 71 35 74 96."
+      );
+    }
   };
 
-  if (submitted) {
+  if (status === "success") {
     return (
       <div className="rounded-2xl border border-brand-success/30 bg-brand-success/10 p-8 text-center">
-        <p className="heading-display text-xl text-brand-night">
-          Merci !
-        </p>
+        <p className="heading-display text-xl text-brand-night">Merci !</p>
         <p className="mt-2 text-brand-charcoal/70">
           Nous avons bien reçu votre demande. Nous vous recontacterons sous
           24h.
@@ -36,6 +79,11 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Honeypot — invisible to users, catches bots */}
+      <div className="absolute -left-[9999px]" aria-hidden="true">
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+      </div>
+
       {/* Name */}
       <div>
         <label htmlFor="contact-name" className={labelClass}>
@@ -48,6 +96,12 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
           required
           placeholder="Jean Dupont"
           className={inputClass}
+          onFocus={() => {
+            if (!formStartTracked.current) {
+              formStartTracked.current = true;
+              trackEvent("form_start", { variant });
+            }
+          }}
         />
       </div>
 
@@ -162,6 +216,17 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
               className={inputClass}
             />
           </div>
+
+          {/* Photo upload */}
+          <div>
+            <label className={labelClass}>
+              Photos de vos pièces{" "}
+              <span className="font-normal text-brand-charcoal/50">
+                (optionnel)
+              </span>
+            </label>
+            <PhotoUpload files={photos} onChange={setPhotos} />
+          </div>
         </>
       )}
 
@@ -180,9 +245,30 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
         />
       </div>
 
+      {/* Error */}
+      {status === "error" && (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {errorMsg}
+        </div>
+      )}
+
       {/* Submit */}
-      <button type="submit" className="btn-primary w-full justify-center">
-        Envoyer la demande
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className={cn(
+          "btn-primary w-full justify-center",
+          status === "loading" && "pointer-events-none opacity-70"
+        )}
+      >
+        {status === "loading" ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Envoi en cours...
+          </>
+        ) : (
+          "Envoyer la demande"
+        )}
       </button>
     </form>
   );

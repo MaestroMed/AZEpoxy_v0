@@ -5,6 +5,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SITE } from "@/lib/utils";
 import { Phone, Mail } from "lucide-react";
 import { FaqSection } from "./faq-section";
+import { FAQS } from "@/lib/faq-data";
 
 export const metadata: Metadata = {
   title: "Questions Fréquentes",
@@ -12,9 +13,28 @@ export const metadata: Metadata = {
     "Retrouvez les réponses aux questions les plus fréquentes sur nos prestations de thermolaquage, sablage et métallisation à Bruyères-sur-Oise.",
 };
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
+
 export default function FaqPage() {
   return (
     <>
+      {/* ── FAQPage Schema ─────────────────────────────────── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       {/* ── Hero ───────────────────────────────────────────── */}
       <PageHero
         label="FAQ"

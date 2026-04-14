@@ -4,6 +4,9 @@ import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { CookieConsent } from "@/components/ui/cookie-consent";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import GA4 from "@/components/analytics/ga4";
 import { SITE } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -143,8 +146,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
         <Header />
-        <main className="relative">{children}</main>
+        <main id="main-content" className="relative">{children}</main>
         <Footer />
+        <GA4 />
+        <WhatsAppButton />
+        <CookieConsent />
       </body>
     </html>
   );

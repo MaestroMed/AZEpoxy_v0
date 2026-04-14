@@ -118,11 +118,39 @@ function CellIcon({ value }: { value: string }) {
   return <span>{value}</span>;
 }
 
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Métallisation",
+  description:
+    "Métallisation zinc et aluminium par projection thermique. Protection anti-corrosion extrême pour milieux marins, industriels et enterrés. Conforme ISO 2063. AZ Époxy, Bruyères-sur-Oise.",
+  provider: {
+    "@type": "LocalBusiness",
+    name: "AZ Époxy",
+    telephone: "+33971357496",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "23 Chemin du Bac des Aubins",
+      addressLocality: "Bruyères-sur-Oise",
+      postalCode: "95820",
+      addressCountry: "FR",
+    },
+  },
+  areaServed: "Île-de-France",
+  serviceType: "Métallisation",
+};
+
 export default function MetallisationPage() {
   const service = getServiceBySlug("metallisation")!;
 
   return (
     <>
+      {/* ── Service Schema ───────────────────────────────────────────── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
       <PageHero
         label="Métallisation"
