@@ -1,9 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Outfit } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { SITE } from "@/lib/utils";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
 
 export const viewport: Viewport = {
   themeColor: "#1A1A2E",
@@ -130,8 +134,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <body className="min-h-screen bg-background antialiased">
+    <html lang="fr" className={`${inter.variable} ${outfit.variable}`}>
+      <body className="min-h-screen bg-background antialiased font-sans">
         <Script
           id="ld-json-business"
           type="application/ld+json"
