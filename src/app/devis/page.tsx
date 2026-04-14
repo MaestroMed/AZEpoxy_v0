@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
-import { ContactForm } from "@/components/ui/contact-form";
+import { DevisWizard } from "@/components/ui/devis-wizard";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SITE } from "@/lib/utils";
@@ -76,39 +76,34 @@ export default function DevisPage() {
         ]}
       />
 
-      {/* ── Form Section ───────────────────────────────────── */}
+      {/* ── Wizard Section ────────────────────────────────── */}
       <section className="bg-brand-cream bg-industrial-grid py-24">
-        <div className="container-wide">
-          <div className="grid lg:grid-cols-[1.4fr_1fr] gap-12">
-            {/* Form */}
-            <ScrollReveal>
-              <ContactForm variant="full" />
-            </ScrollReveal>
+        <div className="container-wide max-w-3xl mx-auto">
+          <ScrollReveal>
+            <DevisWizard />
+          </ScrollReveal>
 
-            {/* Reassurance Cards */}
-            <ScrollReveal delay={0.15}>
-              <div className="space-y-4">
-                {REASSURANCE.map((item) => (
-                  <div
-                    key={item.title}
-                    className="rounded-xl border border-brand-night/10 bg-white p-6 flex gap-4"
-                  >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-orange/10">
-                      <Check className="h-5 w-5 text-brand-orange" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-brand-night mb-1">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-brand-charcoal/60 leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
+          {/* Reassurance — below wizard */}
+          <ScrollReveal delay={0.15}>
+            <div className="mt-8 grid sm:grid-cols-3 gap-4">
+              {REASSURANCE.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-xl border border-brand-night/10 bg-white p-5 text-center"
+                >
+                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-orange/10">
+                    <Check className="h-5 w-5 text-brand-orange" />
                   </div>
-                ))}
-              </div>
-            </ScrollReveal>
-          </div>
+                  <h3 className="font-semibold text-brand-night text-sm mb-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-brand-charcoal/60 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
