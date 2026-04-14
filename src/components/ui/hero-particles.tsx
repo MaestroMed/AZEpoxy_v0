@@ -65,6 +65,8 @@ function generateTargets(
   h: number,
   count: number
 ): { x: number; y: number }[] {
+  if (w < 10 || h < 10 || count < 1) return [];
+
   // Use offscreen canvas to rasterize "AZ" and sample points
   const offscreen = document.createElement("canvas");
   const scale = Math.min(w / 100, h / 60, 8);
@@ -76,7 +78,8 @@ function generateTargets(
 
   ctx.clearRect(0, 0, w, h);
   ctx.fillStyle = "#fff";
-  ctx.font = `900 ${fontSize}px "Outfit", "Helvetica Neue", sans-serif`;
+  // Use multiple fallback fonts — canvas font may not have Outfit loaded yet
+  ctx.font = `900 ${fontSize}px "Outfit", "Arial Black", "Helvetica Neue", Impact, sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText("AZ", w / 2, h / 2 - fontSize * 0.05);
@@ -94,6 +97,18 @@ function generateTargets(
         candidates.push({ x, y });
       }
     }
+  }
+
+  // Safety: if rasterization produced no pixels, generate random scatter targets
+  if (candidates.length === 0) {
+    const result: { x: number; y: number }[] = [];
+    for (let i = 0; i < count; i++) {
+      result.push({
+        x: w * 0.2 + Math.random() * w * 0.6,
+        y: h * 0.2 + Math.random() * h * 0.6,
+      });
+    }
+    return result;
   }
 
   // Shuffle and pick
@@ -162,8 +177,12 @@ export function HeroParticles() {
 
     const state = stateRef.current;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
+    const rect = canvas.getBoundingClientRect();
+    const w = Math.round(rect.width);
+    const h = Math.round(rect.height);
+
+    // Skip init if canvas has no dimensions yet (SSR hydration edge case)
+    if (w < 10 || h < 10) return;
 
     canvas.width = w * dpr;
     canvas.height = h * dpr;
@@ -206,7 +225,22 @@ export function HeroParticles() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    init();
+    // Wait for fonts + ensure layout is ready before initializing
+    const startInit = () => {
+      init();
+      // If init failed because canvas had no size, retry after a short delay
+      if (stateRef.current.width < 10) {
+        setTimeout(startInit, 100);
+        return;
+      }
+    };
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(startInit);
+    } else {
+      // Fallback: wait a frame for layout
+      requestAnimationFrame(startInit);
+    }
 
     const state = stateRef.current;
     const ctx = canvas.getContext("2d", { alpha: false });
