@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, type FormEvent } from "react";
+import { useCallback, useState, useRef, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { PhotoUpload } from "@/components/ui/photo-upload";
+import { TurnstileWidget } from "@/components/ui/turnstile";
 import { trackEvent } from "@/components/analytics/ga4";
 
 interface ContactFormProps {
@@ -17,11 +18,19 @@ const labelClass = "mb-1.5 block text-sm font-semibold text-brand-night";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
 export function ContactForm({ variant = "simple" }: ContactFormProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const formStartTracked = useRef(false);
+
+  // Stable callback so the Turnstile widget effect doesn't re-run every render.
+  const handleTurnstile = useCallback((token: string | null) => {
+    setTurnstileToken(token);
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,10 +43,10 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
       if (variant === "full") {
         // Devis: send as FormData (multipart) to support file uploads
         const formData = new FormData(form);
-        // Remove the honeypot from visible data but keep it for the API
         for (const photo of photos) {
           formData.append("photos", photo);
         }
+        if (turnstileToken) formData.set("turnstileToken", turnstileToken);
         const res = await fetch("/api/devis", { method: "POST", body: formData });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Erreur lors de l'envoi.");
@@ -45,6 +54,7 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
         // Contact: send as JSON
         const formData = new FormData(form);
         const body = Object.fromEntries(formData.entries());
+        if (turnstileToken) body.turnstileToken = turnstileToken;
         const res = await fetch("/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -244,6 +254,9 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
           className={cn(inputClass, "resize-y")}
         />
       </div>
+
+      {/* Turnstile (no-ops when site key missing) */}
+      <TurnstileWidget siteKey={TURNSTILE_SITE_KEY} onToken={handleTurnstile} />
 
       {/* Error */}
       {status === "error" && (

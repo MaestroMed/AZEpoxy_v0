@@ -1,5 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { Resend } from "resend";
+import { extractIp, ratelimit } from "@/lib/ratelimit";
+import { verifyTurnstile } from "@/lib/turnstile";
+import { fanoutLead } from "@/lib/leads";
 
 function getResend() {
   const key = process.env.RESEND_API_KEY;
@@ -7,28 +10,44 @@ function getResend() {
   return new Resend(key);
 }
 
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
+const MAX_FIELD_LENGTH = 5_000;
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + 3600_000 });
-    return false;
-  }
-  entry.count++;
-  return entry.count > 3;
+function truncate(value: unknown): string {
+  if (typeof value !== "string") return "";
+  return value.slice(0, MAX_FIELD_LENGTH);
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Trop de demandes. Réessayez dans une heure." }, { status: 429 });
+  const ip = extractIp(request);
+  const limit = await ratelimit(ip, {
+    prefix: "contact",
+    limit: 5,
+    window: "1 h",
+  });
+  if (!limit.success) {
+    return NextResponse.json(
+      { error: "Trop de demandes. Réessayez dans une heure." },
+      { status: 429 }
+    );
   }
 
   try {
     const body = await request.json();
-    const { name, email, phone, message, website } = body;
+    const name = truncate(body.name);
+    const email = truncate(body.email);
+    const phone = truncate(body.phone);
+    const message = truncate(body.message);
+    const website = truncate(body.website);
+    const turnstileToken =
+      typeof body.turnstileToken === "string" ? body.turnstileToken : null;
 
     // Honeypot — bots fill this hidden field
     if (website) {
@@ -36,7 +55,21 @@ export async function POST(request: NextRequest) {
     }
 
     if (!name || !email || !message) {
-      return NextResponse.json({ error: "Champs obligatoires manquants." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Champs obligatoires manquants." },
+        { status: 400 }
+      );
+    }
+
+    const turnstile = await verifyTurnstile(turnstileToken, ip);
+    if (!turnstile.success) {
+      return NextResponse.json(
+        {
+          error:
+            "Vérification anti-spam échouée. Rechargez la page ou appelez-nous au 09 71 35 74 96.",
+        },
+        { status: 403 }
+      );
     }
 
     // Send notification to AZ Époxy
@@ -89,16 +122,24 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Erreur lors de l'envoi. Appelez-nous au 09 71 35 74 96." }, { status: 500 });
-  }
-}
+    // Fan-out to Sanity + webhook (non-blocking semantically: we await but
+    // the helper never rejects, so the caller always sees success here).
+    const fanout = await fanoutLead({
+      source: "contact",
+      name,
+      email,
+      phone,
+      message,
+      ip,
+    });
 
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    return NextResponse.json({ success: true, fanout });
+  } catch (err) {
+
+    console.error("[contact] submission failed", err);
+    return NextResponse.json(
+      { error: "Erreur lors de l'envoi. Appelez-nous au 09 71 35 74 96." },
+      { status: 500 }
+    );
+  }
 }

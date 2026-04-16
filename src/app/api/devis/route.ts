@@ -1,5 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { Resend } from "resend";
+import { extractIp, ratelimit } from "@/lib/ratelimit";
+import { verifyTurnstile } from "@/lib/turnstile";
+import { fanoutLead } from "@/lib/leads";
 
 function getResend() {
   const key = process.env.RESEND_API_KEY;
@@ -7,17 +10,21 @@ function getResend() {
   return new Resend(key);
 }
 
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
+const MAX_FIELD_LENGTH = 5_000;
+const MAX_PHOTO_BYTES = 10 * 1024 * 1024; // 10 MB
+const MAX_PHOTOS = 8;
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + 3600_000 });
-    return false;
-  }
-  entry.count++;
-  return entry.count > 3;
+function truncate(value: FormDataEntryValue | null): string {
+  if (typeof value !== "string") return "";
+  return value.slice(0, MAX_FIELD_LENGTH);
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 interface DevisAttachment {
@@ -26,24 +33,33 @@ interface DevisAttachment {
 }
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Trop de demandes. Réessayez dans une heure." }, { status: 429 });
+  const ip = extractIp(request);
+  const limit = await ratelimit(ip, {
+    prefix: "devis",
+    limit: 3,
+    window: "1 h",
+  });
+  if (!limit.success) {
+    return NextResponse.json(
+      { error: "Trop de demandes. Réessayez dans une heure." },
+      { status: 429 }
+    );
   }
 
   try {
     const formData = await request.formData();
 
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const phone = formData.get("phone") as string;
-    const service = formData.get("service") as string;
-    const piece = formData.get("piece") as string;
-    const dimensions = formData.get("dimensions") as string;
-    const quantite = formData.get("quantite") as string;
-    const ral = formData.get("ral") as string;
-    const message = formData.get("message") as string;
-    const website = formData.get("website") as string;
+    const name = truncate(formData.get("name"));
+    const email = truncate(formData.get("email"));
+    const phone = truncate(formData.get("phone"));
+    const service = truncate(formData.get("service"));
+    const piece = truncate(formData.get("piece"));
+    const dimensions = truncate(formData.get("dimensions"));
+    const quantite = truncate(formData.get("quantite"));
+    const ral = truncate(formData.get("ral"));
+    const message = truncate(formData.get("message"));
+    const website = truncate(formData.get("website"));
+    const turnstileToken = truncate(formData.get("turnstileToken"));
 
     // Honeypot
     if (website) {
@@ -51,15 +67,30 @@ export async function POST(request: NextRequest) {
     }
 
     if (!name || !email || !message) {
-      return NextResponse.json({ error: "Champs obligatoires manquants." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Champs obligatoires manquants." },
+        { status: 400 }
+      );
+    }
+
+    const turnstile = await verifyTurnstile(turnstileToken || null, ip);
+    if (!turnstile.success) {
+      return NextResponse.json(
+        {
+          error:
+            "Vérification anti-spam échouée. Rechargez la page ou appelez-nous au 09 71 35 74 96.",
+        },
+        { status: 403 }
+      );
     }
 
     // Process uploaded photos
     const attachments: DevisAttachment[] = [];
     const photoEntries = formData.getAll("photos");
     for (const entry of photoEntries) {
+      if (attachments.length >= MAX_PHOTOS) break;
       if (entry instanceof File && entry.size > 0) {
-        if (entry.size > 10 * 1024 * 1024) continue; // Skip files > 10MB
+        if (entry.size > MAX_PHOTO_BYTES) continue; // Skip files > 10MB
         const buffer = await entry.arrayBuffer();
         attachments.push({
           filename: entry.name,
@@ -68,9 +99,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const photoInfo = attachments.length > 0
-      ? `<p style="color:#E85D2C;font-weight:600">📎 ${attachments.length} photo(s) jointe(s)</p>`
-      : `<p style="color:#999">Aucune photo jointe</p>`;
+    const photoInfo =
+      attachments.length > 0
+        ? `<p style="color:#E85D2C;font-weight:600">📎 ${attachments.length} photo(s) jointe(s)</p>`
+        : `<p style="color:#999">Aucune photo jointe</p>`;
 
     // Build detail rows
     const rows = [
@@ -140,16 +172,25 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Erreur lors de l'envoi. Appelez-nous au 09 71 35 74 96." }, { status: 500 });
-  }
-}
+    const fanout = await fanoutLead({
+      source: "devis",
+      name,
+      email,
+      phone,
+      message,
+      projectType: service || piece,
+      ralCode: ral,
+      ip,
+      extra: { dimensions, quantite, photoCount: attachments.length },
+    });
 
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    return NextResponse.json({ success: true, fanout });
+  } catch (err) {
+
+    console.error("[devis] submission failed", err);
+    return NextResponse.json(
+      { error: "Erreur lors de l'envoi. Appelez-nous au 09 71 35 74 96." },
+      { status: 500 }
+    );
+  }
 }

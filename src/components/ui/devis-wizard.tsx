@@ -1,13 +1,22 @@
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
+import { useCallback, useState, useEffect, useRef, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Check, CircleDot, Bike, DoorOpen, Armchair, Factory, Package } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { POPULAR_RAL, RAL_COLORS } from "@/lib/ral-colors";
 import { PhotoUpload } from "@/components/ui/photo-upload";
+import { TurnstileWidget } from "@/components/ui/turnstile";
 import { trackEvent } from "@/components/analytics/ga4";
+import {
+  clearDevisDraft,
+  loadDevisDraft,
+  reportAbandonedDevis,
+  saveDevisDraft,
+} from "@/lib/devis-storage";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 const inputClass =
   "w-full rounded-xl border border-brand-night/15 bg-white px-4 py-3 text-brand-night placeholder:text-brand-charcoal/40 focus:outline-none focus:ring-2 focus:ring-brand-orange transition-shadow";
@@ -71,20 +80,65 @@ export function DevisWizard() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [direction, setDirection] = useState(1);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [draftRestored, setDraftRestored] = useState(false);
+  const submittedRef = useRef(false);
   const searchParams = useSearchParams();
 
-  // Pre-fill RAL from query param (e.g., /devis?ral=RAL 9005,RAL 7016)
+  const handleTurnstile = useCallback((token: string | null) => {
+    setTurnstileToken(token);
+  }, []);
+
+  // Restore an autosaved draft on mount.
+  useEffect(() => {
+    const draft = loadDevisDraft();
+    if (draft) {
+      setData((prev) => ({ ...prev, ...(draft.data as Partial<FormData>) }));
+      setStep(Math.min(Math.max(draft.step, 1), 4));
+      setDraftRestored(true);
+    }
+  }, []);
+
+  // Pre-fill RAL + project type from query params (e.g., /devis?ral=RAL 9005&type=jantes)
   useEffect(() => {
     const ralParam = searchParams.get("ral");
-    if (ralParam) {
-      const codes = ralParam.split(",").filter((c) =>
-        RAL_COLORS.some((r) => r.code === c)
-      );
-      if (codes.length > 0) {
-        setData((d) => ({ ...d, selectedRal: codes.join(", ") }));
+    const typeParam = searchParams.get("type");
+    setData((d) => {
+      const next = { ...d };
+      if (ralParam && !d.selectedRal) {
+        const codes = ralParam.split(",").filter((c) =>
+          RAL_COLORS.some((r) => r.code === c)
+        );
+        if (codes.length > 0) next.selectedRal = codes.join(", ");
       }
-    }
+      if (typeParam && !d.projectType) {
+        next.projectType = typeParam;
+      }
+      return next;
+    });
   }, [searchParams]);
+
+  // Autosave draft whenever step or data changes.
+  useEffect(() => {
+    if (submittedRef.current) return;
+    saveDevisDraft(step, {
+      ...data,
+      // Strip personal fields we don't want on disk for long.
+      photos: undefined,
+    });
+  }, [step, data]);
+
+  // Fire abandon beacon when the user leaves the tab past step 1 without submitting.
+  useEffect(() => {
+    const handler = () => {
+      if (submittedRef.current) return;
+      if (document.visibilityState !== "hidden") return;
+      const draft = loadDevisDraft();
+      if (draft) reportAbandonedDevis(draft);
+    };
+    document.addEventListener("visibilitychange", handler);
+    return () => document.removeEventListener("visibilitychange", handler);
+  }, []);
 
   const set = (field: keyof FormData, value: string | boolean) =>
     setData((d) => ({ ...d, [field]: value }));
@@ -120,10 +174,13 @@ export function DevisWizard() {
       const msg = `Finition: ${data.finition}\nSource: ${data.source || "Non renseigné"}\nAdresse: ${data.address || "Non renseignée"}`;
       fd.append("message", msg);
       for (const photo of photos) fd.append("photos", photo);
+      if (turnstileToken) fd.set("turnstileToken", turnstileToken);
       const res = await fetch("/api/devis", { method: "POST", body: fd });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error);
       trackEvent("form_submit", { variant: "wizard" });
+      submittedRef.current = true;
+      clearDevisDraft();
       setStatus("success");
     } catch (err) {
       setStatus("error");
@@ -147,8 +204,30 @@ export function DevisWizard() {
 
   const selectedRalColor = POPULAR_RAL.find((c) => c.code === data.selectedRal);
 
+  const resetDraft = () => {
+    clearDevisDraft();
+    setData(initialFormData);
+    setStep(1);
+    setDraftRestored(false);
+  };
+
   return (
     <div className="rounded-2xl border border-brand-night/10 bg-white shadow-sm overflow-hidden">
+      {draftRestored && (
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-brand-night/10 bg-brand-cream px-5 py-3 text-sm">
+          <span className="text-brand-charcoal/80">
+            Nous avons restauré votre demande en cours.
+          </span>
+          <button
+            type="button"
+            onClick={resetDraft}
+            className="font-semibold text-brand-orange hover:underline"
+          >
+            Recommencer à zéro
+          </button>
+        </div>
+      )}
+
       {/* Progress bar */}
       <div className="flex border-b border-brand-night/10">
         {STEPS.map((label, i) => (
@@ -434,6 +513,11 @@ export function DevisWizard() {
                     J&apos;accepte d&apos;être recontacté par AZ Époxy concernant ma demande de devis.
                   </span>
                 </label>
+
+                <TurnstileWidget
+                  siteKey={TURNSTILE_SITE_KEY}
+                  onToken={handleTurnstile}
+                />
 
                 {status === "error" && (
                   <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{errorMsg}</div>
