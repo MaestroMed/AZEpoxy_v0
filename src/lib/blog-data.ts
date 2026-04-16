@@ -9,7 +9,7 @@ export interface BlogArticle {
   content: string;
 }
 
-export const BLOG_ARTICLES: BlogArticle[] = [
+export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   {
     slug: "thermolaquage-vs-peinture-liquide",
     title: "Thermolaquage vs peinture liquide : quel choix pour vos pièces métalliques ?",
@@ -381,3 +381,35 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     `,
   },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*  Sanity-aware accessors                                                    */
+/* -------------------------------------------------------------------------- */
+
+import { sanityFetch } from "@/sanity/client";
+import { POSTS_QUERY, POST_BY_SLUG_QUERY } from "@/sanity/queries";
+
+/**
+ * Back-compat sync export — used by sitemap.ts and other build-time consumers
+ * that can't await. Reflects the hardcoded fallback only.
+ */
+export const BLOG_ARTICLES = BLOG_ARTICLES_FALLBACK;
+
+/** Async fetcher: tries Sanity first, falls back to hardcoded data. */
+export async function getBlogArticles(): Promise<BlogArticle[]> {
+  const data = await sanityFetch<BlogArticle[]>(POSTS_QUERY, {}, {
+    tags: ["post:list"],
+  });
+  return data?.length ? data : BLOG_ARTICLES_FALLBACK;
+}
+
+export async function getBlogArticleBySlug(
+  slug: string
+): Promise<BlogArticle | undefined> {
+  const data = await sanityFetch<BlogArticle | null>(
+    POST_BY_SLUG_QUERY,
+    { slug },
+    { tags: [`post:${slug}`] }
+  );
+  return data ?? BLOG_ARTICLES_FALLBACK.find((a) => a.slug === slug);
+}

@@ -23,7 +23,7 @@ export const PROJECT_CATEGORIES = [
 
 export type ProjectCategoryKey = (typeof PROJECT_CATEGORIES)[number]["key"];
 
-export const PROJECTS: Project[] = [
+export const PROJECTS_FALLBACK: Project[] = [
   // ── Jantes (4) ───────────────────────────────────────────────────────
   {
     id: 1,
@@ -188,4 +188,20 @@ export function getProjectsByCategory(
 
 export function getFeaturedProjects(): Project[] {
   return PROJECTS.filter((p) => p.featured);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Sanity-aware accessors                                                    */
+/* -------------------------------------------------------------------------- */
+
+import { sanityFetch } from "@/sanity/client";
+import { REALISATIONS_QUERY } from "@/sanity/queries";
+
+export const PROJECTS = PROJECTS_FALLBACK;
+
+export async function getProjects(): Promise<Project[]> {
+  const data = await sanityFetch<Project[]>(REALISATIONS_QUERY, {}, {
+    tags: ["realisation:list"],
+  });
+  return data?.length ? data : PROJECTS_FALLBACK;
 }

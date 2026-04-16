@@ -15,7 +15,7 @@ export interface Service {
   faqs: { question: string; answer: string }[];
 }
 
-export const SERVICES: Service[] = [
+export const SERVICES_FALLBACK: Service[] = [
   {
     slug: "thermolaquage",
     title: "Thermolaquage Poudre Époxy",
@@ -249,4 +249,27 @@ export const SERVICES: Service[] = [
 
 export function getServiceBySlug(slug: string): Service | undefined {
   return SERVICES.find((s) => s.slug === slug);
+}
+
+import { sanityFetch } from "@/sanity/client";
+import { SERVICES_QUERY, SERVICE_BY_SLUG_QUERY } from "@/sanity/queries";
+
+export const SERVICES = SERVICES_FALLBACK;
+
+export async function getServices(): Promise<Service[]> {
+  const data = await sanityFetch<Service[]>(SERVICES_QUERY, {}, {
+    tags: ["service:list"],
+  });
+  return data?.length ? data : SERVICES_FALLBACK;
+}
+
+export async function getServiceBySlugAsync(
+  slug: string
+): Promise<Service | undefined> {
+  const data = await sanityFetch<Service | null>(
+    SERVICE_BY_SLUG_QUERY,
+    { slug },
+    { tags: [`service:${slug}`] }
+  );
+  return data ?? SERVICES_FALLBACK.find((s) => s.slug === slug);
 }

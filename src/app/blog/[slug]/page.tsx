@@ -7,11 +7,15 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { BLOG_ARTICLES } from "@/lib/blog-data";
+import {
+  BLOG_ARTICLES_FALLBACK,
+  getBlogArticleBySlug,
+  getBlogArticles,
+} from "@/lib/blog-data";
 import { Calendar, Clock, ArrowLeft, ArrowRight } from "lucide-react";
 
 export function generateStaticParams() {
-  return BLOG_ARTICLES.map((a) => ({ slug: a.slug }));
+  return BLOG_ARTICLES_FALLBACK.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({
@@ -20,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const article = BLOG_ARTICLES.find((a) => a.slug === slug);
+  const article = await getBlogArticleBySlug(slug);
   if (!article) return { title: "Article introuvable" };
   return buildMetadata({
     title: article.title,
@@ -41,10 +45,11 @@ export default async function BlogArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = BLOG_ARTICLES.find((a) => a.slug === slug);
+  const article = await getBlogArticleBySlug(slug);
   if (!article) notFound();
 
-  const sorted = [...BLOG_ARTICLES].sort(
+  const all = await getBlogArticles();
+  const sorted = [...all].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
   const idx = sorted.findIndex((a) => a.slug === slug);

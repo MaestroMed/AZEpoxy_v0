@@ -12,7 +12,7 @@ export interface Testimonial {
   rating: number;
 }
 
-export const TESTIMONIALS: Testimonial[] = [
+export const TESTIMONIALS_FALLBACK: Testimonial[] = [
   {
     name: "Julien M.",
     quote:
@@ -94,3 +94,15 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 4,
   },
 ];
+
+import { sanityFetch } from "@/sanity/client";
+import { TESTIMONIALS_QUERY } from "@/sanity/queries";
+
+export const TESTIMONIALS = TESTIMONIALS_FALLBACK;
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  const data = await sanityFetch<Testimonial[]>(TESTIMONIALS_QUERY, {}, {
+    tags: ["testimonial:list"],
+  });
+  return data?.length ? data : TESTIMONIALS_FALLBACK;
+}

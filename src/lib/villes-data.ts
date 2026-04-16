@@ -15,7 +15,7 @@ export interface Ville {
   nearbyVilles: string[];
 }
 
-export const VILLES: Ville[] = [
+export const VILLES_FALLBACK: Ville[] = [
   {
     slug: "cergy",
     name: "Cergy",
@@ -320,4 +320,27 @@ export const VILLES: Ville[] = [
 
 export function getVilleBySlug(slug: string): Ville | undefined {
   return VILLES.find((v) => v.slug === slug);
+}
+
+import { sanityFetch } from "@/sanity/client";
+import { VILLES_QUERY, VILLE_BY_SLUG_QUERY } from "@/sanity/queries";
+
+export const VILLES = VILLES_FALLBACK;
+
+export async function getVilles(): Promise<Ville[]> {
+  const data = await sanityFetch<Ville[]>(VILLES_QUERY, {}, {
+    tags: ["ville:list"],
+  });
+  return data?.length ? data : VILLES_FALLBACK;
+}
+
+export async function getVilleBySlugAsync(
+  slug: string
+): Promise<Ville | undefined> {
+  const data = await sanityFetch<Ville | null>(
+    VILLE_BY_SLUG_QUERY,
+    { slug },
+    { tags: [`ville:${slug}`] }
+  );
+  return data ?? VILLES_FALLBACK.find((v) => v.slug === slug);
 }

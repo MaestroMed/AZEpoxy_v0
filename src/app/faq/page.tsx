@@ -7,7 +7,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SITE } from "@/lib/utils";
 import { Phone, Mail } from "lucide-react";
 import { FaqSection } from "./faq-section";
-import { FAQS } from "@/lib/faq-data";
+import { getFaqs } from "@/lib/faq-data";
 
 export const metadata = buildMetadata({
   title: "Questions Fréquentes",
@@ -16,10 +16,11 @@ export const metadata = buildMetadata({
   path: "/faq",
 });
 
-export default function FaqPage() {
+export default async function FaqPage() {
+  const faqs = await getFaqs();
   return (
     <>
-      <JsonLd id="ld-faq" data={faqPageLd(FAQS)} />
+      <JsonLd id="ld-faq" data={faqPageLd(faqs)} />
 
       {/* ── Hero ───────────────────────────────────────────── */}
       <PageHero
@@ -42,7 +43,7 @@ export default function FaqPage() {
       />
 
       {/* ── FAQ Accordion Section ──────────────────────────── */}
-      <FaqSection />
+      <FaqSection items={faqs} />
 
       {/* ── Contact Block ──────────────────────────────────── */}
       <section className="bg-gradient-night bg-noise py-24">

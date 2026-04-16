@@ -16,7 +16,7 @@ export interface Specialty {
   faqs: { question: string; answer: string }[];
 }
 
-export const SPECIALTIES: Specialty[] = [
+export const SPECIALTIES_FALLBACK: Specialty[] = [
   {
     slug: "jantes",
     title: "Jantes Auto",
@@ -216,4 +216,27 @@ export const SPECIALTIES: Specialty[] = [
 
 export function getSpecialtyBySlug(slug: string): Specialty | undefined {
   return SPECIALTIES.find((s) => s.slug === slug);
+}
+
+import { sanityFetch } from "@/sanity/client";
+import { SPECIALITES_QUERY, SPECIALITE_BY_SLUG_QUERY } from "@/sanity/queries";
+
+export const SPECIALTIES = SPECIALTIES_FALLBACK;
+
+export async function getSpecialties(): Promise<Specialty[]> {
+  const data = await sanityFetch<Specialty[]>(SPECIALITES_QUERY, {}, {
+    tags: ["specialite:list"],
+  });
+  return data?.length ? data : SPECIALTIES_FALLBACK;
+}
+
+export async function getSpecialtyBySlugAsync(
+  slug: string
+): Promise<Specialty | undefined> {
+  const data = await sanityFetch<Specialty | null>(
+    SPECIALITE_BY_SLUG_QUERY,
+    { slug },
+    { tags: [`specialite:${slug}`] }
+  );
+  return data ?? SPECIALTIES_FALLBACK.find((s) => s.slug === slug);
 }

@@ -4,7 +4,7 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { BLOG_ARTICLES } from "@/lib/blog-data";
+import { getBlogArticles } from "@/lib/blog-data";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 
 export const metadata = buildMetadata({
@@ -14,8 +14,9 @@ export const metadata = buildMetadata({
   path: "/blog",
 });
 
-export default function BlogPage() {
-  const sorted = [...BLOG_ARTICLES].sort(
+export default async function BlogPage() {
+  const articles = await getBlogArticles();
+  const sorted = [...articles].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 

@@ -1,18 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { FAQS, FAQ_CATEGORIES } from "@/lib/faq-data";
+import { FAQ_CATEGORIES, type FAQ } from "@/lib/faq-data";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { cn } from "@/lib/utils";
 
-export function FaqSection() {
+interface FaqSectionProps {
+  items: FAQ[];
+}
+
+export function FaqSection({ items }: FaqSectionProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
   const filteredFaqs =
     activeCategory === "all"
-      ? FAQS
-      : FAQS.filter((faq) => faq.category === activeCategory);
+      ? items
+      : items.filter((faq) => faq.category === activeCategory);
 
   return (
     <section className="bg-brand-cream bg-industrial-grid py-24">

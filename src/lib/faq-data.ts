@@ -19,7 +19,7 @@ export const FAQ_CATEGORIES = [
 
 export type FAQCategoryKey = (typeof FAQ_CATEGORIES)[number]["key"];
 
-export const FAQS: FAQ[] = [
+export const FAQS_FALLBACK: FAQ[] = [
   // ── Général ──────────────────────────────────────────────────────────
   {
     category: "general",
@@ -153,4 +153,16 @@ export const FAQS: FAQ[] = [
 
 export function getFAQsByCategory(category: FAQCategoryKey): FAQ[] {
   return FAQS.filter((faq) => faq.category === category);
+}
+
+import { sanityFetch } from "@/sanity/client";
+import { FAQS_QUERY } from "@/sanity/queries";
+
+export const FAQS = FAQS_FALLBACK;
+
+export async function getFaqs(): Promise<FAQ[]> {
+  const data = await sanityFetch<FAQ[]>(FAQS_QUERY, {}, {
+    tags: ["faqItem:list"],
+  });
+  return data?.length ? data : FAQS_FALLBACK;
 }
