@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { buildMetadata } from "@/lib/seo";
+import { serviceLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import {
   ArrowRight,
   CheckCircle2,
@@ -132,10 +135,11 @@ export async function generateMetadata({
     return { title: "Spécialité introuvable" };
   }
 
-  return {
+  return buildMetadata({
     title: `${specialty.title} — Thermolaquage`,
     description: specialty.description.slice(0, 160),
-  };
+    path: `/specialites/${specialty.slug}`,
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -175,6 +179,16 @@ export default async function SpecialtyPage({
 
   return (
     <>
+      <JsonLd
+        id={`ld-service-${specialty.slug}`}
+        data={serviceLd({
+          name: `Thermolaquage ${specialty.title}`,
+          description: specialty.description.slice(0, 220),
+          serviceType: specialty.title,
+          url: `/specialites/${specialty.slug}`,
+        })}
+      />
+
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
       <PageHero
         label="Spécialités"

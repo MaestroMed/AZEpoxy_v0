@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
 import { MessageSquareQuote } from "lucide-react";
 
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { CtaBand } from "@/components/ui/cta-band";
@@ -9,11 +9,12 @@ import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { TESTIMONIALS } from "@/lib/testimonials-data";
 import { PortfolioSection } from "./portfolio-section";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Nos Réalisations",
   description:
     "Découvrez nos projets de thermolaquage, sablage et métallisation. Jantes, moto, mobilier, portails et pièces industrielles.",
-};
+  path: "/realisations",
+});
 
 export default function RealisationsPage() {
   return (

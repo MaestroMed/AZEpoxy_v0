@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
+import { faqPageLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -7,33 +9,17 @@ import { Phone, Mail } from "lucide-react";
 import { FaqSection } from "./faq-section";
 import { FAQS } from "@/lib/faq-data";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Questions Fréquentes",
   description:
     "Retrouvez les réponses aux questions les plus fréquentes sur nos prestations de thermolaquage, sablage et métallisation à Bruyères-sur-Oise.",
-};
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQS.map((faq) => ({
-    "@type": "Question",
-    name: faq.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.answer,
-    },
-  })),
-};
+  path: "/faq",
+});
 
 export default function FaqPage() {
   return (
     <>
-      {/* ── FAQPage Schema ─────────────────────────────────── */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      <JsonLd id="ld-faq" data={faqPageLd(FAQS)} />
 
       {/* ── Hero ───────────────────────────────────────────── */}
       <PageHero

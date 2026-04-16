@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import {
   Wind,
   Sparkles,
@@ -12,6 +11,9 @@ import {
   Check,
 } from "lucide-react";
 
+import { buildMetadata } from "@/lib/seo";
+import { serviceLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
@@ -20,11 +22,14 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 import { getServiceBySlug } from "@/lib/services-data";
 
-export const metadata: Metadata = {
+const SERVICE_DESCRIPTION =
+  "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 mètres. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.";
+
+export const metadata = buildMetadata({
   title: "Sablage & Grenaillage",
-  description:
-    "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 mètres. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.",
-};
+  description: SERVICE_DESCRIPTION,
+  path: "/services/sablage",
+});
 
 /* Types of blasting techniques */
 const BLASTING_TYPES = [
@@ -88,37 +93,19 @@ const APPLICATIONS = [
   },
 ];
 
-const serviceJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Sablage & Grenaillage",
-  description:
-    "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 mètres. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.",
-  provider: {
-    "@type": "LocalBusiness",
-    name: "AZ Époxy",
-    telephone: "+33971357496",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "23 Chemin du Bac des Aubins",
-      addressLocality: "Bruyères-sur-Oise",
-      postalCode: "95820",
-      addressCountry: "FR",
-    },
-  },
-  areaServed: "Île-de-France",
-  serviceType: "Sablage",
-};
-
 export default function SablagePage() {
   const service = getServiceBySlug("sablage")!;
 
   return (
     <>
-      {/* ── Service Schema ───────────────────────────────────────────── */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      <JsonLd
+        id="ld-service-sablage"
+        data={serviceLd({
+          name: "Sablage & Grenaillage",
+          description: SERVICE_DESCRIPTION,
+          serviceType: "Sablage",
+          url: "/services/sablage",
+        })}
       />
 
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}

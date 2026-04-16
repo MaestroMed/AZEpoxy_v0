@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Sparkles,
@@ -12,6 +11,9 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+import { buildMetadata } from "@/lib/seo";
+import { serviceLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
@@ -19,11 +21,14 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 import { getServiceBySlug } from "@/lib/services-data";
 
-export const metadata: Metadata = {
+const SERVICE_DESCRIPTION =
+  "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium Adaptacolor : Patina, Polaris, Dichroic, Sfera. AZ Époxy, Bruyères-sur-Oise.";
+
+export const metadata = buildMetadata({
   title: "Finitions Spéciales",
-  description:
-    "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium Adaptacolor : Patina, Polaris, Dichroic, Sfera. AZ Époxy, Bruyères-sur-Oise.",
-};
+  description: SERVICE_DESCRIPTION,
+  path: "/services/finitions",
+});
 
 /* Finish types for the gallery */
 const FINISH_TYPES = [
@@ -125,37 +130,19 @@ const PREMIUM_COLLECTIONS = [
   },
 ];
 
-const serviceJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Finitions Spéciales",
-  description:
-    "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium Adaptacolor : Patina, Polaris, Dichroic, Sfera. AZ Époxy, Bruyères-sur-Oise.",
-  provider: {
-    "@type": "LocalBusiness",
-    name: "AZ Époxy",
-    telephone: "+33971357496",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "23 Chemin du Bac des Aubins",
-      addressLocality: "Bruyères-sur-Oise",
-      postalCode: "95820",
-      addressCountry: "FR",
-    },
-  },
-  areaServed: "Île-de-France",
-  serviceType: "Finitions Spéciales",
-};
-
 export default function FinitionsPage() {
   const service = getServiceBySlug("finitions")!;
 
   return (
     <>
-      {/* ── Service Schema ───────────────────────────────────────────── */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      <JsonLd
+        id="ld-service-finitions"
+        data={serviceLd({
+          name: "Finitions Spéciales",
+          description: SERVICE_DESCRIPTION,
+          serviceType: "Finitions Spéciales",
+          url: "/services/finitions",
+        })}
       />
 
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}

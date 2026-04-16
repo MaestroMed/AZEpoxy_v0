@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { ContactForm } from "@/components/ui/contact-form";
@@ -7,11 +7,12 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SITE } from "@/lib/utils";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Contact",
   description:
     "Contactez AZ Époxy pour vos projets de thermolaquage, sablage et métallisation. Devis gratuit sous 24h. Bruyères-sur-Oise, Val-d'Oise.",
-};
+  path: "/contact",
+});
 
 const CONTACT_CARDS = [
   {

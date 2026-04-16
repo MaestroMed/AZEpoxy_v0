@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import {
   Layers,
   ShieldCheck,
@@ -14,6 +13,9 @@ import {
   Minus,
 } from "lucide-react";
 
+import { buildMetadata } from "@/lib/seo";
+import { serviceLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
@@ -22,11 +24,14 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 import { getServiceBySlug } from "@/lib/services-data";
 
-export const metadata: Metadata = {
+const SERVICE_DESCRIPTION =
+  "Métallisation zinc et aluminium par projection thermique. Protection anti-corrosion extrême pour milieux marins, industriels et enterrés. Conforme ISO 2063. AZ Époxy, Bruyères-sur-Oise.";
+
+export const metadata = buildMetadata({
   title: "Métallisation",
-  description:
-    "Métallisation zinc et aluminium par projection thermique. Protection anti-corrosion extrême pour milieux marins, industriels et enterrés. Conforme ISO 2063. AZ Époxy, Bruyères-sur-Oise.",
-};
+  description: SERVICE_DESCRIPTION,
+  path: "/services/metallisation",
+});
 
 /* When to use metallisation — 4 use-case cards */
 const USE_CASES = [
@@ -118,37 +123,19 @@ function CellIcon({ value }: { value: string }) {
   return <span>{value}</span>;
 }
 
-const serviceJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Métallisation",
-  description:
-    "Métallisation zinc et aluminium par projection thermique. Protection anti-corrosion extrême pour milieux marins, industriels et enterrés. Conforme ISO 2063. AZ Époxy, Bruyères-sur-Oise.",
-  provider: {
-    "@type": "LocalBusiness",
-    name: "AZ Époxy",
-    telephone: "+33971357496",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "23 Chemin du Bac des Aubins",
-      addressLocality: "Bruyères-sur-Oise",
-      postalCode: "95820",
-      addressCountry: "FR",
-    },
-  },
-  areaServed: "Île-de-France",
-  serviceType: "Métallisation",
-};
-
 export default function MetallisationPage() {
   const service = getServiceBySlug("metallisation")!;
 
   return (
     <>
-      {/* ── Service Schema ───────────────────────────────────────────── */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      <JsonLd
+        id="ld-service-metallisation"
+        data={serviceLd({
+          name: "Métallisation",
+          description: SERVICE_DESCRIPTION,
+          serviceType: "Métallisation",
+          url: "/services/metallisation",
+        })}
       />
 
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}

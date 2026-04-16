@@ -24,6 +24,18 @@
     --input: 240 10% 88%;
     --ring: 16 79% 54%;
     --radius: 0.5rem;
+
+    /* Semantic surfaces (layer over brand palette). */
+    --surface-1: 0 0% 100%;
+    --surface-2: 48 20% 96%;
+    --surface-3: 48 15% 92%;
+    --surface-inverse: 240 28% 8%;
+    --success: 122 39% 49%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 240 28% 14%;
+    --info: 210 80% 52%;
+    --info-foreground: 0 0% 100%;
   }
 
   .dark {
@@ -46,6 +58,17 @@
     --border: 240 15% 20%;
     --input: 240 15% 20%;
     --ring: 16 79% 54%;
+
+    --surface-1: 240 28% 12%;
+    --surface-2: 240 28% 8%;
+    --surface-3: 240 18% 18%;
+    --surface-inverse: 48 20% 96%;
+    --success: 122 39% 55%;
+    --success-foreground: 240 28% 8%;
+    --warning: 38 92% 60%;
+    --warning-foreground: 240 28% 8%;
+    --info: 210 80% 60%;
+    --info-foreground: 240 28% 8%;
   }
 
   * {

@@ -1,19 +1,20 @@
-import type { Metadata } from "next";
 import { Palette, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import Link from "next/link";
 import { RAL_FAMILIES, POPULAR_RAL } from "@/lib/ral-colors";
 import { ColorSwatch } from "@/components/ui/color-swatch";
 import { RalPickerSection } from "./ral-picker-section";
 
-export const metadata: Metadata = {
-  title: "Nuancier RAL — 200+ Couleurs | AZ Epoxy",
+export const metadata = buildMetadata({
+  title: "Nuancier RAL — 200+ Couleurs",
   description:
     "Plus de 200 teintes RAL Classic et 4 collections premium Adaptacolor. Trouvez la couleur parfaite pour votre projet de thermolaquage.",
-};
+  path: "/couleurs-ral",
+});
 
 export default function CouleursRalPage() {
   return (

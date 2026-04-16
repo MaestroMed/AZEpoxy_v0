@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Check, Sparkles, Droplets } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, Sparkles, Droplets } from "lucide-react";
 import { COLLECTIONS, getCollectionBySlug } from "@/lib/collections-data";
-import { PageHero } from "@/components/ui/page-hero";
+import { buildMetadata } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { SectionHeader } from "@/components/ui/section-header";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
@@ -21,11 +23,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { collection: slug } = await params;
   const col = getCollectionBySlug(slug);
-  if (!col) return {};
-  return {
-    title: `Collection ${col.name} — AZ Epoxy`,
+  if (!col) return { title: "Collection introuvable" };
+  return buildMetadata({
+    title: `Collection ${col.name}`,
     description: col.description,
-  };
+    path: `/couleurs-ral/${col.slug}`,
+  });
 }
 
 /* ── Page ──────────────────────────────────────────────────────────── */
@@ -40,6 +43,14 @@ export default async function CollectionPage({
 
   return (
     <>
+      <JsonLd
+        id={`ld-breadcrumb-${collection.slug}`}
+        data={breadcrumbLd([
+          { label: "Couleurs RAL", href: "/couleurs-ral" },
+          { label: `Collection ${collection.name}` },
+        ])}
+      />
+
       {/* ── Section 1 — Custom Hero ───────────────────────────────── */}
       <section className="relative isolate min-h-[50vh] overflow-hidden text-white">
         {/* Gradient background */}
@@ -53,20 +64,22 @@ export default async function CollectionPage({
           {/* Breadcrumbs */}
           <nav
             aria-label="Fil d'Ariane"
-            className="mb-8 flex items-center gap-2 text-sm text-white/60"
+            className="mb-8 flex flex-wrap items-center gap-2 text-sm text-white/60"
           >
             <Link href="/" className="transition-colors hover:text-white">
               Accueil
             </Link>
-            <span aria-hidden="true">&gt;</span>
+            <ChevronRight className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
             <Link
               href="/couleurs-ral"
               className="transition-colors hover:text-white"
             >
               Couleurs RAL
             </Link>
-            <span aria-hidden="true">&gt;</span>
-            <span className="text-white/90">Collection {collection.name}</span>
+            <ChevronRight className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
+            <span aria-current="page" className="text-white/90">
+              Collection {collection.name}
+            </span>
           </nav>
 
           <div className="max-w-3xl">

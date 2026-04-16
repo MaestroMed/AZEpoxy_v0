@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { DevisWizard } from "@/components/ui/devis-wizard";
@@ -8,11 +8,12 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SITE } from "@/lib/utils";
 import { Check, FileText, PhoneCall, Truck } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Devis Gratuit",
   description:
     "Demandez un devis gratuit pour vos projets de thermolaquage, sablage ou métallisation. Réponse sous 24h. AZ Époxy, Bruyères-sur-Oise.",
-};
+  path: "/devis",
+});
 
 const REASSURANCE = [
   {

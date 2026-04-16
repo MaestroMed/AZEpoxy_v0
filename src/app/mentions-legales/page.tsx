@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Mentions Légales",
   description:
     "Mentions légales du site AZ Époxy — thermolaquage et traitement de surface à Bruyères-sur-Oise.",
-};
+  path: "/mentions-legales",
+});
 
 const SECTIONS = [
   {

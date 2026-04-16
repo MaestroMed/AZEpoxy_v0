@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { CtaBand } from "@/components/ui/cta-band";
@@ -7,11 +7,12 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { BLOG_ARTICLES } from "@/lib/blog-data";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Blog — Articles techniques sur le thermolaquage",
   description:
     "Guides, tutoriels et conseils d'experts sur le thermolaquage, le sablage, la métallisation et la protection anticorrosion.",
-};
+  path: "/blog",
+});
 
 export default function BlogPage() {
   const sorted = [...BLOG_ARTICLES].sort(

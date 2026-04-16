@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
@@ -16,11 +16,12 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "À Propos",
   description:
     "Découvrez AZ Époxy, spécialiste du thermolaquage et du traitement de surface à Bruyères-sur-Oise. 1 800 m² d'atelier, 15+ ans d'expérience.",
-};
+  path: "/a-propos",
+});
 
 const EQUIPMENT = [
   "Cabine de thermolaquage 7 mètres",

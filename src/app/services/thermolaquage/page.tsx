@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import {
   Flame,
   ShieldCheck,
@@ -12,6 +11,9 @@ import {
   Sun,
 } from "lucide-react";
 
+import { buildMetadata } from "@/lib/seo";
+import { serviceLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
@@ -22,11 +24,14 @@ import { CtaBand } from "@/components/ui/cta-band";
 import { getServiceBySlug } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 
-export const metadata: Metadata = {
+const SERVICE_DESCRIPTION =
+  "Thermolaquage par poudre époxy professionnel : application électrostatique, cuisson à 200 °C, 200+ couleurs RAL, 0 COV. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.";
+
+export const metadata = buildMetadata({
   title: "Thermolaquage Poudre Époxy",
-  description:
-    "Thermolaquage par poudre époxy professionnel : application électrostatique, cuisson à 200 °C, 200+ couleurs RAL, 0 COV. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.",
-};
+  description: SERVICE_DESCRIPTION,
+  path: "/services/thermolaquage",
+});
 
 /* Map feature titles to appropriate icons */
 const FEATURE_ICONS = [
@@ -38,37 +43,19 @@ const FEATURE_ICONS = [
   <Droplets key="droplets" className="h-6 w-6" />,
 ];
 
-const serviceJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Thermolaquage Poudre Époxy",
-  description:
-    "Thermolaquage par poudre époxy professionnel : application électrostatique, cuisson à 200 °C, 200+ couleurs RAL, 0 COV. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.",
-  provider: {
-    "@type": "LocalBusiness",
-    name: "AZ Époxy",
-    telephone: "+33971357496",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "23 Chemin du Bac des Aubins",
-      addressLocality: "Bruyères-sur-Oise",
-      postalCode: "95820",
-      addressCountry: "FR",
-    },
-  },
-  areaServed: "Île-de-France",
-  serviceType: "Thermolaquage",
-};
-
 export default function ThermolaquagePage() {
   const service = getServiceBySlug("thermolaquage")!;
 
   return (
     <>
-      {/* ── Service Schema ───────────────────────────────────────────── */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      <JsonLd
+        id="ld-service-thermolaquage"
+        data={serviceLd({
+          name: "Thermolaquage Poudre Époxy",
+          description: SERVICE_DESCRIPTION,
+          serviceType: "Thermolaquage",
+          url: "/services/thermolaquage",
+        })}
       />
 
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}

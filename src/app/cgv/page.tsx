@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Conditions Générales de Vente",
   description:
     "Conditions générales de vente d'AZ Époxy — prestations de thermolaquage, sablage et métallisation.",
-};
+  path: "/cgv",
+});
 
 const SECTIONS = [
   {

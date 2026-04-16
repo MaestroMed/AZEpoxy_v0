@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Script from "next/script";
 import { notFound } from "next/navigation";
+import { buildMetadata } from "@/lib/seo";
+import { articleLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -19,11 +21,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const article = BLOG_ARTICLES.find((a) => a.slug === slug);
-  if (!article) return {};
-  return {
+  if (!article) return { title: "Article introuvable" };
+  return buildMetadata({
     title: article.title,
     description: article.description,
-  };
+    path: `/blog/${article.slug}`,
+    type: "article",
+    image: article.image,
+    article: {
+      publishedTime: article.date,
+      section: article.category,
+    },
+  });
 }
 
 export default async function BlogArticlePage({
@@ -42,27 +51,18 @@ export default async function BlogArticlePage({
   const prev = idx < sorted.length - 1 ? sorted[idx + 1] : null;
   const next = idx > 0 ? sorted[idx - 1] : null;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: article.title,
-    description: article.description,
-    datePublished: article.date,
-    author: { "@type": "Organization", name: "AZ Époxy" },
-    publisher: {
-      "@type": "Organization",
-      name: "AZ Époxy",
-      url: "https://www.azepoxy.fr",
-    },
-  };
-
   return (
     <>
-      <Script
-        id={`ld-json-article-${slug}`}
-        type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        id={`ld-article-${slug}`}
+        data={articleLd({
+          headline: article.title,
+          description: article.description,
+          datePublished: article.date,
+          image: article.image,
+          url: `/blog/${article.slug}`,
+          section: article.category,
+        })}
       />
 
       <PageHero

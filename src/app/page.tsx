@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
 import {
   ArrowRight,
   Flame,
@@ -26,12 +26,13 @@ import { ProcessStep } from "@/components/ui/process-step";
 import { CtaBand } from "@/components/ui/cta-band";
 import { HeroParticles } from "@/components/ui/hero-particles";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title:
     "AZ Époxy — Thermolaquage Poudre Époxy Professionnel | 200+ Couleurs RAL",
   description:
     "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL, cabine 7m, service express 48h, 0 COV. Devis gratuit sous 24h.",
-};
+  path: "/",
+});
 
 /** Icon map for service cards */
 const SERVICE_ICONS: Record<string, typeof Flame> = {

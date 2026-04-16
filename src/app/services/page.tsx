@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
 import {
   ArrowRight,
   Check,
@@ -17,11 +17,12 @@ import { CtaBand } from "@/components/ui/cta-band";
 import { SERVICES } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Nos Services",
   description:
     "Thermolaquage poudre époxy, sablage, grenaillage, métallisation et finitions spéciales. Découvrez l'ensemble de nos prestations industrielles depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.",
-};
+  path: "/services",
+});
 
 /* Visual accents per service card for the alternating color blocks */
 const SERVICE_ACCENTS = [

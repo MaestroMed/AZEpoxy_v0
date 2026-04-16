@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbLd, type BreadcrumbItem } from "@/lib/jsonld";
 import { cn } from "@/lib/utils";
 
 interface PageHeroProps {
@@ -6,7 +9,12 @@ interface PageHeroProps {
   title: React.ReactNode;
   description?: string;
   variant?: "night" | "ember";
-  breadcrumbs?: { label: string; href?: string }[];
+  /**
+   * Trail of breadcrumbs to display *after* "Accueil". Passing a leading
+   * "Accueil" entry is supported for back-compat — it is silently stripped.
+   * The resulting list is also serialized as a BreadcrumbList JSON-LD script.
+   */
+  breadcrumbs?: BreadcrumbItem[];
   children?: React.ReactNode;
 }
 
@@ -18,6 +26,9 @@ export function PageHero({
   breadcrumbs,
   children,
 }: PageHeroProps) {
+  const trail = stripLeadingHome(breadcrumbs);
+  const showCrumbs = trail.length > 0;
+
   return (
     <section
       className={cn(
@@ -26,7 +37,8 @@ export function PageHero({
         variant === "ember" && "bg-gradient-ember"
       )}
     >
-      {/* Background layers */}
+      {showCrumbs && <JsonLd data={breadcrumbLd(trail)} />}
+
       {variant === "night" && (
         <>
           <div className="absolute inset-0 bg-gradient-night" />
@@ -40,30 +52,25 @@ export function PageHero({
       )}
 
       <div className="container-wide relative flex min-h-[60vh] flex-col justify-center pt-40 pb-20">
-        {/* Breadcrumbs */}
-        {breadcrumbs && breadcrumbs.length > 0 && (
+        {showCrumbs && (
           <nav
             aria-label="Fil d'Ariane"
-            className="mb-8 flex items-center gap-2 text-sm text-white/60"
+            className="mb-8 flex flex-wrap items-center gap-2 text-sm text-white/60"
           >
-            <Link
-              href="/"
-              className="transition-colors hover:text-white"
-            >
+            <Link href="/" className="transition-colors hover:text-white">
               Accueil
             </Link>
-            {breadcrumbs.map((crumb, i) => (
+            {trail.map((crumb, i) => (
               <span key={i} className="flex items-center gap-2">
-                <span aria-hidden="true">&gt;</span>
+                <ChevronRight className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
                 {crumb.href ? (
-                  <Link
-                    href={crumb.href}
-                    className="transition-colors hover:text-white"
-                  >
+                  <Link href={crumb.href} className="transition-colors hover:text-white">
                     {crumb.label}
                   </Link>
                 ) : (
-                  <span className="text-white/90">{crumb.label}</span>
+                  <span aria-current="page" className="text-white/90">
+                    {crumb.label}
+                  </span>
                 )}
               </span>
             ))}
@@ -71,27 +78,26 @@ export function PageHero({
         )}
 
         <div className="max-w-4xl">
-          {/* Label pill */}
-          {label && (
-            <span className="section-label-light">{label}</span>
-          )}
-
-          {/* Title */}
+          {label && <span className="section-label-light">{label}</span>}
           <h1 className="heading-display mt-6 text-balance text-4xl leading-[0.95] sm:text-5xl lg:text-6xl">
             {title}
           </h1>
-
-          {/* Description */}
           {description && (
             <p className="mt-6 max-w-2xl text-balance text-lg text-white/70 sm:text-xl">
               {description}
             </p>
           )}
-
-          {/* Extra content */}
           {children && <div className="mt-8">{children}</div>}
         </div>
       </div>
     </section>
   );
+}
+
+function stripLeadingHome(items?: BreadcrumbItem[]): BreadcrumbItem[] {
+  if (!items?.length) return [];
+  const first = items[0];
+  const isHome =
+    first.href === "/" || first.label.trim().toLowerCase() === "accueil";
+  return isHome ? items.slice(1) : items;
 }

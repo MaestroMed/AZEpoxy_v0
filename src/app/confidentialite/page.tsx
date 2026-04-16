@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Politique de Confidentialité",
   description:
     "Politique de confidentialité et protection des données personnelles du site AZ Époxy, conformément au RGPD.",
-};
+  path: "/confidentialite",
+});
 
 const SECTIONS = [
   {

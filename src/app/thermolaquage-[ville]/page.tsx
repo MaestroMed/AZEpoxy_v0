@@ -15,13 +15,15 @@ import {
   Leaf,
 } from "lucide-react";
 
+import { buildMetadata } from "@/lib/seo";
+import { localBusinessLd } from "@/lib/jsonld";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 import { VILLES, getVilleBySlug } from "@/lib/villes-data";
-import { SITE } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
 /*  Metadata                                                                   */
@@ -39,13 +41,19 @@ export async function generateMetadata({
     return { title: "Ville introuvable" };
   }
 
-  return {
+  return buildMetadata({
     title: `Thermolaquage à ${ville.name} (${ville.departmentCode}) — Poudre Époxy`,
     description: `Thermolaquage poudre époxy professionnel à ${ville.name} (${ville.department}). ${ville.distance} de notre atelier, ${ville.driveTime} de trajet. 200+ couleurs RAL, sablage, métallisation, express 48h. Devis gratuit.`,
-    alternates: {
-      canonical: `${SITE.url}/thermolaquage-${ville.slug}`,
-    },
-  };
+    path: `/thermolaquage-${ville.slug}`,
+    keywords: [
+      `thermolaquage ${ville.name}`,
+      `poudre époxy ${ville.name}`,
+      `sablage ${ville.name}`,
+      `métallisation ${ville.name}`,
+      `thermolaquage ${ville.department}`,
+      "AZ Époxy",
+    ],
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -107,44 +115,16 @@ export default async function VillePage({
     .map((s) => getVilleBySlug(s))
     .filter(Boolean);
 
-  /* JSON-LD LocalBusiness with areaServed */
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": `${SITE.url}#business`,
-    name: SITE.name,
-    url: SITE.url,
-    telephone: SITE.phone,
-    email: SITE.email,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: SITE.address.street,
-      addressLocality: SITE.address.city,
-      postalCode: SITE.address.zip,
-      addressCountry: "FR",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 49.147,
-      longitude: 2.327,
-    },
-    areaServed: {
-      "@type": "City",
-      name: ville.name,
-      containedInPlace: {
-        "@type": "AdministrativeArea",
-        name: ville.department,
-      },
-    },
-    priceRange: "€€",
-  };
-
   return (
     <>
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        id={`ld-business-${ville.slug}`}
+        data={localBusinessLd({
+          areaServed: [
+            { type: "City", name: ville.name, containedIn: ville.department },
+            { type: "AdministrativeArea", name: ville.department },
+          ],
+        })}
       />
 
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}

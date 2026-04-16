@@ -1,74 +1,67 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import GA4 from "@/components/analytics/ga4";
+import { JsonLd } from "@/components/seo/json-ld";
+import { MotionProvider } from "@/components/motion";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SITE } from "@/lib/utils";
+import { buildMetadata } from "@/lib/seo";
+import {
+  localBusinessLd,
+  organizationLd,
+  websiteLd,
+} from "@/lib/jsonld";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
 
 export const viewport: Viewport = {
-  themeColor: "#1A1A2E",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F5F5F0" },
+    { media: "(prefers-color-scheme: dark)", color: "#1A1A2E" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
+  ...buildMetadata({
+    title:
+      "AZ Époxy — Thermolaquage Poudre Époxy Professionnel | 200+ Couleurs RAL",
+    description:
+      "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL, cabine 7m, service express 48h, 0 COV. Jantes, moto, pièces métalliques, mobilier.",
+    path: "/",
+    keywords: [
+      "thermolaquage",
+      "poudre époxy",
+      "peinture poudre",
+      "RAL",
+      "sablage",
+      "métallisation",
+      "anti-corrosion",
+      "jantes thermolaquées",
+      "moto art",
+      "Île-de-France",
+      "Bruyères-sur-Oise",
+      "Val-d'Oise",
+      "AZ Époxy",
+      "AZ Construction",
+    ],
+  }),
   title: {
-    default: "AZ Époxy — Thermolaquage Poudre Époxy Professionnel | 200+ Couleurs RAL",
+    default:
+      "AZ Époxy — Thermolaquage Poudre Époxy Professionnel | 200+ Couleurs RAL",
     template: "%s | AZ Époxy",
   },
-  description:
-    "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL, cabine 7m, service express 48h, 0 COV. Jantes, moto, pièces métalliques, mobilier.",
-  keywords: [
-    "thermolaquage",
-    "poudre époxy",
-    "peinture poudre",
-    "RAL",
-    "sablage",
-    "métallisation",
-    "anti-corrosion",
-    "jantes thermolaquées",
-    "moto art",
-    "Île-de-France",
-    "Bruyères-sur-Oise",
-    "Val-d'Oise",
-    "AZ Époxy",
-    "AZ Construction",
-  ],
-  authors: [{ name: "AZ Époxy" }],
-  creator: "AZ Époxy",
-  publisher: "AZ Époxy",
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: SITE.url,
-    title: "AZ Époxy — Thermolaquage Poudre Époxy Professionnel",
-    description:
-      "200+ couleurs RAL, cabine 7m, express 48h, 0 COV. Finition premium pour jantes, moto, pièces métalliques et mobilier.",
-    siteName: "AZ Époxy",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "AZ Époxy — Thermolaquage poudre époxy",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "AZ Époxy — Thermolaquage Poudre Époxy",
-    description:
-      "200+ couleurs RAL, cabine 7m, express 48h. Finition premium industrielle.",
-    images: ["/og-image.jpg"],
-  },
+  authors: [{ name: SITE.name }],
+  creator: SITE.name,
+  publisher: SITE.name,
   robots: {
     index: true,
     follow: true,
@@ -80,55 +73,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: SITE.url,
-  },
-  icons: {
-    icon: "/favicon.ico",
-  },
-};
-
-const orgJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "@id": `${SITE.url}#business`,
-  name: SITE.name,
-  alternateName: "AZ Epoxy",
-  description:
-    "Thermolaquage poudre époxy professionnel, 200+ couleurs RAL, sablage, métallisation, finitions spéciales.",
-  url: SITE.url,
-  telephone: SITE.phone,
-  email: SITE.email,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: SITE.address.street,
-    addressLocality: SITE.address.city,
-    postalCode: SITE.address.zip,
-    addressCountry: "FR",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 49.147,
-    longitude: 2.327,
-  },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "08:00",
-      closes: "18:00",
-    },
-  ],
-  areaServed: [
-    { "@type": "AdministrativeArea", name: "Île-de-France" },
-    { "@type": "AdministrativeArea", name: "Val-d'Oise" },
-  ],
-  parentOrganization: {
-    "@type": "Organization",
-    name: SITE.parent.name,
-    url: SITE.parent.url,
-  },
-  priceRange: "€€",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
@@ -137,20 +82,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="min-h-screen bg-background antialiased font-sans">
-        <Script
-          id="ld-json-business"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
-        />
-        <Header />
-        <main id="main-content" className="relative">{children}</main>
-        <Footer />
-        <GA4 />
-        <WhatsAppButton />
-        <CookieConsent />
+    <html
+      lang="fr"
+      className={`${inter.variable} ${outfit.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-screen bg-background text-foreground antialiased font-sans">
+        <JsonLd id="ld-business" data={localBusinessLd()} />
+        <JsonLd id="ld-organization" data={organizationLd()} />
+        <JsonLd id="ld-website" data={websiteLd()} />
+        <ThemeProvider>
+          <MotionProvider>
+            <Header />
+            <main id="main-content" className="relative">
+              {children}
+            </main>
+            <Footer />
+            <GA4 />
+            <WhatsAppButton />
+            <CookieConsent />
+          </MotionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
