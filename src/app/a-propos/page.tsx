@@ -6,7 +6,7 @@ import { StatCounter } from "@/components/ui/stat-counter";
 import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { TESTIMONIALS } from "@/lib/testimonials-data";
+import { getTestimonials } from "@/lib/testimonials-data";
 import {
   ShieldCheck,
   Leaf,
@@ -32,7 +32,8 @@ const EQUIPMENT = [
   "Zone de contrôle qualité",
 ];
 
-export default function AProposPage() {
+export default async function AProposPage() {
+  const testimonials = await getTestimonials();
   return (
     <>
       {/* ── Hero ───────────────────────────────────────────── */}
@@ -275,7 +276,7 @@ export default function AProposPage() {
           </ScrollReveal>
 
           <div className="mt-16 grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.slice(0, 3).map((t, i) => (
+            {testimonials.slice(0, 3).map((t, i) => (
               <ScrollReveal key={t.name} delay={0.1 + i * 0.1}>
                 <TestimonialCard
                   name={t.name}

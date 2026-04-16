@@ -22,7 +22,7 @@ import { FeatureCard } from "@/components/ui/feature-card";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
-import { getServiceBySlug } from "@/lib/services-data";
+import { getServiceBySlugAsync } from "@/lib/services-data";
 
 const SERVICE_DESCRIPTION =
   "Métallisation zinc et aluminium par projection thermique. Protection anti-corrosion extrême pour milieux marins, industriels et enterrés. Conforme ISO 2063. AZ Époxy, Bruyères-sur-Oise.";
@@ -123,8 +123,8 @@ function CellIcon({ value }: { value: string }) {
   return <span>{value}</span>;
 }
 
-export default function MetallisationPage() {
-  const service = getServiceBySlug("metallisation")!;
+export default async function MetallisationPage() {
+  const service = (await getServiceBySlugAsync("metallisation"))!;
 
   return (
     <>

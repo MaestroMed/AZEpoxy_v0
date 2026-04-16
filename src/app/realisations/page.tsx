@@ -1,4 +1,4 @@
-import { MessageSquareQuote } from "lucide-react";
+import { MessageSquareQuote, Star } from "lucide-react";
 
 import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/page-hero";
@@ -6,7 +6,10 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { TestimonialCard } from "@/components/ui/testimonial-card";
-import { TESTIMONIALS } from "@/lib/testimonials-data";
+import { ReviewsCarousel } from "@/components/ui/reviews-carousel";
+import { getTestimonials } from "@/lib/testimonials-data";
+import { getProjects } from "@/lib/realisations-data";
+import { averageRating, getReviews } from "@/lib/reviews-data";
 import { PortfolioSection } from "./portfolio-section";
 
 export const metadata = buildMetadata({
@@ -16,7 +19,14 @@ export const metadata = buildMetadata({
   path: "/realisations",
 });
 
-export default function RealisationsPage() {
+export default async function RealisationsPage() {
+  const [projects, testimonials, reviews] = await Promise.all([
+    getProjects(),
+    getTestimonials(),
+    getReviews(),
+  ]);
+  const reviewsAvg = averageRating(reviews);
+
   return (
     <>
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
@@ -40,7 +50,34 @@ export default function RealisationsPage() {
       />
 
       {/* ── Section 2 — Portfolio Grid with Filters ──────────────────── */}
-      <PortfolioSection />
+      <PortfolioSection projects={projects} />
+
+      {/* ── Section 2b — Google Reviews ──────────────────────────────── */}
+      {reviews.length > 0 && (
+        <section className="bg-white py-20">
+          <div className="container-wide">
+            <ScrollReveal>
+              <SectionHeader
+                centered
+                label="Avis Google"
+                labelIcon={<Star className="h-3 w-3" />}
+                title={
+                  <>
+                    Ce qu&apos;en disent{" "}
+                    <span className="bg-gradient-ember bg-clip-text text-transparent">
+                      nos clients
+                    </span>
+                  </>
+                }
+                description="Avis synchronisés automatiquement depuis notre fiche Google Business."
+              />
+            </ScrollReveal>
+            <div className="mx-auto mt-14 max-w-6xl">
+              <ReviewsCarousel reviews={reviews} average={reviewsAvg} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Section 3 — Testimonials ─────────────────────────────────── */}
       <section className="relative overflow-hidden bg-brand-night py-24 text-white">
@@ -65,7 +102,7 @@ export default function RealisationsPage() {
           </ScrollReveal>
 
           <div className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
-            {TESTIMONIALS.slice(0, 3).map((testimonial, i) => (
+            {testimonials.slice(0, 3).map((testimonial, i) => (
               <ScrollReveal key={testimonial.name} delay={i * 0.1}>
                 <TestimonialCard
                   name={testimonial.name}

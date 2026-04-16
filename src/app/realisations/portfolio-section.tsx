@@ -3,7 +3,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { PROJECTS, PROJECT_CATEGORIES, type ProjectCategoryKey } from "@/lib/realisations-data";
+import {
+  PROJECT_CATEGORIES,
+  type Project,
+  type ProjectCategoryKey,
+} from "@/lib/realisations-data";
 import { trackEvent } from "@/components/analytics/ga4";
 import { RAL_COLORS } from "@/lib/ral-colors";
 
@@ -12,7 +16,11 @@ function ralToHex(code: string): string | undefined {
   return RAL_COLORS.find((c) => c.code === code)?.hex;
 }
 
-export function PortfolioSection() {
+interface PortfolioSectionProps {
+  projects: Project[];
+}
+
+export function PortfolioSection({ projects }: PortfolioSectionProps) {
   const [activeCategory, setActiveCategory] = useState<ProjectCategoryKey>("all");
 
   const handleCategoryChange = (category: ProjectCategoryKey) => {
@@ -22,8 +30,8 @@ export function PortfolioSection() {
 
   const filtered =
     activeCategory === "all"
-      ? PROJECTS
-      : PROJECTS.filter((p) => p.category === activeCategory);
+      ? projects
+      : projects.filter((p) => p.category === activeCategory);
 
   return (
     <section className="bg-brand-cream py-24">

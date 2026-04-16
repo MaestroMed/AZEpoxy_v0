@@ -21,7 +21,7 @@ import { ProcessStep } from "@/components/ui/process-step";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
-import { getServiceBySlug } from "@/lib/services-data";
+import { getServiceBySlugAsync } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 
 const SERVICE_DESCRIPTION =
@@ -43,8 +43,8 @@ const FEATURE_ICONS = [
   <Droplets key="droplets" className="h-6 w-6" />,
 ];
 
-export default function ThermolaquagePage() {
-  const service = getServiceBySlug("thermolaquage")!;
+export default async function ThermolaquagePage() {
+  const service = (await getServiceBySlugAsync("thermolaquage"))!;
 
   return (
     <>

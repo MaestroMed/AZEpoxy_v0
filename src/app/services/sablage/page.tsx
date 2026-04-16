@@ -20,7 +20,8 @@ import { FeatureCard } from "@/components/ui/feature-card";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
-import { getServiceBySlug } from "@/lib/services-data";
+import { BeforeAfter } from "@/components/ui/before-after";
+import { getServiceBySlugAsync } from "@/lib/services-data";
 
 const SERVICE_DESCRIPTION =
   "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 mètres. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.";
@@ -93,8 +94,8 @@ const APPLICATIONS = [
   },
 ];
 
-export default function SablagePage() {
-  const service = getServiceBySlug("sablage")!;
+export default async function SablagePage() {
+  const service = (await getServiceBySlugAsync("sablage"))!;
 
   return (
     <>
@@ -179,14 +180,17 @@ export default function SablagePage() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
-              <div className="flex aspect-[4/3] items-center justify-center rounded-2xl bg-brand-night/5">
-                <div className="text-center">
-                  <Wind className="mx-auto h-12 w-12 text-brand-orange/40" />
-                  <p className="mt-4 text-sm font-semibold uppercase tracking-[0.15em] text-brand-charcoal/40">
-                    Cabine de sablage 7 m
-                  </p>
-                </div>
-              </div>
+              <BeforeAfter
+                before={{
+                  src: "/images/sablage-avant.svg",
+                  alt: "Pièce en acier oxydée, avec rouille et calamine, avant sablage.",
+                }}
+                after={{
+                  src: "/images/sablage-apres.svg",
+                  alt: "Même pièce après sablage — métal nu, propreté SA 2.5, profil de rugosité homogène.",
+                }}
+                label="Avant / après sablage : décapage intégral, propreté SA 2.5, prêt à thermolaquer."
+              />
             </ScrollReveal>
           </div>
         </div>

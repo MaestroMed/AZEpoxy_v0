@@ -14,10 +14,10 @@ import {
 } from "lucide-react";
 import { POPULAR_RAL } from "@/lib/ral-colors";
 import { SITE } from "@/lib/utils";
-import { SERVICES } from "@/lib/services-data";
+import { getServices } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
-import { SPECIALTIES } from "@/lib/specialites-data";
-import { TESTIMONIALS } from "@/lib/testimonials-data";
+import { getSpecialties } from "@/lib/specialites-data";
+import { getTestimonials } from "@/lib/testimonials-data";
 
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { StatCounter } from "@/components/ui/stat-counter";
@@ -56,7 +56,12 @@ const SPECIALTY_BG: string[] = [
 ];
 
 export default async function HomePage() {
-  const reviews = await getReviews();
+  const [reviews, services, specialties, testimonials] = await Promise.all([
+    getReviews(),
+    getServices(),
+    getSpecialties(),
+    getTestimonials(),
+  ]);
   const reviewsAvg = averageRating(reviews);
   return (
     <>
@@ -137,7 +142,7 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid gap-6 lg:grid-cols-2">
-            {SERVICES.map((service, i) => {
+            {services.map((service, i) => {
               const Icon = SERVICE_ICONS[service.slug] ?? Flame;
               return (
                 <ScrollReveal key={service.slug} delay={0.1 * i}>
@@ -335,7 +340,7 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {SPECIALTIES.map((spec, i) => (
+            {specialties.map((spec, i) => (
               <ScrollReveal key={spec.slug} delay={0.1 * i}>
                 <Link
                   href={`/specialites/${spec.slug}`}
@@ -476,7 +481,7 @@ export default async function HomePage() {
           )}
 
           <div className="grid gap-6 lg:grid-cols-3">
-            {TESTIMONIALS.slice(0, 3).map((t, i) => (
+            {testimonials.slice(0, 3).map((t, i) => (
               <ScrollReveal key={t.name} delay={0.15 * i}>
                 <TestimonialCard
                   name={t.name}

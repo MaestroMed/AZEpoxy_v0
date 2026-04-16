@@ -1,11 +1,15 @@
 import type { MetadataRoute } from "next";
-import { VILLES } from "@/lib/villes-data";
-import { BLOG_ARTICLES } from "@/lib/blog-data";
+import { getVilles } from "@/lib/villes-data";
+import { getBlogArticles } from "@/lib/blog-data";
 
 const BASE = "https://www.azepoxy.fr";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const [villes, articles] = await Promise.all([
+    getVilles(),
+    getBlogArticles(),
+  ]);
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
@@ -35,14 +39,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/confidentialite`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
 
-  const villePages: MetadataRoute.Sitemap = VILLES.map((v) => ({
+  const villePages: MetadataRoute.Sitemap = villes.map((v) => ({
     url: `${BASE}/thermolaquage-${v.slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
-  const blogPages: MetadataRoute.Sitemap = BLOG_ARTICLES.map((a) => ({
+  const blogPages: MetadataRoute.Sitemap = articles.map((a) => ({
     url: `${BASE}/blog/${a.slug}`,
     lastModified: new Date(a.date),
     changeFrequency: "yearly" as const,

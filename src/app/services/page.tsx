@@ -14,7 +14,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { ProcessStep } from "@/components/ui/process-step";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
-import { SERVICES } from "@/lib/services-data";
+import { getServices } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 
 export const metadata = buildMetadata({
@@ -46,7 +46,8 @@ const SERVICE_LABELS = [
   "Finitions & effets spéciaux",
 ];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getServices();
   return (
     <>
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
@@ -88,7 +89,7 @@ export default function ServicesPage() {
           </ScrollReveal>
 
           <div className="mt-16 space-y-12">
-            {SERVICES.map((service, index) => {
+            {services.map((service, index) => {
               const isOdd = index % 2 === 0;
               return (
                 <ScrollReveal key={service.slug} delay={0.1}>

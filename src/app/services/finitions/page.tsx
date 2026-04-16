@@ -19,7 +19,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
-import { getServiceBySlug } from "@/lib/services-data";
+import { getServiceBySlugAsync } from "@/lib/services-data";
 
 const SERVICE_DESCRIPTION =
   "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium Adaptacolor : Patina, Polaris, Dichroic, Sfera. AZ Époxy, Bruyères-sur-Oise.";
@@ -130,8 +130,8 @@ const PREMIUM_COLLECTIONS = [
   },
 ];
 
-export default function FinitionsPage() {
-  const service = getServiceBySlug("finitions")!;
+export default async function FinitionsPage() {
+  const service = (await getServiceBySlugAsync("finitions"))!;
 
   return (
     <>

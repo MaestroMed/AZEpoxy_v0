@@ -26,9 +26,12 @@ import { GalleryGrid } from "@/components/ui/gallery-grid";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { SPECIALTIES, getSpecialtyBySlug } from "@/lib/specialites-data";
+import {
+  getSpecialties,
+  getSpecialtyBySlugAsync,
+} from "@/lib/specialites-data";
 import { RAL_COLORS } from "@/lib/ral-colors";
-import { PROJECTS } from "@/lib/realisations-data";
+import { getProjects, type Project } from "@/lib/realisations-data";
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                    */
@@ -94,10 +97,11 @@ const SLUG_TO_CATEGORY: Record<string, string> = {
 function buildGalleryItems(
   categorySlug: string,
   specialtyTitle: string,
-  popularColors: string[]
+  popularColors: string[],
+  projects: Project[]
 ) {
   const projectCategory = SLUG_TO_CATEGORY[categorySlug] ?? categorySlug;
-  const matching = PROJECTS.filter((p) => p.category === projectCategory);
+  const matching = projects.filter((p) => p.category === projectCategory);
   const items = matching.slice(0, 6).map((p) => ({
     title: p.title,
     category: categorySlug,
@@ -129,7 +133,7 @@ export async function generateMetadata({
   params: Promise<{ specialty: string }>;
 }): Promise<Metadata> {
   const { specialty: slug } = await params;
-  const specialty = getSpecialtyBySlug(slug);
+  const specialty = await getSpecialtyBySlugAsync(slug);
 
   if (!specialty) {
     return { title: "Spécialité introuvable" };
@@ -146,8 +150,9 @@ export async function generateMetadata({
 /*  Static params                                                              */
 /* -------------------------------------------------------------------------- */
 
-export function generateStaticParams() {
-  return SPECIALTIES.map((s) => ({ specialty: s.slug }));
+export async function generateStaticParams() {
+  const specialties = await getSpecialties();
+  return specialties.map((s) => ({ specialty: s.slug }));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -160,7 +165,10 @@ export default async function SpecialtyPage({
   params: Promise<{ specialty: string }>;
 }) {
   const { specialty: slug } = await params;
-  const specialty = getSpecialtyBySlug(slug);
+  const [specialty, projects] = await Promise.all([
+    getSpecialtyBySlugAsync(slug),
+    getProjects(),
+  ]);
 
   if (!specialty) {
     notFound();
@@ -169,7 +177,8 @@ export default async function SpecialtyPage({
   const galleryItems = buildGalleryItems(
     specialty.slug,
     specialty.title,
-    specialty.popularColors
+    specialty.popularColors,
+    projects
   );
 
   // Resolve popular colors from RAL catalog

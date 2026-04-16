@@ -23,7 +23,10 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
-import { VILLES, getVilleBySlug } from "@/lib/villes-data";
+import {
+  getVilles,
+  getVilleBySlugAsync,
+} from "@/lib/villes-data";
 
 /* -------------------------------------------------------------------------- */
 /*  Metadata                                                                   */
@@ -35,7 +38,7 @@ export async function generateMetadata({
   params: Promise<{ ville: string }>;
 }): Promise<Metadata> {
   const { ville: slug } = await params;
-  const ville = getVilleBySlug(slug);
+  const ville = await getVilleBySlugAsync(slug);
 
   if (!ville) {
     return { title: "Ville introuvable" };
@@ -60,8 +63,9 @@ export async function generateMetadata({
 /*  Static params                                                              */
 /* -------------------------------------------------------------------------- */
 
-export function generateStaticParams() {
-  return VILLES.map((v) => ({ ville: v.slug }));
+export async function generateStaticParams() {
+  const villes = await getVilles();
+  return villes.map((v) => ({ ville: v.slug }));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -105,14 +109,16 @@ export default async function VillePage({
   params: Promise<{ ville: string }>;
 }) {
   const { ville: slug } = await params;
-  const ville = getVilleBySlug(slug);
+  const allVilles = await getVilles();
+  const ville = allVilles.find((v) => v.slug === slug);
 
   if (!ville) {
     notFound();
   }
 
+  const villeBySlug = new Map(allVilles.map((v) => [v.slug, v]));
   const nearbyVilles = ville.nearbyVilles
-    .map((s) => getVilleBySlug(s))
+    .map((s) => villeBySlug.get(s))
     .filter(Boolean);
 
   return (
