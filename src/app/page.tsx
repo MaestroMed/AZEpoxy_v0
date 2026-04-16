@@ -25,6 +25,11 @@ import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { ProcessStep } from "@/components/ui/process-step";
 import { CtaBand } from "@/components/ui/cta-band";
 import { HeroParticles } from "@/components/ui/hero-particles";
+import { ExitIntentModal } from "@/components/ui/exit-intent-modal";
+import { RalRecommender } from "@/components/ui/ral-recommender";
+import { ReviewsCarousel } from "@/components/ui/reviews-carousel";
+import { SectionHeader } from "@/components/ui/section-header";
+import { averageRating, getReviews } from "@/lib/reviews-data";
 
 export const metadata = buildMetadata({
   title:
@@ -50,9 +55,13 @@ const SPECIALTY_BG: string[] = [
   "bg-[#12121F]",
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const reviews = await getReviews();
+  const reviewsAvg = averageRating(reviews);
   return (
     <>
+      <ExitIntentModal />
+
       {/* ── Section 1 — Hero (night bg + particles) ───────────────────── */}
       <section className="relative isolate h-[100svh] overflow-hidden bg-brand-night text-white">
         {/* Layer 0: Canvas particles (or reduced-motion fallback) */}
@@ -424,7 +433,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Section 8 — Testimonials (night bg) ────────────────────────── */}
+      {/* ── Section 7.5 — RAL recommender (cream bg) ────────────────────── */}
+      <section className="bg-brand-cream py-24">
+        <div className="container-wide">
+          <ScrollReveal>
+            <RalRecommender />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ── Section 8 — Reviews + Testimonials (night bg) ───────────────── */}
       <section className="relative overflow-hidden bg-brand-night py-24 text-white">
         <div className="absolute inset-0 bg-industrial-grid-dark opacity-30" />
         <div className="container-wide relative">
@@ -441,6 +459,21 @@ export default function HomePage() {
               </h2>
             </div>
           </ScrollReveal>
+
+          {reviews.length > 0 && (
+            <ScrollReveal>
+              <div className="mb-12 rounded-3xl bg-white p-6 text-brand-night sm:p-8">
+                <SectionHeader
+                  label="Avis Google"
+                  title="Ce qu'en disent nos clients"
+                  description="Avis synchronisés automatiquement depuis notre fiche Google."
+                />
+                <div className="mt-8">
+                  <ReviewsCarousel reviews={reviews} average={reviewsAvg} />
+                </div>
+              </div>
+            </ScrollReveal>
+          )}
 
           <div className="grid gap-6 lg:grid-cols-3">
             {TESTIMONIALS.slice(0, 3).map((t, i) => (

@@ -24,7 +24,8 @@ export function WhatsAppButton() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="fixed bottom-6 right-6 z-40 flex items-center gap-3"
+          // Hidden on mobile — the sticky CTA bar covers the same action.
+          className="fixed bottom-6 right-6 z-40 hidden items-center gap-3 md:flex"
         >
           {/* Badge — desktop only */}
           <span className="hidden rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-night shadow-lg lg:block">

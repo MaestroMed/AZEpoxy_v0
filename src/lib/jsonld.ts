@@ -1,5 +1,6 @@
 import { SITE } from "@/lib/utils";
 import { TESTIMONIALS } from "@/lib/testimonials-data";
+import type { Review } from "@/lib/reviews-data";
 
 /**
  * Typed JSON-LD builders. Every page that needs structured data should import
@@ -52,6 +53,9 @@ interface LocalBusinessOptions {
   areaServed?: Array<{ type?: string; name: string; containedIn?: string }>;
   /** Pass `false` to omit the rating object (e.g. when no reviews are loaded). */
   withAggregateRating?: boolean;
+  /** When provided, the AggregateRating is derived from these real reviews
+   *  instead of the hardcoded testimonials dataset. */
+  reviews?: Review[];
 }
 
 export function localBusinessLd(options: LocalBusinessOptions = {}) {
@@ -62,7 +66,14 @@ export function localBusinessLd(options: LocalBusinessOptions = {}) {
       { type: "AdministrativeArea", name: "Val-d'Oise" },
     ],
     withAggregateRating = true,
+    reviews,
   } = options;
+
+  const rating = withAggregateRating
+    ? reviews?.length
+      ? aggregateRatingFromReviews(reviews)
+      : aggregateRatingFromTestimonials()
+    : undefined;
 
   return {
     "@context": "https://schema.org",
@@ -80,7 +91,7 @@ export function localBusinessLd(options: LocalBusinessOptions = {}) {
           }
         : {}),
     })),
-    ...(withAggregateRating ? { aggregateRating: aggregateRatingFromTestimonials() } : {}),
+    ...(rating ? { aggregateRating: rating } : {}),
   };
 }
 
@@ -239,6 +250,19 @@ export function reviewLd(input: {
  * Aggregate rating computed from the local testimonials dataset. When real
  * Google reviews land in Phase 4 this should fall back to the synced data.
  */
+function aggregateRatingFromReviews(reviews: Review[]) {
+  if (!reviews.length) return undefined;
+  const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
+  const value = total / reviews.length;
+  return {
+    "@type": "AggregateRating",
+    ratingValue: Number(value.toFixed(2)),
+    bestRating: 5,
+    worstRating: 1,
+    reviewCount: reviews.length,
+  };
+}
+
 export function aggregateRatingFromTestimonials() {
   if (!TESTIMONIALS.length) return undefined;
   const total = TESTIMONIALS.reduce((sum, t) => sum + t.rating, 0);

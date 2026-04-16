@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import { MobileStickyCta } from "@/components/ui/mobile-sticky-cta";
 import GA4 from "@/components/analytics/ga4";
 import { JsonLd } from "@/components/seo/json-ld";
 import { MotionProvider } from "@/components/motion";
@@ -16,6 +17,7 @@ import {
   organizationLd,
   websiteLd,
 } from "@/lib/jsonld";
+import { getReviews } from "@/lib/reviews-data";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
@@ -76,11 +78,12 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const reviews = await getReviews();
   return (
     <html
       lang="fr"
@@ -88,7 +91,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground antialiased font-sans">
-        <JsonLd id="ld-business" data={localBusinessLd()} />
+        <JsonLd id="ld-business" data={localBusinessLd({ reviews })} />
         <JsonLd id="ld-organization" data={organizationLd()} />
         <JsonLd id="ld-website" data={websiteLd()} />
         <ThemeProvider>
@@ -100,6 +103,7 @@ export default function RootLayout({
             <Footer />
             <GA4 />
             <WhatsAppButton />
+            <MobileStickyCta />
             <CookieConsent />
           </MotionProvider>
         </ThemeProvider>

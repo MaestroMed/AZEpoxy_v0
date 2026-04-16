@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/a-propos`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.5 },
     { url: `${BASE}/devis`, lastModified: now, changeFrequency: "yearly", priority: 0.7 },
+    { url: `${BASE}/rendez-vous`, lastModified: now, changeFrequency: "yearly", priority: 0.6 },
     { url: `${BASE}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${BASE}/mentions-legales`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE}/cgv`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
