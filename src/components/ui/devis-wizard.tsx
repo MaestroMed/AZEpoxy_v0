@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { POPULAR_RAL, RAL_COLORS } from "@/lib/ral-colors";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { TurnstileWidget } from "@/components/ui/turnstile";
-import { trackEvent } from "@/components/analytics/ga4";
+import { track } from "@/lib/analytics/events";
 import {
   clearDevisDraft,
   loadDevisDraft,
@@ -178,7 +178,7 @@ export function DevisWizard() {
       const res = await fetch("/api/devis", { method: "POST", body: fd });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error);
-      trackEvent("form_submit", { variant: "wizard" });
+      track("form_submit", { variant: "wizard", status: "ok" });
       submittedRef.current = true;
       clearDevisDraft();
       setStatus("success");

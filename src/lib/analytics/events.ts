@@ -73,6 +73,19 @@ export interface AnalyticsEvents {
   exit_intent_dismissed: {
     via: "close" | "cta" | "phone" | "backdrop";
   };
+  faq_expand: {
+    question: string;
+  };
+  color_cart: {
+    action: "add" | "remove";
+    code: string;
+  };
+  color_filter: {
+    family: string;
+  };
+  realisation_filter: {
+    category: string;
+  };
 }
 
 export type AnalyticsEventName = keyof AnalyticsEvents;

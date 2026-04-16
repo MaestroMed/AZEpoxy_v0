@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PIECE_TYPES, OPTIONS, type PieceType } from "@/lib/pricing-data";
-import { trackEvent } from "@/components/analytics/ga4";
+import { track } from "@/lib/analytics/events";
 
 const ICON_MAP: Record<string, typeof CircleDot> = {
   CircleDot,
@@ -61,12 +61,13 @@ export function PriceEstimator() {
   // Track estimate
   useEffect(() => {
     if (estimate && selectedType) {
-      trackEvent("price_estimate_calculated", {
+      track("price_estimate_calculated", {
         type: selectedType,
-        estimate: `${estimate.min}-${estimate.max}`,
+        quantity,
+        amount: Math.round((estimate.min + estimate.max) / 2),
       });
     }
-  }, [estimate?.min, estimate?.max, selectedType]);
+  }, [estimate?.min, estimate?.max, selectedType, quantity]);
 
   const reset = () => {
     setSelectedType(null);

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { trackEvent } from "@/components/analytics/ga4";
+import { track } from "@/lib/analytics/events";
 
 interface FAQItem {
   question: string;
@@ -20,7 +20,7 @@ export function FAQAccordion({ items }: FAQAccordionProps) {
 
   const toggle = (index: number) => {
     if (openIndex !== index) {
-      trackEvent("faq_expand", { question: items[index].question.substring(0, 50) });
+      track("faq_expand", { question: items[index].question.substring(0, 50) });
     }
     setOpenIndex(openIndex === index ? null : index);
   };

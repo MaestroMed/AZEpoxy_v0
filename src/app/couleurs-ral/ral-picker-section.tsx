@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { RAL_COLORS, RAL_FAMILIES } from "@/lib/ral-colors";
 import { ColorSwatch } from "@/components/ui/color-swatch";
 import { ColorFilterBar } from "@/components/ui/color-filter-bar";
-import { trackEvent } from "@/components/analytics/ga4";
+import { track } from "@/lib/analytics/events";
 import { LayoutGrid, List, ShoppingBag, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -41,7 +41,7 @@ export function RalPickerSection() {
         ? prev.filter((c) => c !== code)
         : [...prev, code];
       saveCart(next);
-      trackEvent("color_cart", { action: prev.includes(code) ? "remove" : "add", code });
+      track("color_cart", { action: prev.includes(code) ? "remove" : "add", code });
       return next;
     });
   }, []);
@@ -77,7 +77,7 @@ export function RalPickerSection() {
 
   const handleFamilyChange = useCallback((family: string | null) => {
     setActiveFamily(family);
-    trackEvent("color_filter", { family: family || "all" });
+    track("color_filter", { family: family || "all" });
   }, []);
 
   const handleSearchChange = useCallback((q: string) => {

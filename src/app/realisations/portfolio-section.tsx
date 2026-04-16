@@ -8,7 +8,7 @@ import {
   type Project,
   type ProjectCategoryKey,
 } from "@/lib/realisations-data";
-import { trackEvent } from "@/components/analytics/ga4";
+import { track } from "@/lib/analytics/events";
 import { RAL_COLORS } from "@/lib/ral-colors";
 
 /** Resolve a RAL code to its hex color */
@@ -25,7 +25,7 @@ export function PortfolioSection({ projects }: PortfolioSectionProps) {
 
   const handleCategoryChange = (category: ProjectCategoryKey) => {
     setActiveCategory(category);
-    trackEvent("realisation_filter", { category });
+    track("realisation_filter", { category });
   };
 
   const filtered =

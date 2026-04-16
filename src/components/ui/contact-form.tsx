@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { TurnstileWidget } from "@/components/ui/turnstile";
-import { trackEvent } from "@/components/analytics/ga4";
+import { track } from "@/lib/analytics/events";
 
 interface ContactFormProps {
   variant?: "simple" | "full";
@@ -63,7 +63,7 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Erreur lors de l'envoi.");
       }
-      trackEvent("form_submit", { variant });
+      track("form_submit", { variant, status: "ok" });
       setStatus("success");
     } catch (err) {
       setStatus("error");
@@ -109,7 +109,7 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
           onFocus={() => {
             if (!formStartTracked.current) {
               formStartTracked.current = true;
-              trackEvent("form_start", { variant });
+              track("form_start", { variant });
             }
           }}
         />
