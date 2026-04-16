@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "check:metadata": "tsx scripts/check-metadata.ts",
-    "sanity:seed": "tsx scripts/seed-sanity.ts"
+    "sanity:seed": "tsx scripts/seed-sanity.ts",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install --with-deps",
+    "lhci": "lhci autorun"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
@@ -31,9 +34,13 @@
     "resend": "^6.11.0",
     "sanity": "^4.22.0",
     "styled-components": "^6.4.0",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "yet-another-react-lightbox": "^3.31.0"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.59.1",
+    "@sentry/nextjs": "^10.49.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",

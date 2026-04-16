@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Phone, X } from "lucide-react";
 import { cn, SITE } from "@/lib/utils";
+import { track } from "@/lib/analytics/events";
 
 const COOKIE_NAME = "azepoxy_exit_intent_dismissed";
 const COOKIE_DAYS = 7;
@@ -39,18 +40,19 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
     if (isDismissed()) return;
 
     let fired = false;
-    const trigger = () => {
+    const trigger = (platform: "desktop" | "mobile") => {
       if (fired) return;
       fired = true;
+      track("exit_intent_triggered", { platform });
       setOpen(true);
     };
 
     const onMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && e.relatedTarget === null) trigger();
+      if (e.clientY <= 0 && e.relatedTarget === null) trigger("desktop");
     };
 
     const onPopState = () => {
-      trigger();
+      trigger("mobile");
       // Rewrite the state so the user doesn't actually navigate away.
       window.history.pushState(null, "", window.location.href);
     };
@@ -70,8 +72,9 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
     };
   }, [enabled]);
 
-  const dismiss = () => {
+  const dismiss = (via: "close" | "cta" | "phone" | "backdrop" = "close") => {
     setDismissedCookie();
+    track("exit_intent_dismissed", { via });
     setOpen(false);
   };
 
@@ -86,7 +89,7 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
       <button
         type="button"
         aria-label="Fermer"
-        onClick={dismiss}
+        onClick={() => dismiss("backdrop")}
         className="absolute inset-0 bg-brand-night/80 backdrop-blur-sm"
       />
       <div
@@ -100,7 +103,7 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
       >
         <button
           type="button"
-          onClick={dismiss}
+          onClick={() => dismiss("close")}
           aria-label="Fermer la fenêtre"
           className="absolute right-4 top-4 z-10 rounded-full p-1 text-brand-charcoal/60 transition-colors hover:bg-brand-cream hover:text-brand-night"
         >
@@ -127,7 +130,7 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
           <div className="flex flex-col gap-3">
             <Link
               href="/devis"
-              onClick={dismiss}
+              onClick={() => dismiss("cta")}
               className="btn-primary w-full justify-center"
             >
               Demander mon devis
@@ -135,7 +138,7 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
             </Link>
             <a
               href={SITE.phoneHref}
-              onClick={dismiss}
+              onClick={() => dismiss("phone")}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-night/15 bg-white px-6 py-3 text-sm font-semibold text-brand-night transition-colors hover:bg-brand-cream"
             >
               <Phone className="h-4 w-4" />
@@ -143,7 +146,7 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
             </a>
             <button
               type="button"
-              onClick={dismiss}
+              onClick={() => dismiss("close")}
               className="text-xs text-brand-charcoal/50 hover:text-brand-charcoal"
             >
               Non merci, je continue ma visite

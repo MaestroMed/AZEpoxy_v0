@@ -1,0 +1,32 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run start",
+      "startServerReadyPattern": "Ready|started server",
+      "url": [
+        "http://localhost:3000/",
+        "http://localhost:3000/services/thermolaquage",
+        "http://localhost:3000/devis",
+        "http://localhost:3000/blog/thermolaquage-vs-peinture-liquide",
+        "http://localhost:3000/thermolaquage-paris"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "preset": "desktop"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.85 }],
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }],
+        "categories:seo": ["error", { "minScore": 0.95 }],
+        "unused-javascript": "off",
+        "uses-responsive-images": "off"
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

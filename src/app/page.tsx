@@ -24,7 +24,7 @@ import { StatCounter } from "@/components/ui/stat-counter";
 import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { ProcessStep } from "@/components/ui/process-step";
 import { CtaBand } from "@/components/ui/cta-band";
-import { HeroParticles } from "@/components/ui/hero-particles";
+import { HeroParticles } from "@/components/ui/hero-particles-lazy";
 import { ExitIntentModal } from "@/components/ui/exit-intent-modal";
 import { RalRecommender } from "@/components/ui/ral-recommender";
 import { ReviewsCarousel } from "@/components/ui/reviews-carousel";

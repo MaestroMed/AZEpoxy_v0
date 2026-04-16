@@ -44,8 +44,17 @@ export default function GA4() {
   );
 }
 
-export function trackEvent(name: string, params?: Record<string, string | number>) {
+export type TrackEventParams = Record<
+  string,
+  string | number | boolean | undefined | null
+>;
+
+export function trackEvent(name: string, params?: TrackEventParams) {
   if (typeof window !== "undefined" && "gtag" in window) {
-    (window as any).gtag("event", name, params);
+    (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
+      "event",
+      name,
+      params
+    );
   }
 }

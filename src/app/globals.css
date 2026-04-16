@@ -89,6 +89,27 @@
   ::selection {
     @apply bg-brand-orange/30 text-brand-night;
   }
+
+  /* Global focus-visible: one consistent outline for every keyboard user.
+     Components can still opt into a brand-tinted ring via focus-visible:ring-*. */
+  :focus-visible {
+    outline: 2px solid theme("colors.brand.orange");
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Honour the OS "reduce motion" setting across every component that
+     doesn't use framer-motion (which handles this itself). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer components {

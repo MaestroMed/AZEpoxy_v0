@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MessageCircle, Phone, FileText } from "lucide-react";
 import { cn, SITE } from "@/lib/utils";
+import { track } from "@/lib/analytics/events";
 
 /**
  * Sticky CTA bar rendered only on mobile. Three one-tap actions:
@@ -47,15 +48,36 @@ export function MobileStickyCta() {
         href={SITE.phoneHref}
         icon={<Phone className="h-4 w-4" />}
         label="Appeler"
+        onClick={() =>
+          track("cta_click", {
+            placement: "sticky_mobile",
+            target: SITE.phoneHref,
+            label: "Appeler",
+          })
+        }
       />
       <CtaAction
         href={whatsappUrl}
         icon={<MessageCircle className="h-4 w-4" />}
         label="WhatsApp"
         external
+        onClick={() =>
+          track("cta_click", {
+            placement: "sticky_mobile",
+            target: whatsappUrl,
+            label: "WhatsApp",
+          })
+        }
       />
       <Link
         href="/devis"
+        onClick={() =>
+          track("cta_click", {
+            placement: "sticky_mobile",
+            target: "/devis",
+            label: "Devis",
+          })
+        }
         className="flex flex-1 items-center justify-center gap-2 bg-brand-orange px-3 py-3.5 text-sm font-semibold text-white"
       >
         <FileText className="h-4 w-4" />
@@ -70,12 +92,14 @@ interface CtaActionProps {
   icon: React.ReactNode;
   label: string;
   external?: boolean;
+  onClick?: () => void;
 }
 
-function CtaAction({ href, icon, label, external }: CtaActionProps) {
+function CtaAction({ href, icon, label, external, onClick }: CtaActionProps) {
   return (
     <a
       href={href}
+      onClick={onClick}
       {...(external
         ? { target: "_blank", rel: "noopener noreferrer" }
         : {})}

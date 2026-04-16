@@ -1,9 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import { cn, SITE } from "@/lib/utils";
+
+function isSectionActive(pathname: string | null, href: string): boolean {
+  if (!pathname) return false;
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 const navGroups = [
   {
@@ -46,6 +53,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -102,7 +110,15 @@ export function Header() {
             >
               <Link
                 href={group.href}
-                className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white"
+                aria-current={
+                  isSectionActive(pathname, group.href) ? "page" : undefined
+                }
+                className={cn(
+                  "flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:text-white",
+                  isSectionActive(pathname, group.href)
+                    ? "text-white after:mx-auto after:mt-0.5 after:block after:h-0.5 after:w-6 after:rounded-full after:bg-brand-orange"
+                    : "text-white/80"
+                )}
               >
                 {group.label}
                 {group.children && (
