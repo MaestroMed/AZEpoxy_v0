@@ -24,12 +24,18 @@ uniform float u_dpr;      // devicePixelRatio
 out vec4 v_color;
 
 void main() {
-  // Simple orthographic projection — we author in NDC-adjacent space.
-  // Aspect correction: keep x within ±1 at all viewport widths, and let
-  // y scale with viewport height so shapes don't squish.
+  // Contain-fit projection: a "unit square" in author space maps to the
+  // largest centered square that fits the viewport, regardless of
+  // orientation. Preserves proportions + centers content in the extra
+  // space on the long axis.
+  //   Landscape (aspect > 1): shrink x by /aspect — content fills height
+  //   Portrait  (aspect < 1): shrink y by *aspect — content fills width
+  // Without this, narrow viewports pushed x-coords off-screen (author
+  // space x=1 became clip x=1/aspect > 1 on portrait).
   float aspect = u_viewport.x / max(u_viewport.y, 1.0);
   vec3 p = a_pos;
-  p.x /= aspect;               // "1 unit" on Y reads wider than on X
+  p.x /= max(aspect, 1.0);
+  p.y *= min(aspect, 1.0);
 
   gl_Position = vec4(p.xy, p.z * 0.5, 1.0);
 

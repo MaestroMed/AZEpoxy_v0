@@ -26,11 +26,15 @@ import { getSwarm } from "@/lib/nuee/store";
 function responsiveOffset(): number {
   if (typeof window === "undefined") return 0;
   const w = window.innerWidth;
-  if (w < 768) return 0;     // mobile: centered
-  if (w < 1024) return 0.35; // small tablet
-  if (w < 1280) return 0.6;  // tablet / small laptop
-  return 0.85;                // desktop: clear right half — logo sits
-                              // at ~75% of viewport width
+  const h = window.innerHeight;
+  const aspect = w / h;
+  // Portrait or near-square viewports: centered, no shift — the hero
+  // stacks text above swarm vertically, shifting right would crop it.
+  if (aspect < 1.15) return 0;
+  if (w < 768) return 0;      // ultra narrow landscape (rare)
+  if (w < 1024) return 0.35;  // small landscape
+  if (w < 1280) return 0.6;   // laptop
+  return 0.85;                 // desktop widescreen
 }
 
 function useResponsiveAnchor() {

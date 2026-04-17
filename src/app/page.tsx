@@ -74,12 +74,16 @@ export default async function HomePage() {
 
       {/* ── Section 1 — Hero (AZ + ÉPOXY via narrative swarm, dynamic RAL) ─ */}
       <section className="relative h-[100svh] overflow-hidden text-white">
-        {/* No bg — the fixed narrative-swarm canvas fills this section
-            with its own dark night + particles (clearColor set in the
-            engine). A left-biased gradient just reinforces text contrast
-            where "200°C / 15 minutes / Une protection à vie" lives. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/70 to-transparent" aria-hidden />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/80 via-transparent to-transparent" aria-hidden />
+        {/* Text-readability overlays — responsive :
+            • Desktop / landscape : left-biased (swarm shines on the right)
+            • Mobile / portrait : uniform dimming + bottom fade (text
+              wraps across the full width, and the swarm lives behind
+              the whole content) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/70 to-transparent hidden md:block" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/80 via-transparent to-transparent hidden md:block" aria-hidden />
+        {/* Mobile / portrait overlay */}
+        <div className="absolute inset-0 bg-brand-night/65 md:hidden" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/90 via-brand-night/30 to-transparent md:hidden" aria-hidden />
 
         {/* Layer 1: HTML content (above canvas) */}
         <div className="container-wide relative z-10 flex h-[100svh] flex-col justify-center pt-32 pb-20 pointer-events-none">

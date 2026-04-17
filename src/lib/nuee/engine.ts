@@ -276,11 +276,13 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
     if (boundaryCfg !== false && typeof window !== "undefined" && window.innerWidth >= 768) {
       const pad = (boundaryCfg && boundaryCfg.padding) ?? 0.08;
       const overshoot = (boundaryCfg && boundaryCfg.overshoot) ?? 0.25;
-      // Phase targets are in "unit" space where the shader later divides X
-      // by aspect; the actual horizontal reach is therefore ±aspect, not ±1.
+      // Match the shader's contain-fit projection: visible unit range is
+      // wider on whichever axis is longer.
+      //   Landscape (aspect > 1): x ∈ [-aspect, aspect], y ∈ [-1, 1]
+      //   Portrait  (aspect < 1): x ∈ [-1, 1], y ∈ [-1/aspect, 1/aspect]
       const aspect = wpx / hpx;
-      const limitX = aspect * (1 - pad);
-      const limitY = 1 - pad;
+      const limitX = aspect >= 1 ? aspect * (1 - pad) : (1 - pad);
+      const limitY = aspect >= 1 ? (1 - pad) : (1 / aspect) * (1 - pad);
       for (let i = 0; i < count; i++) {
         const i3 = i * 3;
         const tx = finalTargets[i3];
