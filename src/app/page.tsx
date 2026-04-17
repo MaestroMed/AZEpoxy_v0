@@ -71,13 +71,13 @@ export default async function HomePage() {
       <HomepageSwarmTimeline />
 
       {/* ── Section 1 — Hero (AZ + ÉPOXY via narrative swarm, dynamic RAL) ─ */}
-      <section className="relative isolate h-[100svh] overflow-hidden text-white">
-        {/* Dark base + left-biased gradient so the heading stays crisp,
-            right half stays transparent for the narrative swarm to
-            form "AZ" + "ÉPOXY" with cycling RAL colors. */}
-        <div className="absolute inset-0 bg-brand-night/35" aria-hidden />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-night/70 via-brand-night/25 to-transparent" aria-hidden />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/60 via-transparent to-transparent" aria-hidden />
+      <section className="relative h-[100svh] overflow-hidden text-white">
+        {/* No bg — the fixed narrative-swarm canvas fills this section
+            with its own dark night + particles (clearColor set in the
+            engine). A left-biased gradient just reinforces text contrast
+            where "200°C / 15 minutes / Une protection à vie" lives. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/70 to-transparent" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/80 via-transparent to-transparent" aria-hidden />
 
         {/* Layer 1: HTML content (above canvas) */}
         <div className="container-wide relative z-10 flex h-[100svh] flex-col justify-center pt-32 pb-20 pointer-events-none">

@@ -26,9 +26,11 @@ import { getSwarm } from "@/lib/nuee/store";
 function responsiveOffset(): number {
   if (typeof window === "undefined") return 0;
   const w = window.innerWidth;
-  if (w < 768) return 0;
-  if (w < 1280) return 0.28;
-  return 0.48;
+  if (w < 768) return 0;     // mobile: centered
+  if (w < 1024) return 0.35; // small tablet
+  if (w < 1280) return 0.6;  // tablet / small laptop
+  return 0.85;                // desktop: clear right half — logo sits
+                              // at ~75% of viewport width
 }
 
 function useResponsiveAnchor() {

@@ -313,7 +313,11 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
     gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
     gl.bufferSubData(gl.ARRAY_BUFFER, 0, finalColors);
 
-    gl.clearColor(0, 0, 0, 0);
+    // Canvas provides the deep night backdrop itself — avoids needing
+    // an opaque HTML overlay on the hero (which would hide the particles).
+    // Sections with solid CSS bg below naturally cover the canvas, so
+    // this only affects transparent/cosmic zones like the hero.
+    gl.clearColor(0.058, 0.058, 0.105, 0.92); // brand-night-ish at 92%
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.uniform1f(uTime, tSec);
     gl.drawArrays(gl.POINTS, 0, count);
