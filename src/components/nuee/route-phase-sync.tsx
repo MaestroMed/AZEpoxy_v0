@@ -25,6 +25,7 @@ import { FLOW_PHASE } from "@/lib/nuee/phases/flow";
 /** Routes where OTHER components take over phase orchestration. */
 const ORCHESTRATED_ROUTES = [
   /^\/$/,                         // homepage → HomepageSwarmTimeline
+  /^\/couleurs-ral$/,             // RAL index → CouleursRalSwarmBinding
   /^\/couleurs-ral\/[^/]+$/,      // collection page → CollectionSwarmBinding
 ];
 
