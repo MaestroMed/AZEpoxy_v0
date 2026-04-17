@@ -71,9 +71,16 @@ export default async function HomePage() {
           through phases as the user scrolls this page. */}
       <HomepageSwarmTimeline />
 
-      {/* ── Section 1 — Hero (night bg + particles) ───────────────────── */}
-      <section className="relative isolate h-[100svh] overflow-hidden bg-brand-night text-white">
-        {/* Layer 0: Canvas particles (or reduced-motion fallback) */}
+      {/* ── Section 1 — Hero (transparent to reveal the narrative swarm) ─ */}
+      <section className="relative isolate h-[100svh] overflow-hidden text-white">
+        {/* Layer 0a: Semi-transparent dark overlay — lets the layout-level
+            WebGL canvas (narrative swarm) shine through while keeping the
+            hero text readable against any content underneath. */}
+        <div className="absolute inset-0 bg-brand-night/80" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-night via-brand-night/40 to-transparent" aria-hidden />
+        {/* Layer 0b: OLD hero particles — kept as additional depth layer
+            alongside the new narrative swarm. Remove once swarm phases
+            cover all hero moods. */}
         <HeroParticles />
 
         {/* Layer 1: HTML content (above canvas) */}
