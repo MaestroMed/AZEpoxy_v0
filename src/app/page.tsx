@@ -73,9 +73,11 @@ export default async function HomePage() {
       {/* ── Section 1 — Hero (transparent to reveal the narrative swarm) ─ */}
       <section className="relative isolate h-[100svh] overflow-hidden text-white">
         {/* Dark overlay — lets the layout-level WebGL canvas (narrative
-            swarm) shine through while keeping the hero text readable. */}
-        <div className="absolute inset-0 bg-brand-night/75" aria-hidden />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-night via-brand-night/40 to-transparent" aria-hidden />
+            swarm) shine through while keeping the hero text readable.
+            Kept light so particles are clearly visible; contrast is
+            ensured by a stronger gradient behind the text block below. */}
+        <div className="absolute inset-0 bg-brand-night/35" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/90 via-brand-night/40 to-transparent" aria-hidden />
 
         {/* Layer 1: HTML content (above canvas) */}
         <div className="container-wide relative z-10 flex h-[100svh] flex-col justify-center pt-32 pb-20 pointer-events-none">

@@ -38,8 +38,11 @@ export function NarrativeSwarm() {
     let handle: ReturnType<typeof createEngine> | null = null;
     try {
       handle = createEngine(canvas);
+      // eslint-disable-next-line no-console
+      console.info("[NarrativeSwarm] engine mounted — WebGL2 ready");
     } catch (err) {
-      // WebGL2 unavailable — silently skip. (Fallback can be added later.)
+      // WebGL2 unavailable — log visibly so we notice in production.
+      // eslint-disable-next-line no-console
       console.warn("[NarrativeSwarm] engine init failed:", err);
       return;
     }
@@ -93,6 +96,12 @@ export function NarrativeSwarm() {
       // positioned content (main, header, footer — they all have
       // position:relative which creates stacking context above us).
       // Pointer-events disabled so content stays interactive.
+      // CSS fallback radial glow — stays visible even if WebGL2 init
+      // fails, so the hero is never a flat black void. WebGL draws on top.
+      style={{
+        background:
+          "radial-gradient(ellipse at 50% 45%, rgba(232,93,44,0.22) 0%, rgba(232,93,44,0.08) 35%, transparent 70%)",
+      }}
     />
   );
 }

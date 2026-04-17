@@ -107,7 +107,9 @@ export default async function RootLayout({
             </main>
             <Footer />
             <GA4 />
-            <WhatsAppButton />
+            {/* WhatsAppButton temporarily disabled — callback popup to
+                be reintroduced later. */}
+            {/* <WhatsAppButton /> */}
             <MobileStickyCta />
             <CookieConsent />
           </MotionProvider>
