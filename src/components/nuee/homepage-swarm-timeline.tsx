@@ -21,6 +21,7 @@ import { AZ_PHASE } from "@/lib/nuee/phases/az";
 import { FLOW_PHASE } from "@/lib/nuee/phases/flow";
 import { GALAXY_PHASE } from "@/lib/nuee/phases/galaxy";
 import { PAINT_GUN_PHASE } from "@/lib/nuee/phases/paint-gun";
+import { MOLTEN_POOL_PHASE } from "@/lib/nuee/phases/molten-pool";
 import { getSwarm } from "@/lib/nuee/store";
 
 function responsiveOffset(): number {
@@ -57,11 +58,14 @@ export function HomepageSwarmTimeline() {
       cues={[
         // 1. AZ identity beat — the brand introduces itself.
         { phase: AZ_PHASE, holdMs: 5500, transitionMs: 1800 },
-        // 2. Flow — molten stream, evokes the thermolaquage process.
+        // 2. Molten Pool — 200°C en bain de fusion, cœur blanc-jaune,
+        //    vapeur qui monte. La promesse thermique rendue poétique.
+        { phase: MOLTEN_POOL_PHASE, holdMs: 5500, transitionMs: 2200 },
+        // 3. Flow — courant post-fusion, orange brassé et blanc chaud.
         { phase: FLOW_PHASE, holdMs: 4500, transitionMs: 2000 },
-        // 3. Paint gun — the money shot. Projection in motion.
+        // 4. Paint gun — projection en action. Money shot.
         { phase: PAINT_GUN_PHASE, holdMs: 6500, transitionMs: 2200 },
-        // 4. Galaxy — zoom out, cosmic scale, "un revêtement à vie".
+        // 5. Galaxy — zoom out cosmique, "protection à vie".
         { phase: GALAXY_PHASE, holdMs: 7000, transitionMs: 2400 },
       ]}
     />
