@@ -263,16 +263,20 @@ export function CollectionHeroMosaic({
       ref={containerRef}
       onMouseMove={onMove}
       className={cn(
-        "relative isolate overflow-hidden text-white",
+        "relative overflow-hidden text-white",
         "min-h-[85vh] lg:min-h-[88vh]",
       )}
     >
-      {/* ── Base gradient ─────────────────────────────────────────── */}
+      {/* ── Base gradient — slightly translucent so the narrative swarm
+          adds a whisper of depth BEHIND it (not replacing it). The
+          mosaic + content still dominate visually. `isolate` removed
+          so the fixed canvas below stacks correctly. */}
       <div
         className={cn(
           "absolute inset-0 bg-gradient-to-br",
           bgGradient,
         )}
+        style={{ opacity: 0.9 }}
       />
 
       {/* ── Mosaic (3 columns) ────────────────────────────────────── */}

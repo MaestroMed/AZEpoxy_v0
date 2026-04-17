@@ -10,6 +10,8 @@ import GA4 from "@/components/analytics/ga4";
 import { JsonLd } from "@/components/seo/json-ld";
 import { MotionProvider } from "@/components/motion";
 import { NarrativeSwarm } from "@/components/nuee/narrative-swarm";
+import { RoutePhaseSync } from "@/components/nuee/route-phase-sync";
+import { CustomCursor } from "@/components/nuee/custom-cursor";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SITE } from "@/lib/utils";
 import { buildMetadata } from "@/lib/seo";
@@ -101,6 +103,13 @@ export default async function RootLayout({
                 page. Never unmounts on route change, so the particles
                 morph across navigations. */}
             <NarrativeSwarm />
+            {/* Auto-morph the swarm to match the current route — pages
+                that declare their own phase (home, collection) override
+                this fallback. */}
+            <RoutePhaseSync />
+            {/* Custom award-tier cursor — precision dot + spring ring,
+                magnetic pull on CTAs. Disabled on touch. */}
+            <CustomCursor />
             <Header />
             <main id="main-content" className="relative">
               {children}

@@ -13,6 +13,22 @@
   to   { transform: translate3d(0, 0, 0); }
 }
 
+/* Custom cursor — hide the native cursor globally when our replacement
+   is active. Fine-pointer devices only (CustomCursor component gates on
+   pointer:coarse so touch keeps the native experience). */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+/* Scroll hint — subtle double-bounce for the "scroll" nudge at the
+   bottom of the hero. */
+@keyframes scroll-nudge {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  40%      { transform: translateY(6px); opacity: 1; }
+  80%      { transform: translateY(0); opacity: 0.4; }
+}
+
 @layer base {
   :root {
     --background: 48 20% 96%;

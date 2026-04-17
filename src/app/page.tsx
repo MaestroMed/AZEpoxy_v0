@@ -128,6 +128,16 @@ export default async function HomePage() {
             </div>
           </ScrollReveal>
         </div>
+
+        {/* Scroll hint — subtle nudge at the bottom of the hero. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/50"
+          style={{ animation: "scroll-nudge 2.4s ease-in-out infinite" }}
+        >
+          <span>Scroll</span>
+          <span className="h-6 w-px bg-gradient-to-b from-white/70 to-transparent" />
+        </div>
       </section>
 
       {/* ── Section 2 — Services Preview (cream bg) ────────────────────── */}
