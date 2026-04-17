@@ -70,13 +70,11 @@ export default async function HomePage() {
           through phases as the user scrolls this page. */}
       <HomepageSwarmTimeline />
 
-      {/* ── Section 1 — Hero (transparent to reveal the narrative swarm) ─ */}
+      {/* ── Section 1 — Hero (AZ + ÉPOXY via narrative swarm, dynamic RAL) ─ */}
       <section className="relative isolate h-[100svh] overflow-hidden text-white">
-        {/* Night sky base — kept light enough (35% dark) so the nuée
-            reads clearly, especially on the right half. A left-biased
-            gradient ADDS darkness only where the text block lives,
-            so "200°C … Une protection à vie" stays crisp without
-            sacrificing the swarm's visibility. */}
+        {/* Dark base + left-biased gradient so the heading stays crisp,
+            right half stays transparent for the narrative swarm to
+            form "AZ" + "ÉPOXY" with cycling RAL colors. */}
         <div className="absolute inset-0 bg-brand-night/35" aria-hidden />
         <div className="absolute inset-0 bg-gradient-to-r from-brand-night/70 via-brand-night/25 to-transparent" aria-hidden />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-night/60 via-transparent to-transparent" aria-hidden />
