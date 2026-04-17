@@ -254,6 +254,33 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
       finalColors = blendedColors;
     }
 
+    // ── Viewport boundary — soft clamp to keep the swarm inside a safe
+    //    rectangle. Makes the nuée feel adaptive: a wide window lets it
+    //    breathe, a narrow one compresses it. Phases that need particles
+    //    to exit the frame (paint-gun spray) can opt out via boundary:false.
+    //    Desktop-only (≥768px) — mobile viewports are too narrow to notice.
+    const boundaryCfg = state.currentPhase.boundary;
+    const wpx = canvas.width || 1;
+    const hpx = canvas.height || 1;
+    if (boundaryCfg !== false && typeof window !== "undefined" && window.innerWidth >= 768) {
+      const pad = (boundaryCfg && boundaryCfg.padding) ?? 0.08;
+      const overshoot = (boundaryCfg && boundaryCfg.overshoot) ?? 0.25;
+      // Phase targets are in "unit" space where the shader later divides X
+      // by aspect; the actual horizontal reach is therefore ±aspect, not ±1.
+      const aspect = wpx / hpx;
+      const limitX = aspect * (1 - pad);
+      const limitY = 1 - pad;
+      for (let i = 0; i < count; i++) {
+        const i3 = i * 3;
+        const tx = finalTargets[i3];
+        const ty = finalTargets[i3 + 1];
+        if (tx > limitX) finalTargets[i3] = limitX + (tx - limitX) * overshoot;
+        else if (tx < -limitX) finalTargets[i3] = -limitX + (tx + limitX) * overshoot;
+        if (ty > limitY) finalTargets[i3 + 1] = limitY + (ty - limitY) * overshoot;
+        else if (ty < -limitY) finalTargets[i3 + 1] = -limitY + (ty + limitY) * overshoot;
+      }
+    }
+
     // Spring current positions toward target.
     const k = state.currentPhase.stiffness ?? 0.06;
     const jitter = state.currentPhase.jitterAmplitude ?? 0;

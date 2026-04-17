@@ -48,6 +48,21 @@ export interface Phase {
 
   /** Optional extra jitter/noise applied on top of target (adds life). */
   jitterAmplitude?: number;
+
+  /**
+   * Engine-level viewport boundary behavior for this phase.
+   *
+   * When enabled, targets that would fall outside a safe rectangle
+   * (centered, with `padding` fraction on each side) get softly pushed
+   * back inward — particles "feel" the window walls. This makes the
+   * swarm look adaptive: a wide window lets the cloud breathe, a narrow
+   * one compresses it.
+   *
+   * Defaults to `{ padding: 0.08, overshoot: 0.25 }` on desktop (≥768px),
+   * disabled on mobile. Set to `false` to fully opt out — essential for
+   * phases that need particles to exit the frame (e.g. paint-gun spray).
+   */
+  boundary?: false | { padding?: number; overshoot?: number };
 }
 
 /**

@@ -162,6 +162,9 @@ export const PAINT_GUN_PHASE: Phase = {
   id: "paint-gun",
   stiffness: 0.12,       // snappier — the shape should read immediately
   jitterAmplitude: 0.0015,
+  // Spray particles MUST exit the frame on the right to read as real
+  // projection. Opt out of the engine's viewport boundary clamp.
+  boundary: false,
 
   computeTarget(count, time, mouse, _scroll, out) {
     if (
