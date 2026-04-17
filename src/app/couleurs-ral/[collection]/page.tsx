@@ -12,6 +12,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 import { CollectionHeroMosaic } from "@/components/ui/collection-hero-mosaic";
 import { CollectionFinishesGrid } from "@/components/ui/collection-finishes-grid";
+import { CollectionSwarmBinding } from "@/components/nuee/collection-swarm-binding";
 
 /* ── Static params ────────────────────────────────────────────────── */
 export function generateStaticParams() {
@@ -54,6 +55,15 @@ export default async function CollectionPage({
           { label: "Couleurs RAL", href: "/couleurs-ral" },
           { label: `Collection ${collection.name}` },
         ])}
+      />
+
+      {/* Declare the narrative swarm phase for this page — particles form
+          the collection name in its accent color. The morph starts as
+          soon as the route mounts, carrying the user's previous phase
+          (AZ/Galaxy/whatever) smoothly into this one. */}
+      <CollectionSwarmBinding
+        name={collection.name}
+        accentHex={collection.accentColor}
       />
 
       {/* ── Hero cinématique ─────────────────────────────────────── */}
