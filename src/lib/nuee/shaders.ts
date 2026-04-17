@@ -53,16 +53,18 @@ void main() {
   // gl_PointCoord is (0..1, 0..1) per-point; center is (0.5, 0.5).
   vec2 uv = gl_PointCoord - 0.5;
   float d = length(uv);
-
-  // Soft circular falloff with a brighter core for that powder-glow look.
-  // discard anything outside the disc.
   if (d > 0.5) discard;
 
-  float core = smoothstep(0.5, 0.0, d);            // 0 at edge, 1 at center
-  float glow = pow(core, 2.2);                     // brighter center
-  float alpha = glow * v_color.a;
+  // Two-stop falloff: tight bright core + wider soft halo (halves of the
+  // disc). This reads better against dark overlays than a pure gaussian.
+  float core = smoothstep(0.5, 0.0, d);       // 0..1 outer to center
+  float halo = smoothstep(0.5, 0.15, d);       // 0..1 outside inner core
+  float glow = halo * 0.35 + pow(core, 1.6) * 0.85;
 
-  // Pre-multiplied-ish color so additive blending stays natural.
-  frag = vec4(v_color.rgb * glow, alpha);
+  // With premultipliedAlpha:false and blendFunc(SRC_ALPHA, ONE), we just
+  // output the color scaled by glow, and alpha controls the per-particle
+  // additive contribution.
+  float a = v_color.a * glow;
+  frag = vec4(v_color.rgb, a);
 }
 `;

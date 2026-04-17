@@ -91,16 +91,19 @@ export function NarrativeSwarm() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full"
-      // z-0 + fixed puts the canvas above body background but below any
-      // positioned content (main, header, footer — they all have
-      // position:relative which creates stacking context above us).
+      className="pointer-events-none fixed inset-0 z-0"
+      // Explicit viewport sizing via inline style — Tailwind's h-full/w-full
+      // resolved to 0×0 for this canvas in some browser contexts (likely a
+      // containing-block quirk with `fixed inset-0`). Inline vw/vh units
+      // bypass any containing-block ambiguity and guarantee full viewport.
       // Pointer-events disabled so content stays interactive.
-      // CSS fallback radial glow — stays visible even if WebGL2 init
-      // fails, so the hero is never a flat black void. WebGL draws on top.
+      // CSS radial glow fallback so the hero is never a flat black void
+      // even if WebGL2 init ever fails; WebGL draws on top.
       style={{
+        width: "100vw",
+        height: "100vh",
         background:
-          "radial-gradient(ellipse at 50% 45%, rgba(232,93,44,0.22) 0%, rgba(232,93,44,0.08) 35%, transparent 70%)",
+          "radial-gradient(ellipse at 50% 40%, rgba(232,93,44,0.35) 0%, rgba(232,93,44,0.14) 35%, transparent 72%)",
       }}
     />
   );

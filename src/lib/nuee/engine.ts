@@ -71,7 +71,10 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
   const ctx = canvas.getContext("webgl2", {
     alpha: true,
     antialias: false,
-    premultipliedAlpha: true,
+    // premultipliedAlpha:false lets us use classic additive blending
+    // (SRC_ALPHA, ONE) without the browser double-multiplying colors
+    // during HTML compositing. Critical for visible glow.
+    premultipliedAlpha: false,
     preserveDrawingBuffer: false,
     powerPreference: "high-performance",
   });
@@ -130,8 +133,9 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
       positions[i * 3] = (rand() - 0.5) * 2.4;
       positions[i * 3 + 1] = (rand() - 0.5) * 1.6;
       positions[i * 3 + 2] = (rand() - 0.5) * 0.4;
-      // Size: most particles small, a few larger "hero" specks.
-      sizes[i] = rand() < 0.02 ? 8 + rand() * 6 : 1.6 + rand() * 2.4;
+      // Sizes bumped — visibility on production compositing over dark
+      // overlays was too faint at 2-4px. 4-9px reads much better as glow.
+      sizes[i] = rand() < 0.03 ? 14 + rand() * 10 : 4 + rand() * 5;
     }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
@@ -145,8 +149,12 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
   // Viewport + DPR handling
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
+    // Fall back to window.innerWidth/Height if clientWidth returns 0.
+    // This happens during the first paint on some SSR-hydration paths,
+    // before CSS has laid out the canvas. Without the fallback the
+    // canvas would lock to 1×1 forever.
+    const w = canvas.clientWidth || window.innerWidth || 1024;
+    const h = canvas.clientHeight || window.innerHeight || 768;
     const pw = Math.max(1, Math.round(w * dpr));
     const ph = Math.max(1, Math.round(h * dpr));
     if (canvas.width !== pw || canvas.height !== ph) {
@@ -160,6 +168,10 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
 
   const ro = new ResizeObserver(resize);
   ro.observe(canvas);
+  // Also watch the window directly — some layout edge cases (particularly
+  // the first frame in SSR-hydrated apps) don't trigger ResizeObserver on
+  // a 0×0 element.
+  window.addEventListener("resize", resize);
   resize();
 
   // Blending setup for that additive glow bloom.
@@ -274,6 +286,7 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
     dispose() {
       cancelAnimationFrame(rafId);
       ro.disconnect();
+      window.removeEventListener("resize", resize);
       gl.deleteBuffer(posBuf);
       gl.deleteBuffer(colBuf);
       gl.deleteBuffer(sizeBuf);
