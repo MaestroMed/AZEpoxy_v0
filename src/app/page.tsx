@@ -65,7 +65,9 @@ export default async function HomePage() {
   const reviewsAvg = averageRating(reviews);
   return (
     <>
-      <ExitIntentModal />
+      {/* ExitIntentModal désactivé pour l'instant — popup trop intrusif
+          pendant la phase de design. À réactiver au lancement. */}
+      {/* <ExitIntentModal /> */}
       {/* Narrative swarm timeline — drives the persistent particle canvas
           through phases as the user scrolls this page. */}
       <HomepageSwarmTimeline />
