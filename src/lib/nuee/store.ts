@@ -23,6 +23,7 @@ export const useSwarm = create<SwarmState>((set, get) => ({
   scroll: 0,
   routePath: "/",
   paused: false,
+  anchorOffsetX: 0,
 
   setPhase(next: Phase, opts) {
     const { currentPhase, targetPhase } = get();
@@ -51,6 +52,10 @@ export const useSwarm = create<SwarmState>((set, get) => ({
 
   setRoute(path: string) {
     set({ routePath: path });
+  },
+
+  setAnchorOffsetX(x: number) {
+    set({ anchorOffsetX: x });
   },
 
   tickTransition(dt: number) {

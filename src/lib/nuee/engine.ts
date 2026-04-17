@@ -254,6 +254,17 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
       finalColors = blendedColors;
     }
 
+    // ── Page-level anchor offset — applied to every target BEFORE the
+    //    boundary clamp so the clamp still keeps everything in-frame
+    //    after the shift. Homepage sets +0.4 on desktop to clear the
+    //    heading block; collection pages leave it at 0.
+    const anchorX = state.anchorOffsetX ?? 0;
+    if (anchorX !== 0) {
+      for (let i = 0; i < count; i++) {
+        finalTargets[i * 3] += anchorX;
+      }
+    }
+
     // ── Viewport boundary — soft clamp to keep the swarm inside a safe
     //    rectangle. Makes the nuée feel adaptive: a wide window lets it
     //    breathe, a narrow one compresses it. Phases that need particles

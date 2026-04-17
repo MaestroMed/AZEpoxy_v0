@@ -78,6 +78,13 @@ export interface SwarmState {
   scroll: number;                     // 0..1 page progress
   routePath: string;                  // for cross-route transitions
   paused: boolean;                    // global kill-switch (reduced motion, off-screen, etc.)
+  /**
+   * Page-level horizontal offset applied to every particle target, in
+   * unit space. Lets a route bias the entire swarm left or right (e.g.
+   * homepage on desktop pushes +0.4 to clear the heading block on the
+   * left; collection pages leave it centered at 0).
+   */
+  anchorOffsetX: number;
 
   // mutators
   setPhase(next: Phase, opts?: { durationMs?: number }): void;
@@ -85,6 +92,7 @@ export interface SwarmState {
   setScroll(s: number): void;
   setPaused(p: boolean): void;
   setRoute(path: string): void;
+  setAnchorOffsetX(x: number): void;
   /** internal — called by engine to advance/finalize transition */
   tickTransition(dt: number): void;
 }
