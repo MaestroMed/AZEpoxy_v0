@@ -5,13 +5,10 @@ import Link from "next/link";
 import {
   AnimatePresence,
   m,
-  useInView,
   useMotionValue,
   useReducedMotion,
   useSpring,
   useTransform,
-  animate,
-  type AnimationPlaybackControls,
 } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, ExternalLink } from "lucide-react";
@@ -43,7 +40,7 @@ function splitColumns(finishes: CollectionFinish[]) {
   });
 }
 
-// ── Column marquee ──────────────────────────────────────────────────────
+// ── Column marquee (CSS keyframes, GPU-accelerated) ────────────────────
 function MosaicColumn({
   finishes,
   durationSec,
@@ -54,45 +51,29 @@ function MosaicColumn({
   finishes: CollectionFinish[];
   durationSec: number;
   direction: "up" | "down";
-  parallaxY: number | ReturnType<typeof useTransform<number, number>>;
+  parallaxY: ReturnType<typeof useTransform<number, number>>;
   paused: boolean;
 }) {
-  const controls = useRef<AnimationPlaybackControls | null>(null);
-  const y = useMotionValue(0);
   const prefersReduced = useReducedMotion();
 
-  useEffect(() => {
-    if (prefersReduced || finishes.length === 0) return;
-    // Animate y from 0 to -50% (or +50% for "down"), infinite linear.
-    const target = direction === "up" ? "-50%" : "50%";
-    controls.current?.stop();
-    controls.current = animate(y, [0, target] as unknown as number[], {
-      duration: durationSec,
-      ease: "linear",
-      repeat: Infinity,
-    });
-    return () => {
-      controls.current?.stop();
-    };
-  }, [direction, durationSec, finishes.length, prefersReduced, y]);
-
-  useEffect(() => {
-    if (paused) controls.current?.pause();
-    else controls.current?.play();
-  }, [paused]);
-
   if (!finishes.length) return <div className="flex-1" aria-hidden />;
+
+  const animationName =
+    prefersReduced ? "none" : direction === "up" ? "marquee-up" : "marquee-down";
 
   return (
     <m.div
       className="relative flex-1 overflow-hidden"
       style={{ y: parallaxY, willChange: "transform" }}
     >
-      <m.div
-        className="flex flex-col gap-3"
+      <div
+        className="flex flex-col gap-3 will-change-transform"
         style={{
-          y: direction === "up" ? y : y,
-          willChange: "transform",
+          animationName,
+          animationDuration: `${durationSec}s`,
+          animationTimingFunction: "linear",
+          animationIterationCount: "infinite",
+          animationPlayState: paused ? "paused" : "running",
         }}
       >
         {finishes.map((f, i) => (
@@ -113,7 +94,7 @@ function MosaicColumn({
             )}
           </div>
         ))}
-      </m.div>
+      </div>
     </m.div>
   );
 }
@@ -205,9 +186,21 @@ export function CollectionHeroMosaic({
   primaryHref = "/devis",
   primaryLabel = "Demander un devis",
 }: CollectionHeroMosaicProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(containerRef, { margin: "200px 0px" });
+  const containerRef = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(true);
   const prefersReduced = useReducedMotion();
+
+  // Pause marquees + featured-tile cycling when scrolled out of view (CPU saver).
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => setInView(entries[0]?.isIntersecting ?? false),
+      { rootMargin: "200px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // Mouse position (normalised 0..1), throttled with rAF.
   const mx = useMotionValue(0.5);
@@ -283,24 +276,24 @@ export function CollectionHeroMosaic({
       />
 
       {/* ── Mosaic (3 columns) ────────────────────────────────────── */}
-      <div className="absolute inset-0 flex gap-3 p-3 opacity-40 mix-blend-screen sm:opacity-50">
+      <div className="absolute inset-0 flex gap-3 p-3 opacity-55 mix-blend-screen sm:opacity-65">
         <MosaicColumn
           finishes={cols[0]}
-          durationSec={42}
+          durationSec={28}
           direction="up"
           parallaxY={parY1}
           paused={paused}
         />
         <MosaicColumn
           finishes={cols[1]}
-          durationSec={56}
+          durationSec={36}
           direction="down"
           parallaxY={parY2}
           paused={paused}
         />
         <MosaicColumn
           finishes={cols[2]}
-          durationSec={48}
+          durationSec={32}
           direction="up"
           parallaxY={parY3}
           paused={paused}

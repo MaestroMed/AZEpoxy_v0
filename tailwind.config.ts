@@ -112,6 +112,14 @@ const config: Config = {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        "marquee-up": {
+          "0%": { transform: "translate3d(0, 0, 0)" },
+          "100%": { transform: "translate3d(0, -50%, 0)" },
+        },
+        "marquee-down": {
+          "0%": { transform: "translate3d(0, -50%, 0)" },
+          "100%": { transform: "translate3d(0, 0, 0)" },
+        },
         "heat-shimmer": {
           "0%, 100%": { transform: "translateY(0) scaleY(1)" },
           "50%": { transform: "translateY(-2px) scaleY(1.02)" },
@@ -123,6 +131,8 @@ const config: Config = {
         "ember-pulse": "ember-pulse 3s ease-in-out infinite",
         "shimmer": "shimmer 3s linear infinite",
         "marquee": "marquee 60s linear infinite",
+        "marquee-up": "marquee-up linear infinite",
+        "marquee-down": "marquee-down linear infinite",
         "heat-shimmer": "heat-shimmer 4s ease-in-out infinite",
       },
       backgroundImage: {
