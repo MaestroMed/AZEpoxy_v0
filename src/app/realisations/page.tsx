@@ -1,7 +1,9 @@
-import { MessageSquareQuote, Star } from "lucide-react";
+import { ChevronRight, MessageSquareQuote, Sparkles, Star } from "lucide-react";
+import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo";
-import { PageHero } from "@/components/ui/page-hero";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbLd } from "@/lib/jsonld";
 import { SectionHeader } from "@/components/ui/section-header";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -29,25 +31,55 @@ export default async function RealisationsPage() {
 
   return (
     <>
-      {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
-      <PageHero
-        label="Portfolio"
-        title={
-          <>
-            Nos
-            <br />
-            <span className="bg-gradient-ember bg-clip-text text-transparent">
-              Réalisations
-            </span>
-          </>
-        }
-        description="Thermolaquage, sablage, métallisation — découvrez nos projets récents. Jantes, moto, pièces auto, portails, mobilier et structures métalliques, chaque réalisation témoigne de notre exigence qualité."
-        variant="night"
-        breadcrumbs={[
-          { label: "Accueil", href: "/" },
-          { label: "Réalisations" },
-        ]}
+      <JsonLd
+        id="ld-breadcrumb-realisations"
+        data={breadcrumbLd([{ label: "Réalisations" }])}
       />
+
+      {/* ── Section 1 — Hero (transparent, swarm galactique perce) ─── */}
+      <section className="relative min-h-[68vh] overflow-hidden text-white">
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/60 to-brand-night/15 hidden md:block"
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-brand-night/55 md:hidden" aria-hidden />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-brand-night/85 via-transparent to-transparent"
+          aria-hidden
+        />
+
+        <div className="container-wide relative flex min-h-[68vh] flex-col justify-center pt-40 pb-20">
+          <nav
+            aria-label="Fil d'Ariane"
+            className="mb-8 flex flex-wrap items-center gap-2 text-sm text-white/60"
+          >
+            <Link href="/" className="transition-colors hover:text-white">
+              Accueil
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5 opacity-60" aria-hidden />
+            <span aria-current="page" className="text-white/90">Réalisations</span>
+          </nav>
+
+          <div className="max-w-4xl">
+            <span className="section-label-light">
+              <Sparkles className="h-3 w-3" />
+              Portfolio
+            </span>
+            <h1 className="heading-display mt-6 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-[clamp(4rem,8vw,7rem)]">
+              Chaque pièce,
+              <br />
+              <span className="bg-gradient-ember bg-clip-text text-transparent">
+                une histoire.
+              </span>
+            </h1>
+            <p className="mt-8 max-w-2xl text-balance text-lg text-white/75 sm:text-xl">
+              Jantes, moto, pièces auto, portails, mobilier et structures
+              métalliques — chaque réalisation témoigne de notre exigence
+              qualité et de la précision du thermolaquage 200°C.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* ── Section 2 — Portfolio Grid with Filters ──────────────────── */}
       <PortfolioSection projects={projects} />

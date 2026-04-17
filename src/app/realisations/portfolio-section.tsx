@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   PROJECT_CATEGORIES,
@@ -10,6 +10,7 @@ import {
 } from "@/lib/realisations-data";
 import { track } from "@/lib/analytics/events";
 import { RAL_COLORS } from "@/lib/ral-colors";
+import { MouseTilt } from "@/components/nuee/mouse-tilt";
 
 /** Resolve a RAL code to its hex color */
 function ralToHex(code: string): string | undefined {
@@ -58,7 +59,7 @@ export function PortfolioSection({ projects }: PortfolioSectionProps) {
         </div>
 
         {/* ── Project grid ────────────────────────────────────────────── */}
-        <motion.div
+        <m.div
           layout
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
@@ -74,64 +75,73 @@ export function PortfolioSection({ projects }: PortfolioSectionProps) {
                   ?.label ?? project.category;
 
               return (
-                <motion.div
+                <m.div
                   key={project.id}
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3 }}
-                  className="group relative aspect-[4/3] overflow-hidden rounded-2xl"
-                  style={{ backgroundColor: primaryHex }}
+                  className="group"
                 >
-                  {/* Noise texture */}
-                  <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay" />
+                  <MouseTilt className="h-full" intensity={8} hoverScale={1.015}>
+                    <div
+                      className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_20px_50px_-20px_rgba(0,0,0,0.45)]"
+                      style={{ backgroundColor: primaryHex }}
+                    >
+                      {/* Noise texture */}
+                      <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay" />
 
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-all duration-300 group-hover:from-black/80 group-hover:via-black/30" />
+                      {/* Gradient overlay — subtle deepen on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
 
-                  {/* Content */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-5">
-                    {/* Category badge */}
-                    <span className="mb-2 inline-flex w-fit rounded-full bg-brand-orange/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white">
-                      {categoryLabel}
-                    </span>
+                      {/* Sheen — diagonal light beam sweep on hover */}
+                      <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-br from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
-                    {/* Title */}
-                    <h3 className="font-semibold text-white leading-snug">
-                      {project.title}
-                    </h3>
+                      {/* Content */}
+                      <div className="absolute inset-0 flex flex-col justify-end p-5">
+                        {/* Category badge */}
+                        <span className="mb-2 inline-flex w-fit rounded-full bg-brand-orange/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
+                          {categoryLabel}
+                        </span>
 
-                    {/* Colors used */}
-                    {project.colors.length > 0 && (
-                      <div className="mt-2 flex items-center gap-2">
-                        {project.colors.map((code) => {
-                          const hex = ralToHex(code);
-                          return (
-                            <div
-                              key={code}
-                              className="flex items-center gap-1.5"
-                            >
-                              <div
-                                className="h-3 w-3 rounded-full border border-white/30"
-                                style={{
-                                  backgroundColor: hex ?? "#888",
-                                }}
-                              />
-                              <span className="font-mono text-[10px] text-white/70">
-                                {code}
-                              </span>
-                            </div>
-                          );
-                        })}
+                        {/* Title */}
+                        <h3 className="font-semibold text-white leading-snug">
+                          {project.title}
+                        </h3>
+
+                        {/* Colors used */}
+                        {project.colors.length > 0 && (
+                          <div className="mt-2 flex items-center gap-2">
+                            {project.colors.map((code) => {
+                              const hex = ralToHex(code);
+                              return (
+                                <div
+                                  key={code}
+                                  className="flex items-center gap-1.5"
+                                >
+                                  <div
+                                    className="h-3 w-3 rounded-full border border-white/30"
+                                    style={{
+                                      backgroundColor: hex ?? "#888",
+                                    }}
+                                  />
+                                  <span className="font-mono text-[10px] text-white/70">
+                                    {code}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </motion.div>
+                    </div>
+                  </MouseTilt>
+                </m.div>
               );
             })}
           </AnimatePresence>
-        </motion.div>
+        </m.div>
 
         {/* ── Empty state ─────────────────────────────────────────────── */}
         {filtered.length === 0 && (
