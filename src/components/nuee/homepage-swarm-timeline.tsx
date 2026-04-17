@@ -63,8 +63,10 @@ export function HomepageSwarmTimeline() {
         { phase: MOLTEN_POOL_PHASE, holdMs: 5500, transitionMs: 2200 },
         // 3. Flow — courant post-fusion, orange brassé et blanc chaud.
         { phase: FLOW_PHASE, holdMs: 4500, transitionMs: 2000 },
-        // 4. Paint gun — projection en action. Money shot.
-        { phase: PAINT_GUN_PHASE, holdMs: 6500, transitionMs: 2200 },
+        // 4. Paint gun — projection en action. Money shot, mais bref
+        //    pour garder le rythme du cycle (le jet dynamique se lit
+        //    immédiatement, pas besoin de 6s de contemplation).
+        { phase: PAINT_GUN_PHASE, holdMs: 4500, transitionMs: 2200 },
         // 5. Galaxy — zoom out cosmique, "protection à vie".
         { phase: GALAXY_PHASE, holdMs: 7000, transitionMs: 2400 },
       ]}

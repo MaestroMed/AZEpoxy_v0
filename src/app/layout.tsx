@@ -12,6 +12,7 @@ import { MotionProvider } from "@/components/motion";
 import { NarrativeSwarm } from "@/components/nuee/narrative-swarm";
 import { RoutePhaseSync } from "@/components/nuee/route-phase-sync";
 import { CustomCursor } from "@/components/nuee/custom-cursor";
+import { SoundToggle } from "@/components/nuee/sound-toggle";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SITE } from "@/lib/utils";
 import { buildMetadata } from "@/lib/seo";
@@ -110,6 +111,8 @@ export default async function RootLayout({
             {/* Custom award-tier cursor — precision dot + spring ring,
                 magnetic pull on CTAs. Disabled on touch. */}
             <CustomCursor />
+            {/* Procedural ambient sound toggle (opt-in, OFF by default). */}
+            <SoundToggle />
             <Header />
             <main id="main-content" className="relative">
               {children}
