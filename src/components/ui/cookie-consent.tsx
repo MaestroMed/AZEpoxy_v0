@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -27,7 +27,7 @@ export function CookieConsent() {
   };
 
   return (
-    <motion.div
+    <m.div
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       className="fixed bottom-0 inset-x-0 z-50 bg-brand-night border-t-2 border-brand-orange text-white px-6 py-4"
@@ -59,6 +59,6 @@ export function CookieConsent() {
           </button>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
