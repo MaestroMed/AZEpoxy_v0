@@ -9,6 +9,7 @@ import { MobileStickyCta } from "@/components/ui/mobile-sticky-cta";
 import GA4 from "@/components/analytics/ga4";
 import { JsonLd } from "@/components/seo/json-ld";
 import { MotionProvider } from "@/components/motion";
+import { NarrativeSwarm } from "@/components/nuee/narrative-swarm";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SITE } from "@/lib/utils";
 import { buildMetadata } from "@/lib/seo";
@@ -96,6 +97,10 @@ export default async function RootLayout({
         <JsonLd id="ld-website" data={websiteLd()} />
         <ThemeProvider>
           <MotionProvider>
+            {/* Persistent narrative swarm — WebGL point cloud behind every
+                page. Never unmounts on route change, so the particles
+                morph across navigations. */}
+            <NarrativeSwarm />
             <Header />
             <main id="main-content" className="relative">
               {children}

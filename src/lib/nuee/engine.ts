@@ -1,0 +1,290 @@
+"use client";
+
+/**
+ * Narrative Swarm — WebGL2 engine.
+ *
+ * Keeps three particle-sized buffers alive for the lifetime of the page:
+ *   • positions[count*3] — current (x,y,z), lerped each frame
+ *   • colors[count*4]    — (r,g,b,a), updated per phase
+ *   • sizes[count]       — base point size (varied per-particle)
+ *
+ * Each frame we:
+ *   1. Ask the current phase to compute target positions (into `targetA`).
+ *   2. If a transition is in flight, ask the target phase too (into `targetB`)
+ *      and blend based on `transitionProgress`.
+ *   3. Spring current positions toward that blended target.
+ *   4. Upload positions to the GPU and draw gl.POINTS.
+ */
+
+import { FRAGMENT_SHADER, VERTEX_SHADER } from "./shaders";
+import { easeInOutCubic, mulberry32 } from "./utils";
+import { getSwarm } from "./store";
+
+export interface EngineHandle {
+  dispose(): void;
+  setParticleCount(n: number): void;
+  getCanvas(): HTMLCanvasElement;
+}
+
+const DEFAULT_COUNT_DESKTOP = 3000;
+const DEFAULT_COUNT_MOBILE = 1500;
+
+export function pickDefaultCount(): number {
+  if (typeof navigator === "undefined") return DEFAULT_COUNT_DESKTOP;
+  // Cheap heuristic: mobile chipsets report 4-8 cores, laptops 8-16, desktops 16+.
+  const cores = navigator.hardwareConcurrency ?? 4;
+  const isCoarse = matchMedia?.("(pointer: coarse)")?.matches ?? false;
+  if (isCoarse || cores < 6) return DEFAULT_COUNT_MOBILE;
+  return DEFAULT_COUNT_DESKTOP;
+}
+
+// ── GL helpers ──────────────────────────────────────────────────────────
+function compile(gl: WebGL2RenderingContext, src: string, type: number): WebGLShader {
+  const s = gl.createShader(type);
+  if (!s) throw new Error("createShader failed");
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+    const log = gl.getShaderInfoLog(s);
+    gl.deleteShader(s);
+    throw new Error(`shader compile: ${log}`);
+  }
+  return s;
+}
+
+function link(gl: WebGL2RenderingContext, vs: WebGLShader, fs: WebGLShader): WebGLProgram {
+  const p = gl.createProgram();
+  if (!p) throw new Error("createProgram failed");
+  gl.attachShader(p, vs);
+  gl.attachShader(p, fs);
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+    const log = gl.getProgramInfoLog(p);
+    gl.deleteProgram(p);
+    throw new Error(`program link: ${log}`);
+  }
+  return p;
+}
+
+// ── Engine ──────────────────────────────────────────────────────────────
+export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
+  const ctx = canvas.getContext("webgl2", {
+    alpha: true,
+    antialias: false,
+    premultipliedAlpha: true,
+    preserveDrawingBuffer: false,
+    powerPreference: "high-performance",
+  });
+  if (!ctx) {
+    throw new Error("WebGL2 unavailable");
+  }
+  // Explicit non-nullable binding so closures (frame loop, dispose, etc.)
+  // don't need `!` or re-narrowing.
+  const gl: WebGL2RenderingContext = ctx;
+
+  // Program
+  const vs = compile(gl, VERTEX_SHADER, gl.VERTEX_SHADER);
+  const fs = compile(gl, FRAGMENT_SHADER, gl.FRAGMENT_SHADER);
+  const prog = link(gl, vs, fs);
+  gl.useProgram(prog);
+
+  // Uniforms
+  const uTime = gl.getUniformLocation(prog, "u_time");
+  const uViewport = gl.getUniformLocation(prog, "u_viewport");
+  const uDpr = gl.getUniformLocation(prog, "u_dpr");
+
+  // Attribute locations
+  const aPos = gl.getAttribLocation(prog, "a_pos");
+  const aColor = gl.getAttribLocation(prog, "a_color");
+  const aSize = gl.getAttribLocation(prog, "a_size");
+
+  // Buffers — size chosen by init(count)
+  const posBuf = gl.createBuffer()!;
+  const colBuf = gl.createBuffer()!;
+  const sizeBuf = gl.createBuffer()!;
+
+  // Particle-sized arrays (reallocated when count changes)
+  let count = 0;
+  let positions = new Float32Array(0);          // current positions (lerped)
+  let targetsA = new Float32Array(0);           // current phase's target
+  let targetsB = new Float32Array(0);           // incoming phase's target
+  let colorsA = new Float32Array(0);
+  let colorsB = new Float32Array(0);
+  let blendedColors = new Float32Array(0);
+  let sizes = new Float32Array(0);
+
+  function allocate(newCount: number) {
+    count = newCount;
+    positions = new Float32Array(count * 3);
+    targetsA = new Float32Array(count * 3);
+    targetsB = new Float32Array(count * 3);
+    colorsA = new Float32Array(count * 4);
+    colorsB = new Float32Array(count * 4);
+    blendedColors = new Float32Array(count * 4);
+    sizes = new Float32Array(count);
+
+    // Initialize current positions as a big cloud so the first transition
+    // visibly "gathers" into the AZ letters.
+    const rand = mulberry32(0x1234);
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (rand() - 0.5) * 2.4;
+      positions[i * 3 + 1] = (rand() - 0.5) * 1.6;
+      positions[i * 3 + 2] = (rand() - 0.5) * 0.4;
+      // Size: most particles small, a few larger "hero" specks.
+      sizes[i] = rand() < 0.02 ? 8 + rand() * 6 : 1.6 + rand() * 2.4;
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.DYNAMIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, blendedColors, gl.DYNAMIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, sizes, gl.STATIC_DRAW);
+  }
+
+  // Viewport + DPR handling
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    const pw = Math.max(1, Math.round(w * dpr));
+    const ph = Math.max(1, Math.round(h * dpr));
+    if (canvas.width !== pw || canvas.height !== ph) {
+      canvas.width = pw;
+      canvas.height = ph;
+    }
+    gl.viewport(0, 0, pw, ph);
+    gl.uniform2f(uViewport, pw, ph);
+    gl.uniform1f(uDpr, dpr);
+  }
+
+  const ro = new ResizeObserver(resize);
+  ro.observe(canvas);
+  resize();
+
+  // Blending setup for that additive glow bloom.
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+
+  // Attribute wiring — done once per buffer; we re-use these bindings every frame.
+  function bindAttribs() {
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+    gl.enableVertexAttribArray(aColor);
+    gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuf);
+    gl.enableVertexAttribArray(aSize);
+    gl.vertexAttribPointer(aSize, 1, gl.FLOAT, false, 0, 0);
+  }
+
+  // Initial allocation
+  allocate(pickDefaultCount());
+  bindAttribs();
+
+  // ── Render loop ──────────────────────────────────────────────────────
+  let prevTS = performance.now();
+  let rafId = 0;
+  const startTS = performance.now();
+
+  function frame(ts: number) {
+    rafId = requestAnimationFrame(frame);
+
+    const dtMs = Math.min(64, ts - prevTS); // clamp big pauses to 64ms
+    prevTS = ts;
+    const tSec = (ts - startTS) / 1000;
+
+    const state = getSwarm();
+    if (state.paused) return;
+
+    // Advance transition progress.
+    if (state.targetPhase) state.tickTransition(dtMs);
+
+    // Compute targets A (current phase).
+    state.currentPhase.computeTarget(
+      count,
+      ts - startTS,
+      state.mouse,
+      state.scroll,
+      targetsA,
+    );
+    state.currentPhase.computeColor?.(count, ts - startTS, colorsA);
+
+    const transitionT = state.targetPhase
+      ? easeInOutCubic(state.transitionProgress)
+      : 0;
+
+    const finalTargets = targetsA;
+    let finalColors = colorsA;
+
+    if (state.targetPhase) {
+      state.targetPhase.computeTarget(
+        count,
+        ts - startTS,
+        state.mouse,
+        state.scroll,
+        targetsB,
+      );
+      state.targetPhase.computeColor?.(count, ts - startTS, colorsB);
+      // Blend A → B directly into positions' reference via a scratch (targetsA
+      // is safe to overwrite — it was just used).
+      for (let i = 0; i < count * 3; i++) {
+        targetsA[i] = targetsA[i] * (1 - transitionT) + targetsB[i] * transitionT;
+      }
+      for (let i = 0; i < count * 4; i++) {
+        blendedColors[i] = colorsA[i] * (1 - transitionT) + colorsB[i] * transitionT;
+      }
+      finalColors = blendedColors;
+    } else {
+      // Single phase — just copy the colors (slight perf waste but simple).
+      blendedColors.set(colorsA);
+      finalColors = blendedColors;
+    }
+
+    // Spring current positions toward target.
+    const k = state.currentPhase.stiffness ?? 0.06;
+    const jitter = state.currentPhase.jitterAmplitude ?? 0;
+    const timeSec = tSec;
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+      // Per-particle breathing noise — tiny sinusoidal jitter unique per index.
+      const phase = (i % 97) * 0.06 + timeSec;
+      const jx = Math.sin(phase * 1.3) * jitter;
+      const jy = Math.cos(phase * 0.9) * jitter;
+      positions[i3] += (finalTargets[i3] + jx - positions[i3]) * k;
+      positions[i3 + 1] += (finalTargets[i3 + 1] + jy - positions[i3 + 1]) * k;
+      positions[i3 + 2] += (finalTargets[i3 + 2] - positions[i3 + 2]) * k;
+    }
+
+    // Upload positions + colors.
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, positions);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, finalColors);
+
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f(uTime, tSec);
+    gl.drawArrays(gl.POINTS, 0, count);
+  }
+  rafId = requestAnimationFrame(frame);
+
+  return {
+    dispose() {
+      cancelAnimationFrame(rafId);
+      ro.disconnect();
+      gl.deleteBuffer(posBuf);
+      gl.deleteBuffer(colBuf);
+      gl.deleteBuffer(sizeBuf);
+      gl.deleteProgram(prog);
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+    },
+    setParticleCount(n: number) {
+      allocate(n);
+      bindAttribs();
+    },
+    getCanvas: () => canvas,
+  };
+}

@@ -25,6 +25,7 @@ import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { ProcessStep } from "@/components/ui/process-step";
 import { CtaBand } from "@/components/ui/cta-band";
 import { HeroParticles } from "@/components/ui/hero-particles-lazy";
+import { HomepageSwarmTimeline } from "@/components/nuee/homepage-swarm-timeline";
 import { ExitIntentModal } from "@/components/ui/exit-intent-modal";
 import { RalRecommender } from "@/components/ui/ral-recommender";
 import { ReviewsCarousel } from "@/components/ui/reviews-carousel";
@@ -66,6 +67,9 @@ export default async function HomePage() {
   return (
     <>
       <ExitIntentModal />
+      {/* Narrative swarm timeline — drives the persistent particle canvas
+          through phases as the user scrolls this page. */}
+      <HomepageSwarmTimeline />
 
       {/* ── Section 1 — Hero (night bg + particles) ───────────────────── */}
       <section className="relative isolate h-[100svh] overflow-hidden bg-brand-night text-white">
