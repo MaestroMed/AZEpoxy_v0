@@ -292,6 +292,30 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
       }
     }
 
+    // ── Horizontal light-sweep wave — a soft vertical band of extra
+    //    brightness slowly traverses the hero left-to-right, like a
+    //    reflection catching the particles. Purely additive on colors,
+    //    so it works regardless of phase palette. 12s cycle.
+    {
+      const aspect = wpx / hpx;
+      const waveSpan = aspect * 2.6;               // start fully left, finish fully right
+      const waveT = (tSec % 12) / 12;              // 0..1 every 12s
+      const waveX = -aspect * 1.1 + waveT * waveSpan;
+      const waveWidth = 0.55;                       // band half-width
+      for (let i = 0; i < count; i++) {
+        const dx = finalTargets[i * 3] - waveX;
+        const ax = dx < 0 ? -dx : dx;
+        if (ax < waveWidth) {
+          // Soft bell: 1 at center, 0 at edge.
+          const t = ax / waveWidth;
+          const strength = (1 - t * t) * 0.45;
+          finalColors[i * 4] = Math.min(1, finalColors[i * 4] + strength * 0.85);
+          finalColors[i * 4 + 1] = Math.min(1, finalColors[i * 4 + 1] + strength * 0.78);
+          finalColors[i * 4 + 2] = Math.min(1, finalColors[i * 4 + 2] + strength * 0.6);
+        }
+      }
+    }
+
     // Spring current positions toward target.
     const k = state.currentPhase.stiffness ?? 0.06;
     const jitter = state.currentPhase.jitterAmplitude ?? 0;

@@ -23,16 +23,20 @@ import { hexToRgb, mulberry32, smoothstep } from "../utils";
 const GUN_CANVAS_W = 512;
 const GUN_CANVAS_H = 256;
 
-// Gun positioned in the LEFT quarter of the screen — we want empty space
-// on the right for the spray to fan out cinematically.
+// Gun mirrored horizontally: pistol grip on the right, nozzle on the
+// left, spray flows LEFT across the hero toward the heading text.
+// More dramatic composition when combined with the homepage's
+// rightward anchor offset.
 const ANCHOR_SCALE = 0.6;
-const GUN_OFFSET_X = -0.5;
+const GUN_OFFSET_X = 0.5;      // gun body pushed right
 const GUN_OFFSET_Y = 0.1;
-const NOZZLE_LOCAL = { x: 0.46, y: 0.0 };  // in unit-box local coords (±1)
+const NOZZLE_LOCAL = { x: -0.46, y: 0.0 };   // nozzle on the LEFT of the local gun box
 const NOZZLE_WORLD = {
   x: GUN_OFFSET_X + NOZZLE_LOCAL.x * ANCHOR_SCALE,
   y: GUN_OFFSET_Y + NOZZLE_LOCAL.y * ANCHOR_SCALE,
 };
+// Base direction the spray flows in (leftward now, was 0 = right).
+const SPRAY_BASE_DIR = Math.PI;
 
 // Trajectory tuning
 const CYCLE_SEC = 2.4;                 // full spray traversal
@@ -109,8 +113,9 @@ function sampleGunSilhouette(): Array<[number, number]> {
   for (let y = 0; y < GUN_CANVAS_H; y += 2) {
     for (let x = 0; x < GUN_CANVAS_W; x += 2) {
       if (data[(y * GUN_CANVAS_W + x) * 4 + 3] > 200) {
-        // Map to [-1..1] normalized box.
-        const nx = (x / GUN_CANVAS_W) * 2 - 1;
+        // Map to [-1..1] normalized box, then FLIP X so the gun is
+        // mirrored (pistol grip on the right, nozzle on the left).
+        const nx = -((x / GUN_CANVAS_W) * 2 - 1);
         const ny = -((y / GUN_CANVAS_H) * 2 - 1) * (GUN_CANVAS_H / GUN_CANVAS_W);
         opaque.push([nx, ny]);
       }
@@ -202,9 +207,10 @@ export const PAINT_GUN_PHASE: Phase = {
       // Life in [0..1] for this particle's current cycle.
       const life = ((t + s3) % CYCLE_SEC) / CYCLE_SEC;
 
-      // Direction: base to the right + personal cone angle + aim.
-      const dirAngle = s0 + aimY * 0.6;       // mouse Y rotates the cone up/down
-      const speed = BASE_SPEED * s1 * (1 + aimX * 0.2);
+      // Direction: base (leftward now) + personal cone angle + aim.
+      // Mouse Y rotates the cone up/down; mouse X modulates speed.
+      const dirAngle = SPRAY_BASE_DIR + s0 + aimY * 0.6;
+      const speed = BASE_SPEED * s1 * (1 - aimX * 0.2); // aimX inverted since we flow left
 
       // Parametric trajectory:
       //   x grows linearly with life (scaled by speed)

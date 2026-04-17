@@ -206,13 +206,26 @@ export const AZ_PHASE: Phase = {
       const brightness = globalPulse * perPart;
 
       if (role === 1) {
-        // Cold sparkle — tinted slightly by the RAL hue so it harmonizes,
-        // but stays mostly white/cyan to pop above the cloud.
+        // Cold sparkle — tinted slightly by the RAL hue to harmonize,
+        // but stays white/cyan to pop above the cloud.
         const palette = SPARKLE_COLORS[i % SPARKLE_COLORS.length];
-        out[i * 4] = Math.min(1, (palette[0] * 0.82 + rr * 0.18) * brightness);
-        out[i * 4 + 1] = Math.min(1, (palette[1] * 0.82 + rg * 0.18) * brightness);
-        out[i * 4 + 2] = Math.min(1, (palette[2] * 0.82 + rb * 0.18) * brightness);
-        out[i * 4 + 3] = 0.95;
+        // Distant-star twinkle: each sparkle has a unique flash cycle
+        // with a long dim phase + short bright burst. Makes the
+        // logo feel alive without being frantic.
+        const twinklePhase = cachedPersonalities[i * 4]; // reuse phase offset
+        const twinkleSpeed = 0.42 + (i % 13) * 0.03;     // 0.42..0.78 rad/s
+        const raw = Math.sin(tSec * twinkleSpeed + twinklePhase);
+        // Map sin → 0..1 with a bias toward dim (power 3) so twinkles
+        // are rare bright pulses rather than constant pulsing.
+        const twinkle = Math.pow(Math.max(0, raw), 3);
+        const twinkleBoost = 1 + twinkle * 1.1;
+        const r = palette[0] * 0.82 + rr * 0.18;
+        const g = palette[1] * 0.82 + rg * 0.18;
+        const b = palette[2] * 0.82 + rb * 0.18;
+        out[i * 4] = Math.min(1, r * brightness * twinkleBoost);
+        out[i * 4 + 1] = Math.min(1, g * brightness * twinkleBoost);
+        out[i * 4 + 2] = Math.min(1, b * brightness * twinkleBoost);
+        out[i * 4 + 3] = Math.min(1, 0.95 + twinkle * 0.05);
       } else {
         // RAL-cycling particle. Apply per-particle saturation jitter for life.
         // Mix the RAL hue with a tiny bit of warm-white to keep midtones
