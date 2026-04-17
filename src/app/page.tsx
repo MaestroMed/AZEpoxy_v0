@@ -72,11 +72,13 @@ export default async function HomePage() {
 
       {/* ── Section 1 — Hero (transparent to reveal the narrative swarm) ─ */}
       <section className="relative isolate h-[100svh] overflow-hidden text-white">
-        {/* Dark overlay — kept minimal so the narrative swarm reads
-            clearly through the hero. A targeted gradient under the text
-            block takes care of readability. */}
-        <div className="absolute inset-0 bg-brand-night/20" aria-hidden />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/75 via-brand-night/20 to-transparent" aria-hidden />
+        {/* Dark base — the swarm shines against a proper night sky, not a
+            washed-out gray. A left-biased gradient keeps the heading
+            block readable (very dark on the left where the text lives),
+            while letting the right half stay cinematic for the nuée. */}
+        <div className="absolute inset-0 bg-brand-night/60" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/60 to-brand-night/30" aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/80 via-transparent to-brand-night/20" aria-hidden />
 
         {/* Layer 1: HTML content (above canvas) */}
         <div className="container-wide relative z-10 flex h-[100svh] flex-col justify-center pt-32 pb-20 pointer-events-none">

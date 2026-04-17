@@ -22,6 +22,27 @@ const PARTICLE_COUNT = 3000;
 
 let cachedTargets: Float32Array | null = null;
 let cachedColors: Float32Array | null = null;
+let cachedOffsetX = 0;
+let cachedOffsetViewportW = 0;
+
+/**
+ * On desktop viewports, shift the AZ letters rightward so the hero text
+ * block (200°C / 15 minutes / Une protection à vie) gets the left half to
+ * itself. Matches the positioning of the original HeroParticles.
+ *
+ * Cached against the last-seen viewport width so resizes are picked up
+ * within a frame without any per-particle work.
+ */
+function ensureOffsetX(): number {
+  if (typeof window === "undefined") return 0;
+  const w = window.innerWidth;
+  if (w === cachedOffsetViewportW) return cachedOffsetX;
+  cachedOffsetViewportW = w;
+  if (w < 768) cachedOffsetX = 0;            // mobile: centered
+  else if (w < 1280) cachedOffsetX = 0.2;     // tablet: slight right bias
+  else cachedOffsetX = 0.38;                  // desktop: clear right half
+  return cachedOffsetX;
+}
 
 /** Build a (count*3) Float32Array of normalized x,y,z positions sampled from opaque text pixels. */
 function buildTargets(count: number): Float32Array {
@@ -117,8 +138,10 @@ export const AZ_PHASE: Phase = {
     if (!cachedTargets || cachedTargets.length !== count * 3) {
       cachedTargets = buildTargets(count);
     }
-    // Copy cached targets — then offset slightly based on mouse for parallax "breath".
-    const mx = mouse[0] * 0.02;
+    // Copy cached targets — then offset based on mouse (parallax "breath")
+    // and a static rightward shift on desktop viewports.
+    const offsetX = ensureOffsetX();
+    const mx = mouse[0] * 0.02 + offsetX;
     const my = mouse[1] * 0.02;
     for (let i = 0; i < count; i++) {
       out[i * 3] = cachedTargets[i * 3] + mx;
