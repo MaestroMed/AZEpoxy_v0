@@ -48,6 +48,21 @@ html.has-custom-cursor textarea {
   80%      { transform: translateY(0); opacity: 0.4; }
 }
 
+/* Logo conic sweep — rotation 360° d'un gradient conique au hover du
+   logo AZ Époxy dans le header. Crée un effet "étincelle qui parcourt
+   l'icône". */
+@keyframes logo-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Stat counter pop — scale up puis retour quand le counter atterrit. */
+@keyframes stat-pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
 /* Blog drop cap — première lettre du premier paragraphe d'un article
    en grande initiale magazine. Ne s'applique qu'aux <article data-
    reading-target> pour ne pas polluer les autres paragraphes. */

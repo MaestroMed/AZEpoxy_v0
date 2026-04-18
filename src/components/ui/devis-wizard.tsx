@@ -239,22 +239,91 @@ export function DevisWizard() {
         </div>
       )}
 
-      {/* Progress bar */}
-      <div className="flex border-b border-brand-night/10">
-        {STEPS.map((label, i) => (
-          <button
-            key={label}
-            onClick={() => { if (i + 1 < step) { setDirection(-1); setStep(i + 1); } }}
-            className={cn(
-              "flex-1 py-4 text-center text-sm font-semibold transition-colors",
-              i + 1 === step ? "bg-brand-orange text-white" :
-              i + 1 < step ? "bg-brand-orange/10 text-brand-orange cursor-pointer" :
-              "bg-brand-cream/50 text-brand-charcoal/40"
-            )}
-          >
-            <span className="hidden sm:inline">{i + 1}. </span>{label}
-          </button>
-        ))}
+      {/* Progress bar — connecté : line continue en gradient qui
+          s'étend selon le step, + chips numérotés au-dessus. */}
+      <div className="relative border-b border-brand-night/10 bg-gradient-to-b from-brand-cream/40 to-white px-5 py-5 sm:px-8">
+        {/* Baseline — fond */}
+        <div
+          aria-hidden
+          className="absolute left-8 right-8 top-[3.5rem] h-0.5 rounded-full bg-brand-night/10 sm:top-[4rem]"
+        />
+        {/* Progress line — s'étend selon step */}
+        <div
+          aria-hidden
+          className="absolute left-8 top-[3.5rem] h-0.5 rounded-full bg-gradient-ember transition-[width] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] sm:top-[4rem]"
+          style={{
+            // Each step occupies 1/(n-1) of the bar; step 1 = 0%, step n = 100%.
+            width: `calc((${Math.max(0, step - 1)}) / ${STEPS.length - 1} * (100% - 4rem))`,
+          }}
+        />
+
+        <div className="relative flex items-start justify-between gap-2">
+          {STEPS.map((label, i) => {
+            const idx = i + 1;
+            const completed = idx < step;
+            const active = idx === step;
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => {
+                  if (idx < step) {
+                    setDirection(-1);
+                    setStep(idx);
+                  }
+                }}
+                disabled={idx > step}
+                className={cn(
+                  "group flex flex-col items-center gap-2 text-center transition-colors",
+                  idx < step && "cursor-pointer"
+                )}
+                aria-current={active ? "step" : undefined}
+                aria-label={`Étape ${idx} : ${label}`}
+              >
+                <span
+                  className={cn(
+                    "relative flex h-9 w-9 items-center justify-center rounded-full font-mono text-sm font-bold tabular-nums transition-all duration-300 sm:h-10 sm:w-10",
+                    active &&
+                      "bg-brand-orange text-white shadow-[0_0_0_4px_rgba(232,93,44,0.18),0_8px_20px_-8px_rgba(232,93,44,0.5)]",
+                    completed &&
+                      "bg-brand-orange/15 text-brand-orange ring-1 ring-brand-orange/30 group-hover:bg-brand-orange/25",
+                    !active &&
+                      !completed &&
+                      "bg-brand-night/5 text-brand-charcoal/50 ring-1 ring-brand-night/10"
+                  )}
+                >
+                  {completed ? (
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-4 w-4"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  ) : (
+                    idx
+                  )}
+                </span>
+                <span
+                  className={cn(
+                    "text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors sm:text-xs",
+                    active
+                      ? "text-brand-night"
+                      : completed
+                        ? "text-brand-orange"
+                        : "text-brand-charcoal/40"
+                  )}
+                >
+                  {label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="p-6 sm:p-8">

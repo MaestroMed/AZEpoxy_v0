@@ -83,18 +83,32 @@ export function Header() {
         Aller au contenu principal
       </a>
       <div className="container-wide flex h-20 items-center justify-between">
-        <Link href="/" className="group flex items-center gap-3">
-          <div className="relative h-10 w-10 overflow-hidden rounded-md bg-gradient-ember shadow-lg shadow-brand-orange/40">
-            <span className="absolute inset-0 flex items-center justify-center font-display text-xl font-black text-white">
+        <Link href="/" className="group flex items-center gap-3" data-magnetic>
+          <div className="relative h-10 w-10 overflow-hidden rounded-md bg-gradient-ember shadow-lg shadow-brand-orange/40 transition-all duration-500 group-hover:shadow-brand-orange/70 group-hover:shadow-xl">
+            {/* AZ label avec transition de scale subtle */}
+            <span className="absolute inset-0 z-10 flex items-center justify-center font-display text-xl font-black text-white transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110">
               AZ
             </span>
+            {/* Ember pulse existant */}
             <div className="absolute inset-0 animate-ember-pulse bg-gradient-heat opacity-60" />
+            {/* Conic sweep au hover — rotation rapide d'un gradient
+                conique quand la souris survole, comme une étincelle
+                qui parcourt l'icône. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              style={{
+                background:
+                  "conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.28) 45deg, transparent 90deg, transparent 360deg)",
+                animation: "logo-sweep 1.6s linear infinite",
+              }}
+            />
           </div>
           <div className="flex flex-col leading-none">
-            <span className="font-display text-lg font-black text-white tracking-tight">
+            <span className="font-display text-lg font-black text-white tracking-tight transition-colors duration-300 group-hover:text-white">
               ÉPOXY
             </span>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-orange">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-orange transition-all duration-300 group-hover:tracking-[0.24em]">
               Thermolaquage
             </span>
           </div>

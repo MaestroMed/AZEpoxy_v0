@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useInView,
   useMotionValue,
@@ -25,21 +25,38 @@ function parseValue(value: string): { num: number; suffix: string } {
   return { num: parseInt(match[1], 10), suffix: match[2] };
 }
 
+/**
+ * Animated stat counter avec reveal polish award-tier :
+ *   • Thin gradient underline qui scale-x 0 → 1 sur 900ms quand le
+ *     counter atterrit, signale la fin du compte
+ *   • Pulse flash brief à l'atterrissage (scale 1.08 → 1) — reward
+ *   • Tabular-nums pour que le counter ne "saute" pas pendant la
+ *     progression (largeur des chiffres fixe)
+ *   • Label qui s'éclaircit un peu après le pulse (delay 120ms)
+ */
 export function StatCounter({ value, label, dark = false }: StatCounterProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: "-80px" });
   const { num, suffix } = parseValue(value);
+  const [landed, setLanded] = useState(false);
 
   const motionValue = useMotionValue(0);
   const springValue = useSpring(motionValue, {
-    stiffness: 60,
-    damping: 30,
+    stiffness: 70,
+    damping: 26,
   });
 
   useEffect(() => {
-    if (isInView) {
-      animate(motionValue, num, { duration: 1.5, ease: "easeOut" });
-    }
+    if (!isInView) return;
+    const controls = animate(motionValue, num, {
+      duration: 1.6,
+      ease: [0.22, 1, 0.36, 1], // ease-out-expo, award-grade smooth stop
+    });
+    // Mark landed after the tween resolves — triggers the underline
+    // scale-in and the label fade-up.
+    controls.then(() => setLanded(true));
+    return () => controls.stop();
   }, [isInView, motionValue, num]);
 
   useEffect(() => {
@@ -52,21 +69,35 @@ export function StatCounter({ value, label, dark = false }: StatCounterProps) {
   }, [springValue, suffix]);
 
   return (
-    <div>
-      <span
-        ref={ref}
-        className={cn(
-          "heading-display text-4xl sm:text-5xl",
-          dark ? "text-white" : "text-brand-night"
-        )}
-      >
-        0{suffix}
-      </span>
+    <div ref={containerRef} className="group">
+      <div className="relative inline-block">
+        <span
+          ref={ref}
+          className={cn(
+            "heading-display text-4xl tabular-nums sm:text-5xl transition-transform duration-300",
+            dark ? "text-white" : "text-brand-night",
+            // Subtle flash pop when landed — scale briefly, then ease back.
+            landed && "motion-safe:animate-[stat-pop_420ms_cubic-bezier(0.22,1,0.36,1)_1]"
+          )}
+        >
+          0{suffix}
+        </span>
+        {/* Gradient underline — scale-in au landed. */}
+        <span
+          aria-hidden
+          className={cn(
+            "absolute -bottom-0.5 left-0 h-0.5 w-full origin-left rounded-full bg-gradient-ember transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+            landed ? "scale-x-100" : "scale-x-0"
+          )}
+        />
+      </div>
       <div
         className={cn(
-          "mt-2 text-xs font-semibold uppercase tracking-[0.2em]",
-          dark ? "text-white/50" : "text-brand-charcoal/50"
+          "mt-2 text-xs font-semibold uppercase tracking-[0.2em] transition-opacity duration-500",
+          dark ? "text-white/50" : "text-brand-charcoal/50",
+          landed && (dark ? "text-white/70" : "text-brand-charcoal/70")
         )}
+        style={{ transitionDelay: landed ? "120ms" : "0ms" }}
       >
         {label}
       </div>
