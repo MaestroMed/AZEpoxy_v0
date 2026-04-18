@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { ReadingProgress } from "@/components/ui/reading-progress";
 import {
   BLOG_ARTICLES_FALLBACK,
   getBlogArticleBySlug,
@@ -58,6 +59,7 @@ export default async function BlogArticlePage({
 
   return (
     <>
+      <ReadingProgress targetSelector="[data-reading-target]" />
       <JsonLd
         id={`ld-article-${slug}`}
         data={articleLd({
@@ -106,6 +108,7 @@ export default async function BlogArticlePage({
 
           <ScrollReveal delay={0.1}>
             <article
+              data-reading-target
               className="prose prose-lg max-w-none prose-headings:font-outfit prose-headings:text-brand-night prose-h2:text-xl prose-h2:mt-10 prose-h2:mb-4 prose-p:text-brand-charcoal/80 prose-p:leading-relaxed prose-li:text-brand-charcoal/80 prose-strong:text-brand-night prose-a:text-brand-orange prose-a:no-underline hover:prose-a:underline"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />

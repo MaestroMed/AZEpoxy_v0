@@ -6,6 +6,7 @@ import { StatCounter } from "@/components/ui/stat-counter";
 import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { MouseTilt } from "@/components/nuee/mouse-tilt";
 import { getTestimonials } from "@/lib/testimonials-data";
 import {
   ShieldCheck,
@@ -147,32 +148,40 @@ export default async function AProposPage() {
 
           <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <ScrollReveal delay={0.1}>
-              <FeatureCard
-                icon={<ShieldCheck className="h-6 w-6" />}
-                title="Qualité sans compromis"
-                description="Chaque pièce passe par un processus en 6 étapes — du dégraissage au contrôle final — conforme aux normes ISO les plus exigeantes."
-              />
+              <MouseTilt intensity={6} hoverScale={1.01}>
+                <FeatureCard
+                  icon={<ShieldCheck className="h-6 w-6" />}
+                  title="Qualité sans compromis"
+                  description="Chaque pièce passe par un processus en 6 étapes — du dégraissage au contrôle final — conforme aux normes ISO les plus exigeantes."
+                />
+              </MouseTilt>
             </ScrollReveal>
             <ScrollReveal delay={0.15}>
-              <FeatureCard
-                icon={<Leaf className="h-6 w-6" />}
-                title="Engagement écologique"
-                description="0 COV, poudre 100 % recyclable, zéro solvant. Le thermolaquage est le procédé de finition le plus respectueux de l'environnement."
-              />
+              <MouseTilt intensity={6} hoverScale={1.01}>
+                <FeatureCard
+                  icon={<Leaf className="h-6 w-6" />}
+                  title="Engagement écologique"
+                  description="0 COV, poudre 100 % recyclable, zéro solvant. Le thermolaquage est le procédé de finition le plus respectueux de l'environnement."
+                />
+              </MouseTilt>
             </ScrollReveal>
             <ScrollReveal delay={0.2}>
-              <FeatureCard
-                icon={<Zap className="h-6 w-6" />}
-                title="Réactivité"
-                description="Service express 48h disponible, devis envoyé sous 24 heures. Nous nous adaptons à vos contraintes de planning."
-              />
+              <MouseTilt intensity={6} hoverScale={1.01}>
+                <FeatureCard
+                  icon={<Zap className="h-6 w-6" />}
+                  title="Réactivité"
+                  description="Service express 48h disponible, devis envoyé sous 24 heures. Nous nous adaptons à vos contraintes de planning."
+                />
+              </MouseTilt>
             </ScrollReveal>
             <ScrollReveal delay={0.25}>
-              <FeatureCard
-                icon={<Award className="h-6 w-6" />}
-                title="Savoir-faire"
-                description="Plus de 15 ans d'expertise industrielle, des finitions premium (texturé, sablé, métallisé) et un conseil personnalisé."
-              />
+              <MouseTilt intensity={6} hoverScale={1.01}>
+                <FeatureCard
+                  icon={<Award className="h-6 w-6" />}
+                  title="Savoir-faire"
+                  description="Plus de 15 ans d'expertise industrielle, des finitions premium (texturé, sablé, métallisé) et un conseil personnalisé."
+                />
+              </MouseTilt>
             </ScrollReveal>
           </div>
         </div>
