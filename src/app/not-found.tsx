@@ -3,10 +3,18 @@ import { ArrowRight, Compass } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <section className="relative isolate min-h-[80vh] overflow-hidden bg-brand-night text-white">
-      <div className="absolute inset-0 bg-gradient-night" />
-      <div className="absolute inset-0 bg-industrial-grid-dark opacity-40" />
-      <div className="absolute -left-40 top-1/3 h-[500px] w-[500px] rounded-full bg-brand-orange/20 blur-[140px]" />
+    <section className="relative min-h-[80vh] overflow-hidden text-white">
+      {/* Transparent — la nuée galactique (via RoutePhaseSync fallback)
+          envahit l'écran, métaphore "perdu dans l'espace". */}
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/55 to-brand-night/15 hidden md:block"
+        aria-hidden
+      />
+      <div className="absolute inset-0 bg-brand-night/55 md:hidden" aria-hidden />
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-brand-night/85 via-transparent to-transparent"
+        aria-hidden
+      />
       <div className="container-wide relative flex min-h-[80vh] flex-col items-start justify-center pt-40 pb-20">
         <span className="section-label-light">
           <Compass className="h-3 w-3" />

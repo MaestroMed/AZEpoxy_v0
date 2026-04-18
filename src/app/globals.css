@@ -21,12 +21,50 @@ html.has-custom-cursor * {
   cursor: none !important;
 }
 
+/* Exception — restore the I-beam inside text fields so users know
+   they can type. The custom ring still floats above. */
+html.has-custom-cursor input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html.has-custom-cursor textarea {
+  cursor: text !important;
+}
+
 /* Scroll hint — subtle double-bounce for the "scroll" nudge at the
    bottom of the hero. */
 @keyframes scroll-nudge {
   0%, 100% { transform: translateY(0); opacity: 0.4; }
   40%      { transform: translateY(6px); opacity: 1; }
   80%      { transform: translateY(0); opacity: 0.4; }
+}
+
+/* ── Form focus — award-tier ring + glow ────────────────────────────
+   Every input/textarea/select gets a smooth animated outline in brand
+   orange when focused. Feels intentional, premium, and accessible.
+   Skipped for reduced-motion users (outline appears instantly). */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+textarea,
+select {
+  transition:
+    border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: rgb(232, 93, 44);
+  box-shadow:
+    0 0 0 4px rgba(232, 93, 44, 0.14),
+    0 8px 24px -12px rgba(232, 93, 44, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    transition: none;
+  }
 }
 
 @layer base {
