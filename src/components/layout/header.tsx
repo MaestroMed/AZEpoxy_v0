@@ -73,7 +73,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500 md:top-9",
         scrolled || open
           ? "bg-brand-night/95 backdrop-blur-xl shadow-lg shadow-black/10"
           : "bg-transparent"

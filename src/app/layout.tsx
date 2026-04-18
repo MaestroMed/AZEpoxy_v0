@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { MobileStickyCta } from "@/components/ui/mobile-sticky-cta";
+import { LiveAtelierBanner } from "@/components/ui/live-atelier-banner";
 import GA4 from "@/components/analytics/ga4";
 import { JsonLd } from "@/components/seo/json-ld";
 import { MotionProvider } from "@/components/motion";
@@ -123,6 +124,10 @@ export default async function RootLayout({
             {/* Easter eggs : taper "az", "boom" ou le Konami code
                 déclenche un burst de la nuée. */}
             <EasterEgg />
+            {/* Live atelier banner — thin simulated "now in workshop"
+                strip above the header. Gives the site a permanent
+                heartbeat. Time-aware (closed nights + weekends). */}
+            <LiveAtelierBanner />
             <Header />
             <main id="main-content" className="relative">
               {children}
