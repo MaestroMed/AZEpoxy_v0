@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbLd, type BreadcrumbItem } from "@/lib/jsonld";
 import { cn } from "@/lib/utils";
+import { TextReveal } from "@/components/ui/text-reveal";
 
 interface PageHeroProps {
   label?: string;
@@ -108,7 +109,7 @@ export function PageHero({
         <div className="max-w-4xl">
           {label && <span className="section-label-light">{label}</span>}
           <h1 className="heading-display mt-6 text-balance text-4xl leading-[0.95] sm:text-5xl lg:text-6xl">
-            {title}
+            <TextReveal>{title}</TextReveal>
           </h1>
           {description && (
             <p className="mt-6 max-w-2xl text-balance text-lg text-white/70 sm:text-xl">
