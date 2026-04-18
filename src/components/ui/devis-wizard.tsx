@@ -601,7 +601,41 @@ export function DevisWizard() {
                 />
 
                 {status === "error" && (
-                  <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{errorMsg}</div>
+                  <div
+                    role="alert"
+                    className="relative flex items-start gap-3 overflow-hidden rounded-2xl border border-red-200 bg-gradient-to-br from-red-50 via-red-50/80 to-red-50/40 p-5 shadow-[0_8px_24px_-14px_rgba(239,68,68,0.3)]"
+                  >
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-red-200/30 blur-2xl"
+                    />
+                    <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-5 w-5"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                      </svg>
+                    </div>
+                    <div className="relative flex-1">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-red-700/70">
+                        Erreur
+                      </p>
+                      <p className="mt-0.5 font-display text-sm font-semibold text-red-900">
+                        Envoi impossible
+                      </p>
+                      <p className="mt-1 text-sm text-red-800/80 leading-relaxed">
+                        {errorMsg}
+                      </p>
+                    </div>
+                  </div>
                 )}
 
                 <div className="flex justify-between pt-4">

@@ -147,17 +147,25 @@ export function RalPickerSection() {
             {/* Cart button */}
             <button
               onClick={() => setCartOpen(!cartOpen)}
+              aria-expanded={cartOpen}
+              data-magnetic
               className={cn(
-                "relative flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-semibold transition-all",
+                "group relative flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-semibold transition-all duration-300",
                 cart.length > 0
-                  ? "border-brand-orange bg-brand-orange/10 text-brand-orange"
-                  : "border-brand-night/15 bg-white text-brand-charcoal/60"
+                  ? "border-brand-orange bg-brand-orange/10 text-brand-orange shadow-[0_6px_18px_-10px_rgba(232,93,44,0.45)] hover:bg-brand-orange/15"
+                  : "border-brand-night/15 bg-white text-brand-charcoal/60 hover:border-brand-night/30 hover:text-brand-night",
               )}
             >
-              <ShoppingBag className="h-4 w-4" />
+              <ShoppingBag className="h-4 w-4 transition-transform duration-300 group-hover:-rotate-6" />
               <span className="hidden sm:inline">Ma sélection</span>
               {cart.length > 0 && (
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-orange text-[10px] font-bold text-white">
+                <span
+                  className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-orange text-[10px] font-bold tabular-nums text-white shadow-sm"
+                  key={cart.length /* force remount so animate-stat-pop plays on change */}
+                  style={{
+                    animation: "stat-pop 400ms cubic-bezier(0.22,1,0.36,1) 1",
+                  }}
+                >
                   {cart.length}
                 </span>
               )}
@@ -165,17 +173,37 @@ export function RalPickerSection() {
           </div>
         </div>
 
-        {/* Cart panel */}
-        {cartOpen && (
-          <div className="mb-8 rounded-2xl border border-brand-orange/20 bg-white p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-brand-night text-sm">
-                Ma sélection ({cart.length} couleur{cart.length !== 1 ? "s" : ""})
-              </h3>
+        {/* Cart panel — stagger reveal + chips animés */}
+        <div
+          aria-hidden={!cartOpen}
+          className={cn(
+            "overflow-hidden transition-[max-height,opacity,margin-bottom] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            cartOpen
+              ? "max-h-[600px] opacity-100 mb-8"
+              : "pointer-events-none max-h-0 opacity-0"
+          )}
+        >
+          <div className="relative overflow-hidden rounded-2xl border border-brand-orange/25 bg-gradient-to-br from-white via-brand-orange/[0.02] to-white p-6 shadow-[0_12px_32px_-18px_rgba(232,93,44,0.35)]">
+            {/* Corner accent */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-brand-orange/10 blur-3xl"
+            />
+
+            <div className="relative mb-4 flex items-center justify-between">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-orange">
+                  Ma sélection
+                </p>
+                <h3 className="font-display text-lg font-semibold text-brand-night">
+                  {cart.length} couleur{cart.length !== 1 ? "s" : ""} retenue
+                  {cart.length !== 1 ? "s" : ""}
+                </h3>
+              </div>
               {cart.length > 0 && (
                 <button
                   onClick={clearCart}
-                  className="text-xs text-brand-charcoal/50 hover:text-red-500 transition-colors"
+                  className="text-[11px] font-semibold uppercase tracking-wider text-brand-charcoal/45 transition-colors hover:text-red-500"
                 >
                   Tout supprimer
                 </button>
@@ -183,50 +211,62 @@ export function RalPickerSection() {
             </div>
 
             {cart.length === 0 ? (
-              <p className="text-sm text-brand-charcoal/50">
-                Cliquez sur le + d&apos;une couleur pour l&apos;ajouter à votre sélection.
+              <p className="relative text-sm text-brand-charcoal/55">
+                Cliquez sur le <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-orange/15 text-[11px] font-bold text-brand-orange align-middle">+</span> d&apos;une couleur pour l&apos;ajouter à votre sélection.
               </p>
             ) : (
               <>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {cartColors.map((color) =>
+                <div className="relative mb-5 flex flex-wrap gap-2">
+                  {cartColors.map((color, i) =>
                     color ? (
                       <div
                         key={color.code}
-                        className="flex items-center gap-2 rounded-full border border-brand-night/10 bg-brand-cream px-3 py-1.5"
+                        className="group/chip flex items-center gap-2 rounded-full border border-brand-night/10 bg-white px-3 py-1.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-orange/40 hover:shadow-md"
+                        style={{
+                          animation: cartOpen
+                            ? `stat-pop 420ms cubic-bezier(0.22,1,0.36,1) ${i * 30}ms both`
+                            : undefined,
+                        }}
                       >
                         <span
-                          className="h-4 w-4 rounded-full border border-black/10"
+                          className="h-4 w-4 rounded-full border border-black/10 shadow-sm"
                           style={{ backgroundColor: color.hex }}
                         />
-                        <span className="text-xs font-semibold text-brand-night">
+                        <span className="font-mono text-[11px] font-bold text-brand-night">
                           {color.code}
                         </span>
-                        <span className="text-xs text-brand-charcoal/50">
+                        <span className="max-w-[8rem] truncate text-[11px] text-brand-charcoal/55">
                           {color.name}
                         </span>
                         <button
                           onClick={() => toggleCart(color.code)}
-                          className="ml-1 text-brand-charcoal/30 hover:text-red-500 transition-colors"
+                          className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full text-brand-charcoal/30 transition-all hover:bg-red-50 hover:text-red-500 hover:scale-110"
                           aria-label={`Retirer ${color.code}`}
                         >
                           <X className="h-3 w-3" />
                         </button>
                       </div>
-                    ) : null
+                    ) : null,
                   )}
                 </div>
                 <Link
                   href={`/devis?ral=${cart.join(",")}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-brand-orange/90 hover:shadow-lg"
+                  data-magnetic
+                  className="group/cta relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-orange/35 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-orange/50"
                 >
-                  Demander un devis avec ces couleurs
-                  <ArrowRight className="h-4 w-4" />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-br from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover/cta:translate-x-full"
+                  />
+                  <span className="relative">
+                    Demander un devis avec ces couleurs
+                  </span>
+                  <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
                 </Link>
               </>
             )}
           </div>
-        )}
+        </div>
 
         {/* Color display */}
         {filtered.length > 0 ? (
