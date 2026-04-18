@@ -170,10 +170,11 @@ export const PAINT_GUN_PHASE: Phase = {
   // Spray particles MUST exit the frame on the right to read as real
   // projection. Opt out of the engine's viewport boundary clamp.
   boundary: false,
-  // Le pistolet a sa propre composition (crosse à droite, jet à
-  // gauche) — décalé par la homepage, le jet pilait sur la bordure
-  // droite. On reste centré.
-  anchorPreference: "center",
+  // Le pistolet a été conçu avec composition asymétrique (crosse à
+  // droite, jet vers la gauche). Sur desktop il respecte le page
+  // anchor comme AZ — la scène entière calée à droite lit bien. Sur
+  // mobile/portrait, l'anchor est 0 donc centré automatiquement.
+  anchorPreference: "page",
 
   computeTarget(count, time, mouse, _scroll, out) {
     if (

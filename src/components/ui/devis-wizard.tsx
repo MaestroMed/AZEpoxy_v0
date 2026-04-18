@@ -2,13 +2,15 @@
 
 import { useCallback, useState, useEffect, useRef, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Check, CircleDot, Bike, DoorOpen, Armchair, Factory, Package } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { POPULAR_RAL, RAL_COLORS } from "@/lib/ral-colors";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { TurnstileWidget } from "@/components/ui/turnstile";
 import { track } from "@/lib/analytics/events";
+import { getSwarm } from "@/lib/nuee/store";
+import { getSoundEngine } from "@/lib/nuee/sound";
 import {
   clearDevisDraft,
   loadDevisDraft,
@@ -182,6 +184,15 @@ export function DevisWizard() {
       submittedRef.current = true;
       clearDevisDraft();
       setStatus("success");
+      // Célèbre la soumission réussie avec un burst de la nuée +
+      // whoosh si le son est actif. Feedback visuel/audio immédiat,
+      // avant même que l'écran de confirmation apparaisse.
+      try {
+        getSwarm().triggerBurst(1400);
+        getSoundEngine().whoosh(0.8);
+      } catch {
+        /* engine not initialized — silent */
+      }
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Erreur. Appelez-nous au 09 71 35 74 96.");
@@ -248,7 +259,7 @@ export function DevisWizard() {
 
       <div className="p-6 sm:p-8">
         <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
+          <m.div
             key={step}
             custom={direction}
             initial={{ x: direction * 50, opacity: 0 }}
@@ -533,7 +544,7 @@ export function DevisWizard() {
                 </div>
               </form>
             )}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </div>
     </div>

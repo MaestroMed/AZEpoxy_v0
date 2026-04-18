@@ -24,7 +24,12 @@ import {
   Layers,
   Search,
   Image as ImageIcon,
+  Volume2,
+  ArrowUp,
+  Zap,
 } from "lucide-react";
+import { getSwarm } from "@/lib/nuee/store";
+import { getSoundEngine } from "@/lib/nuee/sound";
 
 type CommandKind = "nav" | "action";
 
@@ -107,6 +112,48 @@ const COMMANDS: CommandItem[] = [
     href: "/contact",
     icon: <Phone className="h-4 w-4" />,
     keywords: ["contact", "telephone", "mail"],
+  },
+  // ── Actions contextuelles (kind: "action") ──────────────────────
+  {
+    id: "toggle-sound",
+    label: "Activer / couper le son ambiant",
+    hint: "Son procédural, cycle de phases",
+    kind: "action",
+    icon: <Volume2 className="h-4 w-4" />,
+    keywords: ["son", "sound", "audio", "musique", "ambiance"],
+    action: () => {
+      const engine = getSoundEngine();
+      if (engine.enabled) engine.disable();
+      else engine.enable();
+      try {
+        window.localStorage.setItem(
+          "az-swarm-sound",
+          engine.enabled ? "on" : "off",
+        );
+      } catch {
+        /* localStorage unavailable */
+      }
+    },
+  },
+  {
+    id: "scroll-top",
+    label: "Revenir en haut de page",
+    kind: "action",
+    icon: <ArrowUp className="h-4 w-4" />,
+    keywords: ["haut", "top", "scroll", "remonter"],
+    action: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+  },
+  {
+    id: "burst",
+    label: "Déclencher un burst de la nuée",
+    hint: "Explosion radiale puis reforme",
+    kind: "action",
+    icon: <Zap className="h-4 w-4" />,
+    keywords: ["burst", "explosion", "fun", "easter", "boom"],
+    action: () => {
+      getSwarm().triggerBurst(1200);
+      getSoundEngine().whoosh(0.7);
+    },
   },
 ];
 
