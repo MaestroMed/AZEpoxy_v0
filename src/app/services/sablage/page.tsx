@@ -5,9 +5,7 @@ import {
   Zap,
   Target,
   Wrench,
-  Paintbrush,
   CircleDot,
-  Layers,
   Check,
 } from "lucide-react";
 

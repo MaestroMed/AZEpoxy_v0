@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Flame,
   Palette,
-  Phone,
   Sparkles,
   ShieldCheck,
   Wrench,
@@ -13,7 +12,6 @@ import {
   Users,
 } from "lucide-react";
 import { POPULAR_RAL } from "@/lib/ral-colors";
-import { SITE } from "@/lib/utils";
 import { getServices } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 import { getSpecialties } from "@/lib/specialites-data";
@@ -25,7 +23,6 @@ import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { ProcessStep } from "@/components/ui/process-step";
 import { CtaBand } from "@/components/ui/cta-band";
 import { HomepageSwarmTimeline } from "@/components/nuee/homepage-swarm-timeline";
-import { ExitIntentModal } from "@/components/ui/exit-intent-modal";
 import { RalRecommender } from "@/components/ui/ral-recommender";
 import { ReviewsCarousel } from "@/components/ui/reviews-carousel";
 import { SectionHeader } from "@/components/ui/section-header";

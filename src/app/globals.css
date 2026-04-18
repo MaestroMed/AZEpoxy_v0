@@ -295,11 +295,11 @@ select:focus-visible {
     }
 
   .section-label {
-    @apply inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange;
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-orange shadow-[0_2px_12px_-6px_rgba(232,93,44,0.35)];
   }
 
   .section-label-light {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-white/90 backdrop-blur-sm;
+    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-white/90 backdrop-blur-sm shadow-[0_4px_20px_-10px_rgba(0,0,0,0.4)];
   }
 
   /* Subtle industrial grid backdrop */

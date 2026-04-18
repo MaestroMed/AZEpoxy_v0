@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/seo";
 import { SectionHeader } from "@/components/ui/section-header";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { RAL_FAMILIES, POPULAR_RAL } from "@/lib/ral-colors";
+import { POPULAR_RAL } from "@/lib/ral-colors";
 import { ColorSwatch } from "@/components/ui/color-swatch";
 import { RalPickerSection } from "./ral-picker-section";
 import { CouleursRalSwarmBinding } from "@/components/nuee/couleurs-ral-binding";

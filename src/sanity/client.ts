@@ -56,7 +56,6 @@ export async function sanityFetch<T>(
       },
     });
   } catch (err) {
-
     console.error("[sanityFetch] query failed", err);
     return null;
   }
