@@ -22,7 +22,6 @@ import {
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FeatureCard } from "@/components/ui/feature-card";
-import { GalleryGrid } from "@/components/ui/gallery-grid";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -32,7 +31,14 @@ import {
   getSpecialtyBySlugAsync,
 } from "@/lib/specialites-data";
 import { RAL_COLORS } from "@/lib/ral-colors";
-import { getProjects, type Project } from "@/lib/realisations-data";
+import {
+  getProjects,
+  getProjectSlug,
+  catalogNumber,
+  PROJECT_CATEGORIES,
+  type Project,
+} from "@/lib/realisations-data";
+import { ArrowUpRight } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                    */
@@ -94,35 +100,8 @@ const SLUG_TO_CATEGORY: Record<string, string> = {
   pieces: "industriel", // pieces maps to industriel category
 };
 
-/** Build gallery items from matching projects, padding with generic items if needed */
-function buildGalleryItems(
-  categorySlug: string,
-  specialtyTitle: string,
-  popularColors: string[],
-  projects: Project[]
-) {
-  const projectCategory = SLUG_TO_CATEGORY[categorySlug] ?? categorySlug;
-  const matching = projects.filter((p) => p.category === projectCategory);
-  const items = matching.slice(0, 6).map((p) => ({
-    title: p.title,
-    category: categorySlug,
-    colors: p.colors,
-  }));
-
-  // Pad to 6 items if not enough
-  let colorIdx = 0;
-  while (items.length < 6) {
-    const color = popularColors[colorIdx % popularColors.length];
-    items.push({
-      title: `Projet ${specialtyTitle} — ${color}`,
-      category: categorySlug,
-      colors: [color],
-    });
-    colorIdx++;
-  }
-
-  return items;
-}
+/* buildGalleryItems was removed — specialty pages now surface real
+   realisations from the catalogue raisonné as dense index rows. */
 
 /* -------------------------------------------------------------------------- */
 /*  Metadata                                                                   */
@@ -166,21 +145,37 @@ export default async function SpecialtyPage({
   params: Promise<{ specialty: string }>;
 }) {
   const { specialty: slug } = await params;
-  const [specialty, projects] = await Promise.all([
+  const [specialty, projects, allSpecialties] = await Promise.all([
     getSpecialtyBySlugAsync(slug),
     getProjects(),
+    getSpecialties(),
   ]);
 
   if (!specialty) {
     notFound();
   }
 
-  const galleryItems = buildGalleryItems(
-    specialty.slug,
-    specialty.title,
-    specialty.popularColors,
-    projects
+  // Chapter numbering — each specialty is a chapter of the catalogue
+  // raisonné. Uses the order from getSpecialties() so when specialties
+  // reorder, chapter numbers follow. Stable within a single build.
+  const chapterIndex = Math.max(
+    0,
+    allSpecialties.findIndex((s) => s.slug === specialty.slug),
   );
+  const chapterNumber = String(chapterIndex + 1).padStart(2, "0");
+  const chapterTotal = String(allSpecialties.length).padStart(2, "0");
+
+  // Build catalogue rows from real /realisations projects matching
+  // this specialty's category. This ties the specialty page directly
+  // to the catalogue raisonné — each chapter exposes real pieces
+  // instead of generic gallery tiles.
+  const projectCategory = SLUG_TO_CATEGORY[specialty.slug] ?? specialty.slug;
+  const catalogueRows = projects
+    .filter((p) => p.category === projectCategory)
+    .slice(0, 6);
+  const projectCategoryLabel =
+    PROJECT_CATEGORIES.find((c) => c.key === projectCategory)?.label ??
+    projectCategory;
 
   // Resolve popular colors from RAL catalog
   const popularRalColors = specialty.popularColors
@@ -200,14 +195,14 @@ export default async function SpecialtyPage({
         })}
       />
 
-      {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
+      {/* ── Section 1 — Hero (chapitre du catalogue) ────────────────── */}
       <PageHero
-        label="Spécialités"
+        label={`Chapitre · ${chapterNumber} / ${chapterTotal}`}
         title={
           <>
             Thermolaquage{" "}
-            <span className="bg-gradient-ember bg-clip-text text-transparent">
-              {specialty.title}
+            <span className="block bg-gradient-ember bg-clip-text text-transparent">
+              {specialty.title}.
             </span>
           </>
         }
@@ -297,32 +292,107 @@ export default async function SpecialtyPage({
         </div>
       </section>
 
-      {/* ── Section 4 — Gallery ──────────────────────────────────────── */}
-      <section className="bg-brand-cream py-24">
-        <div className="container-wide">
+      {/* ── Section 4 — Catalogue (pièces voisines de ce chapitre) ─── */}
+      <section className="relative overflow-hidden bg-brand-cream py-24">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-industrial-grid opacity-25"
+        />
+        <div className="container-wide relative">
           <ScrollReveal>
-            <SectionHeader
-              label="Portfolio"
-              labelIcon={<Search className="h-3 w-3" />}
-              title={
-                <>
-                  Nos réalisations{" "}
-                  <span className="bg-gradient-ember bg-clip-text text-transparent">
-                    {specialty.title.toLowerCase()}
+            <div className="flex flex-wrap items-baseline justify-between gap-6">
+              <div>
+                <span className="section-label">Catalogue · Chapitre {chapterNumber}</span>
+                <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
+                  Pièces{" "}
+                  <span className="block bg-gradient-ember bg-clip-text text-transparent">
+                    exposées.
                   </span>
-                </>
-              }
-              description={`Découvrez quelques-uns de nos projets de thermolaquage ${specialty.title.toLowerCase()}. Chaque pièce est traitée selon le même protocole industriel exigeant.`}
-              ctaLabel="Voir toutes nos réalisations"
-              ctaHref="/realisations"
-            />
+                </h2>
+                <p className="mt-5 max-w-xl text-brand-charcoal/70">
+                  {catalogueRows.length} réalisation
+                  {catalogueRows.length !== 1 ? "s" : ""} dans le
+                  catalogue raisonné pour ce chapitre. Chaque pièce a
+                  sa propre fiche éditoriale.
+                </p>
+              </div>
+              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-brand-charcoal/55">
+                {String(catalogueRows.length).padStart(2, "0")} pièces · {projectCategoryLabel.toLowerCase()}
+              </span>
+            </div>
           </ScrollReveal>
 
-          <div className="mt-14">
-            <ScrollReveal delay={0.1}>
-              <GalleryGrid items={galleryItems} columns={3} />
-            </ScrollReveal>
-          </div>
+          <ScrollReveal delay={0.1}>
+            <ul className="mt-14 divide-y divide-brand-night/10 border-y border-brand-night/10">
+              {catalogueRows.map((p) => {
+                const pHex = p.colors[0]
+                  ? RAL_COLORS.find((c) => c.code === p.colors[0])?.hex
+                  : undefined;
+                const pCat =
+                  PROJECT_CATEGORIES.find((c) => c.key === p.category)?.label ??
+                  p.category;
+                return (
+                  <li key={p.id}>
+                    <Link
+                      href={`/realisations/${getProjectSlug(p)}`}
+                      data-magnetic
+                      className="group relative flex items-center gap-5 py-6 transition-colors duration-300 hover:bg-white/60 sm:py-7"
+                    >
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute left-0 top-1/2 h-[60%] w-[3px] -translate-y-1/2 origin-bottom scale-y-0 bg-brand-orange transition-transform duration-500 group-hover:scale-y-100"
+                      />
+                      <span className="w-12 shrink-0 font-mono text-sm font-bold text-brand-night/40 transition-colors duration-300 group-hover:text-brand-orange sm:w-16 sm:text-base">
+                        N°{catalogNumber(p)}
+                      </span>
+                      {pHex && (
+                        <span
+                          aria-hidden
+                          className="h-10 w-2.5 shrink-0 rounded-sm ring-1 ring-brand-night/10 transition-all duration-500 group-hover:h-12"
+                          style={{ backgroundColor: pHex }}
+                        />
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/55 transition-colors duration-300 group-hover:text-brand-orange">
+                            {pCat}
+                          </span>
+                          {p.featured && (
+                            <span className="rounded-full border border-brand-orange/30 bg-brand-orange/5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-brand-orange">
+                              Signature
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="mt-1 font-display text-base font-bold leading-tight text-brand-night transition-colors duration-300 group-hover:text-brand-orange sm:text-lg">
+                          {p.title}
+                        </h3>
+                      </div>
+                      {p.colors[0] && (
+                        <span className="hidden font-mono text-xs text-brand-charcoal/45 sm:inline sm:text-sm">
+                          {p.colors[0]}
+                        </span>
+                      )}
+                      <span className="shrink-0 text-brand-charcoal/30 transition-all duration-300 group-hover:translate-x-1 group-hover:text-brand-orange">
+                        <ArrowUpRight className="h-5 w-5" />
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className="mt-10 flex justify-center">
+              <Link
+                href="/realisations"
+                className="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-[0.22em] text-brand-night/80 transition-colors hover:text-brand-night"
+              >
+                <span>Voir tout le catalogue raisonné</span>
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-night/20 transition-all duration-300 group-hover:border-brand-orange group-hover:bg-brand-orange group-hover:text-white">
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
