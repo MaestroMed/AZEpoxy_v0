@@ -79,6 +79,15 @@ export function Header() {
           : "bg-transparent"
       )}
     >
+      {/* Thin gradient line under the header — visible only when
+          scrolled, signals "the header is now a shelf". */}
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-x-0 bottom-0 h-px origin-center bg-gradient-to-r from-transparent via-brand-orange/40 to-transparent transition-opacity duration-500",
+          scrolled || open ? "opacity-100" : "opacity-0"
+        )}
+      />
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-[60] focus:rounded focus:bg-brand-orange focus:px-4 focus:py-2 focus:text-white">
         Aller au contenu principal
       </a>
