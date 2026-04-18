@@ -91,12 +91,18 @@ export default function ContactPage() {
                     <Wrapper
                       key={card.label}
                       {...wrapperProps}
-                      className="flex gap-4 rounded-xl border border-brand-night/10 bg-white p-5 transition hover:shadow-md"
+                      data-magnetic={card.href ? "" : undefined}
+                      className="group relative flex gap-4 overflow-hidden rounded-xl border border-brand-night/10 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-orange/40 hover:shadow-[0_12px_32px_-18px_rgba(232,93,44,0.35)]"
                     >
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-orange/10">
-                        <Icon className="h-5 w-5 text-brand-orange" />
+                      {/* Sheen on hover */}
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-br from-transparent via-brand-orange/6 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+                      />
+                      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-orange/10 transition-colors duration-300 group-hover:bg-brand-orange group-hover:text-white">
+                        <Icon className="h-5 w-5 text-brand-orange transition-colors duration-300 group-hover:text-white" />
                       </div>
-                      <div>
+                      <div className="relative">
                         <p className="text-xs font-medium uppercase tracking-wider text-brand-charcoal/50 mb-0.5">
                           {card.label}
                         </p>

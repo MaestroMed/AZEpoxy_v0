@@ -26,6 +26,7 @@ import { GalleryGrid } from "@/components/ui/gallery-grid";
 import { FAQAccordion } from "@/components/ui/faq-accordion";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { SpecialtySwarmBinding } from "@/components/nuee/specialty-swarm-binding";
 import {
   getSpecialties,
   getSpecialtyBySlugAsync,
@@ -188,6 +189,7 @@ export default async function SpecialtyPage({
 
   return (
     <>
+      <SpecialtySwarmBinding slug={specialty.slug} />
       <JsonLd
         id={`ld-service-${specialty.slug}`}
         data={serviceLd({
