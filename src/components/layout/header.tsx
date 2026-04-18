@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import { cn, SITE } from "@/lib/utils";
+import { NavPreviewLink } from "@/components/nuee/nav-preview-link";
 
 function isSectionActive(pathname: string | null, href: string): boolean {
   if (!pathname) return false;
@@ -129,13 +130,13 @@ export function Header() {
                 <div className="absolute left-0 top-full pt-2">
                   <div className="min-w-[240px] overflow-hidden rounded-xl border border-white/10 bg-brand-night-deep/95 p-2 shadow-2xl backdrop-blur-xl">
                     {group.children.map((child) => (
-                      <Link
+                      <NavPreviewLink
                         key={child.href}
                         href={child.href}
                         className="block rounded-lg px-4 py-2.5 text-sm text-white/80 transition-colors hover:bg-brand-orange/20 hover:text-white"
                       >
                         {child.label}
-                      </Link>
+                      </NavPreviewLink>
                     ))}
                   </div>
                 </div>
