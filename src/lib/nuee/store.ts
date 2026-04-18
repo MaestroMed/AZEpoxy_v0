@@ -24,6 +24,7 @@ export const useSwarm = create<SwarmState>((set, get) => ({
   routePath: "/",
   paused: false,
   anchorOffsetX: 0,
+  burstUntil: 0,
 
   setPhase(next: Phase, opts) {
     const { currentPhase, targetPhase } = get();
@@ -56,6 +57,11 @@ export const useSwarm = create<SwarmState>((set, get) => ({
 
   setAnchorOffsetX(x: number) {
     set({ anchorOffsetX: x });
+  },
+
+  triggerBurst(durationMs = 900) {
+    const now = typeof performance !== "undefined" ? performance.now() : Date.now();
+    set({ burstUntil: now + durationMs });
   },
 
   tickTransition(dt: number) {

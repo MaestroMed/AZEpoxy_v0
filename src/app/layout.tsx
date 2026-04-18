@@ -15,6 +15,7 @@ import { CustomCursor } from "@/components/nuee/custom-cursor";
 import { SoundToggle } from "@/components/nuee/sound-toggle";
 import { CommandPalette } from "@/components/nuee/command-palette";
 import { ScrollToTop } from "@/components/nuee/scroll-to-top";
+import { EasterEgg } from "@/components/nuee/easter-egg";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SITE } from "@/lib/utils";
 import { buildMetadata } from "@/lib/seo";
@@ -119,6 +120,9 @@ export default async function RootLayout({
             <CommandPalette />
             {/* Scroll-to-top with progress ring — appears after 40% scroll. */}
             <ScrollToTop />
+            {/* Easter eggs : taper "az", "boom" ou le Konami code
+                déclenche un burst de la nuée. */}
+            <EasterEgg />
             <Header />
             <main id="main-content" className="relative">
               {children}

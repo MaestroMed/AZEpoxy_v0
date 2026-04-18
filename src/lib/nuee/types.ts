@@ -86,6 +86,14 @@ export interface SwarmState {
    */
   anchorOffsetX: number;
 
+  /**
+   * Timestamp (performance.now()) until which the swarm is in BURST
+   * mode — particles ignore the phase target and fly outward in a
+   * radial explosion, then spring back naturally once burst expires.
+   * Triggered by easter eggs, form submissions, etc.
+   */
+  burstUntil: number;
+
   // mutators
   setPhase(next: Phase, opts?: { durationMs?: number }): void;
   setMouse(m: Vec3): void;
@@ -93,6 +101,8 @@ export interface SwarmState {
   setPaused(p: boolean): void;
   setRoute(path: string): void;
   setAnchorOffsetX(x: number): void;
+  /** Fire a radial burst lasting `durationMs` — default 900ms. */
+  triggerBurst(durationMs?: number): void;
   /** internal — called by engine to advance/finalize transition */
   tickTransition(dt: number): void;
 }

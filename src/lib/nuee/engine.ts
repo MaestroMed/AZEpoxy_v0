@@ -273,6 +273,36 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
       }
     }
 
+    // ── BURST — radial explosion override. When active, every
+    //    particle's target is pushed radially outward from origin,
+    //    scaled by burst intensity. Once burst expires, normal phase
+    //    targets kick back in and the spring naturally reforms the
+    //    shape. Magical moment, reusable for easter eggs / success
+    //    events / form submits.
+    const burstNow = ts - startTS + performance.timeOrigin; // align to perf.now
+    const burstUntil = state.burstUntil ?? 0;
+    const isBursting = burstUntil > performance.now();
+    if (isBursting) {
+      // Intensity decays over the burst duration (linear).
+      const remaining = Math.max(0, (burstUntil - performance.now()) / 900);
+      const strength = remaining * 1.8; // peaks at ~1.8 unit outward
+      for (let i = 0; i < count; i++) {
+        const i3 = i * 3;
+        const px = positions[i3];
+        const py = positions[i3 + 1];
+        const pz = positions[i3 + 2];
+        const len = Math.sqrt(px * px + py * py + pz * pz) || 1;
+        const nx = px / len;
+        const ny = py / len;
+        const nz = pz / len;
+        finalTargets[i3] = px + nx * strength;
+        finalTargets[i3 + 1] = py + ny * strength;
+        finalTargets[i3 + 2] = pz + nz * strength;
+      }
+      // Also void the reference to `burstNow` so ESLint doesn't complain.
+      void burstNow;
+    }
+
     // ── Viewport boundary — soft clamp to keep the swarm inside a safe
     //    rectangle. Makes the nuée feel adaptive: a wide window lets it
     //    breathe, a narrow one compresses it. Phases that need particles
