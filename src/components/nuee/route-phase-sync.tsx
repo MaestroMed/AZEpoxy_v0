@@ -24,6 +24,7 @@ import { FLOW_PHASE } from "@/lib/nuee/phases/flow";
 import { MOLTEN_POOL_PHASE } from "@/lib/nuee/phases/molten-pool";
 import { RAL_CASCADE_PHASE } from "@/lib/nuee/phases/ral-cascade";
 import { PAINT_GUN_PHASE } from "@/lib/nuee/phases/paint-gun";
+import { OVEN_PHASE } from "@/lib/nuee/phases/oven";
 import type { Phase } from "@/lib/nuee/types";
 
 /** Routes where OTHER components take over phase orchestration. */
@@ -51,12 +52,15 @@ const ORCHESTRATED_ROUTES = [
  *  Default                  → Galaxy
  */
 function fallbackPhaseFor(path: string): Phase {
-  if (/^\/services\/thermolaquage/.test(path)) return MOLTEN_POOL_PHASE;
+  // Thermolaquage = le four (Oven), feu + chaleur pulsante
+  if (/^\/services\/thermolaquage/.test(path)) return OVEN_PHASE;
   if (/^\/services\/sablage/.test(path)) return PAINT_GUN_PHASE;
   if (/^\/services\/finitions/.test(path)) return RAL_CASCADE_PHASE;
   if (/^\/services\/metallisation/.test(path)) return FLOW_PHASE;
+  // Services index = le bain de fusion, la spécialité qui fonde tout
   if (/^\/services$/.test(path)) return MOLTEN_POOL_PHASE;
-  if (/^\/thermolaquage-/.test(path)) return MOLTEN_POOL_PHASE;
+  // Pages SEO ville = Oven (on présente le four dans chaque ville)
+  if (/^\/thermolaquage-/.test(path)) return OVEN_PHASE;
   if (/^\/devis|^\/rendez-vous|^\/contact/.test(path)) return FLOW_PHASE;
   return GALAXY_PHASE;
 }
