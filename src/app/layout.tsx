@@ -13,6 +13,7 @@ import { NarrativeSwarm } from "@/components/nuee/narrative-swarm";
 import { RoutePhaseSync } from "@/components/nuee/route-phase-sync";
 import { CustomCursor } from "@/components/nuee/custom-cursor";
 import { SoundToggle } from "@/components/nuee/sound-toggle";
+import { CommandPalette } from "@/components/nuee/command-palette";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SITE } from "@/lib/utils";
 import { buildMetadata } from "@/lib/seo";
@@ -113,6 +114,8 @@ export default async function RootLayout({
             <CustomCursor />
             {/* Procedural ambient sound toggle (opt-in, OFF by default). */}
             <SoundToggle />
+            {/* ⌘K command palette for power users. */}
+            <CommandPalette />
             <Header />
             <main id="main-content" className="relative">
               {children}
