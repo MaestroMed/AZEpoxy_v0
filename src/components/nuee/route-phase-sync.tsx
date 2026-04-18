@@ -26,6 +26,7 @@ import { RAL_CASCADE_PHASE } from "@/lib/nuee/phases/ral-cascade";
 import { PAINT_GUN_PHASE } from "@/lib/nuee/phases/paint-gun";
 import { OVEN_PHASE } from "@/lib/nuee/phases/oven";
 import { SHIELD_PHASE } from "@/lib/nuee/phases/shield";
+import { THUNDER_PHASE } from "@/lib/nuee/phases/thunder";
 import type { Phase } from "@/lib/nuee/types";
 
 /** Routes where OTHER components take over phase orchestration. */

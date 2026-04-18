@@ -14,6 +14,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { ProcessStep } from "@/components/ui/process-step";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
+import { MouseTilt } from "@/components/nuee/mouse-tilt";
 import { getServices } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 
@@ -92,64 +93,70 @@ export default async function ServicesPage() {
             {services.map((service, index) => {
               const isOdd = index % 2 === 0;
               return (
-                <ScrollReveal key={service.slug} delay={0.1}>
-                  <div
-                    className={`grid overflow-hidden rounded-2xl lg:grid-cols-2 ${
-                      isOdd ? "" : "direction-rtl"
-                    }`}
-                  >
-                    {/* Visual block */}
+                <ScrollReveal key={service.slug} delay={0.08} variant="rise">
+                  <MouseTilt intensity={4} hoverScale={1.008}>
                     <div
-                      className={`relative flex min-h-[300px] items-center justify-center p-10 ${
-                        SERVICE_ACCENTS[index] ?? "bg-brand-night"
-                      } ${isOdd ? "lg:order-1" : "lg:order-2"}`}
-                    >
-                      <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay" />
-                      <div className="relative text-center">
-                        {SERVICE_ICONS[index]}
-                        <p className="mt-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
-                          {SERVICE_LABELS[index]}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Content block */}
-                    <div
-                      className={`flex flex-col justify-center bg-white p-10 lg:p-14 ${
-                        isOdd ? "lg:order-2" : "lg:order-1"
+                      className={`grid overflow-hidden rounded-2xl shadow-[0_10px_40px_-20px_rgba(0,0,0,0.25)] lg:grid-cols-2 ${
+                        isOdd ? "" : "direction-rtl"
                       }`}
                     >
-                      <h3 className="heading-display text-2xl text-brand-night sm:text-3xl">
-                        {service.shortTitle}
-                      </h3>
-                      <p className="mt-4 text-brand-charcoal/70 leading-relaxed">
-                        {service.description.slice(0, 200)}…
-                      </p>
+                      {/* Visual block */}
+                      <div
+                        className={`group/visual relative flex min-h-[300px] items-center justify-center overflow-hidden p-10 ${
+                          SERVICE_ACCENTS[index] ?? "bg-brand-night"
+                        } ${isOdd ? "lg:order-1" : "lg:order-2"}`}
+                      >
+                        <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay" />
+                        {/* Sheen on hover */}
+                        <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-br from-transparent via-white/12 to-transparent transition-transform duration-700 group-hover/visual:translate-x-full" />
+                        <div className="relative text-center">
+                          <div className="transition-transform duration-500 group-hover/visual:scale-110">
+                            {SERVICE_ICONS[index]}
+                          </div>
+                          <p className="mt-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
+                            {SERVICE_LABELS[index]}
+                          </p>
+                        </div>
+                      </div>
 
-                      {/* Feature bullets */}
-                      <ul className="mt-6 space-y-3">
-                        {service.features.slice(0, 3).map((feature) => (
-                          <li
-                            key={feature.title}
-                            className="flex items-start gap-3 text-sm text-brand-charcoal/80"
+                      {/* Content block */}
+                      <div
+                        className={`flex flex-col justify-center bg-white p-10 lg:p-14 ${
+                          isOdd ? "lg:order-2" : "lg:order-1"
+                        }`}
+                      >
+                        <h3 className="heading-display text-2xl text-brand-night sm:text-3xl">
+                          {service.shortTitle}
+                        </h3>
+                        <p className="mt-4 text-brand-charcoal/70 leading-relaxed">
+                          {service.description.slice(0, 200)}…
+                        </p>
+
+                        {/* Feature bullets */}
+                        <ul className="mt-6 space-y-3">
+                          {service.features.slice(0, 3).map((feature) => (
+                            <li
+                              key={feature.title}
+                              className="flex items-start gap-3 text-sm text-brand-charcoal/80"
+                            >
+                              <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-orange" />
+                              <span>{feature.title}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="mt-8">
+                          <Link
+                            href={`/services/${service.slug}`}
+                            className="group/cta inline-flex items-center gap-2 rounded-full border border-brand-night/15 bg-white px-6 py-3 text-sm font-semibold text-brand-night transition-all hover:border-brand-night hover:bg-brand-night hover:text-white"
                           >
-                            <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-orange" />
-                            <span>{feature.title}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mt-8">
-                        <Link
-                          href={`/services/${service.slug}`}
-                          className="inline-flex items-center gap-2 rounded-full border border-brand-night/15 bg-white px-6 py-3 text-sm font-semibold text-brand-night transition-all hover:border-brand-night hover:bg-brand-night hover:text-white"
-                        >
-                          Découvrir
-                          <ArrowRight className="h-4 w-4" />
-                        </Link>
+                            Découvrir
+                            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5" />
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </MouseTilt>
                 </ScrollReveal>
               );
             })}

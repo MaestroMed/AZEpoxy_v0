@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { ArrowRight, Compass } from "lucide-react";
+import { NotFoundSwarmBinding } from "@/components/nuee/not-found-swarm-binding";
 
 export default function NotFound() {
   return (
     <section className="relative min-h-[80vh] overflow-hidden text-white">
+      <NotFoundSwarmBinding />
       {/* Transparent — la nuée galactique (via RoutePhaseSync fallback)
           envahit l'écran, métaphore "perdu dans l'espace". */}
       <div
