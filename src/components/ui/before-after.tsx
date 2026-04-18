@@ -108,12 +108,36 @@ export function BeforeAfter({
           </div>
         </div>
 
-        {/* Labels */}
-        <span className="absolute left-3 top-3 rounded-full bg-brand-night/80 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
+        {/* Labels — design plus architectural + indicator dot */}
+        <span
+          className={cn(
+            "absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition-opacity duration-300",
+            pct < 10 ? "opacity-0" : "opacity-100"
+          )}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
           Avant
         </span>
-        <span className="absolute right-3 top-3 rounded-full bg-brand-orange px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
+        <span
+          className={cn(
+            "absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-brand-orange px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-lg shadow-brand-orange/40 transition-opacity duration-300",
+            pct > 90 ? "opacity-0" : "opacity-100"
+          )}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-white" />
           Après
+        </span>
+
+        {/* Percentage indicator — affiche le pourcentage actuel
+            discrètement en bas du handle. */}
+        <span
+          aria-hidden
+          className={cn(
+            "absolute top-3 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-2.5 py-0.5 font-mono text-[10px] font-bold tabular-nums text-brand-night shadow-sm backdrop-blur-sm transition-opacity duration-200",
+            dragging ? "opacity-100" : "opacity-0"
+          )}
+        >
+          {Math.round(pct)}%
         </span>
 
         {/* Divider + handle */}
@@ -126,16 +150,39 @@ export function BeforeAfter({
           aria-valuenow={Math.round(pct)}
           aria-valuetext={`${Math.round(pct)} % avant`}
           onKeyDown={onKeyDown}
-          className="absolute inset-y-0 flex w-1 cursor-ew-resize items-center justify-center bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
-          style={{ left: `calc(${pct}% - 2px)` }}
+          className={cn(
+            "group absolute inset-y-0 flex w-0.5 items-center justify-center bg-white/80 shadow-[0_0_12px_rgba(255,255,255,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange",
+            dragging ? "cursor-grabbing" : "cursor-ew-resize"
+          )}
+          style={{ left: `calc(${pct}% - 1px)` }}
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand-night shadow-lg">
+          <span
+            className={cn(
+              "flex h-12 w-12 items-center justify-center rounded-full bg-white text-brand-night shadow-[0_8px_24px_-8px_rgba(0,0,0,0.4)] transition-transform duration-200",
+              dragging ? "scale-110" : "scale-100 group-hover:scale-105",
+            )}
+          >
+            {/* Decorative inner ring brand orange */}
+            <span
+              aria-hidden
+              className={cn(
+                "pointer-events-none absolute h-12 w-12 rounded-full border-2 transition-all duration-300",
+                dragging
+                  ? "border-brand-orange/60 scale-125 opacity-80"
+                  : "border-brand-orange/0 scale-100 opacity-0"
+              )}
+            />
             <svg
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
-              className="h-4 w-4"
+              strokeWidth="2.25"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={cn(
+                "h-4 w-4 transition-transform duration-200",
+                dragging && "scale-90"
+              )}
               aria-hidden="true"
             >
               <path d="M9 6l-6 6 6 6M15 6l6 6-6 6" />

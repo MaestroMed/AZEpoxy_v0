@@ -73,6 +73,26 @@ html.has-custom-cursor textarea {
   animation: skeleton-shimmer 1.8s linear infinite;
 }
 
+/* ── Design system — easing + durations canoniques ─────────────────
+   Variables CSS partagées pour garantir la cohérence du motion.
+   Toutes les transitions custom devraient pointer sur l'une de ces
+   valeurs. Les composants TS utilisent les mêmes constantes en JS
+   via [0.22, 1, 0.36, 1].
+*/
+:root {
+  /* Ease-out-expo : démarre vif, ralentit en douceur — le standard
+     Awwwards pour les entrées et hovers. */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Ease-in-out-cubic : pour les loops et les transitions entre
+     deux états de même importance. */
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Durées standardisées. */
+  --dur-fast: 180ms;
+  --dur-normal: 300ms;
+  --dur-slow: 500ms;
+  --dur-epic: 800ms;
+}
+
 /* Blog drop cap — première lettre du premier paragraphe d'un article
    en grande initiale magazine. Ne s'applique qu'aux <article data-
    reading-target> pour ne pas polluer les autres paragraphes. */

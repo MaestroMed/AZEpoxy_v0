@@ -109,21 +109,28 @@ export function RalRecommender() {
           Six suggestions
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {suggestions.map((color) => (
+          {suggestions.map((color, i) => (
             <Link
               key={color.code}
               href={`/devis?ral=${encodeURIComponent(color.code)}`}
-              className="group rounded-xl border border-brand-night/10 bg-white p-3 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5"
+              data-magnetic
+              className="group relative overflow-hidden rounded-xl border border-brand-night/10 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/40 hover:shadow-[0_10px_28px_-14px_rgba(232,93,44,0.4)]"
+              style={{
+                animation: `stat-pop 420ms cubic-bezier(0.22,1,0.36,1) ${i * 60}ms both`,
+              }}
             >
+              {/* Sheen sur le swatch color au hover */}
               <div
-                className="h-16 w-full rounded-md"
+                className="relative h-16 w-full overflow-hidden rounded-md"
                 style={{ backgroundColor: color.hex }}
                 aria-hidden="true"
-              />
-              <p className="mt-2 text-xs font-mono text-brand-charcoal/50">
+              >
+                <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-br from-transparent via-white/30 to-transparent mix-blend-overlay transition-transform duration-700 group-hover:translate-x-full" />
+              </div>
+              <p className="mt-2 font-mono text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/50">
                 {color.code}
               </p>
-              <p className="text-sm font-semibold text-brand-night line-clamp-1">
+              <p className="text-sm font-semibold text-brand-night leading-tight line-clamp-2 transition-colors group-hover:text-brand-orange">
                 {color.name}
               </p>
             </Link>
@@ -161,7 +168,7 @@ function QuestionGroup<T extends string>({
 }: QuestionGroupProps<T>) {
   return (
     <fieldset>
-      <legend className="mb-2 text-sm font-semibold text-brand-night">
+      <legend className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-charcoal/70">
         {label}
       </legend>
       <div className="flex flex-wrap gap-2">
@@ -171,10 +178,10 @@ function QuestionGroup<T extends string>({
             type="button"
             onClick={() => onChange(o.key)}
             className={cn(
-              "rounded-full border px-4 py-2 text-sm font-medium transition-all",
+              "rounded-full border px-4 py-2 text-sm font-medium transition-all duration-300",
               active === o.key
-                ? "border-brand-orange bg-brand-orange text-white shadow-sm"
-                : "border-brand-night/15 bg-white text-brand-charcoal/70 hover:border-brand-night/40"
+                ? "border-brand-orange bg-brand-orange text-white shadow-[0_4px_14px_-6px_rgba(232,93,44,0.5)] ring-1 ring-brand-orange/40 ring-offset-2 ring-offset-white"
+                : "border-brand-night/15 bg-white text-brand-charcoal/70 hover:-translate-y-0.5 hover:border-brand-night/40 hover:shadow-sm"
             )}
           >
             {o.label}
