@@ -131,13 +131,40 @@ export function CommandPalette() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // Focus the input when opening.
+  // ── A11y — focus trap + return focus + inert siblings ──────────────
+  //
+  // Ouverture : on mémorise l'élément focusé AVANT d'ouvrir, on focus le
+  // champ recherche, et on applique `inert` aux siblings pour les
+  // retirer du tab order.
+  // Fermeture : on retire inert, et on rend le focus à l'élément
+  // d'origine — pattern a11y attendu pour les modales.
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
-    if (open) {
-      setQuery("");
-      setActiveIdx(0);
-      requestAnimationFrame(() => inputRef.current?.focus());
+    if (!open) return;
+
+    // Mémorise le focus courant (sauf si c'est déjà dans la palette).
+    lastFocusedRef.current = document.activeElement as HTMLElement | null;
+
+    setQuery("");
+    setActiveIdx(0);
+    requestAnimationFrame(() => inputRef.current?.focus());
+
+    // Marque les siblings body du panel en inert.
+    const bodyKids = Array.from(document.body.children) as HTMLElement[];
+    const inerted: HTMLElement[] = [];
+    for (const kid of bodyKids) {
+      if (kid.dataset.palettePanel === "true" || kid.tagName === "SCRIPT") continue;
+      if (!kid.hasAttribute("inert")) {
+        kid.setAttribute("inert", "");
+        inerted.push(kid);
+      }
     }
+
+    return () => {
+      inerted.forEach((el) => el.removeAttribute("inert"));
+      // Redonne le focus — petit délai pour laisser React finir l'unmount.
+      requestAnimationFrame(() => lastFocusedRef.current?.focus());
+    };
   }, [open]);
 
   const filtered = useMemo(() => {

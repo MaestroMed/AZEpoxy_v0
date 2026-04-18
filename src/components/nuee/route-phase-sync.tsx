@@ -25,6 +25,7 @@ import { MOLTEN_POOL_PHASE } from "@/lib/nuee/phases/molten-pool";
 import { RAL_CASCADE_PHASE } from "@/lib/nuee/phases/ral-cascade";
 import { PAINT_GUN_PHASE } from "@/lib/nuee/phases/paint-gun";
 import { OVEN_PHASE } from "@/lib/nuee/phases/oven";
+import { SHIELD_PHASE } from "@/lib/nuee/phases/shield";
 import type { Phase } from "@/lib/nuee/types";
 
 /** Routes where OTHER components take over phase orchestration. */
@@ -62,6 +63,9 @@ function fallbackPhaseFor(path: string): Phase {
   // Pages SEO ville = Oven (on présente le four dans chaque ville)
   if (/^\/thermolaquage-/.test(path)) return OVEN_PHASE;
   if (/^\/devis|^\/rendez-vous|^\/contact/.test(path)) return FLOW_PHASE;
+  // "Protection à vie" : bouclier pour /a-propos et les specialités
+  // (l'expertise qui protège).
+  if (/^\/a-propos|^\/specialites/.test(path)) return SHIELD_PHASE;
   return GALAXY_PHASE;
 }
 
