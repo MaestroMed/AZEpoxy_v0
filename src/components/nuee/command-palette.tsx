@@ -1,14 +1,18 @@
 "use client";
 
 /**
- * CommandPalette — ⌘K / Ctrl+K quick navigation.
+ * CommandPalette — ⌘K / Ctrl+K RAL-first search + quick nav.
  *
- * Signature award feature : press ⌘K anywhere on the site, a blurred
- * modal appears with a search input and a filtered list of destinations.
- * Arrow keys to navigate, Enter to go, Esc to close.
+ * The palette is positioned primarily as a RAL search. Typing a number
+ * (\"3020\"), a name (\"rouge\", \"anthracite\"), or a hex (\"#E85D2C\") shows
+ * the matching RAL swatches inline with their editorial quote. Enter
+ * opens the RAL's detail page (/couleurs-ral/teinte/[code]) with the
+ * color pièce, realisations list, and \"devis in this RAL\" CTA.
  *
- * Deliberately minimal : just navigation + a few contextual actions
- * (request devis, call, etc.). Not a super-app — just a power-user shortcut.
+ * Nav commands (devis, rendez-vous, contact...) are kept as a secondary
+ * set, shown first when the input is empty and as fallback when a
+ * query has no RAL match. This way the palette is always useful —
+ * either finding a color or jumping across the site.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -31,8 +35,10 @@ import {
 import { getSwarm } from "@/lib/nuee/store";
 import { getSoundEngine } from "@/lib/nuee/sound";
 import { track } from "@/lib/analytics/events";
+import { RAL_COLORS, type RALColor } from "@/lib/ral-colors";
+import { getRalEditorial } from "@/lib/ral-editorial";
 
-type CommandKind = "nav" | "action";
+type CommandKind = "nav" | "action" | "ral";
 
 interface CommandItem {
   id: string;
@@ -43,6 +49,65 @@ interface CommandItem {
   icon: React.ReactNode;
   href?: string;
   action?: () => void;
+  /** RAL-specific fields (kind === "ral") */
+  ral?: RALColor;
+  ralQuote?: string;
+}
+
+/**
+ * Match RAL colors against the query. Supports :
+ *   · numeric code  ("3020", "9005")
+ *   · full code     ("ral 3020", "RAL 9005")
+ *   · name          ("rouge", "anthracite", "noir foncé")
+ *   · hex           ("#e85d2c", "e85d2c")
+ *
+ * Returns up to `limit` best matches, with curated RALs boosted to
+ * the top so the editorial layer surfaces first when relevant.
+ */
+function searchRal(query: string, limit = 8): RALColor[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+
+  // Hex match — prefix "#" optional, must be 3/6 hex chars
+  const hexMatch = q.match(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/);
+  if (hexMatch) {
+    const hex = `#${hexMatch[1]}`.toLowerCase();
+    const exact = RAL_COLORS.filter((c) => c.hex.toLowerCase() === hex);
+    if (exact.length) return exact.slice(0, limit);
+  }
+
+  // Numeric-only : match codes containing the digits
+  const numMatch = q.match(/^\s*(?:ral\s*)?(\d{3,5})\s*$/i);
+  if (numMatch) {
+    const digits = numMatch[1];
+    const prefix = RAL_COLORS.filter((c) =>
+      c.code.replace(/^RAL\s*/i, "").startsWith(digits),
+    );
+    if (prefix.length) return prefix.slice(0, limit);
+    const contains = RAL_COLORS.filter((c) =>
+      c.code.replace(/^RAL\s*/i, "").includes(digits),
+    );
+    return contains.slice(0, limit);
+  }
+
+  // Text : name + family match. Curated RALs float to the top.
+  const matches = RAL_COLORS.filter(
+    (c) =>
+      c.name.toLowerCase().includes(q) ||
+      c.family.toLowerCase().includes(q) ||
+      c.code.toLowerCase().includes(q),
+  );
+  matches.sort((a, b) => {
+    const ca = getRalEditorial(a.code) ? 1 : 0;
+    const cb = getRalEditorial(b.code) ? 1 : 0;
+    return cb - ca;
+  });
+  return matches.slice(0, limit);
+}
+
+/** Convert RAL code → URL slug ("RAL 3020" → "3020"). */
+function ralToSlug(code: string): string {
+  return code.replace(/^RAL\s*/i, "").trim();
 }
 
 const COMMANDS: CommandItem[] = [
@@ -220,12 +285,31 @@ export function CommandPalette() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    // Empty query → just nav commands.
     if (!q) return COMMANDS;
-    return COMMANDS.filter(
+
+    // RAL-first : if we get RAL matches, they take the top slots.
+    const rals = searchRal(q, 8);
+    const ralItems: CommandItem[] = rals.map((c) => ({
+      id: `ral-${c.code}`,
+      label: c.code,
+      hint: c.name,
+      keywords: [c.code, c.name, c.family],
+      kind: "ral",
+      icon: <Palette className="h-4 w-4" />,
+      href: `/couleurs-ral/teinte/${ralToSlug(c.code)}`,
+      ral: c,
+      ralQuote: getRalEditorial(c.code),
+    }));
+
+    // Nav commands that still match the text — small subset.
+    const navMatches = COMMANDS.filter(
       (c) =>
         c.label.toLowerCase().includes(q) ||
         c.keywords.some((k) => k.includes(q)),
     );
+
+    return [...ralItems, ...navMatches];
   }, [query]);
 
   // Keep active index in range.
@@ -288,7 +372,7 @@ export function CommandPalette() {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="Chercher une page ou une action..."
+                placeholder="RAL 3020, rouge, #E85D2C..."
                 value={query}
                 onChange={(e) => {
                   setQuery(e.target.value);
@@ -296,7 +380,7 @@ export function CommandPalette() {
                 }}
                 onKeyDown={onKeyDown}
                 className="flex-1 border-0 bg-transparent p-0 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-0"
-                aria-label="Chercher"
+                aria-label="Rechercher un RAL ou une page"
               />
               <kbd className="hidden rounded border border-white/15 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-white/50 sm:inline">
                 Esc
@@ -312,6 +396,8 @@ export function CommandPalette() {
               )}
               {filtered.map((cmd, i) => {
                 const active = i === activeIdx;
+                const isRal = cmd.kind === "ral";
+                const ralColor = cmd.ral;
                 return (
                   <li key={cmd.id} role="option" aria-selected={active}>
                     <button
@@ -325,24 +411,62 @@ export function CommandPalette() {
                           : "text-white/75 hover:bg-white/[0.04]")
                       }
                     >
-                      <span
-                        className={
-                          "flex h-8 w-8 items-center justify-center rounded-lg " +
-                          (active ? "bg-brand-orange text-white" : "bg-white/5 text-white/60")
-                        }
-                      >
-                        {cmd.icon}
-                      </span>
-                      <span className="flex-1">
-                        <span className="block text-sm font-medium">{cmd.label}</span>
+                      {/* Icon slot — for RAL rows, show the actual color swatch */}
+                      {isRal && ralColor ? (
+                        <span
+                          aria-hidden
+                          className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/15 transition-transform duration-300 group-hover:scale-105"
+                          style={{ backgroundColor: ralColor.hex }}
+                        >
+                          {cmd.ralQuote && (
+                            <span
+                              aria-hidden
+                              className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-brand-orange ring-2 ring-brand-night"
+                              title="Teinte curatée"
+                            />
+                          )}
+                        </span>
+                      ) : (
+                        <span
+                          className={
+                            "flex h-8 w-8 items-center justify-center rounded-lg " +
+                            (active
+                              ? "bg-brand-orange text-white"
+                              : "bg-white/5 text-white/60")
+                          }
+                        >
+                          {cmd.icon}
+                        </span>
+                      )}
+
+                      <span className="flex-1 min-w-0">
+                        <span className="flex items-center gap-2">
+                          <span
+                            className={`block text-sm font-medium ${
+                              isRal ? "font-mono font-bold tracking-wider" : ""
+                            }`}
+                          >
+                            {cmd.label}
+                          </span>
+                          {isRal && ralColor && (
+                            <span className="font-mono text-[10px] uppercase tracking-wider text-white/40">
+                              {ralColor.hex.toUpperCase()}
+                            </span>
+                          )}
+                        </span>
                         {cmd.hint && (
-                          <span className="mt-0.5 block text-[11px] text-white/50">
+                          <span className="mt-0.5 block truncate text-[11px] text-white/55">
                             {cmd.hint}
+                          </span>
+                        )}
+                        {isRal && cmd.ralQuote && active && (
+                          <span className="mt-1 block max-w-sm truncate text-[11px] italic text-brand-orange/80">
+                            &ldquo;{cmd.ralQuote}&rdquo;
                           </span>
                         )}
                       </span>
                       {active && (
-                        <kbd className="rounded border border-white/15 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-white/60">
+                        <kbd className="shrink-0 rounded border border-white/15 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-white/60">
                           ↵
                         </kbd>
                       )}

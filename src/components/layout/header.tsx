@@ -180,7 +180,7 @@ export function Header() {
             }}
             className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-white/60 transition-all hover:border-white/25 hover:text-white/90"
           >
-            <span className="uppercase tracking-[0.12em]">Chercher</span>
+            <span className="uppercase tracking-[0.12em]">Chercher un RAL</span>
             <kbd className="rounded border border-white/15 bg-white/[0.07] px-1.5 py-0.5 font-mono text-[10px] text-white/70 group-hover:border-white/30">
               ⌘K
             </kbd>
