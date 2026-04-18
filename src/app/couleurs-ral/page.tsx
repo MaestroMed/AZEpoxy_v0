@@ -62,9 +62,8 @@ export default function CouleursRalPage() {
               Couleurs
             </span>
             <h1 className="heading-display mt-6 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-[clamp(4rem,8vw,7.5rem)]">
-              Un nuancier
-              <br />
-              <span className="bg-gradient-ember bg-clip-text text-transparent">
+              Un nuancier{" "}
+              <span className="block bg-gradient-ember bg-clip-text text-transparent">
                 qui respire.
               </span>
             </h1>

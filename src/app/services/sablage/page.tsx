@@ -112,9 +112,8 @@ export default async function SablagePage() {
         label="Sablage"
         title={
           <>
-            Sablage &amp;
-            <br />
-            <span className="bg-gradient-ember bg-clip-text text-transparent">
+            Sablage &amp;{" "}
+            <span className="block bg-gradient-ember bg-clip-text text-transparent">
               Grenaillage
             </span>
           </>

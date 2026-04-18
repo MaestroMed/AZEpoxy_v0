@@ -57,7 +57,13 @@ export function HomepageSwarmTimeline() {
     <TimelinePhaseSync
       cues={[
         // 1. AZ identity beat — the brand introduces itself.
-        { phase: AZ_PHASE, holdMs: 5500, transitionMs: 1800 },
+        //    Faster transition (1200ms) so the logotype reads within the
+        //    attention window. Longer hold (7500ms) so a first-time
+        //    viewer has time to recognize "AZ ÉPOXY" before the next
+        //    phase morphs in. Audit feedback was that the original 1800ms
+        //    transition + 5500ms hold meant the AZ logo didn't register
+        //    on first cycle — viewers saw a "diffuse cloud" for 30s+.
+        { phase: AZ_PHASE, holdMs: 7500, transitionMs: 1200 },
         // 2. Molten Pool — 200°C en bain de fusion, cœur blanc-jaune,
         //    vapeur qui monte. La promesse thermique rendue poétique.
         { phase: MOLTEN_POOL_PHASE, holdMs: 5500, transitionMs: 2200 },
@@ -67,8 +73,10 @@ export function HomepageSwarmTimeline() {
         //    pour garder le rythme du cycle (le jet dynamique se lit
         //    immédiatement, pas besoin de 6s de contemplation).
         { phase: PAINT_GUN_PHASE, holdMs: 4500, transitionMs: 2200 },
-        // 5. Galaxy — zoom out cosmique, "protection à vie".
-        { phase: GALAXY_PHASE, holdMs: 7000, transitionMs: 2400 },
+        // 5. Galaxy — zoom out cosmique, "protection à vie". Audit
+        //    flagged this phase as the strongest moment ("seul moment
+        //    où la nuée RACONTE quelque chose"), so we let it breathe.
+        { phase: GALAXY_PHASE, holdMs: 8500, transitionMs: 2400 },
       ]}
     />
   );

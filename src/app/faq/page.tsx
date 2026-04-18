@@ -27,9 +27,8 @@ export default async function FaqPage() {
         label="FAQ"
         title={
           <>
-            Questions
-            <br />
-            <span className="bg-gradient-ember bg-clip-text text-transparent">
+            Questions{" "}
+            <span className="block bg-gradient-ember bg-clip-text text-transparent">
               Fréquentes
             </span>
           </>

@@ -66,8 +66,7 @@ export default function DevisPage() {
         title={
           <>
             Un projet ?{" "}
-            <br />
-            <span className="bg-gradient-ember bg-clip-text text-transparent">
+            <span className="block bg-gradient-ember bg-clip-text text-transparent">
               Une réponse.
             </span>
           </>

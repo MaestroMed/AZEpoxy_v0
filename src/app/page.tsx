@@ -92,13 +92,11 @@ export default async function HomePage() {
               </span>
 
               <h1 className="heading-display mt-6 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-[clamp(3.5rem,7vw,7rem)]">
-                200°C.
-                <br />
-                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                <span className="block">200°C.</span>{" "}
+                <span className="block bg-gradient-ember bg-clip-text text-transparent">
                   15 minutes.
-                </span>
-                <br />
-                Une protection à vie.
+                </span>{" "}
+                <span className="block">Une protection à vie.</span>
               </h1>
 
               <p className="mt-8 max-w-2xl text-balance text-lg text-white/70 sm:text-xl">
@@ -152,9 +150,8 @@ export default async function HomePage() {
                 Services
               </span>
               <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
-                4 expertises.
-                <br />
-                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                4 expertises.{" "}
+                <span className="block bg-gradient-ember bg-clip-text text-transparent">
                   Un seul atelier.
                 </span>
               </h2>
@@ -313,9 +310,8 @@ export default async function HomePage() {
                 Notre procédé
               </span>
               <h2 className="heading-display mx-auto mt-4 max-w-2xl text-4xl text-white sm:text-5xl">
-                6 étapes.
-                <br />
-                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                6 étapes.{" "}
+                <span className="block bg-gradient-ember bg-clip-text text-transparent">
                   Zéro compromis.
                 </span>
               </h2>
@@ -350,9 +346,8 @@ export default async function HomePage() {
                 Spécialités
               </span>
               <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
-                Chaque pièce
-                <br />
-                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                Chaque pièce{" "}
+                <span className="block bg-gradient-ember bg-clip-text text-transparent">
                   mérite l&apos;excellence.
                 </span>
               </h2>
@@ -438,9 +433,8 @@ export default async function HomePage() {
                 En chiffres
               </span>
               <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
-                Notre atelier,
-                <br />
-                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                Notre atelier,{" "}
+                <span className="block bg-gradient-ember bg-clip-text text-transparent">
                   en quelques chiffres.
                 </span>
               </h2>

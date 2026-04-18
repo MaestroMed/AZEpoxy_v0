@@ -63,9 +63,8 @@ export default async function ThermolaquagePage() {
         label="Thermolaquage"
         title={
           <>
-            Thermolaquage
-            <br />
-            <span className="bg-gradient-ember bg-clip-text text-transparent">
+            Thermolaquage{" "}
+            <span className="block bg-gradient-ember bg-clip-text text-transparent">
               Poudre Époxy
             </span>
           </>

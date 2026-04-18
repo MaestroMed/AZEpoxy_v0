@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npx kill-port:*)",
+      "Bash(taskkill //F //IM \"node.exe\")",
+      "Bash(node -e ':*)",
+      "Bash(npm run:*)",
+      "Bash(node fix-accents.mjs)",
+      "Bash(rm fix-accents.mjs)",
+      "Bash(node fix-jsx-escapes.mjs)",
+      "Bash(rm fix-jsx-escapes.mjs)",
+      "Bash(ls \"C:/Users/Matter1/AZEpoxy_v0/src/app/\"*.tsx)",
+      "Bash(ls \"C:/Users/Matter1/AZEpoxy_v0/.env\"*)",
+      "Bash(node -e \"const icons = require\\('lucide-react'\\); const matches = Object.keys\\(icons\\).filter\\(k => k.toLowerCase\\(\\).includes\\('linked'\\)\\); console.log\\(matches\\);\")",
+      "Bash(node -e \"const icons = require\\('lucide-react'\\); const matches = Object.keys\\(icons\\).filter\\(k => k.toLowerCase\\(\\).includes\\('facebook'\\) || k.toLowerCase\\(\\).includes\\('instagram'\\) || k.toLowerCase\\(\\).includes\\('link'\\)\\).slice\\(0,20\\); console.log\\(matches\\);\")",
+      "WebSearch",
+      "WebFetch(domain:www.pexels.com)"
+    ]
+  }
+}

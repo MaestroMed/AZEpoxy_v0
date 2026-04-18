@@ -42,9 +42,8 @@ export default async function AProposPage() {
         label="Entreprise"
         title={
           <>
-            L&apos;excellence
-            <br />
-            <span className="bg-gradient-ember bg-clip-text text-transparent">
+            L&apos;excellence{" "}
+            <span className="block bg-gradient-ember bg-clip-text text-transparent">
               industrielle
             </span>
           </>
@@ -103,10 +102,26 @@ export default async function AProposPage() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
-              <div className="rounded-2xl bg-brand-night/5 aspect-[4/3] flex items-center justify-center">
-                <p className="text-brand-charcoal/30 text-sm font-medium">
-                  Photo de l&apos;atelier
-                </p>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-brand-night via-brand-night to-brand-charcoal p-10 flex flex-col justify-end">
+                <div aria-hidden className="absolute inset-0 bg-industrial-grid-dark opacity-40" />
+                <div aria-hidden className="pointer-events-none absolute -right-6 -top-6 select-none font-display text-[11rem] leading-[0.85] font-black tracking-tighter text-white/[0.055]">
+                  1800
+                </div>
+                <div aria-hidden className="absolute -left-16 top-1/3 h-64 w-64 rounded-full bg-brand-orange/25 blur-[120px]" />
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/75">
+                    Notre atelier
+                  </span>
+                  <p className="mt-5 font-display text-3xl font-black leading-[1.1] text-white">
+                    1 800 m² dédiés{" "}
+                    <span className="block bg-gradient-ember bg-clip-text text-transparent">
+                      à votre pièce.
+                    </span>
+                  </p>
+                  <p className="mt-5 text-sm text-white/55">
+                    Cabine 7 m · Four pro 200°C · Sableuse · Pont 3 t · 2 000 projets/an.
+                  </p>
+                </div>
               </div>
             </ScrollReveal>
           </div>
@@ -208,10 +223,28 @@ export default async function AProposPage() {
 
           <div className="mt-16 grid lg:grid-cols-2 gap-12 items-center">
             <ScrollReveal delay={0.1}>
-              <div className="rounded-2xl bg-brand-charcoal aspect-video flex items-center justify-center">
-                <p className="text-white/30 text-sm font-medium">
-                  Photo de l&apos;atelier
-                </p>
+              <div className="relative aspect-video overflow-hidden rounded-2xl bg-brand-charcoal p-10 flex flex-col justify-between">
+                <div aria-hidden className="absolute inset-0 bg-industrial-grid-dark opacity-30" />
+                <div aria-hidden className="pointer-events-none absolute -right-8 -bottom-10 select-none font-display text-[14rem] leading-[0.8] font-black tracking-tighter text-white/[0.045]">
+                  7m
+                </div>
+                <div aria-hidden className="absolute right-0 top-0 h-40 w-40 rounded-full bg-brand-orange/15 blur-[100px]" />
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/75">
+                    Cabine principale
+                  </span>
+                  <p className="mt-5 font-display text-2xl sm:text-3xl font-black leading-[1.1] text-white">
+                    Thermolaquage{" "}
+                    <span className="block bg-gradient-ember bg-clip-text text-transparent">
+                      7 mètres.
+                    </span>
+                  </p>
+                </div>
+                <div className="relative flex flex-wrap gap-x-8 gap-y-3 text-[11px] uppercase tracking-[0.18em] text-white/45">
+                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">200°C</span>cuisson</span>
+                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">3 t</span>pont roulant</span>
+                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">15&apos;</span>polymérisation</span>
+                </div>
               </div>
             </ScrollReveal>
 

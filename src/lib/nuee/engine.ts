@@ -126,21 +126,20 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
     blendedColors = new Float32Array(count * 4);
     sizes = new Float32Array(count);
 
-    // Boot state : start with particles VERY dispersed (wide cloud +
-    // extra Z depth) so the first transition feels like a cosmic
-    // "gathering" — particles swarm in from the dark toward whichever
-    // phase is active at mount. Spring stiffness (0.08 default) takes
-    // ~2s to fully settle, which is a beautiful first-visit moment
-    // without stealing perceived load time.
+    // Boot state : particles start CLOSE to the viewport edges (not far
+    // off-screen) so the first phase's shape forms within ~1.5s of mount.
+    // The audit fed back that the original wide dispersion (r=1.8-3.0)
+    // meant the first phase didn't read clearly until ~30s — particles
+    // were still travelling. Tightened to r=0.9-1.4 so AZ logotype is
+    // visible by ~2s and recognizable by ~3s. The "gathering" still
+    // feels deliberate but completes inside the attention window.
     const rand = mulberry32(0x1234);
     for (let i = 0; i < count; i++) {
-      // Ring-ish dispersion : many particles start OFF-screen in a
-      // circle around the viewport edges, rushing inward.
       const ang = rand() * Math.PI * 2;
-      const r = 1.8 + rand() * 1.2; // 1.8..3.0 — mostly off-screen
+      const r = 0.9 + rand() * 0.5; // 0.9..1.4 — at edge, not beyond
       positions[i * 3] = Math.cos(ang) * r;
       positions[i * 3 + 1] = Math.sin(ang) * r * 0.7;
-      positions[i * 3 + 2] = (rand() - 0.5) * 1.2;
+      positions[i * 3 + 2] = (rand() - 0.5) * 0.6;
       // Sizes bumped — visibility on production compositing over dark
       // overlays was too faint at 2-4px. 4-9px reads much better as glow.
       sizes[i] = rand() < 0.03 ? 14 + rand() * 10 : 4 + rand() * 5;

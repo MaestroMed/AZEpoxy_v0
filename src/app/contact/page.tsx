@@ -53,10 +53,9 @@ export default function ContactPage() {
         label="Contact"
         title={
           <>
-            Contactez
-            <br />
-            <span className="bg-gradient-ember bg-clip-text text-transparent">
-              nous
+            Contactez{" "}
+            <span className="block bg-gradient-ember bg-clip-text text-transparent">
+              nous.
             </span>
           </>
         }
