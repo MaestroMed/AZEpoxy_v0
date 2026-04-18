@@ -1,43 +1,98 @@
 "use client";
 
 /**
- * CustomCursor — award-tier pointer.
+ * CustomCursor — award-tier pointer with contextual modes.
  *
- * Two elements: a small dot that tracks the mouse 1:1 (precision) + a
- * larger ring that lags behind via spring (smooth trail). When hovering
- * an interactive element ([data-magnetic], [href], button) the ring
- * grows and softens, and the interactive element is slightly pulled
- * toward the cursor (magnetic feel).
+ * Three elements :
+ *   • precision dot (tracks 1:1)
+ *   • trail ring (lags via spring)
+ *   • contextual label INSIDE the ring — "→" on links, "VIEW" on
+ *     images, a bigger filled variant on buttons, etc.
  *
- * Disabled on touch devices (pointer:coarse) — they have the native
- * platform cursor which is the right call.
+ * Mode detection (in priority order) :
+ *   data-cursor="…" → explicit override
+ *   <img>, picture, [data-image]        → "VIEW"
+ *   a[href^="/blog"]                     → "READ"
+ *   button, [role=button]                → grow + filled tint
+ *   a, [role=link]                       → "→"
+ *   else                                  → default hover grow
  *
- * Respects prefers-reduced-motion by skipping the lag/spring entirely.
+ * Adds magnetic pull on CTAs (buttons/links). Disabled on touch.
  */
 
 import { useEffect, useRef, useState } from "react";
 import { useMotionValue, useSpring, m, useReducedMotion } from "framer-motion";
 
 const MAGNETIC_ATTRACTORS = "a, button, [role='button'], [data-magnetic]";
-const MAGNETIC_RANGE = 120; // px — how close the cursor needs to be for pull
+const MAGNETIC_RANGE = 120;
+
+type CursorMode = "default" | "link" | "read" | "view" | "button" | "disabled";
+
+interface CursorLook {
+  size: number;
+  border: number;
+  fill: string; // tailwind-safe css bg
+  label: string;
+  labelColor: string;
+}
+
+function lookForMode(mode: CursorMode): CursorLook {
+  switch (mode) {
+    case "view":
+      return { size: 80, border: 0, fill: "rgba(232,93,44,0.92)", label: "VIEW", labelColor: "#fff" };
+    case "read":
+      return { size: 72, border: 0, fill: "rgba(232,93,44,0.92)", label: "LIRE", labelColor: "#fff" };
+    case "button":
+      return { size: 60, border: 0, fill: "rgba(255,255,255,0.92)", label: "", labelColor: "#000" };
+    case "link":
+      return { size: 56, border: 2, fill: "transparent", label: "→", labelColor: "rgba(255,255,255,0.95)" };
+    case "disabled":
+      return { size: 28, border: 1, fill: "transparent", label: "", labelColor: "transparent" };
+    default:
+      return { size: 32, border: 1, fill: "transparent", label: "", labelColor: "transparent" };
+  }
+}
+
+function detectMode(target: HTMLElement | null): CursorMode {
+  if (!target) return "default";
+  // Explicit override wins.
+  const explicit = target.closest("[data-cursor]") as HTMLElement | null;
+  if (explicit) {
+    const v = explicit.getAttribute("data-cursor");
+    if (v === "view" || v === "read" || v === "button" || v === "link" || v === "disabled") return v;
+  }
+  // Image-like.
+  const img = target.closest("img, picture, [data-image]");
+  if (img) return "view";
+  // Blog / article links get "READ".
+  const blogLink = target.closest('a[href^="/blog"]') as HTMLAnchorElement | null;
+  if (blogLink) return "read";
+  // Buttons (stronger visual than links).
+  const btn = target.closest("button, [role='button']") as HTMLElement | null;
+  if (btn) {
+    if (btn.hasAttribute("disabled") || btn.getAttribute("aria-disabled") === "true") return "disabled";
+    return "button";
+  }
+  // Plain links.
+  const link = target.closest("a[href], [role='link']") as HTMLElement | null;
+  if (link) return "link";
+  return "default";
+}
 
 export function CustomCursor() {
   const prefersReduced = useReducedMotion();
   const [enabled, setEnabled] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
+  const [mode, setMode] = useState<CursorMode>("default");
 
-  // Raw mouse pos (dot) + spring (ring).
   const dotX = useMotionValue(-100);
   const dotY = useMotionValue(-100);
   const ringX = useSpring(dotX, { stiffness: 320, damping: 28, mass: 0.4 });
   const ringY = useSpring(dotY, { stiffness: 320, damping: 28, mass: 0.4 });
 
-  // Magnetic pull transform on the hovered element (CSS transform).
   const magneticTargetRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    // Disable on coarse pointers (touch).
     const isCoarse = window.matchMedia("(pointer: coarse)").matches;
     if (isCoarse) return;
     setEnabled(true);
@@ -50,7 +105,6 @@ export function CustomCursor() {
       dotX.set(e.clientX);
       dotY.set(e.clientY);
 
-      // Magnetic pull: check for interactive element near cursor.
       if (prefersReduced) return;
       const target = magneticTargetRef.current;
       if (target) {
@@ -73,25 +127,28 @@ export function CustomCursor() {
     };
 
     const onOver = (e: MouseEvent) => {
-      const el = (e.target as HTMLElement)?.closest(MAGNETIC_ATTRACTORS) as HTMLElement | null;
-      if (!el) {
-        setIsHovering(false);
+      const t = e.target as HTMLElement | null;
+      const detected = detectMode(t);
+      setMode(detected);
+
+      // Magnetic pull on interactive elements only.
+      const magnetEl = t?.closest(MAGNETIC_ATTRACTORS) as HTMLElement | null;
+      if (!magnetEl) {
         if (magneticTargetRef.current) {
           magneticTargetRef.current.style.transform = "";
           magneticTargetRef.current = null;
         }
         return;
       }
-      setIsHovering(true);
-      if (!prefersReduced && magneticTargetRef.current !== el) {
+      if (!prefersReduced && magneticTargetRef.current !== magnetEl) {
         if (magneticTargetRef.current) magneticTargetRef.current.style.transform = "";
-        magneticTargetRef.current = el;
-        el.style.transition = "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)";
+        magneticTargetRef.current = magnetEl;
+        magnetEl.style.transition = "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)";
       }
     };
 
     const onLeave = () => {
-      setIsHovering(false);
+      setMode("default");
       if (magneticTargetRef.current) {
         magneticTargetRef.current.style.transform = "";
         magneticTargetRef.current = null;
@@ -108,8 +165,6 @@ export function CustomCursor() {
     };
   }, [enabled, prefersReduced, dotX, dotY]);
 
-  // Hide the native cursor globally once ours is mounted (reduces visual
-  // clutter). Done via a body class so it's easy to undo in DevTools.
   useEffect(() => {
     if (!enabled) return;
     document.documentElement.classList.add("has-custom-cursor");
@@ -118,28 +173,51 @@ export function CustomCursor() {
 
   if (!enabled) return null;
 
+  const look = lookForMode(mode);
+  // Label-bearing modes ditch mix-blend (the tinted fills need to
+  // render their own contrast). Default/link/disabled keep difference
+  // blend so they contrast with any background.
+  const useBlendDifference = mode === "default" || mode === "link" || mode === "disabled";
+  // Hide the precision dot when we're showing a big filled cursor
+  // — otherwise it's a random dot in the middle of "VIEW".
+  const hideDot = mode === "view" || mode === "read" || mode === "button";
+
   return (
     <>
       {/* Precision dot (tracks 1:1). */}
       <m.div
         aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[100] h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white mix-blend-difference"
-        style={{ x: prefersReduced ? dotX : dotX, y: prefersReduced ? dotY : dotY }}
+        className="pointer-events-none fixed left-0 top-0 z-[100] h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white mix-blend-difference transition-opacity duration-200"
+        style={{
+          x: dotX,
+          y: dotY,
+          opacity: hideDot ? 0 : 1,
+        }}
       />
-      {/* Trail ring (lags via spring). */}
+      {/* Trail ring (lags via spring) with contextual label. */}
       <m.div
         aria-hidden
         className={
-          "pointer-events-none fixed left-0 top-0 z-[100] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/70 mix-blend-difference transition-[width,height,border-width] duration-200 ease-out"
+          "pointer-events-none fixed left-0 top-0 z-[100] -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full transition-[width,height,border-width,background-color,color] duration-200 ease-out" +
+          (useBlendDifference ? " mix-blend-difference" : "")
         }
         style={{
           x: prefersReduced ? dotX : ringX,
           y: prefersReduced ? dotY : ringY,
-          width: isHovering ? 56 : 32,
-          height: isHovering ? 56 : 32,
-          borderWidth: isHovering ? 2 : 1,
+          width: look.size,
+          height: look.size,
+          borderWidth: look.border,
+          borderColor: useBlendDifference ? "rgba(255,255,255,0.7)" : "transparent",
+          borderStyle: "solid",
+          backgroundColor: look.fill,
+          color: look.labelColor,
+          fontSize: look.label.length <= 2 ? 20 : 11,
+          fontWeight: 700,
+          letterSpacing: look.label.length > 2 ? "0.12em" : "0",
         }}
-      />
+      >
+        {look.label}
+      </m.div>
     </>
   );
 }

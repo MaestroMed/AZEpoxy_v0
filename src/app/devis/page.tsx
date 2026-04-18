@@ -65,13 +65,14 @@ export default function DevisPage() {
         label="Devis"
         title={
           <>
-            Devis Gratuit
+            Un projet ?{" "}
             <br />
-            <span className="text-white">Réponse sous 24h</span>
+            <span className="bg-gradient-ember bg-clip-text text-transparent">
+              Une réponse.
+            </span>
           </>
         }
-        description="Décrivez votre projet en quelques clics. Nous vous envoyons un devis précis et personnalisé dans les 24 heures."
-        variant="ember"
+        description="Décrivez votre projet en quelques clics. Nous vous envoyons un chiffrage précis et personnalisé dans les 24 heures ouvrées — gratuit, sans engagement."
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Devis" },
