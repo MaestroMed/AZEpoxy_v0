@@ -48,6 +48,36 @@ html.has-custom-cursor textarea {
   80%      { transform: translateY(0); opacity: 0.4; }
 }
 
+/* Blog drop cap — première lettre du premier paragraphe d'un article
+   en grande initiale magazine. Ne s'applique qu'aux <article data-
+   reading-target> pour ne pas polluer les autres paragraphes. */
+article[data-reading-target] > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-size: 5.5rem;
+  font-weight: 900;
+  line-height: 0.85;
+  padding-top: 0.2rem;
+  padding-right: 0.6rem;
+  color: rgb(232, 93, 44); /* brand orange */
+}
+
+/* Pull quote automatique sur les <blockquote> d'un article. */
+article[data-reading-target] blockquote {
+  position: relative;
+  margin: 2.5rem 0;
+  padding: 0 0 0 2rem;
+  border-left: 3px solid rgb(232, 93, 44);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgb(26, 26, 46); /* brand-night */
+}
+article[data-reading-target] blockquote p {
+  margin: 0;
+}
+
 /* ── Form focus — award-tier ring + glow ────────────────────────────
    Every input/textarea/select gets a smooth animated outline in brand
    orange when focused. Feels intentional, premium, and accessible.
