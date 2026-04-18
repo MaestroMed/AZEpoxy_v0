@@ -12,6 +12,10 @@ interface ColorSwatchProps {
   size?: "sm" | "md" | "lg";
   inCart?: boolean;
   onToggleCart?: () => void;
+  /** Editorial quote revealed on hover — positions the color in
+   *  shared cultural memory. When absent the swatch renders without
+   *  the quote area (same layout as before). */
+  quote?: string;
 }
 
 const sizeClasses = {
@@ -27,6 +31,7 @@ export function ColorSwatch({
   size = "md",
   inCart,
   onToggleCart,
+  quote,
 }: ColorSwatchProps) {
   const [copied, setCopied] = useState(false);
 
@@ -108,8 +113,28 @@ export function ColorSwatch({
 
       {/* Color info */}
       <div className="absolute inset-x-0 bottom-0 p-3">
+        {/* Curated editorial quote — revealed from below on hover.
+            Italic serif voice, cultural references. Marks the most
+            iconic RALs as "curated" vocabulary entries. */}
+        {quote && (
+          <p
+            aria-hidden
+            className="pointer-events-none mb-2 max-h-0 origin-bottom translate-y-2 overflow-hidden text-[11px] italic leading-snug text-white/85 opacity-0 transition-all duration-500 group-hover:max-h-24 group-hover:translate-y-0 group-hover:opacity-100"
+          >
+            {quote}
+          </p>
+        )}
         <p className="font-mono text-xs font-semibold uppercase tracking-wider text-white/90">
           {code}
+          {quote && (
+            <span
+              aria-label="Couleur curatée"
+              className="ml-2 inline-flex items-center gap-1 rounded-full bg-white/15 px-1.5 py-0.5 text-[8px] font-bold tracking-[0.18em] text-white/85 backdrop-blur-sm"
+            >
+              <span aria-hidden className="h-1 w-1 rounded-full bg-white/85" />
+              Curatée
+            </span>
+          )}
         </p>
         <p className="text-sm font-semibold text-white leading-snug">{name}</p>
       </div>

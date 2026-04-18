@@ -5,6 +5,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { POPULAR_RAL } from "@/lib/ral-colors";
+import { getRalEditorial } from "@/lib/ral-editorial";
 import { ColorSwatch } from "@/components/ui/color-swatch";
 import { RalPickerSection } from "./ral-picker-section";
 import { CouleursRalSwarmBinding } from "@/components/nuee/couleurs-ral-binding";
@@ -94,7 +95,7 @@ export default function CouleursRalPage() {
                   </span>
                 </>
               }
-              description="Les teintes RAL les plus choisies par nos clients pour le thermolaquage."
+              description="Les teintes RAL les plus choisies par nos clients. Les plus iconiques ont droit à une ligne éditoriale — une couleur n'est jamais seulement une couleur, elle cite déjà quelque chose."
             />
           </ScrollReveal>
 
@@ -106,6 +107,7 @@ export default function CouleursRalPage() {
                   name={color.name}
                   hex={color.hex}
                   size="lg"
+                  quote={getRalEditorial(color.code)}
                 />
               </ScrollReveal>
             ))}

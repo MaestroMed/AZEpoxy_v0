@@ -13,6 +13,7 @@ import {
   catalogNumber,
 } from "@/lib/realisations-data";
 import { RAL_COLORS } from "@/lib/ral-colors";
+import { getRalEditorial } from "@/lib/ral-editorial";
 import { buildMetadata } from "@/lib/seo";
 import { breadcrumbLd } from "@/lib/jsonld";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -252,25 +253,33 @@ export default async function RealisationDetailPage({
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
                     Palette
                   </p>
-                  <ul className="mt-3 space-y-2">
+                  <ul className="mt-3 space-y-3">
                     {project.colors.map((code) => {
                       const hex = ralToHex(code);
                       const name = ralToName(code);
+                      const quote = getRalEditorial(code);
                       return (
-                        <li key={code} className="flex items-center gap-3 text-xs">
-                          <span
-                            aria-hidden
-                            className="h-4 w-4 rounded-sm ring-1 ring-white/20"
-                            style={{ backgroundColor: hex ?? "#555" }}
-                          />
-                          <span className="font-mono font-bold text-white/85">{code}</span>
-                          {name && (
-                            <span className="text-white/45">· {name}</span>
-                          )}
-                          {hex && (
-                            <span className="ml-auto font-mono text-[10px] text-white/35">
-                              {hex.toUpperCase()}
-                            </span>
+                        <li key={code} className="space-y-1.5 text-xs">
+                          <div className="flex items-center gap-3">
+                            <span
+                              aria-hidden
+                              className="h-4 w-4 rounded-sm ring-1 ring-white/20"
+                              style={{ backgroundColor: hex ?? "#555" }}
+                            />
+                            <span className="font-mono font-bold text-white/85">{code}</span>
+                            {name && (
+                              <span className="text-white/45">· {name}</span>
+                            )}
+                            {hex && (
+                              <span className="ml-auto font-mono text-[10px] text-white/35">
+                                {hex.toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                          {quote && (
+                            <p className="pl-7 text-[11px] italic leading-snug text-white/55">
+                              {quote}
+                            </p>
                           )}
                         </li>
                       );
