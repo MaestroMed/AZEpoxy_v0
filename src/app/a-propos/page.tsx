@@ -215,18 +215,20 @@ export default async function AProposPage() {
               </div>
             </ScrollReveal>
 
-            <ScrollReveal delay={0.2}>
-              <ul className="space-y-4">
-                {EQUIPMENT.map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-orange/20">
-                      <Check className="h-3.5 w-3.5 text-brand-orange" />
+            <ul className="space-y-4">
+              {EQUIPMENT.map((item, i) => (
+                <ScrollReveal key={item} delay={0.2 + i * 0.08} variant="slide" direction="left">
+                  <li className="group flex items-start gap-3">
+                    <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-orange/20 transition-transform duration-300 group-hover:scale-110">
+                      <Check className="h-3.5 w-3.5 text-brand-orange transition-transform duration-300 group-hover:scale-110" />
                     </div>
-                    <span className="text-white/80 text-lg">{item}</span>
+                    <span className="text-white/80 text-lg transition-colors duration-300 group-hover:text-white">
+                      {item}
+                    </span>
                   </li>
-                ))}
-              </ul>
-            </ScrollReveal>
+                </ScrollReveal>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
