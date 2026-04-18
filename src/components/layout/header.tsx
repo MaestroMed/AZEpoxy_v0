@@ -145,6 +145,22 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          {/* ⌘K hint — fires the command palette on click (same shortcut too). */}
+          <button
+            type="button"
+            aria-label="Ouvrir la palette de commandes"
+            onClick={() => {
+              window.dispatchEvent(
+                new KeyboardEvent("keydown", { key: "k", metaKey: true, ctrlKey: true }),
+              );
+            }}
+            className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-white/60 transition-all hover:border-white/25 hover:text-white/90"
+          >
+            <span className="uppercase tracking-[0.12em]">Chercher</span>
+            <kbd className="rounded border border-white/15 bg-white/[0.07] px-1.5 py-0.5 font-mono text-[10px] text-white/70 group-hover:border-white/30">
+              ⌘K
+            </kbd>
+          </button>
           <a
             href={SITE.phoneHref}
             className="flex items-center gap-2 text-sm font-semibold text-white/90 transition-colors hover:text-brand-orange"
