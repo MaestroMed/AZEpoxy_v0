@@ -63,6 +63,16 @@ html.has-custom-cursor textarea {
   100% { transform: scale(1); }
 }
 
+/* Skeleton shimmer — bande lumineuse qui traverse le placeholder de
+   gauche à droite, loop 1.8s linear. Lecture "content incoming". */
+@keyframes skeleton-shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+.motion-safe\:animate-skeleton-shimmer {
+  animation: skeleton-shimmer 1.8s linear infinite;
+}
+
 /* Blog drop cap — première lettre du premier paragraphe d'un article
    en grande initiale magazine. Ne s'applique qu'aux <article data-
    reading-target> pour ne pas polluer les autres paragraphes. */

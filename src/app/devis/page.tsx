@@ -83,7 +83,16 @@ export default function DevisPage() {
       <section className="bg-brand-cream bg-industrial-grid py-24">
         <div className="container-wide max-w-3xl mx-auto">
           <ScrollReveal>
-            <Suspense fallback={<div className="h-96 animate-pulse rounded-2xl bg-white/50" />}>
+            <Suspense
+              fallback={
+                <div className="relative h-96 overflow-hidden rounded-2xl bg-brand-night/[0.04]">
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent motion-safe:animate-skeleton-shimmer"
+                  />
+                </div>
+              }
+            >
               <DevisWizard />
             </Suspense>
           </ScrollReveal>
