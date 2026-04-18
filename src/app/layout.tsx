@@ -14,6 +14,7 @@ import { RoutePhaseSync } from "@/components/nuee/route-phase-sync";
 import { CustomCursor } from "@/components/nuee/custom-cursor";
 import { SoundToggle } from "@/components/nuee/sound-toggle";
 import { CommandPalette } from "@/components/nuee/command-palette";
+import { ScrollToTop } from "@/components/nuee/scroll-to-top";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SITE } from "@/lib/utils";
 import { buildMetadata } from "@/lib/seo";
@@ -116,6 +117,8 @@ export default async function RootLayout({
             <SoundToggle />
             {/* ⌘K command palette for power users. */}
             <CommandPalette />
+            {/* Scroll-to-top with progress ring — appears after 40% scroll. */}
+            <ScrollToTop />
             <Header />
             <main id="main-content" className="relative">
               {children}

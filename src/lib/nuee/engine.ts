@@ -126,13 +126,21 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
     blendedColors = new Float32Array(count * 4);
     sizes = new Float32Array(count);
 
-    // Initialize current positions as a big cloud so the first transition
-    // visibly "gathers" into the AZ letters.
+    // Boot state : start with particles VERY dispersed (wide cloud +
+    // extra Z depth) so the first transition feels like a cosmic
+    // "gathering" — particles swarm in from the dark toward whichever
+    // phase is active at mount. Spring stiffness (0.08 default) takes
+    // ~2s to fully settle, which is a beautiful first-visit moment
+    // without stealing perceived load time.
     const rand = mulberry32(0x1234);
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (rand() - 0.5) * 2.4;
-      positions[i * 3 + 1] = (rand() - 0.5) * 1.6;
-      positions[i * 3 + 2] = (rand() - 0.5) * 0.4;
+      // Ring-ish dispersion : many particles start OFF-screen in a
+      // circle around the viewport edges, rushing inward.
+      const ang = rand() * Math.PI * 2;
+      const r = 1.8 + rand() * 1.2; // 1.8..3.0 — mostly off-screen
+      positions[i * 3] = Math.cos(ang) * r;
+      positions[i * 3 + 1] = Math.sin(ang) * r * 0.7;
+      positions[i * 3 + 2] = (rand() - 0.5) * 1.2;
       // Sizes bumped — visibility on production compositing over dark
       // overlays was too faint at 2-4px. 4-9px reads much better as glow.
       sizes[i] = rand() < 0.03 ? 14 + rand() * 10 : 4 + rand() * 5;

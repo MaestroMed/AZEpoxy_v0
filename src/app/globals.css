@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scroll across the whole site — anchor links, scroll-to-top,
+   programmatic scrolls all get buttery motion. Disabled for users who
+   prefer reduced motion (jumps keep original intent). */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* Vertical marquees for CollectionHeroMosaic — keyframes declared here so
    they're emitted regardless of Tailwind JIT class detection. */
 @keyframes marquee-up {
