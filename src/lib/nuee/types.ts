@@ -63,6 +63,20 @@ export interface Phase {
    * phases that need particles to exit the frame (e.g. paint-gun spray).
    */
   boundary?: false | { padding?: number; overshoot?: number };
+
+  /**
+   * Positionnement horizontal de la phase.
+   *
+   * • "page"   (défaut) — respecte le `anchorOffsetX` de la route
+   *   courante. Convient aux phases dont la forme est asymétrique et
+   *   gagne à être décalée côté composition texte (ex. logotype AZ
+   *   calé à droite sur desktop).
+   * • "center" — ignore l'anchor de page, reste centrée. À utiliser
+   *   pour les phases dont la forme est SYMÉTRIQUE ou occupe tout
+   *   l'espace (sphères, cascades, flammes, galaxies). Le décalage
+   *   les ferait sortir partiellement du frame et piler sur le bord.
+   */
+  anchorPreference?: "page" | "center";
 }
 
 /**

@@ -83,6 +83,8 @@ export const MOLTEN_POOL_PHASE: Phase = {
   id: "molten-pool",
   stiffness: 0.07,
   jitterAmplitude: 0.0025,
+  // Le bassin est circulaire et symétrique — décalé, il déborde.
+  anchorPreference: "center",
 
   computeTarget(count, time, mouse, _scroll, out) {
     if (!cachedSeeds || cachedSeeds.length !== count * 4) {

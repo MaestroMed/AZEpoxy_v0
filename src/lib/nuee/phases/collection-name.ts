@@ -119,6 +119,7 @@ export function createCollectionNamePhase(name: string, accentHex: string): Phas
     id: `collection-name-${name.toLowerCase()}`,
     stiffness: 0.08,
     jitterAmplitude: 0.0025,
+    anchorPreference: "center",
 
     computeTarget(count, _time, mouse, _scroll, out) {
       const targets = buildTextTargets(name, count);

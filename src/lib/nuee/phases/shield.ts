@@ -47,6 +47,8 @@ export const SHIELD_PHASE: Phase = {
   id: "shield",
   stiffness: 0.06,
   jitterAmplitude: 0.0025,
+  // Sphère symétrique — reste centrée.
+  anchorPreference: "center",
 
   computeTarget(count, time, mouse, _scroll, out) {
     if (!cachedSeeds || cachedSeeds.length !== count * 4) {

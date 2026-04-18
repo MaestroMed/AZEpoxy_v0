@@ -74,6 +74,8 @@ export const GALAXY_PHASE: Phase = {
   id: "galaxy",
   stiffness: 0.04,        // slow settle for cosmic feel
   jitterAmplitude: 0.003,
+  // Spirale circulaire — doit rester centrée.
+  anchorPreference: "center",
 
   computeTarget(count, time, mouse, _scroll, out) {
     if (!cachedSeeds || cachedSeeds.length !== count * 4) {

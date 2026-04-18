@@ -47,6 +47,8 @@ export const OVEN_PHASE: Phase = {
   id: "oven",
   stiffness: 0.08,
   jitterAmplitude: 0.0035,
+  // Nappe de flammes pleine largeur — centrée.
+  anchorPreference: "center",
 
   computeTarget(count, time, mouse, _scroll, out) {
     if (!cachedSeeds || cachedSeeds.length !== count * 4) {

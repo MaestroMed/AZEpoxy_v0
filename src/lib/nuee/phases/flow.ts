@@ -73,6 +73,8 @@ export const FLOW_PHASE: Phase = {
   id: "flow",
   stiffness: 0.06,
   jitterAmplitude: 0.004,
+  // Courant fluide pleine largeur — centré.
+  anchorPreference: "center",
 
   computeTarget(count, time, mouse, _scroll, out) {
     if (!cachedSeeds || cachedSeeds.length !== count * 3) {

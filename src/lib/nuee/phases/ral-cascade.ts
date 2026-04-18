@@ -48,6 +48,8 @@ export const RAL_CASCADE_PHASE: Phase = {
   id: "ral-cascade",
   stiffness: 0.07,
   jitterAmplitude: 0.003,
+  // Cascade pleine largeur — centré.
+  anchorPreference: "center",
 
   computeTarget(count, time, mouse, _scroll, out) {
     if (!cachedSeeds || cachedSeeds.length !== count * 6) {

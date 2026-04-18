@@ -266,10 +266,55 @@ export function createEngine(canvas: HTMLCanvasElement): EngineHandle {
     //    boundary clamp so the clamp still keeps everything in-frame
     //    after the shift. Homepage sets +0.4 on desktop to clear the
     //    heading block; collection pages leave it at 0.
+    //
+    //    Phase-level override: phases that are symmetrical (circular
+    //    pools, spheres, cascades) declare `anchorPreference: "center"`
+    //    and opt out of the shift — otherwise they'd slide off-frame
+    //    and pile up at the boundary clamp.
+    //
+    //    During a transition between a "page" phase and a "center"
+    //    phase, we lerp the applied offset too, avoiding abrupt pops.
     const anchorX = state.anchorOffsetX ?? 0;
-    if (anchorX !== 0) {
+    const currentAnchorWeight = state.currentPhase.anchorPreference === "center" ? 0 : 1;
+    const targetAnchorWeight = state.targetPhase
+      ? state.targetPhase.anchorPreference === "center" ? 0 : 1
+      : currentAnchorWeight;
+    const effectiveAnchorWeight = state.targetPhase
+      ? currentAnchorWeight * (1 - transitionT) + targetAnchorWeight * transitionT
+      : currentAnchorWeight;
+    const effectiveAnchor = anchorX * effectiveAnchorWeight;
+    if (effectiveAnchor !== 0) {
       for (let i = 0; i < count; i++) {
-        finalTargets[i * 3] += anchorX;
+        finalTargets[i * 3] += effectiveAnchor;
+      }
+    }
+
+    // ── Swirl-helix during transitions — pendant un morph, chaque
+    //    particule prend un chemin courbe autour de l'origine (rotation
+    //    Y axis) + une ondulation Y qui varie par-particule (DNA helix
+    //    effect). L'amplitude monte puis redescend sur la courbe de
+    //    transition (sin(π × t)), donc on démarre en ligne droite,
+    //    on swirle au milieu, on atterrit net.
+    if (state.targetPhase && transitionT > 0 && transitionT < 1) {
+      const swirlAmp = Math.sin(transitionT * Math.PI); // 0..1..0
+      const rotAngle = swirlAmp * 0.55;                  // ~31° peak rotation
+      const waveAmp = swirlAmp * 0.12;                    // ~0.12 unit Y wobble
+      const cosR = Math.cos(rotAngle);
+      const sinR = Math.sin(rotAngle);
+      for (let i = 0; i < count; i++) {
+        const i3 = i * 3;
+        const x = finalTargets[i3];
+        const y = finalTargets[i3 + 1];
+        const z = finalTargets[i3 + 2];
+        // Rotate around Y (x, z plane).
+        const rx = cosR * x + sinR * z;
+        const rz = -sinR * x + cosR * z;
+        // Helix wave on Y : per-particle frequency via index mod.
+        const phaseI = (i % 73) * 0.15;
+        const wobble = Math.sin(phaseI + transitionT * Math.PI * 3) * waveAmp;
+        finalTargets[i3] = rx;
+        finalTargets[i3 + 1] = y + wobble;
+        finalTargets[i3 + 2] = rz;
       }
     }
 
