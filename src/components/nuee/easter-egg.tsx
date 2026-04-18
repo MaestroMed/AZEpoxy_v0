@@ -18,6 +18,7 @@
 import { useEffect } from "react";
 import { getSwarm } from "@/lib/nuee/store";
 import { getSoundEngine } from "@/lib/nuee/sound";
+import { track } from "@/lib/analytics/events";
 
 const SEQUENCES: Array<{
   match: string;
@@ -65,6 +66,15 @@ export function EasterEgg() {
         if (buffer.endsWith(seq.match)) {
           getSwarm().triggerBurst(seq.burstMs);
           if (seq.withWhoosh) getSoundEngine().whoosh(0.9);
+          // Track which easter egg was fired — fun metric.
+          track("swarm_burst", {
+            trigger:
+              seq.match === "az"
+                ? "easter_egg_az"
+                : seq.match === "boom"
+                  ? "easter_egg_boom"
+                  : "easter_egg_konami",
+          });
           buffer = "";
           break;
         }

@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { getSwarm } from "@/lib/nuee/store";
 import { getSoundEngine } from "@/lib/nuee/sound";
+import { track } from "@/lib/analytics/events";
 
 type CommandKind = "nav" | "action";
 
@@ -169,7 +170,10 @@ export function CommandPalette() {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setOpen((v) => !v);
+        setOpen((v) => {
+          if (!v) track("command_palette_open", {});
+          return !v;
+        });
       } else if (e.key === "Escape" && open) {
         setOpen(false);
       }
@@ -230,6 +234,7 @@ export function CommandPalette() {
   }, [filtered.length, activeIdx]);
 
   const execute = (cmd: CommandItem) => {
+    track("command_palette_execute", { command_id: cmd.id, kind: cmd.kind });
     setOpen(false);
     if (cmd.href) router.push(cmd.href);
     cmd.action?.();

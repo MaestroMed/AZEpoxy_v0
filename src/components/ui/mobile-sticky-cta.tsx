@@ -40,10 +40,17 @@ export function MobileStickyCta() {
     <div
       aria-hidden={!visible}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 flex items-stretch gap-px border-t border-white/10 bg-brand-night/95 backdrop-blur-xl shadow-[0_-8px_24px_rgba(0,0,0,0.2)] transition-transform duration-300 md:hidden",
-        visible ? "translate-y-0" : "translate-y-full pointer-events-none"
+        "fixed inset-x-0 bottom-0 z-40 flex items-stretch gap-px border-t border-white/10 bg-brand-night/95 backdrop-blur-xl shadow-[0_-12px_32px_rgba(0,0,0,0.3)] transition-[transform,opacity] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden",
+        visible
+          ? "translate-y-0 opacity-100"
+          : "translate-y-full pointer-events-none opacity-0"
       )}
     >
+      {/* Accent gradient line top */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-orange/60 to-transparent"
+      />
       <CtaAction
         href={SITE.phoneHref}
         icon={<Phone className="h-4 w-4" />}
@@ -78,10 +85,15 @@ export function MobileStickyCta() {
             label: "Devis",
           })
         }
-        className="flex flex-1 items-center justify-center gap-2 bg-brand-orange px-3 py-3.5 text-sm font-semibold text-white"
+        className="group/devis relative flex flex-1 items-center justify-center gap-2 overflow-hidden bg-brand-orange px-3 py-3.5 text-sm font-semibold text-white active:bg-brand-orange-dark"
       >
-        <FileText className="h-4 w-4" />
-        Devis gratuit
+        {/* Sheen */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-br from-transparent via-white/18 to-transparent transition-transform duration-700 group-hover/devis:translate-x-full group-active/devis:translate-x-full"
+        />
+        <FileText className="relative h-4 w-4" />
+        <span className="relative">Devis gratuit</span>
       </Link>
     </div>
   );
@@ -103,10 +115,12 @@ function CtaAction({ href, icon, label, external, onClick }: CtaActionProps) {
       {...(external
         ? { target: "_blank", rel: "noopener noreferrer" }
         : {})}
-      className="flex flex-1 items-center justify-center gap-2 bg-white/[0.03] px-3 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white/[0.08]"
+      className="group relative flex flex-1 items-center justify-center gap-2 bg-white/[0.03] px-3 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-white/[0.08] active:bg-white/[0.12]"
     >
-      {icon}
-      {label}
+      <span className="transition-transform duration-300 group-active:scale-90">
+        {icon}
+      </span>
+      <span>{label}</span>
     </a>
   );
 }

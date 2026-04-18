@@ -86,6 +86,18 @@ export interface AnalyticsEvents {
   realisation_filter: {
     category: string;
   };
+  // ── Narrative swarm signature events ─────────────────────────────
+  swarm_burst: {
+    trigger: "easter_egg_az" | "easter_egg_boom" | "easter_egg_konami" | "form_success" | "command_palette";
+  };
+  swarm_sound_toggle: {
+    enabled: boolean;
+  };
+  command_palette_open: Record<string, never>;
+  command_palette_execute: {
+    command_id: string;
+    kind: "nav" | "action";
+  };
 }
 
 export type AnalyticsEventName = keyof AnalyticsEvents;

@@ -17,6 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { getSoundEngine } from "@/lib/nuee/sound";
 import { useSwarm } from "@/lib/nuee/store";
+import { track } from "@/lib/analytics/events";
 
 const STORAGE_KEY = "az-swarm-sound";
 
@@ -40,6 +41,7 @@ export function SoundToggle() {
     window.localStorage.setItem(STORAGE_KEY, next ? "on" : "off");
     if (next) getSoundEngine().enable();
     else getSoundEngine().disable();
+    track("swarm_sound_toggle", { enabled: next });
   };
 
   // Whoosh on phase transition (when store starts morphing to a new target).

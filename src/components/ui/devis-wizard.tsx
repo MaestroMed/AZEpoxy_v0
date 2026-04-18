@@ -190,6 +190,7 @@ export function DevisWizard() {
       try {
         getSwarm().triggerBurst(1400);
         getSoundEngine().whoosh(0.8);
+        track("swarm_burst", { trigger: "form_success" });
       } catch {
         /* engine not initialized — silent */
       }

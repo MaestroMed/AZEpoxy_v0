@@ -2,19 +2,24 @@
 
 import { useCallback, useState, useRef, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { TurnstileWidget } from "@/components/ui/turnstile";
 import { track } from "@/lib/analytics/events";
+import { getSwarm } from "@/lib/nuee/store";
+import { getSoundEngine } from "@/lib/nuee/sound";
 
 interface ContactFormProps {
   variant?: "simple" | "full";
 }
 
+// Input styles — premium feel. Focus ring is applied globally from
+// globals.css (brand-orange glow + shadow), so we don't repeat it here.
 const inputClass =
-  "w-full rounded-xl border border-brand-night/15 bg-white px-4 py-3 text-brand-night placeholder:text-brand-charcoal/40 focus:outline-none focus:ring-2 focus:ring-brand-orange transition-shadow";
+  "w-full rounded-xl border border-brand-night/15 bg-white px-4 py-3.5 text-brand-night placeholder:text-brand-charcoal/35 focus:outline-none";
 
-const labelClass = "mb-1.5 block text-sm font-semibold text-brand-night";
+const labelClass =
+  "mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-charcoal/80";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -65,6 +70,14 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
       }
       track("form_submit", { variant, status: "ok" });
       setStatus("success");
+      // Burst + whoosh de célébration, même logique que le wizard devis.
+      try {
+        getSwarm().triggerBurst(1200);
+        getSoundEngine().whoosh(0.7);
+        track("swarm_burst", { trigger: "form_success" });
+      } catch {
+        /* engine not init — silent */
+      }
     } catch (err) {
       setStatus("error");
       setErrorMsg(
@@ -77,12 +90,22 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-brand-success/30 bg-brand-success/10 p-8 text-center">
-        <p className="heading-display text-xl text-brand-night">Merci !</p>
-        <p className="mt-2 text-brand-charcoal/70">
-          Nous avons bien reçu votre demande. Nous vous recontacterons sous
-          24h.
-        </p>
+      <div className="relative overflow-hidden rounded-2xl border border-brand-success/30 bg-gradient-to-br from-brand-success/15 via-brand-success/8 to-brand-success/5 p-10 text-center shadow-[0_16px_40px_-20px_rgba(76,175,80,0.35)]">
+        {/* Ripple décoratif */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-transparent via-white/20 to-transparent motion-safe:animate-[stat-pop_1200ms_cubic-bezier(0.22,1,0.36,1)_1]"
+        />
+        <div className="relative">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-success text-white shadow-lg shadow-brand-success/40">
+            <Check className="h-6 w-6" strokeWidth={3} />
+          </div>
+          <p className="heading-display text-2xl text-brand-night">Merci !</p>
+          <p className="mx-auto mt-3 max-w-sm text-brand-charcoal/75 leading-relaxed">
+            Nous avons bien reçu votre demande. Notre équipe vous recontactera
+            sous <strong className="text-brand-night">24h</strong>.
+          </p>
+        </div>
       </div>
     );
   }
