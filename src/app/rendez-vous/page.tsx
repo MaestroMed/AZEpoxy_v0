@@ -45,7 +45,7 @@ export default function RendezVousPage() {
           </>
         }
         description="Visite de l'atelier, conseil couleur ou revue de devis — choisissez le format qui vous convient et réservez directement en ligne."
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Rendez-vous" },

@@ -212,7 +212,7 @@ export default function ConfidentialitePage() {
             </span>
           </>
         }
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Confidentialité" },

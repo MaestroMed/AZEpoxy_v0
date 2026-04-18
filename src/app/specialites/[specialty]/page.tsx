@@ -210,7 +210,7 @@ export default async function SpecialtyPage({
           </>
         }
         description={specialty.tagline}
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Spécialités", href: "/specialites" },

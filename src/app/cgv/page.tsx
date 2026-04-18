@@ -177,7 +177,7 @@ export default function CgvPage() {
             </span>
           </>
         }
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "CGV" },

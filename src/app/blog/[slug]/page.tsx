@@ -74,7 +74,7 @@ export default async function BlogArticlePage({
         label={article.category}
         title={article.title}
         description={article.description}
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Blog", href: "/blog" },

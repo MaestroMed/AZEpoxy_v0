@@ -61,7 +61,7 @@ export default function ContactPage() {
           </>
         }
         description="Une question, un projet ? Notre équipe est à votre écoute."
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Contact" },

@@ -8,7 +8,16 @@ interface PageHeroProps {
   label?: string;
   title: React.ReactNode;
   description?: string;
-  variant?: "night" | "ember";
+  /**
+   * Visual variant.
+   * - `transparent` (default) — no opaque bg, overlays let the layout-level
+   *   narrative swarm perce through. Responsive : left-biased gradient on
+   *   desktop (text zone dark, swarm zone clear), uniform dim + bottom
+   *   fade on mobile.
+   * - `night` — legacy solid dark with gradients + ember orbs.
+   * - `ember` — brand orange gradient block.
+   */
+  variant?: "transparent" | "night" | "ember";
   /**
    * Trail of breadcrumbs to display *after* "Accueil". Passing a leading
    * "Accueil" entry is supported for back-compat — it is silently stripped.
@@ -22,7 +31,7 @@ export function PageHero({
   label,
   title,
   description,
-  variant = "night",
+  variant = "transparent",
   breadcrumbs,
   children,
 }: PageHeroProps) {
@@ -32,13 +41,32 @@ export function PageHero({
   return (
     <section
       className={cn(
-        "relative isolate min-h-[60vh] overflow-hidden text-white",
+        "relative min-h-[60vh] overflow-hidden text-white",
+        // Transparent variant does NOT use `isolate` — the stacking
+        // context would block the persistent canvas from showing through.
+        variant !== "transparent" && "isolate",
         variant === "night" && "bg-brand-night",
         variant === "ember" && "bg-gradient-ember"
       )}
     >
       {showCrumbs && <JsonLd data={breadcrumbLd(trail)} />}
 
+      {variant === "transparent" && (
+        <>
+          {/* Desktop : left-biased dim so the text zone reads on any
+              phase, the right half stays open for the swarm to show. */}
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/60 to-brand-night/15 hidden md:block"
+            aria-hidden
+          />
+          {/* Mobile : uniform dim (text wraps full width) + bottom fade. */}
+          <div className="absolute inset-0 bg-brand-night/55 md:hidden" aria-hidden />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-brand-night/85 via-transparent to-transparent"
+            aria-hidden
+          />
+        </>
+      )}
       {variant === "night" && (
         <>
           <div className="absolute inset-0 bg-gradient-night" />

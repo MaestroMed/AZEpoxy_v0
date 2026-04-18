@@ -122,7 +122,7 @@ export default async function SablagePage() {
           </>
         }
         description="La préparation de surface est la clé de la tenue du revêtement. Notre cabine de sablage de 7 mètres accueille des pièces de grande dimension pour un décapage conforme à la norme ISO 8501-1."
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Services", href: "/services" },

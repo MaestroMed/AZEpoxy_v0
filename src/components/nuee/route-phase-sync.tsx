@@ -21,6 +21,10 @@ import { usePathname } from "next/navigation";
 import { getSwarm } from "@/lib/nuee/store";
 import { GALAXY_PHASE } from "@/lib/nuee/phases/galaxy";
 import { FLOW_PHASE } from "@/lib/nuee/phases/flow";
+import { MOLTEN_POOL_PHASE } from "@/lib/nuee/phases/molten-pool";
+import { RAL_CASCADE_PHASE } from "@/lib/nuee/phases/ral-cascade";
+import { PAINT_GUN_PHASE } from "@/lib/nuee/phases/paint-gun";
+import type { Phase } from "@/lib/nuee/types";
 
 /** Routes where OTHER components take over phase orchestration. */
 const ORCHESTRATED_ROUTES = [
@@ -29,8 +33,30 @@ const ORCHESTRATED_ROUTES = [
   /^\/couleurs-ral\/[^/]+$/,      // collection page → CollectionSwarmBinding
 ];
 
-/** Fallback phase mapping for everything else. */
-function fallbackPhaseFor(path: string) {
+/**
+ * Phase mapping for non-orchestrated routes. Each page of the site gets
+ * a phase that resonates with its content :
+ *
+ *  /services/thermolaquage → Molten Pool (200°C bath, le cœur du métier)
+ *  /services/sablage        → Paint Gun (projection, similar mechanic)
+ *  /services/finitions      → RAL Cascade (le choix des teintes)
+ *  /services/metallisation  → Flow (couche liquide sur le métal)
+ *  /services                → Molten Pool (représente la spécialité principale)
+ *  /specialites/*           → Galaxy (éventail, cosmique)
+ *  /realisations            → Galaxy (portfolio, diversité)
+ *  /devis, /rendez-vous, /contact → Flow (conversion, guidage fluide)
+ *  /a-propos, /faq, /blog   → Galaxy (contemplatif)
+ *  /thermolaquage-[ville]   → Molten Pool (local SEO mais métier central)
+ *  Legal (cgv, mentions, confidentialite) → Galaxy (subtle, ne distrait pas)
+ *  Default                  → Galaxy
+ */
+function fallbackPhaseFor(path: string): Phase {
+  if (/^\/services\/thermolaquage/.test(path)) return MOLTEN_POOL_PHASE;
+  if (/^\/services\/sablage/.test(path)) return PAINT_GUN_PHASE;
+  if (/^\/services\/finitions/.test(path)) return RAL_CASCADE_PHASE;
+  if (/^\/services\/metallisation/.test(path)) return FLOW_PHASE;
+  if (/^\/services$/.test(path)) return MOLTEN_POOL_PHASE;
+  if (/^\/thermolaquage-/.test(path)) return MOLTEN_POOL_PHASE;
   if (/^\/devis|^\/rendez-vous|^\/contact/.test(path)) return FLOW_PHASE;
   return GALAXY_PHASE;
 }

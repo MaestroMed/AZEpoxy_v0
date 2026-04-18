@@ -35,7 +35,7 @@ export default async function FaqPage() {
           </>
         }
         description="Tout ce que vous devez savoir sur nos prestations de thermolaquage, sablage et métallisation."
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "FAQ" },

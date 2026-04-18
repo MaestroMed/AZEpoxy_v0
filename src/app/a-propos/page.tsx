@@ -49,7 +49,7 @@ export default async function AProposPage() {
           </>
         }
         description="Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise, nous apportons une finition premium à chaque pièce."
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "À propos" },

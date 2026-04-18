@@ -145,7 +145,7 @@ export default async function VillePage({
           </>
         }
         description={`Service professionnel de thermolaquage poudre époxy pour ${ville.name} et ses environs. À seulement ${ville.distance} de notre atelier de Bruyères-sur-Oise.`}
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: `Thermolaquage à ${ville.name}` },

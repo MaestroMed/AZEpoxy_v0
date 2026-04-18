@@ -62,7 +62,7 @@ export default async function ServicesPage() {
           </>
         }
         description="De la préparation de surface à la finition finale, AZ Époxy maîtrise l'ensemble de la chaîne du revêtement industriel. Thermolaquage, sablage, métallisation, finitions spéciales — chaque prestation suit un protocole rigoureux pour une qualité irréprochable."
-        variant="night"
+        variant="transparent"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Services" },
