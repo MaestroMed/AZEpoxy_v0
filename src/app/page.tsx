@@ -11,11 +11,19 @@ import {
   Award,
   Users,
 } from "lucide-react";
-import { POPULAR_RAL } from "@/lib/ral-colors";
+import { POPULAR_RAL, RAL_COLORS } from "@/lib/ral-colors";
 import { getServices } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 import { getSpecialties } from "@/lib/specialites-data";
 import { getTestimonials } from "@/lib/testimonials-data";
+import {
+  PROJECTS,
+  PROJECT_CATEGORIES,
+  getFeaturedProjects,
+  getProjectSlug,
+  catalogNumber,
+} from "@/lib/realisations-data";
+import { ArrowUpRight } from "lucide-react";
 
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { StatCounter } from "@/components/ui/stat-counter";
@@ -382,45 +390,215 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Section 6 — Feature Band (night bg) ────────────────────────── */}
-      <section className="relative overflow-hidden bg-brand-night py-24 text-white">
-        <div className="absolute inset-0 bg-industrial-grid-dark opacity-30" />
-        <div className="container-wide relative">
-          <div className="grid gap-12 lg:grid-cols-3">
-            {[
-              {
-                icon: Flame,
-                title: "Procédé 6 étapes",
-                desc: "Dégraissage, primaire 80µ, cuisson 180°C, finition polyester 60µ, cuisson 200°C, contrôle qualité. Protocole industriel pro.",
-              },
-              {
-                icon: ShieldCheck,
-                title: "Durabilité 10+ ans",
-                desc: "Résistance UV, résistance chocs, résistance à la corrosion. Procédé sans solvant, 0 COV. Garantie possible 10 ans.",
-              },
-              {
-                icon: Sparkles,
-                title: "Finitions signature",
-                desc: "Au-delà du RAL Classic : collections Patina, Polaris, Dichroic, Sfera du partenaire Adaptacolor.",
-              },
-            ].map((f, i) => (
-              <ScrollReveal key={f.title} delay={0.15 * i}>
-                <div className="group rounded-2xl border border-white/10 bg-white/[0.02] p-8 transition-all hover:border-brand-orange/40 hover:bg-white/[0.04]">
-                  <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-orange/15 text-brand-orange">
-                    <f.icon className="h-6 w-6" />
+      {/* ── Section 6 — CURATION · Pièce en vedette + index preview ──────
+          Replaces the former "feature band" (3 generic boxes repeating
+          info seen elsewhere). Now shows a spotlight realisation from
+          the catalogue raisonné + a dense 5-row index preview linking
+          to the full catalogue. Speaks museum/auction-house voice.    */}
+      {(() => {
+        const featured = getFeaturedProjects()[0] ?? PROJECTS[0];
+        const featuredHex = featured.colors[0]
+          ? RAL_COLORS.find((c) => c.code === featured.colors[0])?.hex
+          : undefined;
+        const featuredCat =
+          PROJECT_CATEGORIES.find((c) => c.key === featured.category)?.label ??
+          featured.category;
+        const indexPreview = PROJECTS.filter((p) => p.id !== featured.id).slice(
+          0,
+          5,
+        );
+
+        return (
+          <section className="relative overflow-hidden bg-brand-night py-24 text-white">
+            <div aria-hidden className="absolute inset-0 bg-gradient-night" />
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-industrial-grid-dark opacity-30"
+            />
+            {featuredHex && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-24 top-1/3 h-[500px] w-[500px] rounded-full opacity-20 blur-[160px]"
+                style={{ backgroundColor: featuredHex }}
+              />
+            )}
+
+            <div className="container-wide relative">
+              <ScrollReveal>
+                <div className="flex flex-wrap items-baseline justify-between gap-6">
+                  <div>
+                    <span className="section-label-light">Curation</span>
+                    <h2 className="heading-display mt-4 text-4xl sm:text-5xl">
+                      Pièce en vedette.
+                    </h2>
                   </div>
-                  <h3 className="heading-display text-xl text-white">
-                    {f.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-white/60">
-                    {f.desc}
-                  </p>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/45">
+                    Catalogue · Semaine en cours
+                  </span>
                 </div>
               </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+
+              {/* FEATURED PIECE — big editorial block */}
+              <ScrollReveal delay={0.1}>
+                <Link
+                  href={`/realisations/${getProjectSlug(featured)}`}
+                  data-magnetic
+                  className="group relative mt-14 block overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] transition-all duration-500 hover:-translate-y-0.5 hover:border-brand-orange/40 hover:bg-white/[0.04]"
+                >
+                  {featured.colors[0] && (
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute -right-6 -top-4 select-none font-display text-[clamp(6rem,14vw,14rem)] font-black leading-[0.8] tracking-tighter text-white/[0.04] transition-colors duration-500 group-hover:text-white/[0.07]"
+                    >
+                      {featured.colors[0].replace("RAL ", "")}
+                    </span>
+                  )}
+
+                  {featuredHex && (
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-0 top-0 h-0.5"
+                      style={{ backgroundColor: featuredHex }}
+                    />
+                  )}
+
+                  <div className="relative grid gap-10 p-8 lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-12 lg:p-12">
+                    {/* N° en grand */}
+                    <div className="flex items-baseline gap-4 lg:flex-col lg:items-start lg:gap-1">
+                      <span className="font-display text-[clamp(3rem,8vw,5rem)] font-black leading-[0.85] tracking-tighter text-white">
+                        N°{catalogNumber(featured)}
+                      </span>
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-brand-orange">
+                        En vedette
+                      </span>
+                    </div>
+
+                    {/* Middle — title + description */}
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
+                          <span
+                            aria-hidden
+                            className="h-1 w-1 rounded-full bg-brand-orange"
+                          />
+                          {featuredCat}
+                        </span>
+                        {featured.colors.length > 0 && (
+                          <span className="font-mono text-[11px] text-white/45">
+                            {featured.colors.join(" · ")}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="mt-3 font-display text-2xl font-black leading-tight text-white sm:text-3xl lg:text-4xl">
+                        {featured.title}
+                      </h3>
+                      <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/65 sm:text-base">
+                        {featured.description}
+                      </p>
+                    </div>
+
+                    {/* Right — swatch + circular CTA */}
+                    <div className="flex items-center gap-4">
+                      {featuredHex && (
+                        <span
+                          aria-hidden
+                          className="h-16 w-16 shrink-0 rounded-sm ring-1 ring-white/10 transition-transform duration-500 group-hover:scale-110 sm:h-20 sm:w-20"
+                          style={{ backgroundColor: featuredHex }}
+                        />
+                      )}
+                      <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-brand-night transition-all duration-300 group-hover:bg-brand-orange group-hover:text-white group-hover:shadow-[0_10px_24px_-8px_rgba(232,93,44,0.55)]">
+                        <ArrowUpRight className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </ScrollReveal>
+
+              {/* INDEX PREVIEW — 5 dense rows linking to /realisations */}
+              <ScrollReveal delay={0.2}>
+                <div className="mt-16 flex items-end justify-between gap-6">
+                  <div>
+                    <span className="section-label-light">Catalogue · Aperçu</span>
+                    <p className="mt-3 font-display text-xl font-bold text-white/85 sm:text-2xl">
+                      {String(PROJECTS.length).padStart(2, "0")} pièces au catalogue raisonné.
+                    </p>
+                  </div>
+                </div>
+
+                <ul className="mt-8 divide-y divide-white/10 border-y border-white/10">
+                  {indexPreview.map((p) => {
+                    const pHex = p.colors[0]
+                      ? RAL_COLORS.find((c) => c.code === p.colors[0])?.hex
+                      : undefined;
+                    const pCat =
+                      PROJECT_CATEGORIES.find((c) => c.key === p.category)
+                        ?.label ?? p.category;
+                    return (
+                      <li key={p.id}>
+                        <Link
+                          href={`/realisations/${getProjectSlug(p)}`}
+                          data-magnetic
+                          className="group relative flex items-center gap-5 py-5 transition-colors duration-300 hover:bg-white/[0.02] sm:py-6"
+                        >
+                          <span
+                            aria-hidden
+                            className="pointer-events-none absolute left-0 top-1/2 h-[60%] w-[3px] -translate-y-1/2 origin-bottom scale-y-0 bg-brand-orange transition-transform duration-500 group-hover:scale-y-100"
+                          />
+                          <span className="w-12 shrink-0 font-mono text-sm font-bold text-white/30 transition-colors duration-300 group-hover:text-brand-orange sm:w-16 sm:text-base">
+                            N°{catalogNumber(p)}
+                          </span>
+                          {pHex && (
+                            <span
+                              aria-hidden
+                              className="h-10 w-2.5 shrink-0 rounded-sm ring-1 ring-white/10 transition-all duration-500 group-hover:h-12"
+                              style={{ backgroundColor: pHex }}
+                            />
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-3">
+                              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55 transition-colors duration-300 group-hover:text-brand-orange">
+                                {pCat}
+                              </span>
+                              {p.featured && (
+                                <span className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-brand-orange">
+                                  Signature
+                                </span>
+                              )}
+                            </div>
+                            <h4 className="mt-1 font-display text-base font-bold leading-tight text-white transition-colors duration-300 group-hover:text-brand-orange sm:text-lg">
+                              {p.title}
+                            </h4>
+                          </div>
+                          {p.colors[0] && (
+                            <span className="hidden font-mono text-xs text-white/45 sm:inline sm:text-sm">
+                              {p.colors[0]}
+                            </span>
+                          )}
+                          <span className="shrink-0 text-white/35 transition-all duration-300 group-hover:translate-x-1 group-hover:text-brand-orange">
+                            <ArrowUpRight className="h-5 w-5" />
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                <div className="mt-10 flex justify-center">
+                  <Link
+                    href="/realisations"
+                    className="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-[0.22em] text-white/80 transition-colors hover:text-white"
+                  >
+                    <span>Voir tout le catalogue</span>
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover:border-brand-orange group-hover:bg-brand-orange">
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </Link>
+                </div>
+              </ScrollReveal>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ── Section 7 — Stats Band (cream bg) ──────────────────────────── */}
       <section className="relative overflow-hidden bg-brand-cream py-24">
