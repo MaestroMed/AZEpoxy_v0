@@ -29,6 +29,7 @@ const navGroups = [
     href: "/couleurs-ral",
     children: [
       { label: "Nuancier RAL complet", href: "/couleurs-ral" },
+      { label: "Configurateur visuel", href: "/configurateur" },
       { label: "Collection Patina", href: "/couleurs-ral/patina" },
       { label: "Collection Polaris", href: "/couleurs-ral/polaris" },
       { label: "Collection Dichroic", href: "/couleurs-ral/dichroic" },
@@ -46,8 +47,17 @@ const navGroups = [
     ],
   },
   { label: "Réalisations", href: "/realisations" },
-  { label: "FAQ", href: "/faq" },
-  { label: "À propos", href: "/a-propos" },
+  { label: "Pros", href: "/professionnels" },
+  {
+    label: "Ressources",
+    href: "/faq",
+    children: [
+      { label: "FAQ", href: "/faq" },
+      { label: "Glossaire technique", href: "/glossaire" },
+      { label: "Blog", href: "/blog" },
+      { label: "À propos", href: "/a-propos" },
+    ],
+  },
 ];
 
 export function Header() {

@@ -96,7 +96,7 @@ export interface AnalyticsEvents {
   command_palette_open: Record<string, never>;
   command_palette_execute: {
     command_id: string;
-    kind: "nav" | "action";
+    kind: "nav" | "action" | "ral";
   };
 }
 

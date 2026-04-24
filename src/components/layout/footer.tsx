@@ -16,6 +16,7 @@ const cols = [
     title: "Couleurs",
     links: [
       { label: "Nuancier RAL 209+", href: "/couleurs-ral" },
+      { label: "Configurateur visuel", href: "/configurateur" },
       { label: "Collection Patina", href: "/couleurs-ral/patina" },
       { label: "Collection Polaris", href: "/couleurs-ral/polaris" },
       { label: "Collection Dichroic", href: "/couleurs-ral/dichroic" },
@@ -35,7 +36,9 @@ const cols = [
     title: "Entreprise",
     links: [
       { label: "À propos", href: "/a-propos" },
+      { label: "Espace pro", href: "/professionnels" },
       { label: "Réalisations", href: "/realisations" },
+      { label: "Glossaire technique", href: "/glossaire" },
       { label: "FAQ", href: "/faq" },
       { label: "Contact", href: "/contact" },
       { label: "Devis gratuit", href: "/devis" },
