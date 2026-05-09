@@ -84,10 +84,10 @@ export function Header() {
       <div className="container-wide flex h-20 items-center justify-between">
         <Link href="/" className="group flex items-center gap-3">
           <div className="relative h-10 w-10 overflow-hidden rounded-md bg-gradient-ember shadow-lg shadow-brand-orange/40">
-            <span className="absolute inset-0 flex items-center justify-center font-display text-xl font-black text-white">
+            <div className="pointer-events-none absolute inset-0 animate-ember-pulse bg-gradient-heat opacity-60" />
+            <span className="relative z-10 flex h-full w-full items-center justify-center font-display text-xl font-black text-white">
               AZ
             </span>
-            <div className="absolute inset-0 animate-ember-pulse bg-gradient-heat opacity-60" />
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-display text-lg font-black text-white tracking-tight">
