@@ -33,7 +33,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         title: "Protection contre le sel de déneigement",
         description:
-          "En hiver, le sel et les fondants routiers attaquent l'aluminium. Notre traitement anti-corrosion (sablage + primaire zinc + poudre époxy) protège vos jantes même dans les conditions les plus rudes.",
+          "En hiver, le sel et les fondants routiers attaquent l'aluminium. Notre traitement anti-corrosion (sablage + primaire + poudre époxy) protège vos jantes même dans les conditions les plus rudes.",
       },
       {
         title: "Résistance aux projections de graviers",
@@ -63,12 +63,12 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         question: "Peut-on thermolaquer des jantes en aluminium forgé ?",
         answer:
-          "Absolument. Les jantes en aluminium forgé supportent parfaitement la cuisson à 200 °C. Nous adaptons la pression de sablage pour préserver la dureté et les tolérances de ces jantes haut de gamme. Le résultat est identique en termes de finition et de durabilité.",
+          "Absolument. Les jantes en aluminium forgé supportent parfaitement la cuisson en four. Nous adaptons la pression de sablage pour préserver la dureté et les tolérances de ces jantes haut de gamme. Le résultat est identique en termes de finition et de durabilité.",
       },
       {
         question: "Proposez-vous des finitions spéciales pour les jantes ?",
         answer:
-          "Oui, au-delà des teintes RAL classiques, nous proposons des finitions métallisées (type aluminium brossé), des effets bicolores (face usinée + flanc peint) et les teintes premium de nos collections Adaptacolor (Polaris, Sfera). Demandez-nous un nuancier.",
+          "Oui, au-delà des teintes RAL classiques, nous proposons des finitions métallisées (type aluminium brossé), des effets bicolores (face usinée + flanc peint) et les teintes premium de nos collections effets architecturaux (Effets Métalliques, Effets Anodisés). Demandez-nous un nuancier.",
       },
     ],
   },
@@ -88,7 +88,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         title: "Résistance à la chaleur moteur",
         description:
-          "Nos poudres époxy supportent des températures continues de 200 °C et des pics à 250 °C, ce qui les rend adaptées aux pièces proches du moteur et de la ligne d'échappement (hors collecteur direct).",
+          "Nos poudres époxy supportent des températures continues élevées avec pics thermiques résistants, ce qui les rend adaptées aux pièces proches du moteur et de la ligne d'échappement (hors collecteur direct).",
       },
       {
         title: "Couleurs vibrantes et durables",
@@ -113,7 +113,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         question: "Le thermolaquage résiste-t-il à la chaleur d'un moteur ?",
         answer:
-          "Oui, pour les pièces situées à proximité du moteur (cadre, carters latéraux). Nos poudres résistent en continu jusqu'à 200 °C. Pour les collecteurs et pots d'échappement exposés à des températures supérieures à 300 °C, nous recommandons un traitement céramique spécifique.",
+          "Oui, pour les pièces situées à proximité du moteur (cadre, carters latéraux). Nos poudres résistent en continu à haute température. Pour les collecteurs et pots d'échappement exposés à des températures extrêmes, nous recommandons un traitement céramique spécifique.",
       },
       {
         question: "Quel délai pour un cadre complet de moto ?",
@@ -133,7 +133,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         title: "Résistance à la chaleur du compartiment moteur",
         description:
-          "Les caches moteur, étriers et pièces sous capot sont exposés à des températures élevées. Nos poudres supportent 200 °C en continu, bien au-delà des conditions thermiques habituelles du compartiment moteur.",
+          "Les caches moteur, étriers et pièces sous capot sont exposés à des températures élevées. Nos poudres supportent à haute température en continu, bien au-delà des conditions thermiques habituelles du compartiment moteur.",
       },
       {
         title: "Esthétique et personnalisation",
@@ -153,7 +153,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         question: "Peut-on thermolaquer des étriers de frein ?",
         answer:
-          "Oui, c'est l'une de nos prestations les plus demandées. Les étriers sont sablés, puis thermolaqués avec une poudre haute température résistant à 200 °C en continu. Le tarif démarre à 50 € par étrier pour un traitement complet (sablage + thermolaquage).",
+          "Oui, c'est l'une de nos prestations les plus demandées. Les étriers sont sablés, puis thermolaqués avec une poudre haute température résistant à à haute température en continu. Le tarif démarre à 50 € par étrier pour un traitement complet (sablage + thermolaquage).",
       },
       {
         question: "Le thermolaquage résiste-t-il aux vibrations mécaniques ?",
@@ -176,14 +176,14 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
     icon: "Factory",
     benefits: [
       {
-        title: "Capacité grande dimension — cabine 7 m",
+        title: "Capacité grande dimension — cabine 7 × 3 × 4 m",
         description:
           "Notre cabine de sablage et notre four de polymérisation de 7 mètres accueillent des pièces de grande envergure : portails coulissants, garde-corps de balcon, structures métalliques assemblées.",
       },
       {
         title: "Protection anti-corrosion longue durée",
         description:
-          "Pour les environnements agressifs (milieu marin, industriel, enterré), nous proposons le système duplex métallisation zinc + thermolaquage époxy, conforme à la norme ISO 12944 catégorie C5-M, avec une durée de vie de 25 ans et plus.",
+          "Pour les environnements agressifs (milieu marin, industriel, enterré), nous proposons le système duplex finitions spéciales zinc + thermolaquage époxy, conforme à la norme ISO 12944 catégorie C5-M, avec une durée de vie de 25 ans et plus.",
       },
       {
         title: "Production en série et répétabilité",
@@ -198,7 +198,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         question: "Quelle est la taille maximale des pièces que vous pouvez traiter ?",
         answer:
-          "Notre four et notre cabine de sablage mesurent 7 mètres de longueur. Pour les pièces dépassant cette dimension, nous étudions au cas par cas la possibilité d'un traitement en plusieurs passes ou d'une intervention sur site par métallisation.",
+          "Notre four et notre cabine de sablage mesurent 7 mètres de longueur. Pour les pièces dépassant cette dimension, nous étudions au cas par cas la possibilité d'un traitement en plusieurs passes ou d'une intervention sur site par finitions spéciales.",
       },
       {
         question: "Travaillez-vous avec les professionnels du bâtiment ?",

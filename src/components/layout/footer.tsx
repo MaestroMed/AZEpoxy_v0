@@ -8,18 +8,17 @@ const cols = [
     links: [
       { label: "Thermolaquage poudre", href: "/services/thermolaquage" },
       { label: "Sablage & grenaillage", href: "/services/sablage" },
-      { label: "Métallisation", href: "/services/metallisation" },
       { label: "Finitions spéciales", href: "/services/finitions" },
     ],
   },
   {
     title: "Couleurs",
     links: [
-      { label: "Nuancier RAL 209+", href: "/couleurs-ral" },
-      { label: "Collection Patina", href: "/couleurs-ral/patina" },
-      { label: "Collection Polaris", href: "/couleurs-ral/polaris" },
-      { label: "Collection Dichroic", href: "/couleurs-ral/dichroic" },
-      { label: "Collection Sfera", href: "/couleurs-ral/sfera" },
+      { label: "Nuanciers RAL & NCS", href: "/couleurs-ral" },
+      { label: "Effets Corten", href: "/couleurs-ral/patina" },
+      { label: "Effets Métalliques", href: "/couleurs-ral/polaris" },
+      { label: "Effets Irisés", href: "/couleurs-ral/dichroic" },
+      { label: "Effets Anodisés", href: "/couleurs-ral/sfera" },
     ],
   },
   {

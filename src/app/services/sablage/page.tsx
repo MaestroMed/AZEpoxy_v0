@@ -24,7 +24,7 @@ import { BeforeAfter } from "@/components/ui/before-after";
 import { getServiceBySlugAsync } from "@/lib/services-data";
 
 const SERVICE_DESCRIPTION =
-  "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 mètres. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.";
+  "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 × 3 × 4 mètres. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.";
 
 export const metadata = buildMetadata({
   title: "Sablage & Grenaillage",
@@ -166,7 +166,7 @@ export default async function SablagePage() {
                   des particules décape le métal et crée simultanément un profil
                   de rugosité contrôlé (25 à 75 µm) indispensable à
                   l&apos;adhérence mécanique de la couche suivante, qu&apos;il
-                  s&apos;agisse de peinture, de poudre époxy ou de métallisation.
+                  s&apos;agisse de peinture, de poudre époxy ou de finitions spéciales.
                 </p>
                 <p>
                   Notre cabine de sablage de 7 mètres de long permet de traiter

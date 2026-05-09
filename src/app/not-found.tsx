@@ -26,7 +26,7 @@ export default function NotFound() {
           <NotFoundCard
             href="/services"
             title="Nos services"
-            description="Thermolaquage, sablage, métallisation, finitions spéciales."
+            description="Thermolaquage, sablage, finitions spéciales, finitions spéciales."
           />
           <NotFoundCard
             href="/couleurs-ral"

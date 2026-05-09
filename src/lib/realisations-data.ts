@@ -103,10 +103,10 @@ export const PROJECTS_FALLBACK: Project[] = [
   },
   {
     id: 9,
-    title: "Table basse design — Effet corten Patina",
+    title: "Table basse design — Effet corten Effets Corten",
     category: "mobilier",
     description:
-      "Table basse en acier découpé au laser, thermolaquée avec la finition Patina « Corten Classique ». L'effet rouillé contraste avec le plateau en chêne massif.",
+      "Table basse en acier découpé au laser, thermolaquée avec la finition Effets Corten « Corten Classique ». L'effet rouillé contraste avec le plateau en chêne massif.",
     colors: [],
     featured: false,
   },
@@ -126,7 +126,7 @@ export const PROJECTS_FALLBACK: Project[] = [
     title: "Charpente métallique atelier 200 m²",
     category: "industriel",
     description:
-      "Sablage SA 2.5 et thermolaquage de l'ensemble de la charpente métallique d'un atelier artisanal. Système duplex métallisation zinc + poudre époxy gris clair pour une durabilité de 25 ans.",
+      "Sablage SA 2.5 et thermolaquage de l'ensemble de la charpente métallique d'un atelier artisanal. Système duplex finitions spéciales zinc + poudre époxy gris clair pour une durabilité de 25 ans.",
     colors: ["RAL 7035"],
     featured: true,
   },
@@ -144,7 +144,7 @@ export const PROJECTS_FALLBACK: Project[] = [
     title: "Supports panneaux solaires — Anti-corrosion C4",
     category: "industriel",
     description:
-      "Traitement anti-corrosion de 200 supports de panneaux photovoltaïques pour une ferme solaire en milieu rural. Métallisation zinc 200 µm + thermolaquage gris fenêtre conforme ISO 12944 C4.",
+      "Traitement anti-corrosion de 200 supports de panneaux photovoltaïques pour une ferme solaire en milieu rural. finitions spéciales zinc 200 µm + thermolaquage gris fenêtre conforme ISO 12944 C4.",
     colors: ["RAL 7040"],
     featured: false,
   },
@@ -155,7 +155,7 @@ export const PROJECTS_FALLBACK: Project[] = [
     title: "Portail coulissant 5 m — RAL 7016",
     category: "portail",
     description:
-      "Portail coulissant motorisé de 5 mètres en acier, thermolaqué gris anthracite. Sablage intégral de la structure rouillée puis application du système primaire zinc + poudre époxy.",
+      "Portail coulissant motorisé de 5 mètres en acier, thermolaqué gris anthracite. Sablage intégral de la structure rouillée puis application du système primaire + poudre époxy.",
     colors: ["RAL 7016"],
     featured: false,
   },

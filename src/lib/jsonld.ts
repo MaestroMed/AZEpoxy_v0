@@ -60,7 +60,7 @@ interface LocalBusinessOptions {
 
 export function localBusinessLd(options: LocalBusinessOptions = {}) {
   const {
-    description = "Thermolaquage poudre époxy professionnel, 200+ couleurs RAL, sablage, métallisation, finitions spéciales.",
+    description = "Thermolaquage poudre époxy professionnel, 200+ couleurs RAL, sablage, finitions spéciales, finitions spéciales.",
     areaServed = [
       { type: "AdministrativeArea", name: "Île-de-France" },
       { type: "AdministrativeArea", name: "Val-d'Oise" },

@@ -25,7 +25,7 @@ import { getServiceBySlugAsync } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 
 const SERVICE_DESCRIPTION =
-  "Thermolaquage par poudre époxy professionnel : application électrostatique, cuisson à 200 °C, 200+ couleurs RAL, 0 COV. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.";
+  "Thermolaquage par poudre époxy professionnel : application électrostatique, cuisson en four, 200+ couleurs RAL, 0 COV. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.";
 
 export const metadata = buildMetadata({
   title: "Thermolaquage Poudre Époxy",
@@ -113,7 +113,7 @@ export default async function ThermolaquagePage() {
                 </p>
                 <p>
                   La pièce revêtue est ensuite placée dans un four de
-                  polymérisation à 200 °C pendant 15 minutes. Sous l&apos;effet
+                  polymérisation en four, durée variable selon la pièce. Sous l&apos;effet
                   de la chaleur, les particules de poudre fondent, se lient
                   chimiquement entre elles et au substrat, puis forment un film
                   continu d&apos;une épaisseur de 60 à 80 µm. Ce processus de

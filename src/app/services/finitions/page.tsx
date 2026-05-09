@@ -22,7 +22,7 @@ import { CtaBand } from "@/components/ui/cta-band";
 import { getServiceBySlugAsync } from "@/lib/services-data";
 
 const SERVICE_DESCRIPTION =
-  "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium Adaptacolor : Patina, Polaris, Dichroic, Sfera. AZ Époxy, Bruyères-sur-Oise.";
+  "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium effets architecturaux : Effets Corten, Effets Métalliques, Effets Irisés, Effets Anodisés. AZ Époxy, Bruyères-sur-Oise.";
 
 export const metadata = buildMetadata({
   title: "Finitions Spéciales",
@@ -98,7 +98,7 @@ const FINISH_TYPES = [
 const PREMIUM_COLLECTIONS = [
   {
     slug: "patina",
-    label: "Patina",
+    label: "Effets Corten",
     tagline: "Effets corten & oxyde",
     description:
       "Reproduisez l'aspect authentique de l'acier corten, de la rouille stabilisée et des patines naturelles — sans la corrosion réelle.",
@@ -106,7 +106,7 @@ const PREMIUM_COLLECTIONS = [
   },
   {
     slug: "polaris",
-    label: "Polaris",
+    label: "Effets Métalliques",
     tagline: "Métalliques structurés",
     description:
       "Finitions métallisées haut de gamme avec des reflets structurés : chrome satiné, bronze antique, anthracite perlé.",
@@ -114,7 +114,7 @@ const PREMIUM_COLLECTIONS = [
   },
   {
     slug: "dichroic",
-    label: "Dichroic",
+    label: "Effets Irisés",
     tagline: "Reflets irisés",
     description:
       "Poudres à effet dichroïque qui changent de couleur selon l'angle de vue. Un rendu spectaculaire pour les projets signature.",
@@ -122,7 +122,7 @@ const PREMIUM_COLLECTIONS = [
   },
   {
     slug: "sfera",
-    label: "Sfera",
+    label: "Effets Anodisés",
     tagline: "Cosmos anodisé",
     description:
       "Teintes profondes inspirées du cosmos, avec un effet anodisé lisse et velouté. Parfait pour le luxe, l'automobile et l'architecture.",
@@ -233,11 +233,11 @@ export default async function FinitionsPage() {
                 <>
                   4 collections{" "}
                   <span className="bg-gradient-ember bg-clip-text text-transparent">
-                    Adaptacolor.
+                    effets architecturaux.
                   </span>
                 </>
               }
-              description="En partenariat avec Adaptacolor, nous proposons des gammes de poudres exclusives qui transcendent le nuancier RAL classique."
+              description="En partenariat avec effets architecturaux, nous proposons des gammes de poudres exclusives qui transcendent le nuancier RAL classique."
             />
           </ScrollReveal>
 

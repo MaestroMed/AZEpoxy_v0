@@ -1,6 +1,7 @@
 /**
- * Services proposés par AZ Époxy — thermolaquage, sablage,
- * métallisation et finitions spéciales.
+ * Services proposés par AZ Époxy — thermolaquage, sablage et finitions
+ * spéciales. Tous les revêtements suivent les exigences QUALICOAT et les
+ * normes ISO 12944 / 8501 / 2409 applicables.
  */
 
 export interface Service {
@@ -20,9 +21,10 @@ export const SERVICES_FALLBACK: Service[] = [
     slug: "thermolaquage",
     title: "Thermolaquage Poudre Époxy",
     shortTitle: "Thermolaquage",
-    tagline: "Une finition durable, esthétique et respectueuse de l'environnement",
+    tagline:
+      "Une finition durable, esthétique et respectueuse de l'environnement",
     description:
-      "Le thermolaquage par poudre époxy est notre spécialité. Ce procédé consiste à appliquer une poudre thermodurcissable sur un support métallique à l'aide d'un pistolet électrostatique, puis à polymériser l'ensemble en four à 200 °C. Le résultat : un revêtement ultra-résistant, homogène et disponible dans plus de 200 teintes RAL et effets spéciaux.",
+      "Le thermolaquage par poudre époxy est notre spécialité. Le procédé consiste à appliquer une poudre thermodurcissable de qualité architecturale sur un support métallique à l'aide d'un pistolet électrostatique, puis à polymériser l'ensemble en four. La durée de cuisson est ajustée à la masse et à la géométrie de chaque pièce. Le résultat : un revêtement ultra-résistant, homogène et disponible dans plus de 200 teintes RAL et NCS, plus une gamme d'effets spéciaux.",
     icon: "Paintbrush",
     features: [
       {
@@ -31,9 +33,9 @@ export const SERVICES_FALLBACK: Service[] = [
           "Contrairement à la peinture liquide, la poudre époxy ne contient aucun composé organique volatil. Le procédé est conforme aux réglementations environnementales les plus strictes.",
       },
       {
-        title: "200+ couleurs RAL & effets spéciaux",
+        title: "200+ couleurs RAL & nuancier NCS",
         description:
-          "Choisissez parmi l'ensemble du nuancier RAL Classic, des collections Adaptacolor premium et des finitions mates, satinées, brillantes, texturées ou mouchetées.",
+          "Choisissez parmi l'ensemble du nuancier RAL Classic et du Natural Color System (NCS), avec des finitions mates, satinées, brillantes, texturées, mouchetées ou à effets architecturaux (corten, métalliques, irisés, anodisés).",
       },
       {
         title: "Résistance UV exceptionnelle",
@@ -51,35 +53,35 @@ export const SERVICES_FALLBACK: Service[] = [
           "L'application électrostatique garantit une couche régulière de 60 à 80 µm sur l'ensemble de la pièce, y compris dans les recoins et les angles difficiles d'accès.",
       },
       {
-        title: "Poudre 100 % recyclable",
+        title: "Poudre neuve, jamais réintégrée",
         description:
-          "Les surplus de poudre non déposés sont récupérés par le système de filtration de notre cabine et réintégrés dans le circuit d'application, limitant les déchets à moins de 2 %.",
+          "Nous travaillons exclusivement avec de la poudre certifiée fraîche : aucune réintégration en circuit d'application. C'est la garantie d'un rendu de finition irréprochable, sans micro-pollution ni dérive de teinte.",
       },
     ],
     specs: [
       { label: "Épaisseur du film", value: "60 – 80 µm" },
-      { label: "Température de cuisson", value: "200 °C" },
-      { label: "Durée de cuisson", value: "15 minutes" },
+      { label: "Durée de cuisson", value: "Variable selon la pièce" },
       { label: "Résistance UV", value: "Excellente" },
       { label: "Résistance aux chocs", value: "> 50 kg/cm" },
       { label: "Adhérence (cross-cut test)", value: "Classe 0 (ISO 2409)" },
-      { label: "Normes", value: "ISO 12944 / QUALICOAT" },
+      { label: "Référentiel qualité", value: "QUALICOAT / ISO 12944" },
     ],
     faqs: [
       {
-        question: "Quelle est la différence entre thermolaquage et peinture liquide ?",
+        question:
+          "Quelle est la différence entre thermolaquage et peinture liquide ?",
         answer:
-          "Le thermolaquage utilise une poudre sèche chargée électrostatiquement, sans solvant, polymérisée au four à 200 °C. Le résultat est un film plus épais (60-80 µm contre 25-40 µm), plus résistant aux chocs et à la corrosion, et totalement exempt de COV. La peinture liquide nécessite des solvants et offre une tenue nettement inférieure dans le temps.",
+          "Le thermolaquage utilise une poudre sèche chargée électrostatiquement, sans solvant, polymérisée au four. Le résultat est un film plus épais (60-80 µm contre 25-40 µm), plus résistant aux chocs et à la corrosion, et totalement exempt de COV. La peinture liquide nécessite des solvants et offre une tenue nettement inférieure dans le temps.",
       },
       {
         question: "Quels types de métaux peut-on thermolaquer ?",
         answer:
-          "Tous les métaux conducteurs supportant une cuisson à 200 °C peuvent être thermolaqués : acier, acier galvanisé, aluminium, fonte, inox. Seuls les métaux non conducteurs ou les matériaux sensibles à la chaleur (plastique, bois) ne sont pas éligibles au procédé.",
+          "Tous les métaux conducteurs supportant une cuisson en four peuvent être thermolaqués : acier, acier galvanisé, aluminium, fonte, inox. Seuls les métaux non conducteurs ou les matériaux sensibles à la chaleur (plastique, bois) ne sont pas éligibles au procédé.",
       },
       {
         question: "Le thermolaquage résiste-t-il en extérieur ?",
         answer:
-          "Oui, c'est même l'une de ses principales applications. Les poudres polyester et époxy-polyester que nous utilisons sont spécialement formulées pour résister aux UV, à l'humidité et aux variations de température. C'est pourquoi le thermolaquage est le revêtement de référence pour les portails, clôtures, mobilier urbain et façades métalliques.",
+          "Oui, c'est même l'une de ses principales applications. Les poudres polyester et époxy-polyester que nous utilisons sont spécialement formulées pour résister aux UV, à l'humidité et aux variations de température. C'est pourquoi le thermolaquage est le revêtement de référence pour les portails, clôtures, mobilier urbain, façades métalliques et structures de chaudronnerie.",
       },
       {
         question: "Peut-on thermolaquer une pièce déjà peinte ?",
@@ -94,7 +96,7 @@ export const SERVICES_FALLBACK: Service[] = [
     shortTitle: "Sablage",
     tagline: "Préparer la surface, c'est garantir la tenue du revêtement",
     description:
-      "Le sablage et le grenaillage sont des techniques de préparation de surface par projection d'abrasif à haute pression. Ils éliminent la rouille, la calamine, les anciennes peintures et les impuretés, créant un profil d'ancrage optimal pour tout revêtement ultérieur. Notre cabine de sablage de 7 mètres accueille des pièces de grande dimension.",
+      "Le sablage et le grenaillage sont des techniques de préparation de surface par projection d'abrasif à haute pression. Ils éliminent la rouille, la calamine, les anciennes peintures et les impuretés, créant un profil d'ancrage optimal pour tout revêtement ultérieur. Notre cabine 7 × 3 × 4 m accueille des pièces de chaudronnerie, des charpentes, des portails et des structures industrielles de grande dimension.",
     icon: "Wind",
     features: [
       {
@@ -108,9 +110,9 @@ export const SERVICES_FALLBACK: Service[] = [
           "Le sablage crée un profil de rugosité contrôlé (25 à 75 µm) indispensable à l'adhérence mécanique de la couche de peinture ou de poudre époxy.",
       },
       {
-        title: "Nettoyage de pièces industrielles",
+        title: "Pièces de chaudronnerie & structures",
         description:
-          "Suppression des résidus de graisse, de soudure, de dépôts calcaires et de toute contamination superficielle sur des pièces mécaniques, charpentes ou structures métalliques.",
+          "Suppression des résidus de soudure, des dépôts calcaires et de toute contamination superficielle sur les pièces de chaudronnerie, charpentes, portails ou structures métalliques de grande série.",
       },
       {
         title: "Rénovation & remise à neuf",
@@ -121,7 +123,7 @@ export const SERVICES_FALLBACK: Service[] = [
     specs: [
       { label: "Granulométrie abrasif", value: "0,2 – 2,0 mm" },
       { label: "Pression de projection", value: "4 – 8 bars" },
-      { label: "Cabine de sablage", value: "7 m de longueur" },
+      { label: "Cabine de sablage", value: "7 × 3 × 4 m" },
       { label: "Normes de propreté", value: "SA 2.5 / SA 3 (ISO 8501-1)" },
     ],
     faqs: [
@@ -143,66 +145,12 @@ export const SERVICES_FALLBACK: Service[] = [
     ],
   },
   {
-    slug: "metallisation",
-    title: "Métallisation",
-    shortTitle: "Métallisation",
-    tagline: "Protection anti-corrosion extrême par projection thermique",
-    description:
-      "La métallisation consiste à projeter du zinc ou de l'aluminium fondu sur le métal de base à l'aide d'un pistolet à arc ou à flamme. Ce dépôt de 150 à 300 µm offre une protection cathodique sacrificielle comparable à la galvanisation, mais applicable sur site et sur des pièces de toute taille. Idéal pour les structures exposées en milieu marin, industriel ou enterré.",
-    icon: "Layers",
-    features: [
-      {
-        title: "Protection cathodique sacrificielle",
-        description:
-          "Le zinc se corrode préférentiellement à l'acier, protégeant le substrat même en cas de rayure ou d'écaillage local du revêtement. La durée de vie atteint 25 ans et plus.",
-      },
-      {
-        title: "Applicable sur pièces de grande dimension",
-        description:
-          "Contrairement à la galvanisation à chaud qui nécessite un bain, la métallisation s'effectue au pistolet et s'adapte à des structures de plusieurs mètres, sans contrainte de taille de cuve.",
-      },
-      {
-        title: "Compatible avec le thermolaquage",
-        description:
-          "La métallisation constitue une sous-couche idéale avant l'application d'une poudre époxy. Le système duplex (métallisation + thermolaquage) offre la durabilité maximale, jusqu'à 40 ans en environnement C5-M.",
-      },
-      {
-        title: "Conforme aux normes anti-corrosion",
-        description:
-          "Nos métallisations respectent les exigences de la norme ISO 2063 et les catégories de corrosivité C3 à C5-M définies par la norme ISO 12944. Certificat de conformité fourni sur demande.",
-      },
-    ],
-    specs: [
-      { label: "Épaisseur dépôt zinc", value: "150 – 300 µm" },
-      { label: "Norme de référence", value: "ISO 2063" },
-      { label: "Durée de vie estimée", value: "25+ ans (système duplex)" },
-      { label: "Catégories de corrosivité", value: "C3 à C5-M (ISO 12944)" },
-    ],
-    faqs: [
-      {
-        question: "Quand faut-il métalliser plutôt que galvaniser ?",
-        answer:
-          "La métallisation est préférable lorsque la pièce est trop volumineuse pour un bain de galvanisation, lorsqu'elle est déjà assemblée sur site, ou lorsqu'on souhaite appliquer un thermolaquage par-dessus. Elle est également utilisée en réparation ponctuelle de galvanisation endommagée.",
-      },
-      {
-        question: "Zinc ou aluminium : comment choisir ?",
-        answer:
-          "Le zinc offre une meilleure protection cathodique en milieu atmosphérique et en eau douce. L'aluminium est préféré en milieu marin (eau de mer) et à haute température. Un alliage zinc-aluminium (85/15) combine les avantages des deux métaux pour les environnements les plus agressifs.",
-      },
-      {
-        question: "Peut-on peindre ou thermolaquer sur une métallisation ?",
-        answer:
-          "Oui, c'est même recommandé. Le système duplex (métallisation + peinture ou thermolaquage) combine la protection cathodique du zinc avec la barrière physique de la couche de finition. La durée de vie est multipliée par 1,5 à 2 par rapport à chaque revêtement pris séparément.",
-      },
-    ],
-  },
-  {
     slug: "finitions",
     title: "Finitions Spéciales",
     shortTitle: "Finitions",
     tagline: "Sublimez vos pièces avec des effets uniques",
     description:
-      "Au-delà du nuancier RAL standard, nous proposons une gamme de finitions spéciales qui apportent texture, relief et caractère à vos réalisations. Effets mat profond, satiné velouté, brillant miroir, texturé grainé, moucheté granite ou encore traitement anti-graffiti : chaque projet peut bénéficier d'une identité visuelle unique.",
+      "Au-delà des nuanciers RAL et NCS, nous proposons une gamme de finitions spéciales qui apportent texture, relief et caractère à vos réalisations. Effets mat profond, satiné velouté, brillant miroir, texturé grainé, moucheté granite, effets architecturaux corten, métalliques, irisés, anodisés ou encore traitement anti-graffiti : chaque projet bénéficie d'une identité visuelle unique, le tout dans le respect du référentiel QUALICOAT.",
     icon: "Palette",
     features: [
       {
@@ -221,6 +169,11 @@ export const SERVICES_FALLBACK: Service[] = [
           "L'effet moucheté superpose des micro-particules de couleurs contrastées pour un rendu pierre ou granite très esthétique. Idéal pour les espaces publics, il dissimule les traces d'usure quotidienne.",
       },
       {
+        title: "Effets architecturaux",
+        description:
+          "Effets corten (oxydation stabilisée), finitions métalliques structurées, reflets irisés et finitions anodisées profondes — quatre familles d'effets premium pour les projets d'architecture et de design qui sortent du nuancier classique.",
+      },
+      {
         title: "Traitement anti-graffiti",
         description:
           "Notre revêtement anti-graffiti crée une surface non poreuse sur laquelle les peintures et marqueurs ne pénètrent pas. Le nettoyage s'effectue simplement à l'eau chaude ou au nettoyant doux, sans solvant agressif.",
@@ -231,12 +184,13 @@ export const SERVICES_FALLBACK: Service[] = [
       {
         question: "Les finitions spéciales coûtent-elles plus cher ?",
         answer:
-          "Le surcoût dépend de la finition choisie. Les effets mat, satiné et brillant sont au même tarif que le thermolaquage standard. Les texturés, mouchetés et anti-graffiti entraînent un léger supplément lié au coût de la poudre spéciale, généralement de l'ordre de 10 à 20 %.",
+          "Le surcoût dépend de la finition choisie. Les effets mat, satiné et brillant sont au même tarif que le thermolaquage standard. Les texturés, mouchetés, anti-graffiti et effets architecturaux entraînent un léger supplément lié au coût de la poudre certifiée, généralement de l'ordre de 10 à 20 %.",
       },
       {
-        question: "Peut-on combiner une finition spéciale avec une teinte RAL ?",
+        question:
+          "Peut-on combiner une finition spéciale avec une teinte RAL ou NCS ?",
         answer:
-          "Absolument. La majorité des effets (mat, satiné, texturé, moucheté) sont disponibles dans l'ensemble du nuancier RAL. Pour les collections premium Adaptacolor (Patina, Polaris, Dichroic, Sfera), les teintes et effets sont propres à chaque gamme.",
+          "Absolument. La majorité des effets (mat, satiné, texturé, moucheté) sont disponibles dans l'ensemble des nuanciers RAL et NCS. Les effets architecturaux (corten, métalliques, irisés, anodisés) ont leur propre palette de teintes propres à chaque famille.",
       },
       {
         question: "L'anti-graffiti modifie-t-il l'aspect de la pièce ?",

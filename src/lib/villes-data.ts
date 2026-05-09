@@ -181,7 +181,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTime: "45 min",
     access: "A1 puis A3 direction Bobigny",
     localContext:
-      "Préfecture de la Seine-Saint-Denis, Bobigny est au coeur d'un vaste bassin industriel et tertiaire. Les entreprises de construction métallique, les chantiers du Grand Paris Express et les copropriétés en rénovation constituent une clientèle régulière pour nos prestations de sablage, métallisation et thermolaquage.",
+      "Préfecture de la Seine-Saint-Denis, Bobigny est au coeur d'un vaste bassin industriel et tertiaire. Les entreprises de construction métallique, les chantiers du Grand Paris Express et les copropriétés en rénovation constituent une clientèle régulière pour nos prestations de sablage, finitions spéciales et thermolaquage.",
     nearbyVilles: ["saint-denis", "montreuil", "paris", "sarcelles"],
   },
   {

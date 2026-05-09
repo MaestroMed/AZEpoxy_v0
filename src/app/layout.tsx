@@ -45,7 +45,7 @@ export const metadata: Metadata = {
       "peinture poudre",
       "RAL",
       "sablage",
-      "métallisation",
+      "finitions spéciales",
       "anti-corrosion",
       "jantes thermolaquées",
       "moto art",

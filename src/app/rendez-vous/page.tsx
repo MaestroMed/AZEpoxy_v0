@@ -17,7 +17,7 @@ const HIGHLIGHTS = [
   {
     title: "Visite atelier 30 min",
     description:
-      "Découvrez notre cabine de thermolaquage 7 m, notre stock de poudres et les collections premium Adaptacolor en vrai.",
+      "Découvrez notre cabine de thermolaquage 7 m, notre stock de poudres et les collections premium effets architecturaux en vrai.",
   },
   {
     title: "Conseil couleur RAL",

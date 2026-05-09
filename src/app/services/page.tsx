@@ -20,7 +20,7 @@ import { PROCESS_STEPS } from "@/lib/process-data";
 export const metadata = buildMetadata({
   title: "Nos Services",
   description:
-    "Thermolaquage poudre époxy, sablage, grenaillage, métallisation et finitions spéciales. Découvrez l'ensemble de nos prestations industrielles depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.",
+    "Thermolaquage poudre époxy, sablage, grenaillage et finitions spéciales conformes au référentiel QUALICOAT. Découvrez l'ensemble de nos prestations industrielles depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.",
   path: "/services",
 });
 
@@ -28,21 +28,18 @@ export const metadata = buildMetadata({
 const SERVICE_ACCENTS = [
   "bg-brand-night",
   "bg-brand-orange/10",
-  "bg-gradient-to-br from-slate-600 to-slate-800",
   "bg-gradient-to-br from-amber-500 via-rose-500 to-purple-900",
 ] as const;
 
 const SERVICE_ICONS = [
   <Flame key="flame" className="h-8 w-8 text-brand-orange" />,
   <Sparkles key="sparkles" className="h-8 w-8 text-brand-orange" />,
-  <Layers key="layers" className="h-8 w-8 text-brand-orange" />,
   <Settings key="settings" className="h-8 w-8 text-brand-orange" />,
 ];
 
 const SERVICE_LABELS = [
   "Cabine de thermolaquage",
-  "Cabine de sablage",
-  "Pistolet de métallisation",
+  "Cabine de sablage 7 × 3 × 4 m",
   "Finitions & effets spéciaux",
 ];
 
@@ -61,7 +58,7 @@ export default async function ServicesPage() {
             </span>
           </>
         }
-        description="De la préparation de surface à la finition finale, AZ Époxy maîtrise l'ensemble de la chaîne du revêtement industriel. Thermolaquage, sablage, métallisation, finitions spéciales — chaque prestation suit un protocole rigoureux pour une qualité irréprochable."
+        description="De la préparation de surface à la finition finale, AZ Époxy maîtrise l'ensemble de la chaîne du revêtement industriel. Thermolaquage poudre époxy, sablage & grenaillage, finitions spéciales — chaque prestation suit un protocole rigoureux conforme au référentiel QUALICOAT et aux normes ISO."
         variant="night"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
@@ -78,7 +75,7 @@ export default async function ServicesPage() {
               labelIcon={<Flame className="h-3 w-3" />}
               title={
                 <>
-                  4 métiers.{" "}
+                  3 métiers.{" "}
                   <span className="bg-gradient-ember bg-clip-text text-transparent">
                     1 exigence.
                   </span>

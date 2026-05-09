@@ -162,9 +162,9 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
                 Sélectionner un service
               </option>
               <option value="thermolaquage">Thermolaquage</option>
-              <option value="sablage">Sablage</option>
-              <option value="metallisation">Métallisation</option>
+              <option value="sablage">Sablage & grenaillage</option>
               <option value="finitions">Finitions spéciales</option>
+              <option value="chaudronnerie">Chaudronnerie / cadres</option>
             </select>
           </div>
 

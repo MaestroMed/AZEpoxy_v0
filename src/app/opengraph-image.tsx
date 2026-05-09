@@ -12,7 +12,7 @@ export default async function OpengraphImage() {
       label: "Thermolaquage",
       title: "Thermolaquage poudre époxy",
       tagline:
-        "200+ couleurs RAL · cabine 7 m · service express 48 h · 0 COV",
+        "200+ couleurs RAL · cabine 7 × 3 × 4 m · service express 48 h · 0 COV",
     }),
     size
   );

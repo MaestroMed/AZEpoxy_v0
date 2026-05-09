@@ -15,7 +15,7 @@ import { PortfolioSection } from "./portfolio-section";
 export const metadata = buildMetadata({
   title: "Nos Réalisations",
   description:
-    "Découvrez nos projets de thermolaquage, sablage et métallisation. Jantes, moto, mobilier, portails et pièces industrielles.",
+    "Découvrez nos projets de thermolaquage, sablage et finitions spéciales. Jantes, moto, mobilier, portails et pièces industrielles.",
   path: "/realisations",
 });
 
@@ -41,7 +41,7 @@ export default async function RealisationsPage() {
             </span>
           </>
         }
-        description="Thermolaquage, sablage, métallisation — découvrez nos projets récents. Jantes, moto, pièces auto, portails, mobilier et structures métalliques, chaque réalisation témoigne de notre exigence qualité."
+        description="Thermolaquage, sablage, finitions spéciales — découvrez nos projets récents. Jantes, moto, pièces auto, portails, mobilier et structures métalliques, chaque réalisation témoigne de notre exigence qualité."
         variant="night"
         breadcrumbs={[
           { label: "Accueil", href: "/" },

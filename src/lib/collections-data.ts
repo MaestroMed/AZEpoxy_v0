@@ -1,6 +1,7 @@
 /**
- * Collections premium Adaptacolor — effets spéciaux haut de gamme
- * proposés par AZ Époxy en complément du nuancier RAL Classic.
+ * Familles d'effets architecturaux haut de gamme proposées par AZ Époxy
+ * en complément des nuanciers RAL Classic et NCS. Toutes les poudres
+ * sont certifiées QUALICOAT, qualité architecturale.
  */
 
 export interface Collection {
@@ -18,10 +19,10 @@ export interface Collection {
 export const COLLECTIONS: Collection[] = [
   {
     slug: "patina",
-    name: "Patina",
-    tagline: "Effets corten & oxyde",
+    name: "Effets Corten",
+    tagline: "Aspect oxydé & métal patiné",
     description:
-      "La collection Patina reproduit fidèlement l'aspect du métal patiné par le temps : corten oxydé, cuivre vieilli, bronze antique. Chaque pièce acquiert un caractère unique grâce aux variations subtiles de tonalité propres au procédé. Un revêtement qui raconte une histoire, sans les inconvénients de la corrosion réelle.",
+      "La famille Effets Corten reproduit fidèlement l'aspect du métal patiné par le temps : corten oxydé, cuivre vieilli, bronze antique. Chaque pièce acquiert un caractère unique grâce aux variations subtiles de tonalité propres au procédé. Un revêtement qui raconte une histoire, sans les inconvénients de la corrosion réelle.",
     gradient: "from-amber-800 via-orange-700 to-red-900",
     characteristics: [
       "Effet vieilli naturel — imitation corten, cuivre et bronze",
@@ -50,10 +51,10 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     slug: "polaris",
-    name: "Polaris",
-    tagline: "Métalliques structurés",
+    name: "Effets Métalliques",
+    tagline: "Reflets structurés haute brillance",
     description:
-      "La collection Polaris sublime le métal par des reflets profonds et un grain métallique prononcé. Inspirées de l'aluminium anodisé et de l'acier brossé, ces teintes apportent une élégance industrielle contemporaine. Le rendu structuré capte et diffuse la lumière pour un effet visuel saisissant.",
+      "La famille Effets Métalliques sublime le métal par des reflets profonds et un grain métallique prononcé. Inspirées de l'aluminium anodisé et de l'acier brossé, ces teintes apportent une élégance industrielle contemporaine. Le rendu structuré capte et diffuse la lumière pour un effet visuel saisissant.",
     gradient: "from-slate-500 via-zinc-400 to-slate-700",
     characteristics: [
       "Reflets profonds avec effet miroir directionnel",
@@ -82,10 +83,10 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     slug: "dichroic",
-    name: "Dichroic",
-    tagline: "Reflets irisés",
+    name: "Effets Irisés",
+    tagline: "Reflets multi-tons selon l'angle",
     description:
-      "Inspirée du verre dichroïque et des ailes de papillon, la collection Dichroic offre des reflets irisés qui changent de couleur selon l'angle d'observation et l'éclairage. Un effet spectaculaire et contemporain pour les projets qui osent se démarquer.",
+      "Inspirée du verre dichroïque et des ailes de papillon, la famille Effets Irisés offre des reflets qui changent de couleur selon l'angle d'observation et l'éclairage. Un effet spectaculaire et contemporain pour les projets qui osent se démarquer.",
     gradient: "from-fuchsia-500 via-cyan-400 to-indigo-600",
     characteristics: [
       "Effet multi-reflets — la couleur varie selon l'angle de vue",
@@ -114,10 +115,10 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     slug: "sfera",
-    name: "Sfera",
-    tagline: "Cosmos anodisé",
+    name: "Effets Anodisés",
+    tagline: "Teintes profondes haute densité",
     description:
-      "La collection Sfera s'inspire des nébuleuses et des reflets cosmiques pour créer des teintes profondes à l'aspect anodisé. Des violets galactiques aux ors solaires en passant par des roses stellaires, chaque couleur évoque l'immensité de l'univers avec une finition d'une rare intensité.",
+      "La famille Effets Anodisés s'inspire des nébuleuses et des reflets cosmiques pour créer des teintes profondes à l'aspect anodisé haute densité. Des violets galactiques aux ors solaires en passant par des roses stellaires, chaque couleur évoque l'immensité de l'univers avec une finition d'une rare intensité.",
     gradient: "from-amber-500 via-rose-500 to-purple-900",
     characteristics: [
       "Teintes profondes inspirées de l'univers et des nébuleuses",

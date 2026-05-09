@@ -48,7 +48,7 @@ export const TESTIMONIALS_FALLBACK: Testimonial[] = [
     company: "CB Architecture",
     role: "Architecte DPLG",
     quote:
-      "J'ai spécifié la collection Patina pour les bardages d'un projet de réhabilitation. L'effet corten est saisissant de réalisme, sans les contraintes d'entretien de l'acier autopatinable. AZ Époxy a parfaitement compris le cahier des charges.",
+      "J'ai spécifié la collection Effets Corten pour les bardages d'un projet de réhabilitation. L'effet corten est saisissant de réalisme, sans les contraintes d'entretien de l'acier autopatinable. AZ Époxy a parfaitement compris le cahier des charges.",
     service: "Finitions Spéciales",
     rating: 5,
   },

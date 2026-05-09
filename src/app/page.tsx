@@ -43,7 +43,6 @@ export const metadata = buildMetadata({
 const SERVICE_ICONS: Record<string, typeof Flame> = {
   thermolaquage: Flame,
   sablage: Wrench,
-  metallisation: ShieldCheck,
   finitions: Palette,
 };
 
@@ -82,19 +81,20 @@ export default async function HomePage() {
               </span>
 
               <h1 className="heading-display mt-6 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-[clamp(3.5rem,7vw,7rem)]">
-                200°C.
+                Procédé
                 <br />
                 <span className="bg-gradient-ember bg-clip-text text-transparent">
-                  15 minutes.
+                  Qualicoat.
                 </span>
                 <br />
                 Une protection à vie.
               </h1>
 
               <p className="mt-8 max-w-2xl text-balance text-lg text-white/70 sm:text-xl">
-                Finition premium par thermolaquage poudre époxy. 200+ couleurs
-                RAL, cabine 7 mètres, service express 48h, 0 COV. Depuis notre
-                atelier de 1 800 m² à Bruyères-sur-Oise.
+                Finition premium par thermolaquage poudre époxy de qualité
+                architecturale. Nuanciers RAL et NCS, cabine 7 × 3 × 4 m,
+                service express 48h, 0 COV. Depuis notre atelier de 1 800 m² à
+                Bruyères-sur-Oise.
               </p>
 
               <div className="mt-10 flex flex-wrap gap-4 pointer-events-auto">
@@ -112,8 +112,8 @@ export default async function HomePage() {
           {/* Hero quick stats — animated counters */}
           <ScrollReveal delay={0.3}>
             <div className="relative mt-auto grid grid-cols-2 gap-6 border-t border-white/10 pt-10 sm:grid-cols-4">
-              <StatCounter value="200+" label="Couleurs RAL" dark />
-              <StatCounter value="7" label="Mètres — cabine max" dark />
+              <StatCounter value="200+" label="Couleurs RAL & NCS" dark />
+              <StatCounter value="7×3×4" label="Cabine en mètres" dark />
               <StatCounter value="48" label="Heures — express" dark />
               <StatCounter value="0" label="COV — sans solvant" dark />
             </div>
@@ -184,12 +184,12 @@ export default async function HomePage() {
                 <h2 className="heading-display mt-4 text-4xl text-brand-night sm:text-5xl">
                   Plus de 200 teintes.
                   <br />
-                  Et 4 collections signature.
+                  Et 4 familles d&apos;effets.
                 </h2>
                 <p className="mt-4 max-w-xl text-brand-charcoal/70">
-                  Nuancier RAL Classic complet, plus les collections premium
-                  Adaptacolor : Patina (effets corten), Polaris (métalliques),
-                  Dichroic (reflets irisés) et Sfera (anodisés cosmos).
+                  Nuanciers RAL Classic et NCS au complet, plus quatre familles
+                  d&apos;effets architecturaux : corten oxydés, métalliques
+                  structurés, reflets irisés et anodisés haute densité.
                 </p>
               </div>
               <Link
@@ -235,26 +235,26 @@ export default async function HomePage() {
             {[
               {
                 slug: "patina",
-                label: "Patina",
-                tagline: "Effets corten & oxyde",
+                label: "Effets Corten",
+                tagline: "Aspect oxydé & métal patiné",
                 gradient: "from-amber-800 via-orange-700 to-red-900",
               },
               {
                 slug: "polaris",
-                label: "Polaris",
-                tagline: "Métalliques structurés",
+                label: "Effets Métalliques",
+                tagline: "Reflets structurés haute brillance",
                 gradient: "from-slate-500 via-zinc-400 to-slate-700",
               },
               {
                 slug: "dichroic",
-                label: "Dichroic",
-                tagline: "Reflets irisés",
+                label: "Effets Irisés",
+                tagline: "Reflets multi-tons",
                 gradient: "from-fuchsia-500 via-cyan-400 to-indigo-600",
               },
               {
                 slug: "sfera",
-                label: "Sfera",
-                tagline: "Cosmos anodisé",
+                label: "Effets Anodisés",
+                tagline: "Teintes profondes",
                 gradient: "from-amber-500 via-rose-500 to-purple-900",
               },
             ].map((c) => (
@@ -376,7 +376,7 @@ export default async function HomePage() {
               {
                 icon: Flame,
                 title: "Procédé 6 étapes",
-                desc: "Dégraissage, primaire 80µ, cuisson 180°C, finition polyester 60µ, cuisson 200°C, contrôle qualité. Protocole industriel pro.",
+                desc: "Sablage, dégraissage, primaire, application poudre époxy 60-80 µ, cuisson en four, contrôle qualité. Protocole conforme au référentiel QUALICOAT.",
               },
               {
                 icon: ShieldCheck,
@@ -386,7 +386,7 @@ export default async function HomePage() {
               {
                 icon: Sparkles,
                 title: "Finitions signature",
-                desc: "Au-delà du RAL Classic : collections Patina, Polaris, Dichroic, Sfera du partenaire Adaptacolor.",
+                desc: "Au-delà des nuanciers RAL et NCS : effets corten, métalliques structurés, irisés et anodisés haute densité.",
               },
             ].map((f, i) => (
               <ScrollReveal key={f.title} delay={0.15 * i}>

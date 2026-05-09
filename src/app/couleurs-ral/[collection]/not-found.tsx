@@ -8,7 +8,7 @@ export default function CollectionNotFound() {
           Collection introuvable.
         </h1>
         <p className="mt-4 text-brand-charcoal/70">
-          Nos collections exclusives&nbsp;: Patina, Polaris, Dichroic, Sfera.
+          Nos collections exclusives&nbsp;: Effets Corten, Effets Métalliques, Effets Irisés, Effets Anodisés.
         </p>
         <Link href="/couleurs-ral" className="btn-primary mt-8">
           Voir le nuancier complet

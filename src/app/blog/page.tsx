@@ -10,7 +10,7 @@ import { Calendar, Clock, ArrowRight } from "lucide-react";
 export const metadata = buildMetadata({
   title: "Blog — Articles techniques sur le thermolaquage",
   description:
-    "Guides, tutoriels et conseils d'experts sur le thermolaquage, le sablage, la métallisation et la protection anticorrosion.",
+    "Guides, tutoriels et conseils d'experts sur le thermolaquage, le sablage, la finitions spéciales et la protection anticorrosion.",
   path: "/blog",
 });
 

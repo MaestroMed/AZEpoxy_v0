@@ -29,7 +29,7 @@ export function PriceEstimator() {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [sizeIndex, setSizeIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [zinc, setZinc] = useState(false);
+  const [primaire, setPrimaire] = useState(false);
   const [premium, setPremium] = useState(false);
 
   const piece = PIECE_TYPES.find((p) => p.slug === selectedType) ?? null;
@@ -47,9 +47,9 @@ export function PriceEstimator() {
     }
     let min = base.min * quantity;
     let max = base.max * quantity;
-    if (zinc) {
-      min = Math.round(min * OPTIONS.zinc.multiplier);
-      max = Math.round(max * OPTIONS.zinc.multiplier);
+    if (primaire) {
+      min = Math.round(min * OPTIONS.primaire.multiplier);
+      max = Math.round(max * OPTIONS.primaire.multiplier);
     }
     if (premium) {
       min = Math.round(min * OPTIONS.premium.multiplier);
@@ -73,7 +73,7 @@ export function PriceEstimator() {
     setSelectedType(null);
     setSizeIndex(0);
     setQuantity(1);
-    setZinc(false);
+    setPrimaire(false);
     setPremium(false);
   };
 
@@ -168,12 +168,12 @@ export function PriceEstimator() {
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={zinc}
-                onChange={(e) => setZinc(e.target.checked)}
+                checked={primaire}
+                onChange={(e) => setPrimaire(e.target.checked)}
                 className="h-4 w-4 rounded border-brand-night/15 text-brand-orange focus:ring-brand-orange"
               />
               <span className="text-sm text-brand-charcoal/80">
-                {OPTIONS.zinc.label}{" "}
+                {OPTIONS.primaire.label}{" "}
                 <span className="text-brand-charcoal/50">(+30%)</span>
               </span>
             </label>

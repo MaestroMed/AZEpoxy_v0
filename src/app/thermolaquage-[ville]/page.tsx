@@ -6,7 +6,6 @@ import {
   Car,
   Clock,
   Flame,
-  Layers,
   MapPin,
   Palette,
   Settings,
@@ -46,13 +45,13 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: `Thermolaquage à ${ville.name} (${ville.departmentCode}) — Poudre Époxy`,
-    description: `Thermolaquage poudre époxy professionnel à ${ville.name} (${ville.department}). ${ville.distance} de notre atelier, ${ville.driveTime} de trajet. 200+ couleurs RAL, sablage, métallisation, express 48h. Devis gratuit.`,
+    description: `Thermolaquage poudre époxy professionnel à ${ville.name} (${ville.department}). ${ville.distance} de notre atelier, ${ville.driveTime} de trajet. 200+ couleurs RAL, sablage, finitions spéciales, express 48h. Devis gratuit.`,
     path: `/thermolaquage-${ville.slug}`,
     keywords: [
       `thermolaquage ${ville.name}`,
       `poudre époxy ${ville.name}`,
       `sablage ${ville.name}`,
-      `métallisation ${ville.name}`,
+      `finitions spéciales ${ville.name}`,
       `thermolaquage ${ville.department}`,
       "AZ Époxy",
     ],
@@ -77,25 +76,19 @@ const CITY_SERVICES = [
     icon: <Flame className="h-6 w-6" />,
     title: "Thermolaquage",
     description:
-      "Application de poudre époxy par pistolet électrostatique et cuisson à 200 °C. Finition durable, résistante aux UV, aux chocs et à la corrosion. Plus de 200 couleurs RAL disponibles.",
+      "Application de poudre époxy par pistolet électrostatique et cuisson en four. Finition durable, résistante aux UV, aux chocs et à la corrosion. Plus de 200 teintes RAL et NCS disponibles.",
   },
   {
     icon: <Sparkles className="h-6 w-6" />,
     title: "Sablage & Grenaillage",
     description:
-      "Décapage intégral par projection d'abrasif. Élimination de la rouille, des anciennes peintures et des impuretés pour une adhérence parfaite avant thermolaquage.",
-  },
-  {
-    icon: <Layers className="h-6 w-6" />,
-    title: "Métallisation",
-    description:
-      "Projection thermique de zinc ou zinc-aluminium pour une protection cathodique de longue durée. Idéal pour les pièces exposées en milieu agressif (humidité, sel, chimie).",
+      "Décapage intégral par projection d'abrasif. Élimination de la rouille, des anciennes peintures et des impuretés pour une adhérence parfaite avant thermolaquage. Cabine 7 × 3 × 4 m pour les grandes pièces de chaudronnerie.",
   },
   {
     icon: <Settings className="h-6 w-6" />,
     title: "Finitions spéciales",
     description:
-      "Effets texturés, satinés, mats, métallisés ou nacrés grâce à nos collections Adaptacolor exclusives (Patina, Polaris, Dichroic, Sfera). Personnalisation sur mesure.",
+      "Effets corten, métalliques structurés, irisés et anodisés haute densité, finitions mates, satinées, brillantes, texturées ou mouchetées — toutes nos poudres sont certifiées QUALICOAT, qualité architecturale.",
   },
 ];
 
@@ -244,7 +237,7 @@ export default async function VillePage({
                   </span>
                 </>
               }
-              description={`Thermolaquage, sablage, métallisation et finitions spéciales — l'ensemble de nos prestations est disponible pour les clients de ${ville.name}.`}
+              description={`Thermolaquage, sablage, finitions spéciales et finitions spéciales — l'ensemble de nos prestations est disponible pour les clients de ${ville.name}.`}
             />
           </ScrollReveal>
 

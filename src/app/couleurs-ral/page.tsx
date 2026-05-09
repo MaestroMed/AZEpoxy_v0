@@ -12,7 +12,7 @@ import { RalPickerSection } from "./ral-picker-section";
 export const metadata = buildMetadata({
   title: "Nuancier RAL — 200+ Couleurs",
   description:
-    "Plus de 200 teintes RAL Classic et 4 collections premium Adaptacolor. Trouvez la couleur parfaite pour votre projet de thermolaquage.",
+    "Plus de 200 teintes RAL Classic et 4 collections premium effets architecturaux. Trouvez la couleur parfaite pour votre projet de thermolaquage.",
   path: "/couleurs-ral",
 });
 
@@ -32,7 +32,7 @@ export default function CouleursRalPage() {
             </span>
           </>
         }
-        description="Plus de 200 teintes RAL Classic. 4 collections premium Adaptacolor. Trouvez la couleur parfaite pour votre projet."
+        description="Plus de 200 teintes RAL Classic. 4 collections premium effets architecturaux. Trouvez la couleur parfaite pour votre projet."
         breadcrumbs={[{ label: "Couleurs RAL" }]}
       />
 
@@ -88,7 +88,7 @@ export default function CouleursRalPage() {
                 <>
                   Collections Signature{" "}
                   <span className="bg-gradient-ember bg-clip-text text-transparent">
-                    Adaptacolor
+                    effets architecturaux
                   </span>
                 </>
               }
@@ -100,25 +100,25 @@ export default function CouleursRalPage() {
             {[
               {
                 slug: "patina",
-                label: "Patina",
+                label: "Effets Corten",
                 tagline: "Effets corten & oxyde",
                 gradient: "from-amber-800 via-orange-700 to-red-900",
               },
               {
                 slug: "polaris",
-                label: "Polaris",
+                label: "Effets Métalliques",
                 tagline: "Metalliques structures",
                 gradient: "from-slate-500 via-zinc-400 to-slate-700",
               },
               {
                 slug: "dichroic",
-                label: "Dichroic",
+                label: "Effets Irisés",
                 tagline: "Reflets irises",
                 gradient: "from-fuchsia-500 via-cyan-400 to-indigo-600",
               },
               {
                 slug: "sfera",
-                label: "Sfera",
+                label: "Effets Anodisés",
                 tagline: "Cosmos anodise",
                 gradient: "from-amber-500 via-rose-500 to-purple-900",
               },

@@ -94,7 +94,7 @@ export default async function AProposPage() {
                   Aujourd&apos;hui, AZ Époxy dispose d&apos;un atelier de 1 800 m²,
                   d&apos;une cabine de thermolaquage de 7 mètres, d&apos;un accès
                   complet à la gamme RAL ainsi qu&apos;aux collections premium
-                  (Qualicoat, Interpon, IGP), et d&apos;un service express 48h pour
+                  (Qualicoat, poudre certifiée, IGP), et d&apos;un service express 48h pour
                   les urgences. Nous traitons plus de 2 000 projets par an, pour des
                   professionnels et des particuliers exigeants.
                 </p>
