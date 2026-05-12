@@ -77,6 +77,7 @@ export default async function BlogArticlePage({
         title={article.title}
         description={article.description}
         variant="transparent"
+        image={article.image}
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Blog", href: "/blog" },

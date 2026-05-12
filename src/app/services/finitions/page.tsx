@@ -158,6 +158,7 @@ export default async function FinitionsPage() {
         }
         description="Au-delà du RAL standard : effets mat profond, satiné velouté, brillant miroir, texturé, moucheté granite et traitement anti-graffiti. Sublimez vos pièces avec des finitions uniques."
         variant="transparent"
+        image="/images/heros/services-finitions.webp"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Services", href: "/services" },

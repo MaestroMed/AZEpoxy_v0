@@ -72,6 +72,7 @@ export default function DevisPage() {
           </>
         }
         description="Décrivez votre projet en quelques clics. Nous vous envoyons un chiffrage précis et personnalisé dans les 24 heures ouvrées — gratuit, sans engagement."
+        image="/images/heros/contact-shared.webp"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Devis" },

@@ -208,6 +208,7 @@ export default async function SpecialtyPage({
         }
         description={specialty.tagline}
         variant="transparent"
+        image={`/images/heros/specialites-${specialty.slug}.webp`}
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Spécialités", href: "/specialites" },

@@ -35,6 +35,7 @@ export default async function BlogPage() {
         }
         description="Guides, tutoriels et conseils d'experts pour comprendre nos métiers et faire les bons choix."
         variant="transparent"
+        image="/images/heros/blog.webp"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Blog" },

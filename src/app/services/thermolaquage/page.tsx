@@ -71,6 +71,7 @@ export default async function ThermolaquagePage() {
         }
         description="Le revêtement poudre époxy par charge électrostatique : une finition ultra-durable, sans solvant, disponible en plus de 200 teintes RAL et effets spéciaux. Le standard industriel pour une protection à vie."
         variant="transparent"
+        image="/images/heros/services-thermolaquage.webp"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Services", href: "/services" },

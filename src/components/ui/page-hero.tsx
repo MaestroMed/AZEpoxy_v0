@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -20,6 +21,15 @@ interface PageHeroProps {
    */
   variant?: "transparent" | "night" | "ember";
   /**
+   * Editorial background photograph. When set, replaces the variant deco
+   * with a `next/image fill priority` + a left-anchored gradient overlay
+   * that keeps the headline legible without flattening the image.
+   * Used for catalogue and secondary pages that need a strong product
+   * visual; pages that should keep the persistent narrative swarm
+   * showing through simply omit this prop.
+   */
+  image?: string;
+  /**
    * Trail of breadcrumbs to display *after* "Accueil". Passing a leading
    * "Accueil" entry is supported for back-compat — it is silently stripped.
    * The resulting list is also serialized as a BreadcrumbList JSON-LD script.
@@ -33,6 +43,7 @@ export function PageHero({
   title,
   description,
   variant = "transparent",
+  image,
   breadcrumbs,
   children,
 }: PageHeroProps) {
@@ -45,14 +56,34 @@ export function PageHero({
         "relative min-h-[60vh] overflow-hidden text-white",
         // Transparent variant does NOT use `isolate` — the stacking
         // context would block the persistent canvas from showing through.
-        variant !== "transparent" && "isolate",
-        variant === "night" && "bg-brand-night",
-        variant === "ember" && "bg-gradient-ember"
+        // When an `image` is set we DO want isolate so the photo sits in
+        // its own stacking context above the persistent canvas.
+        (variant !== "transparent" || image) && "isolate",
+        !image && variant === "night" && "bg-brand-night",
+        !image && variant === "ember" && "bg-gradient-ember",
+        image && "bg-brand-night"
       )}
     >
       {showCrumbs && <JsonLd data={breadcrumbLd(trail)} />}
 
-      {variant === "transparent" && (
+      {image && (
+        <>
+          <Image
+            src={image}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          {/* Left-anchored gradient keeps the headline legible without
+              flattening the right-hand image silhouette. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-night/90 via-brand-night/55 to-brand-night/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-night/80 via-transparent to-brand-night/30" />
+        </>
+      )}
+
+      {!image && variant === "transparent" && (
         <>
           {/* Desktop : left-biased dim so the text zone reads on any
               phase, the right half stays open for the swarm to show. */}
@@ -68,7 +99,7 @@ export function PageHero({
           />
         </>
       )}
-      {variant === "night" && (
+      {!image && variant === "night" && (
         <>
           <div className="absolute inset-0 bg-gradient-night" />
           <div className="absolute inset-0 bg-industrial-grid-dark opacity-40" />
@@ -76,7 +107,7 @@ export function PageHero({
           <div className="absolute right-0 top-0 h-[400px] w-[400px] rounded-full bg-brand-orange/10 blur-[120px]" />
         </>
       )}
-      {variant === "ember" && (
+      {!image && variant === "ember" && (
         <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay" />
       )}
 

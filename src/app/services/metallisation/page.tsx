@@ -150,6 +150,7 @@ export default async function MetallisationPage() {
         }
         description="Projection thermique de zinc ou d'aluminium fondu pour une protection anti-corrosion extrême. Conforme ISO 2063, applicable sur des pièces de toute dimension, combinable avec le thermolaquage pour une durée de vie de 40 ans."
         variant="transparent"
+        image="/images/heros/services-sablage.webp"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Services", href: "/services" },

@@ -61,6 +61,7 @@ export default function ContactPage() {
         }
         description="Une question, un projet ? Notre équipe est à votre écoute."
         variant="transparent"
+        image="/images/heros/contact-shared.webp"
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: "Contact" },

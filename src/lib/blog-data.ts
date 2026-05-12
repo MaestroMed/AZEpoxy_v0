@@ -12,6 +12,7 @@ export interface BlogArticle {
 export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   {
     slug: "thermolaquage-vs-peinture-liquide",
+    image: "/images/blog/thermolaquage-vs-peinture-liquide.webp",
     title: "Thermolaquage vs peinture liquide : quel choix pour vos pièces métalliques ?",
     description:
       "Comparatif complet entre le thermolaquage poudre époxy et la peinture liquide traditionnelle. Durabilité, coût, environnement.",
@@ -42,6 +43,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "preparer-jantes-thermolaquage",
+    image: "/images/blog/preparer-jantes-thermolaquage.webp",
     title: "Comment préparer vos jantes avant un thermolaquage ?",
     description:
       "Les étapes essentielles pour préparer vos jantes alu avant de les confier à un professionnel du thermolaquage.",
@@ -72,6 +74,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "couleurs-ral-guide-complet",
+    image: "/images/blog/couleurs-ral-guide-complet.webp",
     title: "Guide complet des couleurs RAL pour le thermolaquage",
     description:
       "Tout savoir sur le nuancier RAL : histoire, familles de couleurs, comment choisir la teinte idéale pour votre projet.",
@@ -125,6 +128,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "sablage-metal-pourquoi-indispensable",
+    image: "/images/blog/sablage-metal-pourquoi-indispensable.webp",
     title: "Sablage métal : pourquoi c'est une étape indispensable",
     description:
       "Le sablage est la clé d'un thermolaquage réussi. Découvrez pourquoi cette préparation de surface est incontournable.",
@@ -163,6 +167,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "metallisation-zinc-protection-ultime",
+    image: "/images/blog/metallisation-zinc-protection-ultime.webp",
     title: "Métallisation au zinc : la protection anti-corrosion ultime",
     description:
       "Découvrez la métallisation au zinc par projection thermique, le traitement anticorrosion le plus performant pour l'acier.",
@@ -203,6 +208,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "entretien-pieces-thermolaquees",
+    image: "/images/blog/entretien-pieces-thermolaquees.webp",
     title: "Comment entretenir vos pièces thermolaquées pour qu'elles durent",
     description:
       "Conseils pratiques pour entretenir et nettoyer vos pièces thermolaquées : jantes, portails, mobilier, garde-corps.",
@@ -235,6 +241,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "thermolaquage-portail-fer-forge",
+    image: "/images/blog/thermolaquage-portail-fer-forge.webp",
     title: "Thermolaquage d'un portail en fer forgé : le guide complet",
     description:
       "De la dépose à la repose : tout le processus de thermolaquage d'un portail en fer forgé expliqué étape par étape.",
@@ -268,6 +275,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "finitions-speciales-tendances",
+    image: "/images/blog/finitions-speciales-tendances.webp",
     title: "Finitions spéciales : les tendances 2025 en thermolaquage",
     description:
       "Effet rouille Corten, givre, caméléon, soft-touch : découvrez les finitions tendance qui subliment vos pièces.",
@@ -298,6 +306,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "thermolaquage-moto-custom",
+    image: "/images/blog/thermolaquage-moto-custom.webp",
     title: "Thermolaquage moto : personnalisez votre machine à l'infini",
     description:
       "Cadre, bras oscillant, jantes, carter : le thermolaquage ouvre des possibilités infinies pour customiser votre moto.",
@@ -346,6 +355,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   },
   {
     slug: "normes-qualite-thermolaquage-qualicoat",
+    image: "/images/blog/normes-qualite-thermolaquage-qualicoat.webp",
     title: "Normes et certifications en thermolaquage : ce que vous devez savoir",
     description:
       "Qualicoat, Qualimarine, GSB, ISO 12944 : comprendre les normes qualité qui garantissent un thermolaquage durable.",
