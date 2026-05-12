@@ -77,7 +77,7 @@ const CITY_SERVICES = [
     icon: <Flame className="h-6 w-6" />,
     title: "Thermolaquage",
     description:
-      "Application de poudre époxy par pistolet électrostatique et cuisson à 200 °C. Finition durable, résistante aux UV, aux chocs et à la corrosion. Plus de 200 couleurs RAL disponibles.",
+      "Application de poudre époxy par pistolet électrostatique et cuisson en four. Finition durable, résistante aux UV, aux chocs et à la corrosion. Nuanciers RAL et NCS au complet.",
   },
   {
     icon: <Sparkles className="h-6 w-6" />,

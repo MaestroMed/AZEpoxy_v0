@@ -120,7 +120,7 @@ export default async function AProposPage() {
                     </span>
                   </p>
                   <p className="mt-5 text-sm text-white/55">
-                    Cabine 7 m · Four pro 200°C · Sableuse · Pont 3 t · 2 000 projets/an.
+                    Cabine 7 × 3 × 4 m · Four professionnel · Sableuse · Pont 3 t · 2 000 projets/an.
                   </p>
                 </div>
               </div>
@@ -242,9 +242,9 @@ export default async function AProposPage() {
                   </p>
                 </div>
                 <div className="relative flex flex-wrap gap-x-8 gap-y-3 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">200°C</span>cuisson</span>
+                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">QUALICOAT</span>référentiel</span>
                   <span><span className="mr-2 font-display text-xl font-black text-brand-orange">3 t</span>pont roulant</span>
-                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">15&apos;</span>polymérisation</span>
+                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">7 m</span>cabine</span>
                 </div>
               </div>
             </ScrollReveal>

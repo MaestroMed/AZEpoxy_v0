@@ -111,7 +111,7 @@ const PROCESS_STEPS = [
   {
     n: "05",
     label: "Cuisson",
-    note: "200°C · 15 min · four pro",
+    note: "Four pro · cycle adapté à la pièce",
   },
   {
     n: "06",
@@ -291,7 +291,7 @@ export default async function RealisationDetailPage({
                 <SpecRow label="Origine" value={project.origin ?? "Commande client direct"} />
                 <SpecRow label="Préparation" value={project.preparation ?? "Sablage SA 2.5 + primaire zinc"} />
                 <SpecRow label="Finition" value={project.finish ?? "Thermolaquage poudre époxy"} />
-                <SpecRow label="Four" value={project.ovenCycle ?? "200°C × 15 min"} />
+                <SpecRow label="Four" value={project.ovenCycle ?? "Cycle adapté à la pièce"} />
                 <SpecRow label="Atelier" value={project.ateliertIn ?? "Bruyères-sur-Oise"} />
               </dl>
 

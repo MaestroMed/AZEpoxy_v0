@@ -82,7 +82,7 @@ const PROCESS_STEPS = [
     num: "03",
     title: "Thermolaquage",
     description:
-      "Application de la poudre époxy par pistolet électrostatique, puis cuisson en four à 200 °C pendant 15 minutes. Le film atteint 60-80 µm d'épaisseur.",
+      "Application de la poudre époxy par pistolet électrostatique, puis cuisson en four, durée variable selon la pièce. Le film atteint 60-80 µm d'épaisseur.",
   },
   {
     num: "04",

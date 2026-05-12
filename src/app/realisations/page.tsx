@@ -83,7 +83,7 @@ export default async function RealisationsPage() {
             <p className="mt-8 max-w-2xl text-balance text-lg text-white/75 sm:text-xl">
               Jantes, moto, pièces auto, portails, mobilier et structures
               métalliques — chaque réalisation témoigne de notre exigence
-              qualité et de la précision du thermolaquage 200°C.
+              qualité et de la précision du procédé QUALICOAT.
             </p>
           </div>
         </div>
