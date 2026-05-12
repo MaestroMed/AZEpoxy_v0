@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/seo";
 import {
@@ -28,7 +29,6 @@ import { ArrowUpRight } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { StatCounter } from "@/components/ui/stat-counter";
 import { TestimonialCard } from "@/components/ui/testimonial-card";
-import { ProcessStep } from "@/components/ui/process-step";
 import { CtaBand } from "@/components/ui/cta-band";
 import { HomepageSwarmTimeline } from "@/components/nuee/homepage-swarm-timeline";
 import { RalRecommender } from "@/components/ui/ral-recommender";
@@ -50,6 +50,64 @@ const SERVICE_ICONS: Record<string, typeof Flame> = {
   sablage: Wrench,
   metallisation: ShieldCheck,
   finitions: Palette,
+};
+
+/** Section-card photographs (16:9 banner per service). */
+const SERVICE_IMAGES: Record<string, string | undefined> = {
+  thermolaquage: "/images/services/thermolaquage.webp",
+  sablage: "/images/services/sablage.webp",
+  // Metallisation reuses the sandblasting photograph as a visual proxy
+  // (similar abrasive-projection workshop scene).
+  metallisation: "/images/services/sablage.webp",
+  finitions: "/images/services/finitions.webp",
+};
+
+/** RAL collection card photographs (replaces the legacy CSS gradients). */
+const COLLECTION_IMAGES: Record<string, string> = {
+  patina: "/images/collections/patina.webp",
+  polaris: "/images/collections/polaris.webp",
+  dichroic: "/images/collections/dichroic.webp",
+  sfera: "/images/collections/sfera.webp",
+};
+
+/** Specialty card photographs (replaces the legacy SPECIALTY_BG flat colors). */
+const SPECIALTY_IMAGES: Record<string, string> = {
+  jantes: "/images/specialites/jantes.webp",
+  moto: "/images/specialites/moto.webp",
+  voiture: "/images/specialites/voiture.webp",
+  pieces: "/images/specialites/pieces.webp",
+};
+
+/** Process-step photographs (square 1:1 per step). */
+const PROCESS_IMAGES: Record<number, string> = {
+  1: "/images/process/01-inspection.webp",
+  2: "/images/process/02-sablage.webp",
+  3: "/images/process/03-degraissage.webp",
+  4: "/images/process/04-primaire.webp",
+  5: "/images/process/05-poudre.webp",
+  6: "/images/process/06-cuisson.webp",
+};
+
+/** Editorial photographs per realisation id — mirrors the map in
+ * `app/realisations/portfolio-section.tsx`. Kept local on purpose so the
+ * homepage server component doesn't pull a client module. */
+const REALISATION_IMAGES: Record<number, string> = {
+  1: "/images/realisations/01-bmw-m4-noir.webp",
+  2: "/images/realisations/02-audi-rs3-graphite.webp",
+  3: "/images/realisations/03-mercedes-blanc.webp",
+  4: "/images/realisations/04-golf-gti-bicolor.webp",
+  5: "/images/realisations/05-triumph-vert.webp",
+  6: "/images/realisations/06-ducati-rouge.webp",
+  7: "/images/realisations/07-yamaha-noir-or.webp",
+  8: "/images/realisations/08-banquettes-anthracite.webp",
+  9: "/images/realisations/09-table-corten.webp",
+  10: "/images/realisations/10-etageres-blanches.webp",
+  11: "/images/realisations/11-charpente-gris.webp",
+  12: "/images/realisations/12-garde-corps-inox.webp",
+  13: "/images/realisations/13-supports-solaires.webp",
+  14: "/images/realisations/14-portail-coulissant.webp",
+  15: "/images/realisations/15-portail-vert.webp",
+  16: "/images/realisations/16-portail-lames-noir.webp",
 };
 
 /** Background colours for specialty cards */
@@ -77,14 +135,31 @@ export default async function HomePage() {
           through phases as the user scrolls this page. */}
       <HomepageSwarmTimeline />
 
-      {/* ── Section 1 — Hero (AZ + ÉPOXY via narrative swarm, dynamic RAL) ─ */}
-      <section className="relative h-[100svh] overflow-hidden text-white">
+      {/* ── Section 1 — Hero (cinematic video + readability overlays) ─── */}
+      <section className="relative h-[100svh] overflow-hidden bg-brand-night text-white">
+        {/* Layer 0 : background hero video (with poster fallback). The
+            cinematic loop drives the visual identity from the very first
+            paint; the swarm canvas, when it shows, blends in via the
+            overlays declared just below. */}
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/images/hero/hero-poster.webp"
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
+
         {/* Text-readability overlays — responsive :
-            • Desktop / landscape : left-biased (swarm shines on the right)
+            • Desktop / landscape : left-biased (image silhouette breathes
+              on the right)
             • Mobile / portrait : uniform dimming + bottom fade (text
-              wraps across the full width, and the swarm lives behind
-              the whole content) */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/70 to-transparent hidden md:block" aria-hidden />
+              wraps across the full width) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/70 to-brand-night/10 hidden md:block" aria-hidden />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-night/80 via-transparent to-transparent hidden md:block" aria-hidden />
         {/* Mobile / portrait overlay */}
         <div className="absolute inset-0 bg-brand-night/65 md:hidden" aria-hidden />
@@ -173,21 +248,35 @@ export default async function HomePage() {
                 <ScrollReveal key={service.slug} delay={0.1 * i}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="group block rounded-2xl border border-brand-night/10 bg-white p-8 transition-all hover:shadow-lg"
+                    className="group block overflow-hidden rounded-2xl border border-brand-night/10 bg-white transition-all hover:shadow-lg"
                   >
-                    <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-orange/10 text-brand-orange">
-                      <Icon className="h-5 w-5" />
+                    {SERVICE_IMAGES[service.slug] && (
+                      <div className="relative aspect-[16/9] overflow-hidden">
+                        <Image
+                          src={SERVICE_IMAGES[service.slug]!}
+                          alt={service.title}
+                          fill
+                          sizes="(min-width: 1024px) 50vw, 100vw"
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                      </div>
+                    )}
+                    <div className="p-8">
+                      <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-orange/10 text-brand-orange">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <h3 className="heading-display text-xl text-brand-night">
+                        {service.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-brand-charcoal/70">
+                        {service.tagline}
+                      </p>
+                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange transition-colors group-hover:text-brand-night">
+                        En savoir plus
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                      </span>
                     </div>
-                    <h3 className="heading-display text-xl text-brand-night">
-                      {service.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-brand-charcoal/70">
-                      {service.tagline}
-                    </p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange transition-colors group-hover:text-brand-night">
-                      En savoir plus
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                    </span>
                   </Link>
                 </ScrollReveal>
               );
@@ -288,11 +377,17 @@ export default async function HomePage() {
                   href={`/couleurs-ral/${c.slug}`}
                   className="group relative block h-48 overflow-hidden rounded-2xl"
                 >
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${c.gradient}`}
+                  <Image
+                    src={COLLECTION_IMAGES[c.slug]!}
+                    alt={c.label}
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${c.gradient} opacity-40 mix-blend-multiply`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
                   <div className="relative flex h-full flex-col justify-end p-6 text-white">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                       Collection
@@ -327,18 +422,40 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {PROCESS_STEPS.map((ps, i) => (
-              <ScrollReveal key={ps.step} delay={0.1 * i}>
-                {/* Dark-mode override wrapper for ProcessStep */}
-                <div className="[&_h3]:text-white [&_p]:text-white/60 [&_span]:text-brand-orange/30">
-                  <ProcessStep
-                    step={ps.step}
-                    title={ps.title}
-                    description={ps.description}
-                  />
-                </div>
-              </ScrollReveal>
-            ))}
+            {PROCESS_STEPS.map((ps, i) => {
+              const formattedStep = String(ps.step).padStart(2, "0");
+              const image = PROCESS_IMAGES[ps.step];
+              return (
+                <ScrollReveal key={ps.step} delay={0.1 * i}>
+                  <div className="relative">
+                    {image && (
+                      <div className="relative mb-6 aspect-square overflow-hidden rounded-2xl">
+                        <Image
+                          src={image}
+                          alt={ps.title}
+                          fill
+                          sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                          className="object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/60 via-transparent to-transparent" />
+                        <span
+                          className="heading-display pointer-events-none absolute bottom-3 right-4 select-none text-7xl text-white/80"
+                          aria-hidden="true"
+                        >
+                          {formattedStep}
+                        </span>
+                      </div>
+                    )}
+                    <h3 className="heading-display text-xl text-white">
+                      {ps.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-white/60">
+                      {ps.description}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -369,16 +486,25 @@ export default async function HomePage() {
                   href={`/specialites/${spec.slug}`}
                   className="group relative block h-56 overflow-hidden rounded-2xl"
                 >
-                  {/* Card background */}
-                  <div
-                    className={`absolute inset-0 ${SPECIALTY_BG[i % SPECIALTY_BG.length]} transition-transform duration-500 group-hover:scale-105`}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  {SPECIALTY_IMAGES[spec.slug] ? (
+                    <Image
+                      src={SPECIALTY_IMAGES[spec.slug]!}
+                      alt={spec.title}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div
+                      className={`absolute inset-0 ${SPECIALTY_BG[i % SPECIALTY_BG.length]} transition-transform duration-500 group-hover:scale-105`}
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
 
                   {/* Content */}
                   <div className="relative flex h-full flex-col justify-end p-6 text-white">
                     <h3 className="heading-display text-2xl">{spec.title}</h3>
-                    <p className="mt-1 text-sm text-white/70">{spec.tagline}</p>
+                    <p className="mt-1 text-sm text-white/80">{spec.tagline}</p>
                     <span className="mt-3 inline-block w-fit rounded-full bg-white/15 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
                       À partir de {spec.priceFrom}
                     </span>
@@ -403,6 +529,8 @@ export default async function HomePage() {
         const featuredCat =
           PROJECT_CATEGORIES.find((c) => c.key === featured.category)?.label ??
           featured.category;
+        const featuredImage =
+          REALISATION_IMAGES[featured.id as keyof typeof REALISATION_IMAGES];
         const indexPreview = PROJECTS.filter((p) => p.id !== featured.id).slice(
           0,
           5,
@@ -460,6 +588,19 @@ export default async function HomePage() {
                       className="absolute inset-x-0 top-0 h-0.5"
                       style={{ backgroundColor: featuredHex }}
                     />
+                  )}
+
+                  {featuredImage && (
+                    <div className="relative aspect-[21/9] overflow-hidden">
+                      <Image
+                        src={featuredImage}
+                        alt={featured.title}
+                        fill
+                        sizes="(min-width: 1280px) 1280px, 100vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-night/55 via-transparent to-transparent" />
+                    </div>
                   )}
 
                   <div className="relative grid gap-10 p-8 lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-12 lg:p-12">

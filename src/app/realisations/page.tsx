@@ -1,4 +1,5 @@
 import { ChevronRight, MessageSquareQuote, Sparkles, Star } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { buildMetadata } from "@/lib/seo";
@@ -36,13 +37,21 @@ export default async function RealisationsPage() {
         data={breadcrumbLd([{ label: "Réalisations" }])}
       />
 
-      {/* ── Section 1 — Hero (transparent, swarm galactique perce) ─── */}
-      <section className="relative min-h-[68vh] overflow-hidden text-white">
+      {/* ── Section 1 — Hero (editorial photo backdrop) ──────────────── */}
+      <section className="relative min-h-[68vh] overflow-hidden bg-brand-night text-white">
+        <Image
+          src="/images/heros/realisations.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-brand-night via-brand-night/60 to-brand-night/15 hidden md:block"
+          className="absolute inset-0 bg-gradient-to-r from-brand-night/90 via-brand-night/55 to-brand-night/10 hidden md:block"
           aria-hidden
         />
-        <div className="absolute inset-0 bg-brand-night/55 md:hidden" aria-hidden />
+        <div className="absolute inset-0 bg-brand-night/65 md:hidden" aria-hidden />
         <div
           className="absolute inset-0 bg-gradient-to-t from-brand-night/85 via-transparent to-transparent"
           aria-hidden

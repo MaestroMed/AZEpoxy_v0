@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { m, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
@@ -14,6 +15,33 @@ import {
 } from "@/lib/realisations-data";
 import { track } from "@/lib/analytics/events";
 import { RAL_COLORS } from "@/lib/ral-colors";
+
+/**
+ * Editorial photographs by project id. Resolved lazily so missing entries
+ * fall back gracefully to the typographic-only catalogue row.
+ */
+const PROJECT_IMAGES: Record<number, string> = {
+  1: "/images/realisations/01-bmw-m4-noir.webp",
+  2: "/images/realisations/02-audi-rs3-graphite.webp",
+  3: "/images/realisations/03-mercedes-blanc.webp",
+  4: "/images/realisations/04-golf-gti-bicolor.webp",
+  5: "/images/realisations/05-triumph-vert.webp",
+  6: "/images/realisations/06-ducati-rouge.webp",
+  7: "/images/realisations/07-yamaha-noir-or.webp",
+  8: "/images/realisations/08-banquettes-anthracite.webp",
+  9: "/images/realisations/09-table-corten.webp",
+  10: "/images/realisations/10-etageres-blanches.webp",
+  11: "/images/realisations/11-charpente-gris.webp",
+  12: "/images/realisations/12-garde-corps-inox.webp",
+  13: "/images/realisations/13-supports-solaires.webp",
+  14: "/images/realisations/14-portail-coulissant.webp",
+  15: "/images/realisations/15-portail-vert.webp",
+  16: "/images/realisations/16-portail-lames-noir.webp",
+};
+
+export function getProjectImage(id: number): string | undefined {
+  return PROJECT_IMAGES[id];
+}
 
 /**
  * CATALOGUE RAISONNÉ INDEX.
@@ -173,12 +201,28 @@ function FeatureRow({ project }: { project: Project }) {
     PROJECT_CATEGORIES.find((c) => c.key === project.category)?.label ??
     project.category;
 
+  const image = PROJECT_IMAGES[project.id];
+
   return (
     <Link
       href={`/realisations/${getProjectSlug(project)}`}
       data-magnetic
       className="group relative block overflow-hidden rounded-2xl border border-brand-night/10 bg-white transition-all duration-500 hover:-translate-y-0.5 hover:border-brand-night/20 hover:shadow-[0_24px_60px_-32px_rgba(26,26,46,0.35)]"
     >
+      {image && (
+        <div className="relative aspect-[16/9] overflow-hidden lg:aspect-[21/9]">
+          <Image
+            src={image}
+            alt={project.title}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+        </div>
+      )}
+
       {/* Giant RAL watermark */}
       {project.colors[0] && (
         <span
@@ -255,6 +299,7 @@ function IndexRow({ project }: { project: Project }) {
   const catLabel =
     PROJECT_CATEGORIES.find((c) => c.key === project.category)?.label ??
     project.category;
+  const image = PROJECT_IMAGES[project.id];
 
   return (
     <Link
@@ -272,6 +317,19 @@ function IndexRow({ project }: { project: Project }) {
       <span className="w-12 shrink-0 font-mono text-sm font-bold uppercase tracking-wider text-brand-night/40 transition-colors duration-300 group-hover:text-brand-orange sm:w-16 sm:text-base">
         N°{num}
       </span>
+
+      {/* Photo thumbnail (editorial accent — small square 1:1) */}
+      {image && (
+        <span className="relative hidden h-14 w-14 shrink-0 overflow-hidden rounded-md ring-1 ring-brand-night/10 transition-transform duration-500 group-hover:scale-105 sm:block sm:h-16 sm:w-16">
+          <Image
+            src={image}
+            alt=""
+            fill
+            sizes="64px"
+            className="object-cover"
+          />
+        </span>
+      )}
 
       {/* Color strip — up to 2 RALs */}
       <span className="flex shrink-0 gap-1">

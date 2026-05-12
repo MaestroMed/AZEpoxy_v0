@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
@@ -12,6 +13,28 @@ import {
   getRelatedProjects,
   catalogNumber,
 } from "@/lib/realisations-data";
+
+/** Editorial photographs per realisation id — local server-safe map. The
+ * same data exists in `portfolio-section.tsx`, but we keep this duplicate
+ * so this server component doesn't import a `"use client"` module. */
+const PROJECT_IMAGES: Record<number, string> = {
+  1: "/images/realisations/01-bmw-m4-noir.webp",
+  2: "/images/realisations/02-audi-rs3-graphite.webp",
+  3: "/images/realisations/03-mercedes-blanc.webp",
+  4: "/images/realisations/04-golf-gti-bicolor.webp",
+  5: "/images/realisations/05-triumph-vert.webp",
+  6: "/images/realisations/06-ducati-rouge.webp",
+  7: "/images/realisations/07-yamaha-noir-or.webp",
+  8: "/images/realisations/08-banquettes-anthracite.webp",
+  9: "/images/realisations/09-table-corten.webp",
+  10: "/images/realisations/10-etageres-blanches.webp",
+  11: "/images/realisations/11-charpente-gris.webp",
+  12: "/images/realisations/12-garde-corps-inox.webp",
+  13: "/images/realisations/13-supports-solaires.webp",
+  14: "/images/realisations/14-portail-coulissant.webp",
+  15: "/images/realisations/15-portail-vert.webp",
+  16: "/images/realisations/16-portail-lames-noir.webp",
+};
 import { RAL_COLORS } from "@/lib/ral-colors";
 import { getRalEditorial } from "@/lib/ral-editorial";
 import { buildMetadata } from "@/lib/seo";
@@ -113,6 +136,7 @@ export default async function RealisationDetailPage({
   const primaryRal = project.colors[0];
   const primaryHex = primaryRal ? ralToHex(primaryRal) : undefined;
   const ref = internalReference(project);
+  const heroImage = PROJECT_IMAGES[project.id];
 
   return (
     <>
@@ -126,9 +150,33 @@ export default async function RealisationDetailPage({
 
       {/* ── HERO — editorial catalog treatment ───────────────────── */}
       <section className="relative isolate min-h-[90vh] overflow-hidden bg-brand-night text-white">
+        {heroImage && (
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-90"
+          />
+        )}
         {/* Background layers — deep industrial with accent glow from RAL */}
-        <div aria-hidden className="absolute inset-0 bg-gradient-night" />
-        <div aria-hidden className="absolute inset-0 bg-industrial-grid-dark opacity-40" />
+        <div
+          aria-hidden
+          className={
+            heroImage
+              ? "absolute inset-0 bg-gradient-to-r from-brand-night/95 via-brand-night/65 to-brand-night/20"
+              : "absolute inset-0 bg-gradient-night"
+          }
+        />
+        <div
+          aria-hidden
+          className={
+            heroImage
+              ? "absolute inset-0 bg-gradient-to-t from-brand-night/85 via-transparent to-brand-night/30"
+              : "absolute inset-0 bg-industrial-grid-dark opacity-40"
+          }
+        />
         {primaryHex && (
           <div
             aria-hidden
