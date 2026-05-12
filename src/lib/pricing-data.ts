@@ -46,6 +46,13 @@ export const PIECE_TYPES: PieceType[] = [
     baseRange: { min: 20, max: 35 },
   },
   {
+    slug: "cadres",
+    label: "Cadres / chaudronnerie",
+    icon: "Frame",
+    unit: "pièce",
+    baseRange: { min: 40, max: 120 },
+  },
+  {
     slug: "mobilier",
     label: "Mobilier",
     icon: "Armchair",
@@ -62,6 +69,6 @@ export const PIECE_TYPES: PieceType[] = [
 ];
 
 export const OPTIONS = {
-  zinc: { label: "Primaire anti-corrosion zinc", multiplier: 1.3 },
-  premium: { label: "Collection premium Adaptacolor", multiplier: 1.2 },
+  primaire: { label: "Primaire anti-corrosion", multiplier: 1.3 },
+  premium: { label: "Effets architecturaux (corten, métalliques, irisés…)", multiplier: 1.2 },
 };

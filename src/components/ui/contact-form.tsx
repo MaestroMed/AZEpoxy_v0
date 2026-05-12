@@ -186,7 +186,6 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
               </option>
               <option value="thermolaquage">Thermolaquage</option>
               <option value="sablage">Sablage</option>
-              <option value="metallisation">Métallisation</option>
               <option value="finitions">Finitions spéciales</option>
             </select>
           </div>

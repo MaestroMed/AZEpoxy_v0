@@ -177,7 +177,7 @@ export const PROJECTS_FALLBACK: Project[] = [
     title: "Supports panneaux solaires — Anti-corrosion C4",
     category: "industriel",
     description:
-      "Traitement anti-corrosion de 200 supports de panneaux photovoltaïques pour une ferme solaire en milieu rural. Métallisation zinc 200 µm + thermolaquage gris fenêtre conforme ISO 12944 C4.",
+      "Traitement anti-corrosion de 200 supports de panneaux photovoltaïques pour une ferme solaire en milieu rural. Finitions spéciales 200 µm + thermolaquage gris fenêtre conforme ISO 12944 C4.",
     colors: ["RAL 7040"],
     featured: false,
   },

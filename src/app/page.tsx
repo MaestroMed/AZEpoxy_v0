@@ -48,7 +48,6 @@ export const metadata = buildMetadata({
 const SERVICE_ICONS: Record<string, typeof Flame> = {
   thermolaquage: Flame,
   sablage: Wrench,
-  metallisation: ShieldCheck,
   finitions: Palette,
 };
 
@@ -56,9 +55,6 @@ const SERVICE_ICONS: Record<string, typeof Flame> = {
 const SERVICE_IMAGES: Record<string, string | undefined> = {
   thermolaquage: "/images/services/thermolaquage.webp",
   sablage: "/images/services/sablage.webp",
-  // Metallisation reuses the sandblasting photograph as a visual proxy
-  // (similar abrasive-projection workshop scene).
-  metallisation: "/images/services/sablage.webp",
   finitions: "/images/services/finitions.webp",
 };
 
@@ -175,9 +171,9 @@ export default async function HomePage() {
               </span>
 
               <h1 className="heading-display mt-6 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-[clamp(3.5rem,7vw,7rem)]">
-                <span className="block">200°C.</span>{" "}
+                <span className="block">Procédé</span>{" "}
                 <span className="block bg-gradient-ember bg-clip-text text-transparent">
-                  15 minutes.
+                  Qualicoat.
                 </span>{" "}
                 <span className="block">Une protection à vie.</span>
               </h1>

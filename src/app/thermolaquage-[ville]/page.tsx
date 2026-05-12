@@ -86,16 +86,10 @@ const CITY_SERVICES = [
       "Décapage intégral par projection d'abrasif. Élimination de la rouille, des anciennes peintures et des impuretés pour une adhérence parfaite avant thermolaquage.",
   },
   {
-    icon: <Layers className="h-6 w-6" />,
-    title: "Métallisation",
-    description:
-      "Projection thermique de zinc ou zinc-aluminium pour une protection cathodique de longue durée. Idéal pour les pièces exposées en milieu agressif (humidité, sel, chimie).",
-  },
-  {
     icon: <Settings className="h-6 w-6" />,
     title: "Finitions spéciales",
     description:
-      "Effets texturés, satinés, mats, métallisés ou nacrés grâce à nos collections Adaptacolor exclusives (Patina, Polaris, Dichroic, Sfera). Personnalisation sur mesure.",
+      "Au-delà du nuancier RAL et NCS : effets texturés, satinés, mats, mouchetés et collections architecturales (Effets Corten, Métalliques, Irisés, Anodisés). Personnalisation sur mesure.",
   },
 ];
 

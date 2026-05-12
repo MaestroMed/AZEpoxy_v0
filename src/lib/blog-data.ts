@@ -23,7 +23,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>Quand il s'agit de protéger et embellir des pièces métalliques, deux grandes options s'offrent à vous : la <strong>peinture liquide traditionnelle</strong> et le <strong>thermolaquage poudre époxy</strong>. Si la peinture liquide reste répandue, le thermolaquage s'impose de plus en plus comme la solution professionnelle de référence. Voici pourquoi.</p>
 
       <h2>Le principe du thermolaquage</h2>
-      <p>Le thermolaquage consiste à appliquer une poudre époxy ou polyester par projection électrostatique sur une pièce métallique préalablement sablée. La pièce est ensuite placée dans un four à 180-200°C pendant 15 à 20 minutes. La poudre fond et se polymérise pour former un revêtement extrêmement résistant.</p>
+      <p>Le thermolaquage consiste à appliquer une poudre époxy ou polyester par projection électrostatique sur une pièce métallique préalablement sablée. La pièce est ensuite placée dans un four de cuisson, durée variable selon la pièce. La poudre fond et se polymérise pour former un revêtement extrêmement résistant.</p>
 
       <h2>Durabilité : avantage thermolaquage</h2>
       <p>Le film obtenu par thermolaquage mesure entre 60 et 120 microns d'épaisseur, contre 20 à 40 microns pour une peinture liquide. Cette épaisseur supérieure confère une résistance accrue aux chocs, aux rayures et à la corrosion. En conditions extérieures, un thermolaquage bien réalisé conserve son aspect pendant <strong>10 à 15 ans</strong>, contre 3 à 5 ans pour une peinture liquide standard.</p>
@@ -57,7 +57,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>Idéalement, apportez vos jantes <strong>sans pneus</strong>. Le démontage/remontage des pneumatiques est une opération que votre garagiste peut réaliser facilement. Si vous ne pouvez pas les démonter, pas de panique : chez AZ Époxy, nous pouvons nous en charger, mais prévoyez un délai supplémentaire.</p>
 
       <h2>Étape 2 : Retirer les accessoires</h2>
-      <p>Enlevez les caches centraux, les plombs d'équilibrage, les capteurs TPMS si possible, et tout autocollant ou cache-écrou. Ces éléments ne supportent pas les 180°C du four de polymérisation.</p>
+      <p>Enlevez les caches centraux, les plombs d'équilibrage, les capteurs TPMS si possible, et tout autocollant ou cache-écrou. Ces éléments ne supportent pas les en four du four de polymérisation.</p>
 
       <h2>Étape 3 : Nettoyage basique</h2>
       <p>Un simple nettoyage au jet d'eau suffit pour retirer la boue, le goudron et la poussière de frein. Pas besoin de décaper vous-même : le sablage professionnel que nous réalisons en atelier élimine toute trace d'ancienne peinture, de corrosion et d'impuretés.</p>
@@ -168,23 +168,23 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
   {
     slug: "metallisation-zinc-protection-ultime",
     image: "/images/blog/metallisation-zinc-protection-ultime.webp",
-    title: "Métallisation au zinc : la protection anti-corrosion ultime",
+    title: "finitions spéciales au zinc : la protection anti-corrosion ultime",
     description:
-      "Découvrez la métallisation au zinc par projection thermique, le traitement anticorrosion le plus performant pour l'acier.",
+      "Découvrez la finitions spéciales au zinc par projection thermique, le traitement anticorrosion le plus performant pour l'acier.",
     date: "2025-05-12",
     readTime: "6 min",
     category: "Technique",
     content: `
-      <p>Pour les pièces exposées à des environnements agressifs — maritime, industriel, chimique — le thermolaquage seul peut ne pas suffire. C'est là qu'intervient la <strong>métallisation au zinc</strong>, une technique de protection cathodique qui offre une durée de vie exceptionnelle.</p>
+      <p>Pour les pièces exposées à des environnements agressifs — maritime, industriel, chimique — le thermolaquage seul peut ne pas suffire. C'est là qu'intervient la <strong>finitions spéciales au zinc</strong>, une technique de protection cathodique qui offre une durée de vie exceptionnelle.</p>
 
-      <h2>Principe de la métallisation</h2>
-      <p>La métallisation par projection thermique (ou schoopage) consiste à fondre du fil de zinc dans un arc électrique ou une flamme, puis à le projeter sous forme de micro-gouttelettes sur la surface métallique. Le zinc se solidifie instantanément et forme une couche protectrice de 80 à 150 microns.</p>
+      <h2>Principe de la finitions spéciales</h2>
+      <p>La finitions spéciales par projection thermique (ou schoopage) consiste à fondre du fil de zinc dans un arc électrique ou une flamme, puis à le projeter sous forme de micro-gouttelettes sur la surface métallique. Le zinc se solidifie instantanément et forme une couche protectrice de 80 à 150 microns.</p>
 
       <h2>Protection cathodique : le zinc se sacrifie</h2>
-      <p>Le zinc est un métal plus réactif que l'acier (potentiel électrochimique inférieur). En cas de rayure ou d'impact, le zinc se corrode <strong>à la place de l'acier</strong>. C'est le principe de l'anode sacrificielle, le même utilisé dans la galvanisation à chaud. La différence : la métallisation peut être appliquée sur des pièces de toute taille, sans les plonger dans un bain de zinc fondu.</p>
+      <p>Le zinc est un métal plus réactif que l'acier (potentiel électrochimique inférieur). En cas de rayure ou d'impact, le zinc se corrode <strong>à la place de l'acier</strong>. C'est le principe de l'anode sacrificielle, le même utilisé dans la galvanisation à chaud. La différence : la finitions spéciales peut être appliquée sur des pièces de toute taille, sans les plonger dans un bain de zinc fondu.</p>
 
-      <h2>Système duplex : métallisation + thermolaquage</h2>
-      <p>La combinaison métallisation + thermolaquage est ce qu'on appelle un <strong>système duplex</strong>. C'est la Rolls-Royce de la protection anti-corrosion :</p>
+      <h2>Système duplex : finitions spéciales + thermolaquage</h2>
+      <p>La combinaison finitions spéciales + thermolaquage est ce qu'on appelle un <strong>système duplex</strong>. C'est la Rolls-Royce de la protection anti-corrosion :</p>
       <ul>
         <li>La couche de zinc protège l'acier par effet cathodique</li>
         <li>Le thermolaquage protège le zinc de l'usure mécanique et des UV</li>
@@ -193,7 +193,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>Un système duplex bien réalisé offre une protection de <strong>25 à 40 ans</strong> en environnement extérieur, contre 10-15 ans pour un thermolaquage seul.</p>
 
       <h2>Applications typiques</h2>
-      <p>Nous recommandons la métallisation pour :</p>
+      <p>Nous recommandons la finitions spéciales pour :</p>
       <ul>
         <li>Portails et clôtures en bord de mer</li>
         <li>Structures métalliques extérieures (pergolas, charpentes)</li>
@@ -202,8 +202,8 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
         <li>Garde-corps et rampes en milieu humide</li>
       </ul>
 
-      <h2>Métallisation chez AZ Époxy</h2>
-      <p>Notre équipement de projection thermique à l'arc permet de traiter des pièces de grande dimension dans notre cabine de 7 mètres. Le processus complet — sablage Sa 3, métallisation zinc 100µm, thermolaquage 80µm — est réalisé dans un délai de 5 à 7 jours ouvrés. Un investissement qui se rentabilise dès la première année grâce à l'absence totale d'entretien.</p>
+      <h2>finitions spéciales chez AZ Époxy</h2>
+      <p>Notre équipement de projection thermique à l'arc permet de traiter des pièces de grande dimension dans notre cabine de 7 × 3 × 4 mètres. Le processus complet — sablage Sa 3, finitions spéciales zinc 100µm, thermolaquage 80µm — est réalisé dans un délai de 5 à 7 jours ouvrés. Un investissement qui se rentabilise dès la première année grâce à l'absence totale d'entretien.</p>
     `,
   },
   {
@@ -236,7 +236,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>En cas de rayure profonde ou d'éclat, n'essayez pas de repeindre vous-même. Contactez-nous : nous pouvons réaliser une <strong>retouche localisée</strong> ou, si nécessaire, un re-thermolaquage de la pièce concernée. Traiter une rayure rapidement évite que la corrosion ne s'installe sous le revêtement.</p>
 
       <h2>Garantie AZ Époxy</h2>
-      <p>Tous nos thermolaquages sont garantis <strong>2 ans</strong> contre les défauts de fabrication (cloques, décollements, perte d'adhérence). Cette garantie couvre une utilisation normale dans des conditions standard. Pour les systèmes duplex (métallisation + thermolaquage), la garantie est étendue à 5 ans.</p>
+      <p>Tous nos thermolaquages sont garantis <strong>2 ans</strong> contre les défauts de fabrication (cloques, décollements, perte d'adhérence). Cette garantie couvre une utilisation normale dans des conditions standard. Pour les systèmes duplex (finitions spéciales + thermolaquage), la garantie est étendue à 5 ans.</p>
     `,
   },
   {
@@ -252,7 +252,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>Le portail est la première chose que vos visiteurs voient. Un portail en fer forgé thermolaqué associe l'élégance du travail artisanal à la durabilité d'une finition industrielle. Voici comment se déroule le processus complet.</p>
 
       <h2>Étape 1 : Diagnostic et devis</h2>
-      <p>Nous commençons par un diagnostic de votre portail : état de la structure, niveau de corrosion, dimensions exactes. Un devis détaillé vous est envoyé sous 24 heures avec les options de traitement recommandées. Pour les portails très corrodés, nous pouvons recommander un système duplex (métallisation + thermolaquage).</p>
+      <p>Nous commençons par un diagnostic de votre portail : état de la structure, niveau de corrosion, dimensions exactes. Un devis détaillé vous est envoyé sous 24 heures avec les options de traitement recommandées. Pour les portails très corrodés, nous pouvons recommander un système duplex (finitions spéciales + thermolaquage).</p>
 
       <h2>Étape 2 : Dépose</h2>
       <p>La dépose du portail peut être réalisée par vos soins ou par notre équipe. Pensez à protéger les gonds et les motorisations. Si votre portail est motorisé, nous vous recommandons de faire intervenir votre installateur pour la déconnexion et la reconnexion.</p>
@@ -261,7 +261,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>Notre cabine de <strong>7 mètres</strong> accepte les portails de grande dimension. Le sablage retire toute trace de rouille, d'ancienne peinture et de calamine. Les barreaux, volutes et éléments décoratifs sont sablés dans leurs moindres recoins — un avantage majeur par rapport au ponçage manuel.</p>
 
       <h2>Étape 4 : Traitement anticorrosion</h2>
-      <p>Après sablage, un primaire anticorrosion est appliqué dans les heures qui suivent pour éviter toute ré-oxydation. Pour les portails exposés (bord de mer, zone humide), nous appliquons une couche de métallisation zinc avant le primaire.</p>
+      <p>Après sablage, un primaire anticorrosion est appliqué dans les heures qui suivent pour éviter toute ré-oxydation. Pour les portails exposés (bord de mer, zone humide), nous appliquons une couche de finitions spéciales zinc avant le primaire.</p>
 
       <h2>Étape 5 : Thermolaquage</h2>
       <p>La poudre époxy ou polyester est appliquée par projection électrostatique. La charge électrique garantit que la poudre atteint chaque recoin, y compris l'intérieur des tubes et les zones difficiles d'accès. La pièce passe ensuite au four à 190°C pendant 20 minutes.</p>
@@ -292,7 +292,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>Les finitions givrées (ou "wrinkle") créent un relief tactile sur la surface. La poudre, formulée avec des agents texturants, produit une surface ondulée qui évoque le givre ou l'écorce d'arbre. Au-delà de l'esthétique, cette texture présente un avantage fonctionnel : elle masque les imperfections de surface et offre une meilleure prise en main.</p>
 
       <h2>Le caméléon (dichroïque)</h2>
-      <p>Les pigments interférentiels changent de couleur selon l'angle de vue. Un bleu qui vire au violet, un vert qui devient doré... Ces finitions captivantes sont particulièrement populaires sur les jantes et les pièces moto. Chez AZ Époxy, notre gamme <strong>Dichroic</strong> propose 4 combinaisons de couleurs pour un effet unique garanti.</p>
+      <p>Les pigments interférentiels changent de couleur selon l'angle de vue. Un bleu qui vire au violet, un vert qui devient doré... Ces finitions captivantes sont particulièrement populaires sur les jantes et les pièces moto. Chez AZ Époxy, notre gamme <strong>Effets Irisés</strong> propose 4 combinaisons de couleurs pour un effet unique garanti.</p>
 
       <h2>Le soft-touch</h2>
       <p>Inspiré de l'industrie automobile premium, le soft-touch donne à la surface un toucher velouté, presque « peau de pêche ». Cette finition ultra-mate (gloss &lt;5) est recherchée pour le mobilier design, les luminaires et les accessoires de luxe. Elle apporte une sensation de douceur incomparable au toucher.</p>

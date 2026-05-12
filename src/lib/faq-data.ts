@@ -25,13 +25,13 @@ export const FAQS_FALLBACK: FAQ[] = [
     category: "general",
     question: "Qu'est-ce que le thermolaquage ?",
     answer:
-      "Le thermolaquage (ou peinture poudre) consiste à appliquer une poudre thermodurcissable sur un support métallique à l'aide d'un pistolet électrostatique, puis à polymériser l'ensemble dans un four à 200 °C pendant 15 minutes. Le résultat est un revêtement de 60 à 80 µm, extrêmement résistant aux chocs, à la corrosion et aux UV, et 100 % exempt de solvant.",
+      "Le thermolaquage (ou peinture poudre) consiste à appliquer une poudre thermodurcissable sur un support métallique à l'aide d'un pistolet électrostatique, puis à polymériser l'ensemble dans un four de cuisson, durée variable selon la pièce. Le résultat est un revêtement de 60 à 80 µm, extrêmement résistant aux chocs, à la corrosion et aux UV, et 100 % exempt de solvant.",
   },
   {
     category: "general",
     question: "Quels types de pièces acceptez-vous ?",
     answer:
-      "Nous traitons toutes les pièces métalliques conductrices supportant une cuisson à 200 °C : acier, aluminium, fonte, inox, acier galvanisé. Cela comprend les jantes, cadres moto, portails, garde-corps, mobilier, pièces industrielles et éléments architecturaux. Les pièces en plastique, bois ou matériaux composites ne sont pas éligibles.",
+      "Nous traitons toutes les pièces métalliques conductrices supportant une cuisson en four : acier, aluminium, fonte, inox, acier galvanisé. Cela comprend les jantes, cadres moto, portails, garde-corps, mobilier, pièces industrielles et éléments architecturaux. Les pièces en plastique, bois ou matériaux composites ne sont pas éligibles.",
   },
   {
     category: "general",
@@ -51,7 +51,7 @@ export const FAQS_FALLBACK: FAQ[] = [
     category: "tarifs",
     question: "Comment sont calculés vos tarifs ?",
     answer:
-      "Nos tarifs dépendent de la surface à traiter, de l'état initial de la pièce (décapage nécessaire ou non), du type de préparation (sablage simple ou métallisation) et de la finition choisie (standard RAL ou collection premium). Un devis détaillé est systématiquement établi après inspection visuelle ou sur photos.",
+      "Nos tarifs dépendent de la surface à traiter, de l'état initial de la pièce (décapage nécessaire ou non), du type de préparation (sablage simple ou finitions spéciales) et de la finition choisie (standard RAL ou collection premium). Un devis détaillé est systématiquement établi après inspection visuelle ou sur photos.",
   },
   {
     category: "tarifs",
@@ -77,7 +77,7 @@ export const FAQS_FALLBACK: FAQ[] = [
     category: "delais",
     question: "Quel est le délai moyen de traitement ?",
     answer:
-      "Le délai standard est de 5 à 7 jours ouvrés pour les pièces courantes (jantes, petites pièces auto, garde-corps). Les pièces de grande dimension ou les commandes en série peuvent nécessiter 10 à 15 jours. Les collections premium Adaptacolor demandent un délai additionnel de 3 à 5 jours lié à l'approvisionnement des poudres spéciales.",
+      "Le délai standard est de 5 à 7 jours ouvrés pour les pièces courantes (jantes, petites pièces auto, garde-corps). Les pièces de grande dimension ou les commandes en série peuvent nécessiter 10 à 15 jours. Les collections premium effets architecturaux demandent un délai additionnel de 3 à 5 jours lié à l'approvisionnement des poudres spéciales.",
   },
   {
     category: "delais",
@@ -121,7 +121,7 @@ export const FAQS_FALLBACK: FAQ[] = [
     category: "technique",
     question: "Quelle est la durée de vie d'un revêtement thermolaqué ?",
     answer:
-      "En conditions normales d'utilisation, un revêtement thermolaqué conserve ses propriétés esthétiques et protectrices pendant 15 à 20 ans en extérieur et 25 ans et plus en intérieur. En système duplex (métallisation + thermolaquage), la durée de vie peut atteindre 40 ans, y compris en environnement marin ou industriel.",
+      "En conditions normales d'utilisation, un revêtement thermolaqué conserve ses propriétés esthétiques et protectrices pendant 15 à 20 ans en extérieur et 25 ans et plus en intérieur. En système duplex (finitions spéciales + thermolaquage), la durée de vie peut atteindre 40 ans, y compris en environnement marin ou industriel.",
   },
 
   // ── Couleurs ─────────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ export const FAQS_FALLBACK: FAQ[] = [
     category: "couleurs",
     question: "Combien de couleurs proposez-vous ?",
     answer:
-      "Nous proposons l'intégralité du nuancier RAL Classic (plus de 200 teintes) ainsi que quatre collections premium Adaptacolor (Patina, Polaris, Dichroic, Sfera) offrant des effets corten, métallisés, irisés et anodisés. Au total, plus de 250 références sont disponibles pour couvrir tous les projets.",
+      "Nous proposons l'intégralité du nuancier RAL Classic (plus de 200 teintes) ainsi que quatre collections premium effets architecturaux (Effets Corten, Effets Métalliques, Effets Irisés, Effets Anodisés) offrant des effets corten, métallisés, irisés et anodisés. Au total, plus de 250 références sont disponibles pour couvrir tous les projets.",
   },
   {
     category: "couleurs",
@@ -145,9 +145,9 @@ export const FAQS_FALLBACK: FAQ[] = [
   },
   {
     category: "couleurs",
-    question: "Les collections Adaptacolor sont-elles disponibles en stock ?",
+    question: "Les collections effets architecturaux sont-elles disponibles en stock ?",
     answer:
-      "Les teintes les plus courantes des collections Polaris et Sfera sont maintenues en stock. Les références Patina et Dichroic, plus spécifiques, sont commandées à la demande avec un délai de 5 à 7 jours ouvrés supplémentaires. Nous vous conseillons de planifier votre projet en conséquence pour les finitions premium.",
+      "Les teintes les plus courantes des collections Effets Métalliques et Effets Anodisés sont maintenues en stock. Les références Effets Corten et Effets Irisés, plus spécifiques, sont commandées à la demande avec un délai de 5 à 7 jours ouvrés supplémentaires. Nous vous conseillons de planifier votre projet en conséquence pour les finitions premium.",
   },
 ];
 

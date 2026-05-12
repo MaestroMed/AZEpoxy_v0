@@ -16,7 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/services`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/services/thermolaquage`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/services/sablage`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/metallisation`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/services/finitions`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/couleurs-ral`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/configurateur`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },

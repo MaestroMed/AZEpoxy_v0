@@ -20,7 +20,6 @@ const navGroups = [
     children: [
       { label: "Thermolaquage poudre", href: "/services/thermolaquage" },
       { label: "Sablage & grenaillage", href: "/services/sablage" },
-      { label: "Métallisation", href: "/services/metallisation" },
       { label: "Finitions spéciales", href: "/services/finitions" },
     ],
   },
