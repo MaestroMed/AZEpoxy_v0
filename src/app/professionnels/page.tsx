@@ -34,7 +34,7 @@ import { averageRating, getReviews } from "@/lib/reviews-data";
 export const metadata = buildMetadata({
   title: "Professionnels — Partenariat B2B & Comptes Pros",
   description:
-    "AZ Époxy accompagne métalliers, serruriers, architectes, bureaux d'études, industriels et carrossiers. Tarifs dégressifs, planning dédié, devis cadre, facturation mensuelle. Devis pro sous 24h.",
+    "AZ Époxy accompagne métalliers, serruriers, chaudronniers, architectes, bureaux d'études, industriels et carrossiers. Tarifs dégressifs, planning dédié, devis cadre, facturation mensuelle. Devis pro sous 24h.",
   path: "/professionnels",
 });
 
@@ -43,13 +43,19 @@ const SEGMENTS = [
     icon: <Hammer className="h-6 w-6" />,
     title: "Métalliers & Serruriers",
     description:
-      "Garde-corps, portails, escaliers, verrières, structures soudées. Cadences hebdomadaires, grandes longueurs jusqu'à 7 mètres.",
+      "Garde-corps, portails, escaliers, verrières, structures soudées. Cadences hebdomadaires, grandes longueurs jusqu'à 7 m.",
+  },
+  {
+    icon: <Factory className="h-6 w-6" />,
+    title: "Chaudronniers",
+    description:
+      "Pièces et ensembles chaudronnés, charpentes, châssis, structures métalliques de grande dimension. Cabine 7 × 3 × 4 m adaptée aux ouvrages volumineux.",
   },
   {
     icon: <Building2 className="h-6 w-6" />,
     title: "Architectes & Bureaux d'études",
     description:
-      "Conseil technique amont, fiches RAL détaillées, échantillons sur demande, suivi de chantier et conformité Qualicoat.",
+      "Conseil technique amont, fiches RAL & NCS détaillées, échantillons sur demande, suivi de chantier dans le respect des normes Qualicoat / ISO 12944.",
   },
   {
     icon: <Factory className="h-6 w-6" />,
@@ -67,13 +73,13 @@ const SEGMENTS = [
     icon: <Car className="h-6 w-6" />,
     title: "Carrossiers & Préparateurs",
     description:
-      "Jantes, pièces carrosserie, accessoires moto. Collections premium (Patina, Polaris, Dichroic, Sfera) et finitions textures.",
+      "Jantes, pièces carrosserie, accessoires moto. Effets architecturaux (Corten, Métalliques, Irisés, Anodisés) et finitions texturées.",
   },
   {
     icon: <Wrench className="h-6 w-6" />,
     title: "Mobilier & Agencement",
     description:
-      "Mobilier design, agencement commercial, signalétique. Finitions mates, satinées, métallisées, effets texturés et sablés.",
+      "Mobilier design, agencement commercial, signalétique. Finitions mates, satinées, texturées, mouchetées et effets architecturaux.",
   },
 ];
 
@@ -112,7 +118,7 @@ const ADVANTAGES = [
     icon: <ShieldCheck className="h-6 w-6" />,
     title: "Garantie qualité",
     description:
-      "Procédure en 6 étapes conforme Qualicoat, poudres certifiées (Interpon, IGP, AkzoNobel), contrôle d'épaisseur systématique.",
+      "Procédure en 6 étapes suivant les normes Qualicoat / ISO 12944, poudres certifiées de qualité architecturale, contrôle d'épaisseur systématique.",
   },
 ];
 
@@ -144,13 +150,13 @@ const PROCESS = [
 ];
 
 const CAPACITIES = [
-  "Cabine thermolaquage 7 m × 2,5 m × 2,5 m",
-  "Four de polymérisation jusqu'à 220 °C",
+  "Cabine thermolaquage 7 × 3 × 4 m",
+  "Four de polymérisation industriel",
   "Sableuse industrielle grande capacité",
   "Pont roulant 3 tonnes",
-  "Accès complet RAL 213 couleurs",
-  "Collections Qualicoat, Interpon, IGP",
-  "Finitions texturées, sablées, métallisées",
+  "Accès complet nuanciers RAL & NCS",
+  "Effets architecturaux : Corten, Métalliques, Irisés, Anodisés",
+  "Finitions mates, satinées, texturées, mouchetées",
   "Service express 48h sur demande",
   "Traitement anti-corrosion C5 disponible",
   "Zone de contrôle qualité dédiée",
@@ -246,7 +252,7 @@ export default async function ProfessionnelsPage() {
                   </span>
                 </>
               }
-              description="1 800 m² d'atelier, une cabine de 7 mètres, un four professionnel et une équipe formée aux exigences les plus strictes."
+              description="1 800 m² d'atelier, une cabine 7 × 3 × 4 m, un four professionnel et une équipe formée aux exigences les plus strictes."
               dark
               centered
             />

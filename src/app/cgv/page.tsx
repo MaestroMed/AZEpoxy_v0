@@ -5,7 +5,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 export const metadata = buildMetadata({
   title: "Conditions Générales de Vente",
   description:
-    "Conditions générales de vente d'AZ Époxy — prestations de thermolaquage, sablage et métallisation.",
+    "Conditions générales de vente d'AZ Époxy — prestations de thermolaquage, sablage et finitions spéciales.",
   path: "/cgv",
 });
 
@@ -16,7 +16,7 @@ const SECTIONS = [
       <p>
         Les présentes conditions générales de vente (CGV) s&apos;appliquent à
         l&apos;ensemble des prestations de services proposées par AZ Époxy,
-        incluant le thermolaquage, le sablage, la métallisation et tout
+        incluant le thermolaquage, le sablage, les finitions spéciales et tout
         traitement de surface associé. Toute commande implique
         l&apos;acceptation sans réserve des présentes CGV.
       </p>

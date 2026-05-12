@@ -52,8 +52,9 @@ export const metadata: Metadata = {
       "poudre époxy",
       "peinture poudre",
       "RAL",
+      "NCS",
       "sablage",
-      "métallisation",
+      "finitions spéciales",
       "anti-corrosion",
       "jantes thermolaquées",
       "moto art",
@@ -83,7 +84,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: { icon: "/favicon.ico" },
+  // Icons are auto-wired by Next.js from src/app/icon.svg + src/app/apple-icon.tsx
 };
 
 export default async function RootLayout({

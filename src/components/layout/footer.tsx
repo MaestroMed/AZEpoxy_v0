@@ -14,12 +14,12 @@ const cols = [
   {
     title: "Couleurs",
     links: [
-      { label: "Nuancier RAL 209+", href: "/couleurs-ral" },
+      { label: "Nuancier RAL & NCS", href: "/couleurs-ral" },
       { label: "Configurateur visuel", href: "/configurateur" },
-      { label: "Collection Patina", href: "/couleurs-ral/patina" },
-      { label: "Collection Polaris", href: "/couleurs-ral/polaris" },
-      { label: "Collection Dichroic", href: "/couleurs-ral/dichroic" },
-      { label: "Collection Sfera", href: "/couleurs-ral/sfera" },
+      { label: "Effets Corten", href: "/couleurs-ral/patina" },
+      { label: "Effets Métalliques", href: "/couleurs-ral/polaris" },
+      { label: "Effets Irisés", href: "/couleurs-ral/dichroic" },
+      { label: "Effets Anodisés", href: "/couleurs-ral/sfera" },
     ],
   },
   {
@@ -72,20 +72,68 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.3fr_repeat(4,1fr)]">
           {/* Brand block */}
           <div className="space-y-6">
-            <Link href="/" className="inline-flex items-center gap-3">
-              <div className="relative h-11 w-11 overflow-hidden rounded-md bg-gradient-ember shadow-lg shadow-brand-orange/40">
-                <span className="absolute inset-0 flex items-center justify-center font-display text-xl font-black text-white">
-                  AZ
-                </span>
+            <Link
+              href="/"
+              className="group inline-flex items-center gap-3.5"
+              aria-label="AZ Époxy — Accueil"
+            >
+              <div className="relative h-12 w-12 shrink-0">
+                <div className="absolute inset-0 rounded-[13px] bg-brand-night ring-1 ring-white/10" />
+                <div
+                  aria-hidden
+                  className="absolute inset-0 rounded-[13px] animate-ember-pulse"
+                  style={{
+                    background:
+                      "radial-gradient(140% 100% at 95% 112%, rgba(232,93,44,0.55) 0%, rgba(200,72,24,0.22) 38%, transparent 72%)",
+                  }}
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-[1px] rounded-[12px]"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 28%)",
+                  }}
+                />
+                <svg
+                  className="relative h-full w-full"
+                  viewBox="0 0 44 44"
+                  fill="none"
+                  role="img"
+                  aria-label="AZ"
+                >
+                  <defs>
+                    <linearGradient
+                      id="az-mark-ember-footer"
+                      x1="0"
+                      y1="0"
+                      x2="1"
+                      y2="1"
+                    >
+                      <stop offset="0%" stopColor="#FF9A5C" />
+                      <stop offset="55%" stopColor="#E85D2C" />
+                      <stop offset="100%" stopColor="#8B2E0A" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 8 33 L 16 10 L 24 33 M 11 26 L 21 26"
+                    stroke="#FFFFFF"
+                    strokeWidth="2.4"
+                    strokeLinecap="square"
+                    strokeLinejoin="miter"
+                  />
+                  <path
+                    d="M 26 12 L 37 12 L 26 32 L 37 32"
+                    stroke="url(#az-mark-ember-footer)"
+                    strokeWidth="2.4"
+                    strokeLinecap="square"
+                    strokeLinejoin="miter"
+                  />
+                </svg>
               </div>
-              <div className="flex flex-col leading-none">
-                <span className="font-display text-xl font-black text-white tracking-tight">
-                  ÉPOXY
-                </span>
-                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-orange">
-                  Thermolaquage
-                </span>
-              </div>
+              <span className="font-display text-xl font-black uppercase tracking-[0.02em] leading-none text-white">
+                ÉPOXY
+              </span>
             </Link>
 
             {/* Status indicator — atelier ouvert. */}
@@ -99,8 +147,9 @@ export function Footer() {
 
             <p className="max-w-sm text-sm leading-relaxed text-white/60">
               Thermolaquage poudre époxy professionnel en Île-de-France.
-              Finition premium, 200+ couleurs RAL, cabine 7m, service express
-              48h. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.
+              Finition premium, 200+ couleurs RAL & NCS, cabine 7 × 3 × 4 m,
+              service express 48h. Depuis notre atelier de 1 800 m² à
+              Bruyères-sur-Oise.
             </p>
 
             <div className="space-y-3 text-sm">

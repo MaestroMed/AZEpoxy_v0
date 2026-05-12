@@ -11,7 +11,7 @@ import { Check, FileText, PhoneCall, Truck } from "lucide-react";
 export const metadata = buildMetadata({
   title: "Devis Gratuit",
   description:
-    "Demandez un devis gratuit pour vos projets de thermolaquage, sablage ou métallisation. Réponse sous 24h. AZ Époxy, Bruyères-sur-Oise.",
+    "Demandez un devis gratuit pour vos projets de thermolaquage, sablage ou finitions spéciales. Réponse sous 24h. AZ Époxy, Bruyères-sur-Oise.",
   path: "/devis",
 });
 

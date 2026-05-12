@@ -10,7 +10,7 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react";
 export const metadata = buildMetadata({
   title: "Contact",
   description:
-    "Contactez AZ Époxy pour vos projets de thermolaquage, sablage et métallisation. Devis gratuit sous 24h. Bruyères-sur-Oise, Val-d'Oise.",
+    "Contactez AZ Époxy pour vos projets de thermolaquage, sablage et finitions spéciales. Devis gratuit sous 24h. Bruyères-sur-Oise, Val-d'Oise.",
   path: "/contact",
 });
 

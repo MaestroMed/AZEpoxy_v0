@@ -25,7 +25,7 @@ import { getServiceBySlugAsync } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
 
 const SERVICE_DESCRIPTION =
-  "Thermolaquage par poudre époxy professionnel : application électrostatique, cuisson en four, 200+ couleurs RAL & NCS, 0 COV. Référentiel QUALICOAT. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.";
+  "Thermolaquage par poudre époxy professionnel : application électrostatique, cuisson en four, 200+ couleurs RAL & NCS, 0 COV. Procédure suivant les normes Qualicoat / ISO 12944. Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.";
 
 export const metadata = buildMetadata({
   title: "Thermolaquage Poudre Époxy",

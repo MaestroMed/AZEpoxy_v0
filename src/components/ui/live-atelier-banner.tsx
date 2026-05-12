@@ -29,24 +29,24 @@ type AtelierState = {
 // ── STATE LIBRARIES (morning / afternoon / night / weekend) ─────────
 
 const MORNING_STATES: AtelierState[] = [
-  { label: "Atelier", text: "Dégraissage alcalin · 12 pièces en cabine A · 8h42" },
-  { label: "En cours", text: "Four à 198°C · RAL 7016 · sortie prévue 9h15" },
+  { label: "Atelier", text: "Dégraissage · 12 pièces en cabine A · 8h42" },
+  { label: "En cours", text: "Cuisson en four · RAL 7016 · sortie prévue 9h15" },
   { label: "Sablage", text: "Charpente industrielle · poste 2 · SA 2.5" },
-  { label: "Atelier", text: "Contrôle Elcometer · 80 µm moyen · conforme Qualicoat" },
+  { label: "Atelier", text: "Contrôle Elcometer · 80 µm moyen · normes ISO 12944" },
   { label: "En cabine", text: "Poudrage électrostatique · jantes 19\" · RAL 9005" },
 ];
 
 const AFTERNOON_STATES: AtelierState[] = [
-  { label: "Cuisson", text: "Four à 200°C · 23 pièces · polymérisation 15 min" },
+  { label: "Cuisson", text: "Four en polymérisation · 23 pièces · durée ajustée à la pièce" },
   { label: "Sortie four", text: "Cadre Triumph Street Triple · RAL 6005 · 14h32" },
   { label: "En cabine", text: "RAL 9016 blanc de sécurité · étagères murales" },
-  { label: "Contrôle", text: "Test adhérence cross-cut · Gt0 · conforme" },
+  { label: "Contrôle", text: "Test adhérence cross-cut · Gt0 · conforme ISO 2409" },
   { label: "Atelier", text: "Préparation prochain batch · 16 pièces clients" },
   { label: "Sortie four", text: "Jantes Audi RS3 · RAL 7024 graphite · refroidissement" },
 ];
 
 const EVENING_STATES: AtelierState[] = [
-  { label: "Dernière cuisson", text: "Four redescend de 200°C · nettoyage cabines" },
+  { label: "Dernière cuisson", text: "Four en fin de cycle · nettoyage cabines" },
   { label: "Atelier", text: "Préparation planning demain · 9 pièces en file" },
   { label: "Atelier", text: "Derniers contrôles qualité du jour" },
 ];

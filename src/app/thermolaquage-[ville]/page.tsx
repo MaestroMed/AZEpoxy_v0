@@ -46,13 +46,13 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: `Thermolaquage à ${ville.name} (${ville.departmentCode}) — Poudre Époxy`,
-    description: `Thermolaquage poudre époxy professionnel à ${ville.name} (${ville.department}). ${ville.distance} de notre atelier, ${ville.driveTime} de trajet. 200+ couleurs RAL, sablage, métallisation, express 48h. Devis gratuit.`,
+    description: `Thermolaquage poudre époxy professionnel à ${ville.name} (${ville.department}). ${ville.distance} de notre atelier, ${ville.driveTime} de trajet. 200+ couleurs RAL & NCS, sablage, finitions spéciales, express 48h. Devis gratuit.`,
     path: `/thermolaquage-${ville.slug}`,
     keywords: [
       `thermolaquage ${ville.name}`,
       `poudre époxy ${ville.name}`,
       `sablage ${ville.name}`,
-      `métallisation ${ville.name}`,
+      `finitions spéciales ${ville.name}`,
       `thermolaquage ${ville.department}`,
       "AZ Époxy",
     ],
@@ -239,7 +239,7 @@ export default async function VillePage({
                   </span>
                 </>
               }
-              description={`Thermolaquage, sablage, métallisation et finitions spéciales — l'ensemble de nos prestations est disponible pour les clients de ${ville.name}.`}
+              description={`Thermolaquage, sablage et finitions spéciales — l'ensemble de nos prestations est disponible pour les clients de ${ville.name}.`}
             />
           </ScrollReveal>
 

@@ -688,7 +688,7 @@ export function HeroParticles() {
           const metricsColor = getGlobalBreathColor(now);
           ctx!.fillStyle = metricsColor.replace("rgb", "rgba").replace(")", `,${metricsAlpha})`);
           const metricsX = w > 1024 ? w * 0.78 : w / 2;
-          ctx!.fillText("200°C  ·  120μm  ·  0 COV", metricsX, h - h * 0.06);
+          ctx!.fillText("RAL & NCS  ·  120μm  ·  0 COV", metricsX, h - h * 0.06);
         }
       }
 

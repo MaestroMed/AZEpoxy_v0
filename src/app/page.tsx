@@ -40,7 +40,7 @@ export const metadata = buildMetadata({
   title:
     "AZ Époxy — Thermolaquage Poudre Époxy Professionnel | 200+ Couleurs RAL",
   description:
-    "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL, cabine 7m, service express 48h, 0 COV. Devis gratuit sous 24h.",
+    "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL & NCS, cabine 7 × 3 × 4 m, service express 48h, 0 COV. Devis gratuit sous 24h.",
   path: "/",
 });
 
@@ -162,7 +162,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-t from-brand-night/90 via-brand-night/30 to-transparent md:hidden" aria-hidden />
 
         {/* Layer 1: HTML content (above canvas) */}
-        <div className="container-wide relative z-10 flex h-[100svh] flex-col justify-center pt-32 pb-20 pointer-events-none">
+        <div className="container-wide relative z-10 flex h-[100svh] flex-col justify-center pt-36 pb-20 md:pt-52 pointer-events-none">
           <ScrollReveal>
             <div className="max-w-4xl">
               <span className="section-label-light">
@@ -171,17 +171,17 @@ export default async function HomePage() {
               </span>
 
               <h1 className="heading-display mt-6 text-balance text-5xl leading-[0.95] sm:text-6xl lg:text-[clamp(3.5rem,7vw,7rem)]">
-                <span className="block">Procédé</span>{" "}
+                <span className="block">Thermolaquage</span>{" "}
                 <span className="block bg-gradient-ember bg-clip-text text-transparent">
-                  Qualicoat.
+                  premium.
                 </span>{" "}
                 <span className="block">Une protection à vie.</span>
               </h1>
 
               <p className="mt-8 max-w-2xl text-balance text-lg text-white/70 sm:text-xl">
                 Finition premium par thermolaquage poudre époxy. 200+ couleurs
-                RAL, cabine 7 mètres, service express 48h, 0 COV. Depuis notre
-                atelier de 1 800 m² à Bruyères-sur-Oise.
+                RAL & NCS, cabine 7 × 3 × 4 m, service express 48h, 0 COV.
+                Depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.
               </p>
 
               <div className="mt-10 flex flex-wrap gap-4 pointer-events-auto">
@@ -297,9 +297,9 @@ export default async function HomePage() {
                   Et 4 collections signature.
                 </h2>
                 <p className="mt-4 max-w-xl text-brand-charcoal/70">
-                  Nuancier RAL Classic complet, plus les collections premium
-                  Adaptacolor : Patina (effets corten), Polaris (métalliques),
-                  Dichroic (reflets irisés) et Sfera (anodisés cosmos).
+                  Nuancier RAL Classic complet et Natural Color System (NCS),
+                  plus 4 familles d'effets architecturaux : Corten oxydés,
+                  Métalliques structurés, Irisés dichroïques et Anodisés cosmos.
                 </p>
               </div>
               <Link
@@ -345,26 +345,26 @@ export default async function HomePage() {
             {[
               {
                 slug: "patina",
-                label: "Patina",
-                tagline: "Effets corten & oxyde",
+                label: "Corten",
+                tagline: "Effets oxydés & métal patiné",
                 gradient: "from-amber-800 via-orange-700 to-red-900",
               },
               {
                 slug: "polaris",
-                label: "Polaris",
-                tagline: "Métalliques structurés",
+                label: "Métalliques",
+                tagline: "Reflets structurés haute brillance",
                 gradient: "from-slate-500 via-zinc-400 to-slate-700",
               },
               {
                 slug: "dichroic",
-                label: "Dichroic",
-                tagline: "Reflets irisés",
+                label: "Irisés",
+                tagline: "Reflets dichroïques multi-tons",
                 gradient: "from-fuchsia-500 via-cyan-400 to-indigo-600",
               },
               {
                 slug: "sfera",
-                label: "Sfera",
-                tagline: "Cosmos anodisé",
+                label: "Anodisés",
+                tagline: "Effets cosmos anodisés",
                 gradient: "from-amber-500 via-rose-500 to-purple-900",
               },
             ].map((c) => (

@@ -101,7 +101,7 @@ const PROCESS_STEPS = [
   {
     n: "03",
     label: "Primaire",
-    note: "Anti-corrosion zinc (duplex)",
+    note: "Primaire d'accrochage anti-corrosion",
   },
   {
     n: "04",
@@ -289,7 +289,7 @@ export default async function RealisationDetailPage({
               <dl className="mt-7 space-y-4 text-sm">
                 <SpecRow label="Pièce" value={project.quantity ?? cat} />
                 <SpecRow label="Origine" value={project.origin ?? "Commande client direct"} />
-                <SpecRow label="Préparation" value={project.preparation ?? "Sablage SA 2.5 + primaire zinc"} />
+                <SpecRow label="Préparation" value={project.preparation ?? "Sablage SA 2.5 + primaire d'accrochage"} />
                 <SpecRow label="Finition" value={project.finish ?? "Thermolaquage poudre époxy"} />
                 <SpecRow label="Four" value={project.ovenCycle ?? "Cycle adapté à la pièce"} />
                 <SpecRow label="Atelier" value={project.ateliertIn ?? "Bruyères-sur-Oise"} />

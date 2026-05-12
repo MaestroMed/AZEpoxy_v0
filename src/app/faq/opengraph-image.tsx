@@ -12,7 +12,7 @@ export default async function FaqOg() {
       label: "FAQ",
       title: "Toutes les réponses.",
       tagline:
-        "Questions fréquentes sur le thermolaquage, sablage, métallisation et finitions.",
+        "Questions fréquentes sur le thermolaquage, sablage et finitions spéciales.",
     }),
     size,
   );

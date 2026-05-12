@@ -10,9 +10,9 @@ export default async function ServicesOg() {
   return new ImageResponse(
     ogTemplate({
       label: "Services",
-      title: "4 métiers. 1 exigence.",
+      title: "3 métiers. 1 exigence.",
       tagline:
-        "Thermolaquage · sablage · métallisation · finitions spéciales.",
+        "Thermolaquage · sablage · finitions spéciales.",
     }),
     size
   );

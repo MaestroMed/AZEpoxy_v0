@@ -11,7 +11,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CollectionFinish } from "@/lib/collections-data";
 
@@ -23,7 +23,6 @@ interface CollectionHeroMosaicProps {
   finishes: CollectionFinish[];       // toutes (pour compter)
   accentColor: string;                 // ex "#A0522D"
   bgGradient: string;                  // tailwind: "from-... via-... to-..."
-  catalogueUrl: string;
   primaryHref?: string;
   primaryLabel?: string;
 }
@@ -182,7 +181,6 @@ export function CollectionHeroMosaic({
   finishes,
   accentColor,
   bgGradient,
-  catalogueUrl,
   primaryHref = "/devis",
   primaryLabel = "Demander un devis",
 }: CollectionHeroMosaicProps) {
@@ -417,15 +415,6 @@ export function CollectionHeroMosaic({
               {primaryLabel}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
-            <a
-              href={catalogueUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.03] px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/[0.08]"
-            >
-              Catalogue Adaptacolor
-              <ExternalLink className="h-4 w-4" />
-            </a>
           </m.div>
         </div>
       </div>

@@ -121,7 +121,7 @@ export const FAQS_FALLBACK: FAQ[] = [
     category: "technique",
     question: "Quelle est la durée de vie d'un revêtement thermolaqué ?",
     answer:
-      "En conditions normales d'utilisation, un revêtement thermolaqué conserve ses propriétés esthétiques et protectrices pendant 15 à 20 ans en extérieur et 25 ans et plus en intérieur. En système duplex (finitions spéciales + thermolaquage), la durée de vie peut atteindre 40 ans, y compris en environnement marin ou industriel.",
+      "En conditions normales d'utilisation, un revêtement thermolaqué conserve ses propriétés esthétiques et protectrices pendant 15 à 20 ans en extérieur et 25 ans et plus en intérieur. Avec une préparation rigoureuse (sablage SA 2.5/SA 3 et primaire d'accrochage adapté), la durée de vie peut être prolongée même en environnement marin ou industriel.",
   },
 
   // ── Couleurs ─────────────────────────────────────────────────────────

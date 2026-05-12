@@ -67,10 +67,10 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Thermolaquage",
     category: "procede",
     definition:
-      "Procédé de finition industrielle consistant à appliquer une poudre thermodurcissable sur une pièce métallique, puis à la polymériser au four à 180-220 °C pour obtenir un revêtement durable, homogène et sans solvant.",
+      "Procédé de finition industrielle consistant à appliquer une poudre thermodurcissable sur une pièce métallique, puis à la polymériser au four pour obtenir un revêtement durable, homogène et sans solvant. Le cycle de cuisson est ajusté à la masse et à la géométrie de chaque pièce.",
     details: [
       "Application par pulvérisation électrostatique",
-      "Polymérisation en four entre 15 et 30 minutes",
+      "Polymérisation en four — cycle adapté à la pièce",
       "Épaisseur typique : 60 à 120 microns",
       "Durée de vie : 15-25 ans selon exposition",
     ],
@@ -96,8 +96,8 @@ export const GLOSSARY: GlossaryTerm[] = [
     definition:
       "Réaction chimique déclenchée par la chaleur du four qui transforme la poudre appliquée en un film plastique tridimensionnel réticulé, formant la couche de finition définitive.",
     details: [
-      "Température four : 160 à 220 °C selon la poudre",
-      "Durée : 10 à 25 minutes",
+      "Cycle de cuisson ajusté à la masse et à la géométrie de la pièce",
+      "Durée et palier contrôlés selon la poudre utilisée",
       "La poudre non polymérisée reste poreuse — la cuisson est critique",
     ],
     related: ["thermolaquage", "four", "reticulation"],
@@ -117,7 +117,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     definition:
       "Enceinte fermée équipée d'un système d'aspiration et de récupération, dans laquelle les pistolets appliquent la poudre. Le confinement évite la contamination croisée et permet de récupérer la poudre excédentaire.",
     details: [
-      "Notre cabine : 7 m × 2,5 m × 2,5 m",
+      "Notre cabine : 7 × 3 × 4 m",
       "Ventilation filtrante pour la santé des opérateurs",
       "Possibilité de changement rapide de teinte",
     ],
@@ -189,7 +189,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Qualisteelcoat",
     category: "norme",
     definition:
-      "Équivalent Qualicoat dédié au thermolaquage de l'acier. Couvre la préparation anti-corrosion (sablage, grenaillage), le primaire zinc et la finition polyester. Classification selon catégories de corrosivité ISO 12944.",
+      "Référentiel qualité international dédié au thermolaquage de l'acier (équivalent Qualicoat pour l'aluminium). Couvre la préparation anti-corrosion (sablage, grenaillage), l'application du primaire et la finition. Classification selon les catégories de corrosivité ISO 12944.",
     related: ["qualicoat", "iso-12944", "c5"],
   },
 
@@ -220,7 +220,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Dégraissage",
     category: "preparation",
     definition:
-      "Élimination des huiles, graisses et contaminants organiques à la surface d'une pièce avant traitement. Réalisé en bains chauffés alcalins, à la vapeur ou par aspersion. Critique pour l'accroche ultérieure.",
+      "Élimination des huiles, graisses et contaminants organiques à la surface d'une pièce avant traitement. Étape critique pour garantir l'accroche du revêtement ultérieur.",
     related: ["phosphatation", "sablage"],
   },
   {
@@ -236,7 +236,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Primaire",
     category: "preparation",
     definition:
-      "Première couche appliquée avant la finition, généralement un époxy ou un primaire zinc. Sert à améliorer l'adhérence, à apporter une protection anti-corrosion et à uniformiser la surface.",
+      "Première couche appliquée avant la finition. Sert à améliorer l'adhérence, à apporter une protection anti-corrosion et à uniformiser la surface. Chez AZ Époxy, nous utilisons un primaire époxy sans plomb ni zinc.",
     related: ["anti-corrosion", "poudre-epoxy"],
   },
 
@@ -299,12 +299,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Métallisation",
     category: "procede",
     definition:
-      "Projection de zinc ou d'aluminium fondu sur l'acier à haute vitesse, formant une couche de 60 à 250 μm anode sacrificielle. Protection anti-corrosion active qui peut être recouverte d'un thermolaquage.",
-    details: [
-      "Zinc : protection cathodique excellente",
-      "Aluminium : atmosphère saline, plus léger",
-      "Combinée au thermolaquage : système duplex 25+ ans",
-    ],
+      "Procédé industriel de projection de métal fondu (zinc, aluminium) sur l'acier, formant une couche anode sacrificielle anti-corrosion. AZ Époxy ne pratique pas ce procédé : nous recommandons un partenaire spécialisé en amont si votre projet l'exige avant thermolaquage.",
     related: ["anti-corrosion", "c5"],
   },
 
@@ -329,8 +324,8 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Classe C5 (anti-corrosion)",
     category: "norme",
     definition:
-      "Environnement de corrosivité très élevée selon ISO 12944 : zones côtières, industries chimiques, offshore. Requiert un système duplex (métallisation + thermolaquage) pour une durabilité supérieure à 15 ans.",
-    related: ["iso-12944", "metallisation"],
+      "Environnement de corrosivité très élevée selon ISO 12944 : zones côtières, industries chimiques, offshore. Requiert un système de protection renforcé (préparation rigoureuse, primaire adapté et thermolaquage) pour une durabilité supérieure à 15 ans.",
+    related: ["iso-12944"],
   },
   {
     slug: "cov",
@@ -354,7 +349,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Acier",
     category: "materiaux",
     definition:
-      "Alliage fer-carbone, support métal le plus courant. Nécessite une préparation rigoureuse (sablage + dégraissage + primaire) pour éviter la corrosion sous revêtement. Compatible tous types de poudres.",
+      "Alliage fer-carbone, support métal le plus courant. Nécessite une préparation rigoureuse (sablage + dégraissage + primaire d'accrochage) pour éviter la corrosion sous revêtement. Compatible tous types de poudres.",
     related: ["sablage", "qualisteelcoat"],
   },
   {
@@ -362,7 +357,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     term: "Anti-corrosion",
     category: "norme",
     definition:
-      "Ensemble des techniques visant à protéger un métal de l'oxydation : préparation mécanique, primaire zinc, métallisation, revêtement étanche. Le choix dépend de la classe d'exposition ISO 12944.",
-    related: ["iso-12944", "c5", "metallisation", "primaire"],
+      "Ensemble des techniques visant à protéger un métal de l'oxydation : préparation mécanique (sablage SA 2.5), primaire d'accrochage et revêtement étanche par thermolaquage. Le choix dépend de la classe d'exposition ISO 12944.",
+    related: ["iso-12944", "c5", "primaire"],
   },
 ];

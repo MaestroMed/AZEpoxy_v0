@@ -164,11 +164,11 @@ export default async function SablagePage() {
                   des particules décape le métal et crée simultanément un profil
                   de rugosité contrôlé (25 à 75 µm) indispensable à
                   l&apos;adhérence mécanique de la couche suivante, qu&apos;il
-                  s&apos;agisse de peinture, de poudre époxy ou de métallisation.
+                  s&apos;agisse de peinture ou de poudre époxy.
                 </p>
                 <p>
-                  Notre cabine de sablage de 7 mètres de long permet de traiter
-                  des pièces de grande dimension : charpentes métalliques,
+                  Notre cabine de sablage 7 × 3 × 4 m permet de traiter des
+                  pièces de grande dimension : charpentes métalliques,
                   portails, escaliers complets, éléments de façade. Pour les
                   pièces sensibles, nous proposons le microbillage et
                   l&apos;aérogommage, des variantes douces adaptées à

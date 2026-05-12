@@ -28,12 +28,12 @@ const navGroups = [
     label: "Couleurs",
     href: "/couleurs-ral",
     children: [
-      { label: "Nuancier RAL complet", href: "/couleurs-ral" },
+      { label: "Nuancier RAL & NCS", href: "/couleurs-ral" },
       { label: "Configurateur visuel", href: "/configurateur" },
-      { label: "Collection Patina", href: "/couleurs-ral/patina" },
-      { label: "Collection Polaris", href: "/couleurs-ral/polaris" },
-      { label: "Collection Dichroic", href: "/couleurs-ral/dichroic" },
-      { label: "Collection Sfera", href: "/couleurs-ral/sfera" },
+      { label: "Effets Corten", href: "/couleurs-ral/patina" },
+      { label: "Effets Métalliques", href: "/couleurs-ral/polaris" },
+      { label: "Effets Irisés", href: "/couleurs-ral/dichroic" },
+      { label: "Effets Anodisés", href: "/couleurs-ral/sfera" },
     ],
   },
   {
@@ -102,37 +102,74 @@ export function Header() {
         Aller au contenu principal
       </a>
       <div className="container-wide flex h-20 items-center justify-between">
-        <Link href="/" className="group flex items-center gap-3" data-magnetic>
-          <div className="relative h-10 w-10 overflow-hidden rounded-md bg-gradient-ember shadow-lg shadow-brand-orange/40 transition-all duration-500 group-hover:shadow-brand-orange/70 group-hover:shadow-xl">
-            {/* Ember pulse — rendered FIRST in DOM + pointer-events-none
-                so the AZ glyph sitting on top reads cleanly. */}
-            <div className="pointer-events-none absolute inset-0 animate-ember-pulse bg-gradient-heat opacity-60" />
-            {/* Conic sweep au hover — rotation rapide d'un gradient
-                conique quand la souris survole, comme une étincelle
-                qui parcourt l'icône. */}
+        <Link
+          href="/"
+          className="group flex items-center gap-3.5"
+          data-magnetic
+          aria-label="AZ Époxy — Accueil"
+        >
+          {/* Mark — geometric AZ monogram on a dark squircle. The Z's
+              strokes carry the ember gradient (the thermolaquage
+              signal); the A stays white for contrast and balance.
+              Soft ember underglow from the bottom-right reads as
+              "kiln door cracked open". */}
+          <div className="relative h-11 w-11 shrink-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]">
+            <div className="absolute inset-0 rounded-[12px] bg-brand-night-deep ring-1 ring-white/10" />
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              className="absolute inset-0 rounded-[12px] animate-ember-pulse"
               style={{
                 background:
-                  "conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.28) 45deg, transparent 90deg, transparent 360deg)",
-                animation: "logo-sweep 1.6s linear infinite",
+                  "radial-gradient(140% 100% at 95% 112%, rgba(232,93,44,0.55) 0%, rgba(200,72,24,0.22) 38%, transparent 72%)",
               }}
             />
-            {/* AZ label LAST + z-10 so it always paints above the
-                ember pulse, with a subtle scale-up on hover. */}
-            <span className="relative z-10 flex h-full w-full items-center justify-center font-display text-xl font-black text-white transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110">
-              AZ
-            </span>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-[1px] rounded-[11px]"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 28%)",
+              }}
+            />
+            <svg
+              className="relative h-full w-full"
+              viewBox="0 0 44 44"
+              fill="none"
+              role="img"
+              aria-label="AZ"
+            >
+              <defs>
+                <linearGradient
+                  id="az-mark-ember"
+                  x1="0"
+                  y1="0"
+                  x2="1"
+                  y2="1"
+                >
+                  <stop offset="0%" stopColor="#FF9A5C" />
+                  <stop offset="55%" stopColor="#E85D2C" />
+                  <stop offset="100%" stopColor="#8B2E0A" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M 8 33 L 16 10 L 24 33 M 11 26 L 21 26"
+                stroke="#FFFFFF"
+                strokeWidth="2.4"
+                strokeLinecap="square"
+                strokeLinejoin="miter"
+              />
+              <path
+                d="M 26 12 L 37 12 L 26 32 L 37 32"
+                stroke="url(#az-mark-ember)"
+                strokeWidth="2.4"
+                strokeLinecap="square"
+                strokeLinejoin="miter"
+              />
+            </svg>
           </div>
-          <div className="flex flex-col leading-none">
-            <span className="font-display text-lg font-black text-white tracking-tight transition-colors duration-300 group-hover:text-white">
-              ÉPOXY
-            </span>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-orange transition-all duration-300 group-hover:tracking-[0.24em]">
-              Thermolaquage
-            </span>
-          </div>
+          <span className="font-display text-lg font-black uppercase tracking-[0.02em] leading-none text-white">
+            ÉPOXY
+          </span>
         </Link>
 
         {/* Desktop nav */}

@@ -43,7 +43,7 @@ export const MOBILE_NAV_GROUPS: MobileNavGroup[] = [
         label: "Thermolaquage poudre",
         href: "/services/thermolaquage",
         image: "/images/services/thermolaquage.webp",
-        tagline: "Le standard Qualicoat — 200+ teintes RAL & NCS",
+        tagline: "Normes Qualicoat / ISO 12944 — 200+ teintes RAL & NCS",
       },
       {
         label: "Sablage & grenaillage",
@@ -583,7 +583,7 @@ function FooterCTAs({
         </Link>
       </div>
       <p className="mt-3 text-center text-[10px] uppercase tracking-[0.18em] text-white/35">
-        Thermolaquage Qualicoat · Île-de-France
+        Thermolaquage premium · Île-de-France
       </p>
     </div>
   );

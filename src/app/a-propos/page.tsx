@@ -25,7 +25,7 @@ export const metadata = buildMetadata({
 });
 
 const EQUIPMENT = [
-  "Cabine de thermolaquage 7 mètres",
+  "Cabine de thermolaquage 7 × 3 × 4 m",
   "Four de cuisson professionnel",
   "Sableuse industrielle",
   "Pistolet électrostatique haute précision",
@@ -93,10 +93,11 @@ export default async function AProposPage() {
                 </p>
                 <p>
                   Aujourd&apos;hui, AZ Époxy dispose d&apos;un atelier de 1 800 m²,
-                  d&apos;une cabine de thermolaquage de 7 mètres, d&apos;un accès
-                  complet à la gamme RAL ainsi qu&apos;aux collections premium
-                  (Qualicoat, Interpon, IGP), et d&apos;un service express 48h pour
-                  les urgences. Nous traitons plus de 2 000 projets par an, pour des
+                  d&apos;une cabine de thermolaquage 7 × 3 × 4 m, d&apos;un accès
+                  complet aux nuanciers RAL et NCS ainsi qu&apos;à nos quatre
+                  familles d&apos;effets architecturaux (Corten, Métalliques,
+                  Irisés, Anodisés), et d&apos;un service express 48h pour les
+                  urgences. Nous traitons plus de 2 000 projets par an, pour des
                   professionnels et des particuliers exigeants.
                 </p>
               </div>
@@ -195,7 +196,7 @@ export default async function AProposPage() {
                 <FeatureCard
                   icon={<Award className="h-6 w-6" />}
                   title="Savoir-faire"
-                  description="Plus de 15 ans d'expertise industrielle, des finitions premium (texturé, sablé, métallisé) et un conseil personnalisé."
+                  description="Plus de 15 ans d'expertise industrielle, des finitions premium (mat, satiné, texturé, moucheté, effets architecturaux) et un conseil personnalisé."
                 />
               </MouseTilt>
             </ScrollReveal>
@@ -237,14 +238,14 @@ export default async function AProposPage() {
                   <p className="mt-5 font-display text-2xl sm:text-3xl font-black leading-[1.1] text-white">
                     Thermolaquage{" "}
                     <span className="block bg-gradient-ember bg-clip-text text-transparent">
-                      7 mètres.
+                      7 × 3 × 4 m.
                     </span>
                   </p>
                 </div>
                 <div className="relative flex flex-wrap gap-x-8 gap-y-3 text-[11px] uppercase tracking-[0.18em] text-white/45">
-                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">QUALICOAT</span>référentiel</span>
+                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">ISO 12944</span>normes suivies</span>
                   <span><span className="mr-2 font-display text-xl font-black text-brand-orange">3 t</span>pont roulant</span>
-                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">7 m</span>cabine</span>
+                  <span><span className="mr-2 font-display text-xl font-black text-brand-orange">7×3×4</span>cabine (m)</span>
                 </div>
               </div>
             </ScrollReveal>

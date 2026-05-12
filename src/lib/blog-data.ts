@@ -166,47 +166,6 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
     `,
   },
   {
-    slug: "metallisation-zinc-protection-ultime",
-    image: "/images/blog/metallisation-zinc-protection-ultime.webp",
-    title: "finitions spéciales au zinc : la protection anti-corrosion ultime",
-    description:
-      "Découvrez la finitions spéciales au zinc par projection thermique, le traitement anticorrosion le plus performant pour l'acier.",
-    date: "2025-05-12",
-    readTime: "6 min",
-    category: "Technique",
-    content: `
-      <p>Pour les pièces exposées à des environnements agressifs — maritime, industriel, chimique — le thermolaquage seul peut ne pas suffire. C'est là qu'intervient la <strong>finitions spéciales au zinc</strong>, une technique de protection cathodique qui offre une durée de vie exceptionnelle.</p>
-
-      <h2>Principe de la finitions spéciales</h2>
-      <p>La finitions spéciales par projection thermique (ou schoopage) consiste à fondre du fil de zinc dans un arc électrique ou une flamme, puis à le projeter sous forme de micro-gouttelettes sur la surface métallique. Le zinc se solidifie instantanément et forme une couche protectrice de 80 à 150 microns.</p>
-
-      <h2>Protection cathodique : le zinc se sacrifie</h2>
-      <p>Le zinc est un métal plus réactif que l'acier (potentiel électrochimique inférieur). En cas de rayure ou d'impact, le zinc se corrode <strong>à la place de l'acier</strong>. C'est le principe de l'anode sacrificielle, le même utilisé dans la galvanisation à chaud. La différence : la finitions spéciales peut être appliquée sur des pièces de toute taille, sans les plonger dans un bain de zinc fondu.</p>
-
-      <h2>Système duplex : finitions spéciales + thermolaquage</h2>
-      <p>La combinaison finitions spéciales + thermolaquage est ce qu'on appelle un <strong>système duplex</strong>. C'est la Rolls-Royce de la protection anti-corrosion :</p>
-      <ul>
-        <li>La couche de zinc protège l'acier par effet cathodique</li>
-        <li>Le thermolaquage protège le zinc de l'usure mécanique et des UV</li>
-        <li>La durée de vie combinée est <strong>supérieure à la somme</strong> des deux traitements séparés (effet synergique)</li>
-      </ul>
-      <p>Un système duplex bien réalisé offre une protection de <strong>25 à 40 ans</strong> en environnement extérieur, contre 10-15 ans pour un thermolaquage seul.</p>
-
-      <h2>Applications typiques</h2>
-      <p>Nous recommandons la finitions spéciales pour :</p>
-      <ul>
-        <li>Portails et clôtures en bord de mer</li>
-        <li>Structures métalliques extérieures (pergolas, charpentes)</li>
-        <li>Mobilier urbain et équipements de collectivités</li>
-        <li>Pièces industrielles exposées à des produits chimiques</li>
-        <li>Garde-corps et rampes en milieu humide</li>
-      </ul>
-
-      <h2>finitions spéciales chez AZ Époxy</h2>
-      <p>Notre équipement de projection thermique à l'arc permet de traiter des pièces de grande dimension dans notre cabine de 7 × 3 × 4 mètres. Le processus complet — sablage Sa 3, finitions spéciales zinc 100µm, thermolaquage 80µm — est réalisé dans un délai de 5 à 7 jours ouvrés. Un investissement qui se rentabilise dès la première année grâce à l'absence totale d'entretien.</p>
-    `,
-  },
-  {
     slug: "entretien-pieces-thermolaquees",
     image: "/images/blog/entretien-pieces-thermolaquees.webp",
     title: "Comment entretenir vos pièces thermolaquées pour qu'elles durent",
@@ -252,7 +211,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>Le portail est la première chose que vos visiteurs voient. Un portail en fer forgé thermolaqué associe l'élégance du travail artisanal à la durabilité d'une finition industrielle. Voici comment se déroule le processus complet.</p>
 
       <h2>Étape 1 : Diagnostic et devis</h2>
-      <p>Nous commençons par un diagnostic de votre portail : état de la structure, niveau de corrosion, dimensions exactes. Un devis détaillé vous est envoyé sous 24 heures avec les options de traitement recommandées. Pour les portails très corrodés, nous pouvons recommander un système duplex (finitions spéciales + thermolaquage).</p>
+      <p>Nous commençons par un diagnostic de votre portail : état de la structure, niveau de corrosion, dimensions exactes. Un devis détaillé vous est envoyé sous 24 heures avec les options de traitement recommandées. Pour les portails très corrodés, nous adaptons la préparation (sablage SA 2.5 / SA 3) et le primaire d'accrochage avant le thermolaquage.</p>
 
       <h2>Étape 2 : Dépose</h2>
       <p>La dépose du portail peut être réalisée par vos soins ou par notre équipe. Pensez à protéger les gonds et les motorisations. Si votre portail est motorisé, nous vous recommandons de faire intervenir votre installateur pour la déconnexion et la reconnexion.</p>

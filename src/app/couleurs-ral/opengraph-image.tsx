@@ -12,7 +12,7 @@ export default async function CouleursRalOg() {
       label: "Couleurs",
       title: "Un nuancier qui respire.",
       tagline:
-        "213 teintes RAL Classic · 4 collections premium Adaptacolor.",
+        "Nuanciers RAL & NCS · 4 familles d'effets architecturaux premium.",
     }),
     size,
   );

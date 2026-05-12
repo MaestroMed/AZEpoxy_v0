@@ -36,12 +36,12 @@ export default function NotFound() {
           <NotFoundCard
             href="/services"
             title="Nos services"
-            description="Thermolaquage, sablage, métallisation, finitions spéciales."
+            description="Thermolaquage, sablage, finitions spéciales."
           />
           <NotFoundCard
             href="/couleurs-ral"
-            title="Nuancier RAL"
-            description="200+ couleurs et collections exclusives."
+            title="Nuancier RAL & NCS"
+            description="200+ couleurs et 4 familles d'effets architecturaux."
           />
           <NotFoundCard
             href="/realisations"

@@ -18,7 +18,7 @@ import { PortfolioSection } from "./portfolio-section";
 export const metadata = buildMetadata({
   title: "Nos Réalisations",
   description:
-    "Découvrez nos projets de thermolaquage, sablage et métallisation. Jantes, moto, mobilier, portails et pièces industrielles.",
+    "Découvrez nos projets de thermolaquage, sablage et finitions spéciales. Jantes, moto, mobilier, portails et pièces industrielles.",
   path: "/realisations",
 });
 
@@ -83,7 +83,8 @@ export default async function RealisationsPage() {
             <p className="mt-8 max-w-2xl text-balance text-lg text-white/75 sm:text-xl">
               Jantes, moto, pièces auto, portails, mobilier et structures
               métalliques — chaque réalisation témoigne de notre exigence
-              qualité et de la précision du procédé QUALICOAT.
+              qualité et de la précision de notre procédé, suivant les normes
+              Qualicoat et ISO 12944.
             </p>
           </div>
         </div>

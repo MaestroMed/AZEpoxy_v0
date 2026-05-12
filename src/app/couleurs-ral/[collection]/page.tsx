@@ -75,7 +75,6 @@ export default async function CollectionPage({
         finishes={collection.finishes}
         accentColor={collection.accentColor}
         bgGradient={collection.bgGradient}
-        catalogueUrl={collection.url}
       />
 
       {/* ── About ────────────────────────────────────────────────── */}

@@ -3,12 +3,9 @@
  * par AZ Époxy en complément du nuancier RAL Classic et NCS.
  *
  * Les slugs (patina / polaris / dichroic / sfera) sont préservés pour
- * la stabilité SEO mais les libellés UI ont été génériquement renommés
- * en "Effets Corten / Métalliques / Irisés / Anodisés" — pas de marque
- * commerciale dans le contenu visible.
- *
- * Les finitions (imageUrl, noms) sont générées par `scripts/build-adapta.mjs`
- * dans `./data/adapta-collections.generated.ts`.
+ * la stabilité SEO mais les libellés UI sont génériques : "Effets
+ * Corten / Métalliques / Irisés / Anodisés" — aucune marque commerciale
+ * de poudre n'apparaît dans le contenu visible.
  */
 
 import {
@@ -42,7 +39,6 @@ export interface Collection {
   subtitle: string;
   description: string;
   longDescription: string;
-  url: string;            // catalogue Adapta officiel
   accentColor: string;    // pour le spotlight hero
   bgGradient: string;     // ex: "from-amber-950 via-orange-900 to-stone-900"
   tags: string[];
@@ -76,8 +72,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       "La famille Effets Corten reproduit fidèlement l'aspect du métal patiné par le temps : corten oxydé, cuivre vieilli, bronze antique. Chaque pièce acquiert un caractère unique grâce aux variations subtiles de tonalité propres au procédé.",
     longDescription:
-      "Six sous-collections — Plain Oxide, Tile, Oxide I & II, Soft et Crystal Patina — pour couvrir toute la palette des effets vieillis : du corten brut aux patines feutrées, en passant par les oxydations minérales et les cristaux translucides. Un revêtement qui raconte une histoire, sans les inconvénients de la corrosion réelle. Protection anti-corrosion réelle sous l'aspect oxydé, résistance UV pour une tenue extérieure durable.",
-    url: "https://adaptacolor.com/fr/catalogoPatina",
+      "Six sous-familles d'effets vieillis : du corten brut aux patines feutrées, en passant par les oxydations minérales et les cristaux translucides. Un revêtement qui raconte une histoire, sans les inconvénients de la corrosion réelle. Protection anti-corrosion réelle sous l'aspect oxydé, résistance UV pour une tenue extérieure durable.",
     accentColor: "#A0522D",
     bgGradient: "from-amber-950 via-orange-900 to-stone-900",
     tags: ["Corten", "Oxyde", "Vieilli", "Texturé"],
@@ -106,8 +101,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       "La famille Effets Métalliques sublime le métal par des reflets profonds et un grain métallique prononcé. Inspirées de l'aluminium anodisé et de l'acier brossé, ces teintes apportent une élégance industrielle contemporaine.",
     longDescription:
-      "Sept sous-collections techniques — Chamaleon, Sculptur, Boreal, Orion, Pegassus, Phoenix et Hydra — qui explorent chacune une facette du métal : caméléon changeant, grain sculpté, aurore boréale, constellations brossées, neutres à fort caractère, métalliques ardents et gris structurés. Le rendu structuré capte et diffuse la lumière pour un effet visuel saisissant. Entretien minimal — surface anti-traces de doigts, résistance supérieure aux rayures.",
-    url: "https://adaptacolor.com/fr/catalogoPolaris",
+      "Sept sous-familles techniques qui explorent chacune une facette du métal : caméléon changeant, grain sculpté, aurore boréale, constellations brossées, neutres à fort caractère, métalliques ardents et gris structurés. Le rendu structuré capte et diffuse la lumière pour un effet visuel saisissant. Entretien minimal — surface anti-traces de doigts, résistance supérieure aux rayures.",
     accentColor: "#4A6FA5",
     bgGradient: "from-slate-900 via-blue-950 to-slate-800",
     tags: ["Métallisé", "Brossé", "Structuré", "Industriel"],
@@ -137,7 +131,6 @@ export const COLLECTIONS: Collection[] = [
       "Inspirée du verre dichroïque et des ailes de papillon, la famille Effets Irisés offre des reflets qui changent de couleur selon l'angle d'observation et l'éclairage.",
     longDescription:
       "Vingt-quatre finitions bichromes — chacune un duo de teintes qui se révèlent au gré de la lumière. Pigments interférentiels de dernière génération, rendu unique à chaque orientation lumineuse. Compatible intérieur et extérieur avec résistance UV renforcée, finition lisse ultra-brillante pour un maximum d'effet. Un choix de caractère pour les projets architecturaux qui osent se démarquer.",
-    url: "https://adaptacolor.com/fr/catalogoDichroic",
     accentColor: "#7B2FBE",
     bgGradient: "from-violet-950 via-purple-900 to-indigo-950",
     tags: ["Irisé", "Bichrome", "Architectural", "Spectaculaire"],
@@ -166,7 +159,6 @@ export const COLLECTIONS: Collection[] = [
       "La famille Effets Anodisés s'inspire des nébuleuses et des reflets cosmiques pour créer des teintes profondes à l'aspect anodisé, à la fois intenses et translucides.",
     longDescription:
       "Treize teintes anodisées haute densité — des violets galactiques aux bronzes solaires en passant par des verts anodisés et des bleus arctiques. Pigments nacrés multicouches pour une profondeur remarquable, excellente tenue des couleurs dans le temps, effet « candy » translucide sur les teintes les plus claires. Idéal pour les jantes, pièces automobiles premium et le mobilier design.",
-    url: "https://adaptacolor.com/fr/catalogoSfera",
     accentColor: "#B87333",
     bgGradient: "from-amber-900 via-yellow-900 to-stone-900",
     tags: ["Anodisé", "Candy", "Automobile", "Premium"],

@@ -12,7 +12,7 @@ import { getFaqs } from "@/lib/faq-data";
 export const metadata = buildMetadata({
   title: "Questions Fréquentes",
   description:
-    "Retrouvez les réponses aux questions les plus fréquentes sur nos prestations de thermolaquage, sablage et métallisation à Bruyères-sur-Oise.",
+    "Retrouvez les réponses aux questions les plus fréquentes sur nos prestations de thermolaquage, sablage et finitions spéciales à Bruyères-sur-Oise.",
   path: "/faq",
 });
 
@@ -33,7 +33,7 @@ export default async function FaqPage() {
             </span>
           </>
         }
-        description="Tout ce que vous devez savoir sur nos prestations de thermolaquage, sablage et métallisation."
+        description="Tout ce que vous devez savoir sur nos prestations de thermolaquage, sablage et finitions spéciales."
         variant="transparent"
         image="/images/heros/faq.webp"
         breadcrumbs={[

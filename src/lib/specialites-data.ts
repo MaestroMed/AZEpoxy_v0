@@ -68,7 +68,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         question: "Proposez-vous des finitions spéciales pour les jantes ?",
         answer:
-          "Oui, au-delà des teintes RAL classiques, nous proposons des finitions métallisées (type aluminium brossé), des effets bicolores (face usinée + flanc peint) et les teintes premium de nos collections effets architecturaux (Effets Métalliques, Effets Anodisés). Demandez-nous un nuancier.",
+          "Oui, au-delà des teintes RAL et NCS classiques, nous proposons des effets métalliques (type aluminium brossé), des effets bicolores (face usinée + flanc peint) et les teintes premium de nos effets architecturaux (Métalliques, Anodisés). Demandez-nous un nuancier.",
       },
     ],
   },
@@ -183,7 +183,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         title: "Protection anti-corrosion longue durée",
         description:
-          "Pour les environnements agressifs (milieu marin, industriel, enterré), nous proposons le système duplex finitions spéciales zinc + thermolaquage époxy, conforme à la norme ISO 12944 catégorie C5-M, avec une durée de vie de 25 ans et plus.",
+          "Pour les environnements agressifs (milieu marin, industriel, enterré), nous mettons en œuvre une préparation rigoureuse (sablage SA 2.5/SA 3), un primaire d'accrochage adapté et un thermolaquage époxy, dans le respect de la norme ISO 12944 catégorie C5-M.",
       },
       {
         title: "Production en série et répétabilité",

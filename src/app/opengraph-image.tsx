@@ -10,9 +10,9 @@ export default async function OpengraphImage() {
   return new ImageResponse(
     ogTemplate({
       label: "Thermolaquage",
-      title: "Thermolaquage poudre époxy",
+      title: "Thermolaquage premium",
       tagline:
-        "200+ couleurs RAL · cabine 7 m · service express 48 h · 0 COV",
+        "200+ couleurs RAL & NCS · cabine 7 × 3 × 4 m · express 48 h · 0 COV",
     }),
     size
   );

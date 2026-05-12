@@ -18,7 +18,8 @@ export interface Project {
   preparation?: string;
   /** Finish type — "Satiné", "Brillant", "Texturé", "Mat". */
   finish?: string;
-  /** Oven cycle — e.g. "200°C × 15 min", "180°C × 20 min". */
+  /** Oven cycle — free-text label (e.g. "Cycle adapté à la pièce"). Avoid
+   * fixed temperatures/times in user-visible copy; cuisson varies per piece. */
   ovenCycle?: string;
   /** Atelier entry — "Q2 2025", "Mars 2025", etc. */
   ateliertIn?: string;
@@ -159,7 +160,7 @@ export const PROJECTS_FALLBACK: Project[] = [
     title: "Charpente métallique atelier 200 m²",
     category: "industriel",
     description:
-      "Sablage SA 2.5 et thermolaquage de l'ensemble de la charpente métallique d'un atelier artisanal. Système duplex métallisation zinc + poudre époxy gris clair pour une durabilité de 25 ans.",
+      "Sablage SA 2.5 et thermolaquage de l'ensemble de la charpente métallique d'un atelier artisanal. Préparation rigoureuse, primaire d'accrochage et poudre époxy gris clair pour une durabilité longue durée.",
     colors: ["RAL 7035"],
     featured: true,
   },
@@ -188,7 +189,7 @@ export const PROJECTS_FALLBACK: Project[] = [
     title: "Portail coulissant 5 m — RAL 7016",
     category: "portail",
     description:
-      "Portail coulissant motorisé de 5 mètres en acier, thermolaqué gris anthracite. Sablage intégral de la structure rouillée puis application du système primaire zinc + poudre époxy.",
+      "Portail coulissant motorisé de 5 mètres en acier, thermolaqué gris anthracite. Sablage intégral de la structure rouillée puis application du primaire d'accrochage et de la poudre époxy.",
     colors: ["RAL 7016"],
     featured: false,
   },

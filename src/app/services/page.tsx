@@ -21,7 +21,7 @@ import { PROCESS_STEPS } from "@/lib/process-data";
 export const metadata = buildMetadata({
   title: "Nos Services",
   description:
-    "Thermolaquage poudre époxy, sablage, grenaillage, métallisation et finitions spéciales. Découvrez l'ensemble de nos prestations industrielles depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.",
+    "Thermolaquage poudre époxy, sablage, grenaillage et finitions spéciales. Découvrez l'ensemble de nos prestations industrielles depuis notre atelier de 1 800 m² à Bruyères-sur-Oise.",
   path: "/services",
 });
 
@@ -43,7 +43,7 @@ const SERVICE_ICONS = [
 const SERVICE_LABELS = [
   "Cabine de thermolaquage",
   "Cabine de sablage",
-  "Pistolet de métallisation",
+  "Pistolet électrostatique",
   "Finitions & effets spéciaux",
 ];
 
@@ -62,7 +62,7 @@ export default async function ServicesPage() {
             </span>
           </>
         }
-        description="De la préparation de surface à la finition finale, AZ Époxy maîtrise l'ensemble de la chaîne du revêtement industriel. Thermolaquage, sablage, métallisation, finitions spéciales — chaque prestation suit un protocole rigoureux pour une qualité irréprochable."
+        description="De la préparation de surface à la finition finale, AZ Époxy maîtrise l'ensemble de la chaîne du revêtement industriel. Thermolaquage, sablage, finitions spéciales — chaque prestation suit un protocole rigoureux pour une qualité irréprochable."
         variant="transparent"
         image="/images/heros/services-thermolaquage.webp"
         breadcrumbs={[

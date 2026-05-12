@@ -16,7 +16,7 @@ import { SITE } from "@/lib/utils";
 export const metadata = buildMetadata({
   title: "Glossaire — Lexique du Thermolaquage",
   description:
-    "30 termes techniques expliqués : thermolaquage, polymérisation, RAL, Qualicoat, C5, métallisation, COV. Le lexique complet pour comprendre la finition poudre époxy.",
+    "30 termes techniques expliqués : thermolaquage, polymérisation, RAL, NCS, normes Qualicoat / ISO 12944, COV. Le lexique complet pour comprendre la finition poudre époxy.",
   path: "/glossaire",
 });
 
