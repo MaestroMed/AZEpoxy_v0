@@ -48,12 +48,116 @@ html.has-custom-cursor textarea {
   80%      { transform: translateY(0); opacity: 0.4; }
 }
 
-/* Logo conic sweep — rotation 360° d'un gradient conique au hover du
-   logo AZ Époxy dans le header. Crée un effet "étincelle qui parcourt
-   l'icône". */
+/* ── AZ monogram logo — system d'animation multi-couches ─────────────
+   Le logo combine 4 animations qui tournent en parallèle pour un effet
+   "alive but never noisy". Les easings + durées sont choisis pour ne
+   jamais attirer l'œil — c'est de la respiration de fond.
+
+   1. Stroke draw on mount  → A puis Z se tracent (1× au load)
+   2. Gradient drift idle   → le ember du Z respire chromatiquement
+   3. Glow breath idle      → l'underglow pulse en douceur
+   4. Hover spark + lift    → scale + spark dot top-right du Z
+*/
+
+/* Mount — chaque tracé du monogramme se dessine de start à end. */
+@keyframes az-mark-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Idle — l'underglow respire (opacité + scale) avec un easing premium. */
+@keyframes az-mark-breath {
+  0%, 100% { opacity: 0.48; transform: scale(1); }
+  50%      { opacity: 0.78; transform: scale(1.035); }
+}
+
+/* Idle — le premier stop du gradient ember dérive entre deux tons
+   chauds. Crée l'illusion d'un ember vivant. */
+@keyframes az-ember-stop-1 {
+  0%, 100% { stop-color: #FF9A5C; }
+  50%      { stop-color: #FFC09B; }
+}
+@keyframes az-ember-stop-2 {
+  0%, 100% { stop-color: #E85D2C; }
+  50%      { stop-color: #FF7A40; }
+}
+
+/* (legacy conic sweep — gardé au cas où d'autres composants le
+   référencent, mais le logo ne s'en sert plus) */
 @keyframes logo-sweep {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+/* ── Classes appliquées au mark ────────────────────────────────────── */
+
+.az-mark-path {
+  stroke-dasharray: 110;
+  stroke-dashoffset: 110;
+  animation: az-mark-draw 1.05s var(--ease-out-expo) forwards;
+  /* Le filtre subtil dramatise les strokes sans halo agressif. */
+  filter: drop-shadow(0 0 0.6px rgba(255, 255, 255, 0.18));
+}
+.az-mark-path--a { animation-delay: 120ms; }
+.az-mark-path--z {
+  animation-delay: 420ms;
+  filter: drop-shadow(0 0 0.6px rgba(232, 93, 44, 0.45));
+}
+
+.az-mark-glow {
+  animation: az-mark-breath 4.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transition: opacity var(--dur-normal) var(--ease-out-expo);
+}
+.group:hover .az-mark-glow {
+  opacity: 1;
+}
+
+.az-mark-stop-1 {
+  animation: az-ember-stop-1 8s ease-in-out infinite;
+}
+.az-mark-stop-2 {
+  animation: az-ember-stop-2 8s ease-in-out infinite;
+}
+
+.az-mark-spark {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.4);
+  transition:
+    opacity 380ms var(--ease-out-expo),
+    transform 480ms var(--ease-out-expo);
+}
+.group:hover .az-mark-spark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.az-mark-container {
+  transition:
+    transform 360ms var(--ease-out-expo),
+    filter 360ms var(--ease-out-expo);
+}
+.group:hover .az-mark-container {
+  transform: scale(1.045);
+  filter: drop-shadow(0 6px 14px rgba(232, 93, 44, 0.28));
+}
+
+/* Reduced motion — on neutralise les animations, on laisse le mark
+   visible dans son état final + statique. */
+@media (prefers-reduced-motion: reduce) {
+  .az-mark-path,
+  .az-mark-glow,
+  .az-mark-stop-1,
+  .az-mark-stop-2 {
+    animation: none;
+  }
+  .az-mark-path {
+    stroke-dashoffset: 0;
+  }
+  .az-mark-container,
+  .az-mark-spark {
+    transition: none;
+  }
 }
 
 /* Stat counter pop — scale up puis retour quand le counter atterrit. */

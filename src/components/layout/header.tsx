@@ -108,21 +108,23 @@ export function Header() {
           data-magnetic
           aria-label="AZ Époxy — Accueil"
         >
-          {/* Mark — geometric AZ monogram on a dark squircle. The Z's
-              strokes carry the ember gradient (the thermolaquage
-              signal); the A stays white for contrast and balance.
-              Soft ember underglow from the bottom-right reads as
-              "kiln door cracked open". */}
-          <div className="relative h-11 w-11 shrink-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]">
+          {/* Mark — geometric AZ monogram on a dark squircle.
+              4 animation layers : stroke-draw on mount, ember gradient
+              drift idle, underglow breath idle, hover spark + lift.
+              All gracefully degraded for prefers-reduced-motion. */}
+          <div className="az-mark-container relative h-11 w-11 shrink-0">
+            {/* Base squircle */}
             <div className="absolute inset-0 rounded-[12px] bg-brand-night-deep ring-1 ring-white/10" />
+            {/* Ember underglow — kiln-door-ajar, breath animation */}
             <div
               aria-hidden
-              className="absolute inset-0 rounded-[12px] animate-ember-pulse"
+              className="az-mark-glow absolute inset-0 rounded-[12px]"
               style={{
                 background:
-                  "radial-gradient(140% 100% at 95% 112%, rgba(232,93,44,0.55) 0%, rgba(200,72,24,0.22) 38%, transparent 72%)",
+                  "radial-gradient(140% 100% at 95% 112%, rgba(232,93,44,0.62) 0%, rgba(200,72,24,0.24) 38%, transparent 72%)",
               }}
             />
+            {/* Top-edge bevel highlight */}
             <div
               aria-hidden
               className="pointer-events-none absolute inset-[1px] rounded-[11px]"
@@ -139,6 +141,8 @@ export function Header() {
               aria-label="AZ"
             >
               <defs>
+                {/* Ember linear gradient — first two stops drift in
+                    color over 8s for a subtle "living ember" feel. */}
                 <linearGradient
                   id="az-mark-ember"
                   x1="0"
@@ -146,24 +150,50 @@ export function Header() {
                   x2="1"
                   y2="1"
                 >
-                  <stop offset="0%" stopColor="#FF9A5C" />
-                  <stop offset="55%" stopColor="#E85D2C" />
+                  <stop
+                    className="az-mark-stop-1"
+                    offset="0%"
+                    stopColor="#FF9A5C"
+                  />
+                  <stop
+                    className="az-mark-stop-2"
+                    offset="55%"
+                    stopColor="#E85D2C"
+                  />
                   <stop offset="100%" stopColor="#8B2E0A" />
                 </linearGradient>
+                {/* Spark radial — appears at Z's top-right on hover. */}
+                <radialGradient id="az-mark-spark" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#FFF5E0" />
+                  <stop offset="55%" stopColor="#FFB780" stopOpacity="0.85" />
+                  <stop offset="100%" stopColor="#FF9A5C" stopOpacity="0" />
+                </radialGradient>
               </defs>
+              {/* A — white, draws first (120ms delay) */}
               <path
-                d="M 8 33 L 16 10 L 24 33 M 11 26 L 21 26"
+                className="az-mark-path az-mark-path--a"
+                d="M 7 33 L 15 9 L 23 33 M 10 26 L 20 26"
                 stroke="#FFFFFF"
-                strokeWidth="2.4"
-                strokeLinecap="square"
-                strokeLinejoin="miter"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
+              {/* Z — ember, draws second (420ms delay) */}
               <path
-                d="M 26 12 L 37 12 L 26 32 L 37 32"
+                className="az-mark-path az-mark-path--z"
+                d="M 25 11 L 37 11 L 25 31 L 37 31"
                 stroke="url(#az-mark-ember)"
-                strokeWidth="2.4"
-                strokeLinecap="square"
-                strokeLinejoin="miter"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              {/* Spark — fades in + scales up at the top of Z on hover */}
+              <circle
+                className="az-mark-spark"
+                cx="37"
+                cy="11"
+                r="2.6"
+                fill="url(#az-mark-spark)"
               />
             </svg>
           </div>

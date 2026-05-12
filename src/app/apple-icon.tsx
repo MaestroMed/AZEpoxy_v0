@@ -44,18 +44,18 @@ export default function AppleIcon() {
             </linearGradient>
           </defs>
           <path
-            d="M 8 33 L 16 10 L 24 33 M 11 26 L 21 26"
+            d="M 7 33 L 15 9 L 23 33 M 10 26 L 20 26"
             stroke="#FFFFFF"
-            strokeWidth="2.6"
-            strokeLinecap="square"
-            strokeLinejoin="miter"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
           <path
-            d="M 26 12 L 37 12 L 26 32 L 37 32"
+            d="M 25 11 L 37 11 L 25 31 L 37 31"
             stroke="url(#az-apple-ember)"
-            strokeWidth="2.6"
-            strokeLinecap="square"
-            strokeLinejoin="miter"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
