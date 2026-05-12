@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import { cn, SITE } from "@/lib/utils";
 import { NavPreviewLink } from "@/components/nuee/nav-preview-link";
+import { MobileMegaMenu } from "@/components/layout/mobile-mega-menu";
 
 function isSectionActive(pathname: string | null, href: string): boolean {
   if (!pathname) return false;
@@ -221,112 +222,13 @@ export function Header() {
         </button>
       </div>
 
-      {/* Mobile menu — fullscreen takeover avec stagger reveal. */}
-      <div
-        className={cn(
-          "fixed inset-0 top-20 z-40 overflow-y-auto bg-brand-night-deep/98 backdrop-blur-2xl lg:hidden",
-          "transition-[opacity,transform] duration-500 ease-out",
-          open
-            ? "pointer-events-auto opacity-100 translate-y-0"
-            : "pointer-events-none opacity-0 -translate-y-4"
-        )}
-        aria-hidden={!open}
-      >
-        <div className="container-wide flex min-h-full flex-col justify-between pb-10 pt-8">
-          <nav className="flex flex-col gap-1">
-            {navGroups.map((group, gi) => (
-              <div
-                key={group.label}
-                className="py-1"
-                style={{
-                  transitionDelay: open ? `${60 + gi * 40}ms` : "0ms",
-                  opacity: open ? 1 : 0,
-                  transform: open ? "translateX(0)" : "translateX(-12px)",
-                  transition:
-                    "opacity 420ms cubic-bezier(0.22, 1, 0.36, 1), transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
-                }}
-              >
-                <Link
-                  href={group.href}
-                  onClick={() => setOpen(false)}
-                  className={cn(
-                    "flex items-center justify-between rounded-xl px-4 py-3 font-display text-xl font-semibold transition-colors",
-                    isSectionActive(pathname, group.href)
-                      ? "bg-brand-orange/10 text-white"
-                      : "text-white/90 hover:bg-white/[0.04]"
-                  )}
-                >
-                  <span>{group.label}</span>
-                  {isSectionActive(pathname, group.href) && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-brand-orange" />
-                  )}
-                </Link>
-                {group.children && (
-                  <div className="ml-4 mt-1 flex flex-col border-l border-white/10 pl-4">
-                    {group.children.map((child, ci) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={() => setOpen(false)}
-                        className={cn(
-                          "rounded-lg px-3 py-2 text-[13px] transition-colors",
-                          pathname === child.href
-                            ? "text-brand-orange"
-                            : "text-white/60 hover:text-white"
-                        )}
-                        style={{
-                          transitionDelay: open ? `${90 + gi * 40 + ci * 20}ms` : "0ms",
-                          opacity: open ? 1 : 0,
-                          transition:
-                            "opacity 380ms cubic-bezier(0.22, 1, 0.36, 1)",
-                        }}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </nav>
-
-          {/* Footer sticky CTAs in the drawer. */}
-          <div
-            className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6"
-            style={{
-              transitionDelay: open ? "280ms" : "0ms",
-              opacity: open ? 1 : 0,
-              transform: open ? "translateY(0)" : "translateY(8px)",
-              transition:
-                "opacity 500ms cubic-bezier(0.22, 1, 0.36, 1), transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
-            }}
-          >
-            <a
-              href={SITE.phoneHref}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-base font-semibold text-white"
-            >
-              <span className="flex items-center gap-2.5">
-                <Phone className="h-4 w-4 text-brand-orange" />
-                {SITE.phone}
-              </span>
-              <span className="text-[11px] font-medium uppercase tracking-[0.12em] text-white/40">
-                Appel direct
-              </span>
-            </a>
-            <Link
-              href="/devis"
-              onClick={() => setOpen(false)}
-              className="btn-primary justify-center py-4"
-            >
-              Demander un devis gratuit
-            </Link>
-            <p className="mt-2 text-center text-[11px] uppercase tracking-[0.18em] text-white/30">
-              Thermolaquage · Île-de-France
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Mobile mega menu — fullscreen Apple-like takeover with image tiles
+          and a 2-level sliding panel. */}
+      <MobileMegaMenu
+        open={open}
+        onClose={() => setOpen(false)}
+        pathname={pathname}
+      />
     </header>
   );
 }
