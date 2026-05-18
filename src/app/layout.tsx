@@ -1,22 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CookieConsent } from "@/components/ui/cookie-consent";
-import { WhatsAppButton } from "@/components/ui/whatsapp-button";
-import { MobileStickyCta } from "@/components/ui/mobile-sticky-cta";
-import { LiveAtelierBanner } from "@/components/ui/live-atelier-banner";
-import GA4 from "@/components/analytics/ga4";
+import { PublicChrome } from "@/components/layout/public-chrome";
 import { JsonLd } from "@/components/seo/json-ld";
 import { MotionProvider } from "@/components/motion";
-import { NarrativeSwarm } from "@/components/nuee/narrative-swarm";
-import { RoutePhaseSync } from "@/components/nuee/route-phase-sync";
-import { CustomCursor } from "@/components/nuee/custom-cursor";
-import { SoundToggle } from "@/components/nuee/sound-toggle";
-import { CommandPalette } from "@/components/nuee/command-palette";
-import { ScrollToTop } from "@/components/nuee/scroll-to-top";
-import { EasterEgg } from "@/components/nuee/easter-egg";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SITE } from "@/lib/utils";
 import { buildMetadata } from "@/lib/seo";
@@ -105,41 +92,11 @@ export default async function RootLayout({
         <JsonLd id="ld-website" data={websiteLd()} />
         <ThemeProvider>
           <MotionProvider>
-            {/* Persistent narrative swarm — WebGL point cloud behind every
-                page. Never unmounts on route change, so the particles
-                morph across navigations. */}
-            <NarrativeSwarm />
-            {/* Auto-morph the swarm to match the current route — pages
-                that declare their own phase (home, collection) override
-                this fallback. */}
-            <RoutePhaseSync />
-            {/* Custom award-tier cursor — precision dot + spring ring,
-                magnetic pull on CTAs. Disabled on touch. */}
-            <CustomCursor />
-            {/* Procedural ambient sound toggle (opt-in, OFF by default). */}
-            <SoundToggle />
-            {/* ⌘K command palette for power users. */}
-            <CommandPalette />
-            {/* Scroll-to-top with progress ring — appears after 40% scroll. */}
-            <ScrollToTop />
-            {/* Easter eggs : taper "az", "boom" ou le Konami code
-                déclenche un burst de la nuée. */}
-            <EasterEgg />
-            {/* Live atelier banner — thin simulated "now in workshop"
-                strip above the header. Gives the site a permanent
-                heartbeat. Time-aware (closed nights + weekends). */}
-            <LiveAtelierBanner />
-            <Header />
-            <main id="main-content" className="relative">
-              {children}
-            </main>
-            <Footer />
-            <GA4 />
-            {/* WhatsAppButton re-enabled — version premium avec badge
-                "Réponse en 1h" qui slide au hover + pulse ring ambient. */}
-            <WhatsAppButton />
-            <MobileStickyCta />
-            <CookieConsent />
+            {/* PublicChrome renders the entire public-site shell
+                (header, footer, swarm, easter eggs, banners) on every
+                non-admin route and renders only `{children}` on
+                /admin/* — the backoffice has its own visual context. */}
+            <PublicChrome>{children}</PublicChrome>
           </MotionProvider>
         </ThemeProvider>
       </body>

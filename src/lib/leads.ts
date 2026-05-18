@@ -1,20 +1,23 @@
 import "server-only";
 import crypto from "node:crypto";
-import { sanityWriteClient } from "@/sanity/client";
+import { getDb, leads, leadEvents, type LeadSource } from "@/lib/db";
 
 /**
  * Lead pipeline fan-out. Every form submission goes to three sinks:
- *   1. Resend email (existing behaviour)
- *   2. Sanity `lead` document (durable storage for the owner)
+ *   1. Resend email (existing behaviour, owned by the calling route)
+ *   2. Postgres `leads` row (durable storage — the backoffice reads this)
  *   3. Outbound HMAC-signed webhook (CRM integrations, Zapier, Make, etc.)
  *
- * Sinks 2 and 3 are gated on their own env vars — a missing integration
- * never blocks the email or fails the POST. All sinks run through
- * Promise.allSettled so one failure can't take down another.
+ * Sinks 2 and 3 are gated on their own env vars / config — a missing
+ * integration never blocks the email or fails the POST. All sinks run
+ * through Promise.allSettled so one failure can't take down another.
+ *
+ * Writing to Postgres also inserts a `created` event in lead_events so
+ * the admin timeline starts populated from the very first submission.
  */
 
 export interface LeadPayload {
-  source: "contact" | "devis" | "guide" | "abandoned" | "other";
+  source: LeadSource;
   name: string;
   email?: string;
   phone?: string;
@@ -24,13 +27,16 @@ export interface LeadPayload {
   ralCode?: string;
   /** Raw IP (will be hashed before storage). */
   ip?: string;
-  /** Extra payload-specific data forwarded to the webhook. */
+  /** Extra payload-specific data forwarded to the webhook + stored as JSONB. */
   extra?: Record<string, unknown>;
 }
 
 export interface LeadFanoutResult {
-  sanity: "ok" | "skipped" | "error";
+  /** Postgres write status (renamed for clarity — was `sanity`). */
+  db: "ok" | "skipped" | "error";
   webhook: "ok" | "skipped" | "error";
+  /** The created lead id, when the DB write succeeded. */
+  leadId?: string;
 }
 
 function hashIp(ip: string | undefined): string | undefined {
@@ -38,32 +44,55 @@ function hashIp(ip: string | undefined): string | undefined {
   return crypto.createHash("sha256").update(ip).digest("hex").slice(0, 16);
 }
 
-async function writeLeadToSanity(lead: LeadPayload): Promise<"ok" | "skipped" | "error"> {
-  if (!sanityWriteClient) return "skipped";
-  try {
-    await sanityWriteClient.create({
-      _type: "lead",
-      source: lead.source,
-      name: lead.name,
-      email: lead.email,
-      phone: lead.phone,
-      company: lead.company,
-      message: lead.message,
-      projectType: lead.projectType,
-      ralCode: lead.ralCode,
-      ipHash: hashIp(lead.ip),
-      status: "new",
-      submittedAt: new Date().toISOString(),
-    });
-    return "ok";
-  } catch (err) {
+function nullable(value: string | undefined): string | null {
+  return value && value.trim().length > 0 ? value : null;
+}
 
-    console.error("[leads] Sanity write failed", err);
-    return "error";
+async function writeLeadToDb(
+  lead: LeadPayload,
+): Promise<{ status: "ok" | "skipped" | "error"; leadId?: string }> {
+  if (!process.env.DATABASE_URL) return { status: "skipped" };
+
+  try {
+    const db = getDb();
+    const [row] = await db
+      .insert(leads)
+      .values({
+        source: lead.source,
+        status: "new",
+        name: lead.name,
+        email: nullable(lead.email),
+        phone: nullable(lead.phone),
+        company: nullable(lead.company),
+        message: nullable(lead.message),
+        projectType: nullable(lead.projectType),
+        ralCode: nullable(lead.ralCode),
+        extra: lead.extra ?? null,
+        ipHash: hashIp(lead.ip) ?? null,
+      })
+      .returning({ id: leads.id });
+
+    if (!row) return { status: "error" };
+
+    // Audit: every lead gets an opening "created" event so the
+    // admin timeline always has at least one entry.
+    await db.insert(leadEvents).values({
+      leadId: row.id,
+      type: "created",
+      actor: "system",
+      payload: { source: lead.source },
+    });
+
+    return { status: "ok", leadId: row.id };
+  } catch (err) {
+    console.error("[leads] Postgres write failed", err);
+    return { status: "error" };
   }
 }
 
-async function dispatchWebhook(lead: LeadPayload): Promise<"ok" | "skipped" | "error"> {
+async function dispatchWebhook(
+  lead: LeadPayload,
+): Promise<"ok" | "skipped" | "error"> {
   const url = process.env.LEAD_WEBHOOK_URL;
   if (!url) return "skipped";
 
@@ -99,13 +128,11 @@ async function dispatchWebhook(lead: LeadPayload): Promise<"ok" | "skipped" | "e
       signal: AbortSignal.timeout(5_000),
     });
     if (!res.ok) {
-
       console.error(`[leads] webhook responded ${res.status}`);
       return "error";
     }
     return "ok";
   } catch (err) {
-
     console.error("[leads] webhook dispatch failed", err);
     return "error";
   }
@@ -116,14 +143,21 @@ async function dispatchWebhook(lead: LeadPayload): Promise<"ok" | "skipped" | "e
  * the API route logs the result map and returns success to the user as long
  * as the email step (the caller) succeeded.
  */
-export async function fanoutLead(lead: LeadPayload): Promise<LeadFanoutResult> {
-  const [sanityResult, webhookResult] = await Promise.allSettled([
-    writeLeadToSanity(lead),
+export async function fanoutLead(
+  lead: LeadPayload,
+): Promise<LeadFanoutResult> {
+  const [dbResult, webhookResult] = await Promise.allSettled([
+    writeLeadToDb(lead),
     dispatchWebhook(lead),
   ]);
 
+  const db =
+    dbResult.status === "fulfilled" ? dbResult.value : { status: "error" as const };
+
   return {
-    sanity: sanityResult.status === "fulfilled" ? sanityResult.value : "error",
-    webhook: webhookResult.status === "fulfilled" ? webhookResult.value : "error",
+    db: db.status,
+    leadId: db.leadId,
+    webhook:
+      webhookResult.status === "fulfilled" ? webhookResult.value : "error",
   };
 }
