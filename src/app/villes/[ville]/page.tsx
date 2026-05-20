@@ -76,12 +76,10 @@ export async function generateMetadata({
 /* -------------------------------------------------------------------------- */
 
 /**
- * On prerendere les 76 villes au build. Vercel a la mémoire qu'il
- * faut ; en local on a contourné l'OOM via `experimental.workerThreads:
- * false` + bump du heap Node. ISR à 24h pour rafraîchir le contenu en
- * arrière-plan sans tout regénérer.
+ * 76 villes prerenderées au build, revalidation ISR 24h.
+ * URL publique : `/thermolaquage-{slug}` (rewrite dans next.config.mjs).
  */
-export const revalidate = 86400; // 24h
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const villes = await getVilles();
