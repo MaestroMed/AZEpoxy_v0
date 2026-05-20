@@ -56,6 +56,7 @@ async function handler(req: NextRequest, trigger: "cron" | "manual") {
     "/couleurs-ral",
     "/professionnels",
     "/a-propos",
+    "/villes",
     ...deptSlugs.map((s) => `/thermolaquage-${s}`),
     ...villes.map((v) => `/thermolaquage-${v.slug}`),
   ];

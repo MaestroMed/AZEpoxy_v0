@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export const SITE = {
   name: "AZ Époxy",
   tagline: "Thermolaquage Poudre Époxy Professionnel",
-  url: "https://azepoxy.fr",
+  url: "https://www.azepoxy.fr",
   phone: "09 71 35 74 96",
   phoneHref: "tel:+33971357496",
   email: "contact@azepoxy.fr",
