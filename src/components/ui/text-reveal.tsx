@@ -26,9 +26,15 @@ interface TextRevealProps {
   delay?: number;
 }
 
+/**
+ * NOTE: pas de `filter: blur()` ici. `filter` sur un parent crée un
+ * stacking context qui CASSE le `background-clip: text` des enfants —
+ * le bug Chrome "bg-clip-text invisible sous filter". Le reveal reste
+ * efficace avec opacity + translate seuls.
+ */
 const REVEAL_VARIANTS = {
-  hidden: { opacity: 0, y: 18, filter: "blur(10px)" },
-  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0 },
 };
 
 export function TextReveal({ children, className, stagger = 55, delay = 0 }: TextRevealProps) {
