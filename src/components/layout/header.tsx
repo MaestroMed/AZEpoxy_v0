@@ -47,6 +47,21 @@ const navGroups = [
     ],
   },
   { label: "Réalisations", href: "/realisations" },
+  {
+    label: "Zones",
+    href: "/thermolaquage-val-d-oise",
+    children: [
+      { label: "Val-d'Oise (95)", href: "/thermolaquage-val-d-oise" },
+      { label: "Hauts-de-Seine (92)", href: "/thermolaquage-hauts-de-seine" },
+      { label: "Seine-Saint-Denis (93)", href: "/thermolaquage-seine-saint-denis" },
+      { label: "Val-de-Marne (94)", href: "/thermolaquage-val-de-marne" },
+      { label: "Yvelines (78)", href: "/thermolaquage-yvelines" },
+      { label: "Essonne (91)", href: "/thermolaquage-essonne" },
+      { label: "Seine-et-Marne (77)", href: "/thermolaquage-seine-et-marne" },
+      { label: "Oise (60)", href: "/thermolaquage-oise" },
+      { label: "Paris (75)", href: "/thermolaquage-paris" },
+    ],
+  },
   { label: "Pros", href: "/professionnels" },
   {
     label: "Ressources",

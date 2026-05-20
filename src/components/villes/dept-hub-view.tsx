@@ -70,6 +70,22 @@ export function DeptHubView({ code }: DeptHubViewProps) {
     description: `AZ Époxy intervient dans ${dept.count} communes du ${dept.name} pour le thermolaquage poudre époxy professionnel.`,
   };
 
+  /* ItemList — signale à Google que cette page est un index/listing
+     des villes du département. Aide le snippet riche en SERP. */
+  const itemListLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Communes desservies en ${dept.name}`,
+    numberOfItems: dept.villes.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    itemListElement: dept.villes.map((v, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${SITE.url}/thermolaquage-${v.slug}`,
+      name: v.name,
+    })),
+  };
+
   // Group villes by drive tier (proche / moyen / loin)
   const proches = dept.villes.filter((v) => v.driveTimeMin <= 25);
   const moyens = dept.villes.filter(
@@ -89,6 +105,7 @@ export function DeptHubView({ code }: DeptHubViewProps) {
       />
       <JsonLd id={`ld-breadcrumb-dept-${dept.slug}`} data={breadcrumbLd} />
       <JsonLd id={`ld-service-dept-${dept.slug}`} data={serviceLd} />
+      <JsonLd id={`ld-itemlist-dept-${dept.slug}`} data={itemListLd} />
 
       {/* ── Hero ─────────────────────────────────────────── */}
       <PageHero

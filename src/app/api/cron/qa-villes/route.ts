@@ -2,7 +2,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import { desc } from "drizzle-orm";
 import { getDb, seoQaRuns } from "@/lib/db";
 import { runQaPass } from "@/lib/seo/qa";
+import { submitToIndexNow } from "@/lib/seo/indexnow";
 import { getVilles } from "@/lib/villes-data";
+import { allDeptHubSlugs } from "@/lib/villes/departments";
 
 /**
  * Hebdo SEO QA — visite chaque page ville, vérifie les signaux
@@ -44,6 +46,7 @@ async function handler(req: NextRequest, trigger: "cron" | "manual") {
   }
 
   const villes = await getVilles();
+  const deptSlugs = allDeptHubSlugs();
   const paths = [
     "/",
     "/services",
@@ -53,6 +56,7 @@ async function handler(req: NextRequest, trigger: "cron" | "manual") {
     "/couleurs-ral",
     "/professionnels",
     "/a-propos",
+    ...deptSlugs.map((s) => `/thermolaquage-${s}`),
     ...villes.map((v) => `/thermolaquage-${v.slug}`),
   ];
 
@@ -77,10 +81,25 @@ async function handler(req: NextRequest, trigger: "cron" | "manual") {
     console.error("[qa-villes] DB insert failed", err);
   }
 
+  // Auto-ping IndexNow with the OK URLs — Bing / Yandex / Naver. Fire
+  // and forget : on n'attend pas la réponse pour répondre au cron.
+  let indexnowResult: Awaited<ReturnType<typeof submitToIndexNow>> | null = null;
+  try {
+    const okUrls = Object.entries(summary.pages)
+      .filter(([, r]) => r.ok)
+      .map(([path]) => `${SITE_URL}${path}`);
+    if (okUrls.length > 0) {
+      indexnowResult = await submitToIndexNow(okUrls);
+    }
+  } catch (err) {
+    console.error("[qa-villes] indexnow ping failed", err);
+  }
+
   return NextResponse.json({
     ok: true,
     trigger,
     ...summary,
+    indexnow: indexnowResult,
   });
 }
 
