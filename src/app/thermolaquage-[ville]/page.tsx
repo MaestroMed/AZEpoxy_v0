@@ -76,16 +76,16 @@ export async function generateMetadata({
 /* -------------------------------------------------------------------------- */
 
 /**
- * Pas de prerender en masse au build : on déclare 0 paths statiques et
- * on laisse les pages se générer à la première requête (ISR), puis se
- * mettre en cache. Évite l'OOM build sur les centaines de pages dyn
- * (villes × RAL teintes) et garde la performance utilisateur intacte.
+ * On prerendere les 76 villes au build. Vercel a la mémoire qu'il
+ * faut ; en local on a contourné l'OOM via `experimental.workerThreads:
+ * false` + bump du heap Node. ISR à 24h pour rafraîchir le contenu en
+ * arrière-plan sans tout regénérer.
  */
-export const dynamicParams = true;
 export const revalidate = 86400; // 24h
 
 export async function generateStaticParams() {
-  return [];
+  const villes = await getVilles();
+  return villes.map((v) => ({ ville: v.slug }));
 }
 
 /* -------------------------------------------------------------------------- */
