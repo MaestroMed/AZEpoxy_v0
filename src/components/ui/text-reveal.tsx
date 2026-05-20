@@ -68,29 +68,30 @@ export function TextReveal({ children, className, stagger = 55, delay = 0 }: Tex
               ease: [0.22, 1, 0.36, 1],
               delay: delay / 1000 + (idx * stagger) / 1000,
             }}
-            style={{ willChange: "transform, opacity, filter" }}
+            style={{ willChange: "transform, opacity" }}
           >
             {word}
           </m.span>,
         );
       });
     } else {
-      // Non-string child (like a styled span for the gradient) — wrap in
-      // its own reveal so it stays synchronized with the last word.
+      // Non-string child (typiquement un <span class="bg-clip-text"> avec
+      // gradient ember) — opacity-only reveal. PAS de transform ni de
+      // willChange, parce que les deux créent un stacking context qui
+      // casse `background-clip: text` sur les enfants. Sans ce traitement
+      // dédié, le span gradient reste invisible jusqu'à ce qu'on retire
+      // tout transform/willChange du wrapper.
       const idx = wordCount++;
       nodes.push(
         <m.span
           key={`n-${childIndex}`}
-          className="inline-block"
-          variants={REVEAL_VARIANTS}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{
-            duration: 0.75,
+            duration: 0.6,
             ease: [0.22, 1, 0.36, 1],
             delay: delay / 1000 + (idx * stagger) / 1000,
           }}
-          style={{ willChange: "transform, opacity, filter" }}
         >
           {child}
         </m.span>,
