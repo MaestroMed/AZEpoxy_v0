@@ -49,8 +49,9 @@ const navGroups = [
   { label: "Réalisations", href: "/realisations" },
   {
     label: "Zones",
-    href: "/thermolaquage-val-d-oise",
+    href: "/villes",
     children: [
+      { label: "Toutes les villes", href: "/villes" },
       { label: "Val-d'Oise (95)", href: "/thermolaquage-val-d-oise" },
       { label: "Hauts-de-Seine (92)", href: "/thermolaquage-hauts-de-seine" },
       { label: "Seine-Saint-Denis (93)", href: "/thermolaquage-seine-saint-denis" },

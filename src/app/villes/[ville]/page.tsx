@@ -65,6 +65,7 @@ export async function generateMetadata({
       title: `Thermolaquage en ${dept.name} (${dept.code}) — ${dept.count} communes`,
       description: `Thermolaquage poudre époxy professionnel dans toutes les communes du ${dept.name} (${dept.code}). ${dept.count} villes desservies depuis notre atelier de Bruyères-sur-Oise. 200+ couleurs RAL & NCS, sablage, finitions spéciales, express 48h.`,
       path: `/thermolaquage-${dept.slug}`,
+      image: `/images/villes/og/${deptCode}.webp`,
       keywords: [
         `thermolaquage ${dept.name}`,
         `thermolaquage ${dept.code}`,
@@ -86,6 +87,7 @@ export async function generateMetadata({
     title: `Thermolaquage à ${ville.name} (${ville.departmentCode}) — Poudre Époxy`,
     description: `Thermolaquage poudre époxy professionnel à ${ville.name} (${ville.department}). ${ville.distance} de notre atelier de Bruyères-sur-Oise, ${ville.driveTime} de trajet via ${ville.access}. 200+ couleurs RAL & NCS, sablage, finitions spéciales, express 48h. Devis gratuit.`,
     path: `/thermolaquage-${ville.slug}`,
+    image: `/images/villes/og/${ville.departmentCode}.webp`,
     keywords: [
       `thermolaquage ${ville.name}`,
       `poudre époxy ${ville.name}`,
