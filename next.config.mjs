@@ -36,6 +36,10 @@ const nextConfig = {
     // on bundle size (avoids pulling the whole icon set or motion
     // feature pack when only a handful is used).
     optimizePackageImports: ["lucide-react", "framer-motion"],
+    // Limit build worker memory pressure when the project gains many
+    // dynamic routes (city pages, RAL teintes).
+    workerThreads: false,
+    cpus: 2,
   },
   // Sanity Studio (and next-sanity) call React 19.2 hooks like useEffectEvent
   // that aren't exposed by Next's bundled "react-builtin". Letting Next

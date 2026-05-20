@@ -107,6 +107,48 @@ export const leadEvents = pgTable(
   }),
 );
 
+/* ── SEO QA — résultats des passes de contrôle automatique ──────── */
+
+/**
+ * One row per QA run. The cron job `/api/cron/qa-villes` writes here.
+ * The admin `/admin/seo` page reads the most recent rows to surface
+ * health metrics and broken pages.
+ */
+export const seoQaRuns = pgTable(
+  "seo_qa_runs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    ranAt: timestamp("ran_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    durationMs: text("duration_ms").notNull().default("0"),
+    totalPages: text("total_pages").notNull().default("0"),
+    okCount: text("ok_count").notNull().default("0"),
+    koCount: text("ko_count").notNull().default("0"),
+    /** Per-page result map: { "/thermolaquage-cergy": { ok, issues, ... } } */
+    pages: jsonb("pages").$type<Record<string, SeoQaPageResult>>().notNull(),
+    /** "manual" | "cron" — provenance. */
+    trigger: text("trigger").notNull().default("cron"),
+  },
+  (table) => ({
+    ranAtIdx: index("seo_qa_runs_ran_at_idx").on(table.ranAt),
+  }),
+);
+
+export interface SeoQaPageResult {
+  ok: boolean;
+  status?: number;
+  /** List of failed checks. Empty when `ok` is true. */
+  issues: string[];
+  /** Approximate word count of the body text. */
+  wordCount?: number;
+  /** First H1 captured. */
+  h1?: string;
+  hasBreadcrumb?: boolean;
+  hasFaq?: boolean;
+  hasLocalBusiness?: boolean;
+}
+
 /* ── Inferred types ───────────────────────────────────────────────── */
 
 export type Lead = typeof leads.$inferSelect;
@@ -116,3 +158,5 @@ export type NewLeadEvent = typeof leadEvents.$inferInsert;
 export type LeadSource = (typeof leadSourceEnum.enumValues)[number];
 export type LeadStatus = (typeof leadStatusEnum.enumValues)[number];
 export type LeadEventType = (typeof leadEventTypeEnum.enumValues)[number];
+export type SeoQaRun = typeof seoQaRuns.$inferSelect;
+export type NewSeoQaRun = typeof seoQaRuns.$inferInsert;

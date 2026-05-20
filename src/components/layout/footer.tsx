@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { Instagram, Mail, MapPin, Phone, ExternalLink } from "lucide-react";
 import { SITE } from "@/lib/utils";
+import {
+  DEPARTMENT_NAMES,
+  VILLES_FALLBACK,
+  type DepartmentCode,
+} from "@/lib/villes-data";
 
 const cols = [
   {
@@ -266,6 +271,46 @@ export function Footer() {
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
         </div>
+
+        {/* Villes desservies — super-mesh interne. Liste compacte des
+            communes par département. Donne à Google ~76 inbound links
+            sitewide vers les pages thermolaquage-[ville]. */}
+        <section
+          aria-label="Villes desservies en Île-de-France"
+          className="mt-16 border-t border-white/10 pt-10"
+        >
+          <h3 className="mb-6 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-orange">
+            Thermolaquage en Île-de-France & Oise
+          </h3>
+          <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+            {(["95", "75", "92", "93", "94", "78", "91", "77", "60"] as DepartmentCode[])
+              .map((code) => {
+                const villes = VILLES_FALLBACK.filter(
+                  (v) => v.departmentCode === code,
+                );
+                if (villes.length === 0) return null;
+                return (
+                  <div key={code}>
+                    <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/55">
+                      {DEPARTMENT_NAMES[code]} ({code})
+                    </p>
+                    <ul className="flex flex-wrap gap-x-2.5 gap-y-1.5 text-[12px]">
+                      {villes.map((v) => (
+                        <li key={v.slug}>
+                          <Link
+                            href={`/thermolaquage-${v.slug}`}
+                            className="text-white/55 transition-colors hover:text-brand-orange"
+                          >
+                            {v.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+          </div>
+        </section>
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">

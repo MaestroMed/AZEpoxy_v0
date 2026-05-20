@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
+  Radar,
   Settings,
   LogOut,
   type LucideIcon,
@@ -38,6 +39,11 @@ export function Sidebar({ adminEmail, leadCount }: SidebarProps) {
       label: "Leads",
       icon: Users,
       badge: leadCount,
+    },
+    {
+      href: "/admin/seo",
+      label: "Santé SEO",
+      icon: Radar,
     },
     {
       href: "/admin/settings",
