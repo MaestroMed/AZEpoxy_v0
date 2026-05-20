@@ -6,6 +6,7 @@ import {
   VILLES_FALLBACK,
   type DepartmentCode,
 } from "@/lib/villes-data";
+import { DEPT_HUB_SLUG } from "@/lib/villes/departments";
 
 const cols = [
   {
@@ -289,10 +290,22 @@ export function Footer() {
                   (v) => v.departmentCode === code,
                 );
                 if (villes.length === 0) return null;
+                const deptSlug = DEPT_HUB_SLUG[code];
                 return (
                   <div key={code}>
                     <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/55">
-                      {DEPARTMENT_NAMES[code]} ({code})
+                      {deptSlug ? (
+                        <Link
+                          href={`/thermolaquage-${deptSlug}`}
+                          className="transition-colors hover:text-brand-orange"
+                        >
+                          {DEPARTMENT_NAMES[code]} ({code}) →
+                        </Link>
+                      ) : (
+                        <>
+                          {DEPARTMENT_NAMES[code]} ({code})
+                        </>
+                      )}
                     </p>
                     <ul className="flex flex-wrap gap-x-2.5 gap-y-1.5 text-[12px]">
                       {villes.map((v) => (

@@ -37,6 +37,13 @@ import {
   composeProcessSteps,
   composeFaqJsonLd,
 } from "@/lib/villes/copy";
+import {
+  allDeptHubSlugs,
+  DEPT_HUB_SLUG,
+  SLUG_TO_DEPT,
+  getDeptOverview,
+} from "@/lib/villes/departments";
+import { DeptHubView } from "@/components/villes/dept-hub-view";
 import { SITE } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
@@ -49,8 +56,28 @@ export async function generateMetadata({
   params: Promise<{ ville: string }>;
 }): Promise<Metadata> {
   const { ville: slug } = await params;
-  const ville = await getVilleBySlugAsync(slug);
 
+  // Dept hub case
+  const deptCode = SLUG_TO_DEPT[slug];
+  if (deptCode) {
+    const dept = getDeptOverview(deptCode);
+    return buildMetadata({
+      title: `Thermolaquage en ${dept.name} (${dept.code}) — ${dept.count} communes`,
+      description: `Thermolaquage poudre époxy professionnel dans toutes les communes du ${dept.name} (${dept.code}). ${dept.count} villes desservies depuis notre atelier de Bruyères-sur-Oise. 200+ couleurs RAL & NCS, sablage, finitions spéciales, express 48h.`,
+      path: `/thermolaquage-${dept.slug}`,
+      keywords: [
+        `thermolaquage ${dept.name}`,
+        `thermolaquage ${dept.code}`,
+        `poudre époxy ${dept.name}`,
+        `sablage ${dept.name}`,
+        `finitions spéciales ${dept.name}`,
+        "AZ Époxy",
+      ],
+    });
+  }
+
+  // Ville case
+  const ville = await getVilleBySlugAsync(slug);
   if (!ville) {
     return { title: "Ville introuvable" };
   }
@@ -83,7 +110,9 @@ export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const villes = await getVilles();
-  return villes.map((v) => ({ ville: v.slug }));
+  const villeParams = villes.map((v) => ({ ville: v.slug }));
+  const deptParams = allDeptHubSlugs().map((s) => ({ ville: s }));
+  return [...villeParams, ...deptParams];
 }
 
 /* -------------------------------------------------------------------------- */
@@ -121,6 +150,13 @@ export default async function VillePage({
   params: Promise<{ ville: string }>;
 }) {
   const { ville: slug } = await params;
+
+  // Dispatch : si slug == dept hub slug → render hub view
+  const deptCode = SLUG_TO_DEPT[slug];
+  if (deptCode) {
+    return <DeptHubView code={deptCode} />;
+  }
+
   const allVilles = await getVilles();
   const ville = allVilles.find((v) => v.slug === slug);
 
@@ -217,7 +253,7 @@ export default async function VillePage({
         }
         description={`Service professionnel de thermolaquage poudre époxy pour ${ville.name} et ses environs. ${ville.distance} de notre atelier de Bruyères-sur-Oise, ${ville.driveTime} de trajet via ${ville.access}.`}
         variant="transparent"
-        image="/images/heros/ville-generic.webp"
+        image={`/images/villes/${ville.departmentCode}.webp`}
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: `Thermolaquage à ${ville.name}` },
@@ -493,8 +529,8 @@ export default async function VillePage({
         </div>
       </section>
 
-      {/* ── Section 8 — Nearby cities (mesh) ───────────────────────── */}
-      {nearbyVilles.length > 0 && (
+      {/* ── Section 8 — Nearby cities + dept hub (mesh) ────────────── */}
+      {(nearbyVilles.length > 0 || DEPT_HUB_SLUG[ville.departmentCode]) && (
         <section className="bg-white py-16">
           <div className="container-wide">
             <ScrollReveal>
@@ -505,12 +541,29 @@ export default async function VillePage({
                 </span>
               </h2>
               <p className="mt-3 text-brand-charcoal/70">
-                AZ Époxy intervient dans toute l&apos;Île-de-France et l&apos;Oise.
-                Découvrez nos pages dédiées aux villes voisines de {ville.name}.
+                AZ Époxy intervient dans toute l&apos;Île-de-France et
+                l&apos;Oise. Découvrez nos pages dédiées aux villes voisines de{" "}
+                {ville.name}.
               </p>
             </ScrollReveal>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            {DEPT_HUB_SLUG[ville.departmentCode] && (
+              <div className="mt-6">
+                <Link
+                  href={`/thermolaquage-${DEPT_HUB_SLUG[ville.departmentCode]}`}
+                  className="
+                    inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/[0.08]
+                    px-5 py-3 text-sm font-bold text-brand-orange
+                    transition-all hover:border-brand-orange/55 hover:bg-brand-orange/[0.15]
+                  "
+                >
+                  <ArrowRight className="h-3.5 w-3.5" />
+                  Voir toutes les communes du {ville.department}
+                </Link>
+              </div>
+            )}
+
+            <div className="mt-6 flex flex-wrap gap-3">
               {nearbyVilles.map((nearby) => (
                 <Link
                   key={nearby.slug}

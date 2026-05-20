@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getVilles } from "@/lib/villes-data";
+import { allDeptHubSlugs } from "@/lib/villes/departments";
 import { getBlogArticles } from "@/lib/blog-data";
 
 const BASE = "https://www.azepoxy.fr";
@@ -48,6 +49,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  const deptPages: MetadataRoute.Sitemap = allDeptHubSlugs().map((slug) => ({
+    url: `${BASE}/thermolaquage-${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
   const blogPages: MetadataRoute.Sitemap = articles.map((a) => ({
     url: `${BASE}/blog/${a.slug}`,
     lastModified: new Date(a.date),
@@ -55,5 +63,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  return [...staticPages, ...villePages, ...blogPages];
+  return [...staticPages, ...deptPages, ...villePages, ...blogPages];
 }
