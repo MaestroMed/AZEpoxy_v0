@@ -20,6 +20,7 @@ import { localBusinessLd } from "@/lib/jsonld";
 import { INDUSTRY_LABEL, type Ville } from "@/lib/villes-data";
 import { SITE } from "@/lib/utils";
 import { getDeptOverview } from "@/lib/villes/departments";
+import { DEPT_LONGFORM } from "@/lib/villes/dept-copy";
 import type { DepartmentCode } from "@/lib/villes-data";
 
 interface DeptHubViewProps {
@@ -34,6 +35,7 @@ interface DeptHubViewProps {
 export function DeptHubView({ code }: DeptHubViewProps) {
   const dept = getDeptOverview(code);
   const heroImage = `/images/villes/${code}.webp`;
+  const longform = DEPT_LONGFORM[code];
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -230,6 +232,56 @@ export function DeptHubView({ code }: DeptHubViewProps) {
           </div>
         </div>
       </section>
+
+      {/* ── Long-form copy — éditorial unique par dept ─── */}
+      {longform && (
+        <section className="bg-white py-20">
+          <div className="container-wide">
+            <ScrollReveal>
+              <div className="mx-auto max-w-3xl">
+                <SectionHeader
+                  label="Contexte local"
+                  title={
+                    <>
+                      <span className="bg-gradient-ember bg-clip-text text-transparent">
+                        {longform.sectionTitle}
+                      </span>
+                    </>
+                  }
+                />
+                <div className="mt-8 space-y-5 text-[16px] leading-relaxed text-brand-charcoal/80">
+                  {longform.paragraphs.map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                </div>
+
+                {longform.useCases.length > 0 && (
+                  <div className="mt-10">
+                    <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-orange">
+                      Cas d&apos;usage typiques
+                    </p>
+                    <ul className="space-y-3">
+                      {longform.useCases.map((uc) => (
+                        <li
+                          key={uc.title}
+                          className="rounded-xl border border-brand-night/10 bg-brand-cream/40 p-4"
+                        >
+                          <p className="text-sm font-semibold text-brand-night">
+                            {uc.title}
+                          </p>
+                          <p className="mt-1 text-[14px] leading-relaxed text-brand-charcoal/70">
+                            {uc.description}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
 
       {/* ── Services rappel ──────────────────────────────── */}
       <section className="relative overflow-hidden bg-brand-night py-20 text-white">

@@ -56,6 +56,9 @@ interface LocalBusinessOptions {
   /** When provided, the AggregateRating is derived from these real reviews
    *  instead of the hardcoded testimonials dataset. */
   reviews?: Review[];
+  /** When true (default), inline up to 5 Review entries — Google
+   *  Search Console pénalise les AggregateRating sans Review attachés. */
+  withReviewList?: boolean;
 }
 
 export function localBusinessLd(options: LocalBusinessOptions = {}) {
@@ -67,6 +70,7 @@ export function localBusinessLd(options: LocalBusinessOptions = {}) {
     ],
     withAggregateRating = true,
     reviews,
+    withReviewList = true,
   } = options;
 
   const rating = withAggregateRating
@@ -74,6 +78,17 @@ export function localBusinessLd(options: LocalBusinessOptions = {}) {
       ? aggregateRatingFromReviews(reviews)
       : aggregateRatingFromTestimonials()
     : undefined;
+
+  // Individual Review entries — Google strongly recommends linking
+  // AggregateRating to actual Review objects pour éviter le warning
+  // "AggregateRating without reviews" en Search Console. On limite à 5
+  // pour ne pas alourdir le markup.
+  const reviewList =
+    withReviewList && rating
+      ? reviews?.length
+        ? reviewsToSchema(reviews.slice(0, 5))
+        : testimonialsToSchema(5)
+      : undefined;
 
   return {
     "@context": "https://schema.org",
@@ -92,7 +107,49 @@ export function localBusinessLd(options: LocalBusinessOptions = {}) {
         : {}),
     })),
     ...(rating ? { aggregateRating: rating } : {}),
+    ...(reviewList && reviewList.length > 0 ? { review: reviewList } : {}),
   };
+}
+
+/* ── Review schema helpers ─────────────────────────────────────── */
+
+function reviewsToSchema(reviews: Review[]) {
+  return reviews
+    .filter((r) => r.author && r.rating)
+    .map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.author },
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: r.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      ...(r.body ? { reviewBody: r.body } : {}),
+      ...(r.publishedAt ? { datePublished: r.publishedAt } : {}),
+    }));
+}
+
+function testimonialsToSchema(limit: number) {
+  return TESTIMONIALS.slice(0, limit)
+    .filter((t) => t.name && t.rating)
+    .map((t) => ({
+      "@type": "Review",
+      author: {
+        "@type": "Person",
+        name: t.name,
+        ...(t.role || t.company
+          ? { jobTitle: [t.role, t.company].filter(Boolean).join(" — ") }
+          : {}),
+      },
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: t.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      ...(t.quote ? { reviewBody: t.quote } : {}),
+    }));
 }
 
 export function websiteLd() {

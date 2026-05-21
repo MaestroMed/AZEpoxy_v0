@@ -43,6 +43,10 @@ import {
   SLUG_TO_DEPT,
   getDeptOverview,
 } from "@/lib/villes/departments";
+import {
+  getRelevantRealisationsForVille,
+  getProjectSlug,
+} from "@/lib/villes/realisations-match";
 import { DeptHubView } from "@/components/villes/dept-hub-view";
 import { SITE } from "@/lib/utils";
 
@@ -176,6 +180,7 @@ export default async function VillePage({
   const archetypes = composeClientArchetypes(ville);
   const faq = composeLocalFaq(ville);
   const processSteps = composeProcessSteps(ville);
+  const relevantRealisations = getRelevantRealisationsForVille(ville, 3);
 
   /* ── Schema.org payloads ──────────────────────────────────── */
   const breadcrumbLd = {
@@ -500,6 +505,80 @@ export default async function VillePage({
           </div>
         </div>
       </section>
+
+      {/* ── Section 6.5 — Réalisations pertinentes (mesh + E-E-A-T) ─ */}
+      {relevantRealisations.length > 0 && (
+        <section className="bg-brand-cream py-20">
+          <div className="container-wide">
+            <ScrollReveal>
+              <SectionHeader
+                label="Réalisations"
+                title={
+                  <>
+                    Nos projets{" "}
+                    <span className="bg-gradient-ember bg-clip-text text-transparent">
+                      qui parleront à {ville.name}
+                    </span>
+                  </>
+                }
+                description={`Sélection de réalisations en cohérence avec le profil ${ville.name === "Cergy" ? "de cette" : "de la"} commune. Cliquez pour voir le projet en détail.`}
+              />
+            </ScrollReveal>
+
+            <div className="mx-auto mt-12 grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {relevantRealisations.map((project, i) => (
+                <ScrollReveal key={project.id} delay={i * 0.08}>
+                  <Link
+                    href={`/realisations/${getProjectSlug(project)}`}
+                    className="
+                      group block h-full rounded-2xl border border-brand-night/10 bg-white p-5
+                      transition-all hover:border-brand-orange/40 hover:shadow-md
+                    "
+                  >
+                    <span className="inline-flex items-center rounded-full bg-brand-orange/[0.08] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-orange">
+                      {project.category}
+                    </span>
+                    <h3 className="heading-display mt-3 text-lg text-brand-night">
+                      {project.title}
+                    </h3>
+                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-brand-charcoal/65">
+                      {project.description}
+                    </p>
+                    <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-brand-charcoal/45">
+                      {project.colors.slice(0, 3).map((c) => (
+                        <span
+                          key={c}
+                          className="rounded bg-brand-night/[0.04] px-1.5 py-0.5"
+                        >
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-brand-orange transition-colors group-hover:text-brand-orange-dark">
+                      Voir le projet
+                      <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </Link>
+                </ScrollReveal>
+              ))}
+            </div>
+
+            <div className="mt-10 text-center">
+              <Link
+                href="/realisations"
+                className="
+                  inline-flex items-center gap-2 rounded-full border border-brand-night/15 bg-white px-6 py-3
+                  text-sm font-semibold text-brand-night transition-all
+                  hover:border-brand-orange hover:bg-brand-orange hover:text-white
+                "
+              >
+                Voir toutes nos réalisations
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Section 7 — FAQ locale ─────────────────────────────────── */}
       <section className="bg-brand-cream py-24">

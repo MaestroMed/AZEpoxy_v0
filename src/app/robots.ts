@@ -14,7 +14,10 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/api/", "/studio/"],
       },
     ],
-    sitemap: "https://www.azepoxy.fr/sitemap.xml",
+    sitemap: [
+      "https://www.azepoxy.fr/sitemap.xml",
+      "https://www.azepoxy.fr/sitemap-images.xml",
+    ],
     host: "https://www.azepoxy.fr",
   };
 }
