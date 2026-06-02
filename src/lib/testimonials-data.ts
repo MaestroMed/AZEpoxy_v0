@@ -100,9 +100,30 @@ import { TESTIMONIALS_QUERY } from "@/sanity/queries";
 
 export const TESTIMONIALS = TESTIMONIALS_FALLBACK;
 
+/**
+ * Avis pour le site public : lit la table `testimonials` (gérée depuis
+ * l'admin) si elle contient des entrées publiées, sinon le dataset
+ * intégré. Import dynamique du module DB (server-only) pour ne jamais
+ * le lier au bundle. DB vide → comportement inchangé.
+ */
 export async function getTestimonials(): Promise<Testimonial[]> {
-  const data = await sanityFetch<Testimonial[]>(TESTIMONIALS_QUERY, {}, {
-    tags: ["testimonial:list"],
-  });
-  return data?.length ? data : TESTIMONIALS_FALLBACK;
+  if (process.env.DATABASE_URL) {
+    try {
+      const { getPublicTestimonials } = await import("@/lib/admin/content");
+      const rows = await getPublicTestimonials();
+      if (rows.length > 0) {
+        return rows.map((r) => ({
+          name: r.name,
+          company: r.company ?? undefined,
+          role: r.role ?? undefined,
+          quote: r.quote,
+          service: r.service ?? "",
+          rating: r.rating,
+        }));
+      }
+    } catch (err) {
+      console.error("[testimonials] DB read failed, fallback", err);
+    }
+  }
+  return TESTIMONIALS_FALLBACK;
 }
