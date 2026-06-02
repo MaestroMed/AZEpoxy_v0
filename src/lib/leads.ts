@@ -139,6 +139,70 @@ async function dispatchWebhook(
 }
 
 /**
+ * Notification email à l'admin sur nouveau lead — activée via le toggle
+ * `notifyOnLead` du profil entreprise (site_settings). No-op silencieux
+ * si désactivé, si Resend n'est pas configuré, ou si pas d'email cible.
+ */
+async function notifyAdminOfLead(
+  lead: LeadPayload,
+): Promise<"ok" | "skipped" | "error"> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey || !process.env.DATABASE_URL) return "skipped";
+  try {
+    // Lecture lazy du module DB (server-only) pour ne pas l'embarquer.
+    const { getSettings } = await import("@/lib/admin/content");
+    const settings = await getSettings();
+    if (!settings.notifyOnLead) return "skipped";
+    const to = settings.notifyEmail || "contact@azepoxy.fr";
+
+    const { Resend } = await import("resend");
+    const resend = new Resend(apiKey);
+    const rows = [
+      ["Source", lead.source],
+      ["Nom", lead.name],
+      ["Email", lead.email],
+      ["Téléphone", lead.phone],
+      ["Entreprise", lead.company],
+      ["Type de projet", lead.projectType],
+      ["Code RAL", lead.ralCode],
+    ]
+      .filter(([, v]) => v)
+      .map(
+        ([k, v]) =>
+          `<tr><td style="padding:4px 12px 4px 0;color:#666">${k}</td><td style="padding:4px 0;font-weight:600">${escapeHtml(String(v))}</td></tr>`,
+      )
+      .join("");
+
+    await resend.emails.send({
+      from: "AZ Époxy <onboarding@resend.dev>",
+      to: [to],
+      subject: `🔔 Nouveau lead — ${lead.name}${lead.projectType ? ` · ${lead.projectType}` : ""}`,
+      html: `<div style="font-family:Arial,sans-serif;max-width:560px">
+        <div style="background:#1A1A2E;padding:20px;border-radius:10px 10px 0 0">
+          <h2 style="color:#E85D2C;margin:0;font-size:17px">🔔 Nouveau lead reçu</h2>
+        </div>
+        <div style="background:#f9f9f6;padding:20px;border:1px solid #e5e5e0">
+          <table style="border-collapse:collapse">${rows}</table>
+          ${lead.message ? `<hr style="border:none;border-top:1px solid #e5e5e0;margin:14px 0"><p style="color:#333;white-space:pre-wrap;line-height:1.5">${escapeHtml(lead.message)}</p>` : ""}
+          <p style="margin-top:16px"><a href="https://www.azepoxy.fr/admin/leads" style="color:#E85D2C;font-weight:600">Ouvrir dans l'admin →</a></p>
+        </div>
+      </div>`,
+    });
+    return "ok";
+  } catch (err) {
+    console.error("[leads] admin notification failed", err);
+    return "error";
+  }
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
  * Fire-and-wait fan-out. Awaits all sinks in parallel but never rejects —
  * the API route logs the result map and returns success to the user as long
  * as the email step (the caller) succeeded.
@@ -149,6 +213,7 @@ export async function fanoutLead(
   const [dbResult, webhookResult] = await Promise.allSettled([
     writeLeadToDb(lead),
     dispatchWebhook(lead),
+    notifyAdminOfLead(lead),
   ]);
 
   const db =

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  ArrowUpRight,
   Download,
   Inbox,
   KanbanSquare,
@@ -8,15 +7,10 @@ import {
   Search,
   X,
 } from "lucide-react";
-import {
-  Card,
-  PageHeader,
-  SourceBadge,
-  StatusBadge,
-} from "@/components/admin/primitives";
+import { Card, PageHeader } from "@/components/admin/primitives";
 import { LeadsKanban } from "@/components/admin/leads-kanban";
+import { LeadsTable } from "@/components/admin/leads-table";
 import { listLeads } from "@/lib/admin/queries";
-import { formatRelativeFr } from "@/lib/admin/format";
 import type { LeadSource, LeadStatus } from "@/lib/db";
 
 interface LeadsPageProps {
@@ -211,91 +205,7 @@ export default async function LeadsListPage({ searchParams }: LeadsPageProps) {
         ) : isKanban ? (
           <LeadsKanban leads={rows} />
         ) : (
-          <Card>
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/[0.05] text-left text-[10px] font-bold uppercase tracking-[0.14em] text-white/40">
-                    <th className="px-5 py-3 font-semibold">Lead</th>
-                    <th className="px-3 py-3 font-semibold">Source</th>
-                    <th className="px-3 py-3 font-semibold">Contact</th>
-                    <th className="px-3 py-3 font-semibold">Projet</th>
-                    <th className="px-3 py-3 font-semibold">Statut</th>
-                    <th className="px-3 py-3 font-semibold">Reçu</th>
-                    <th className="px-5 py-3" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((lead) => (
-                    <tr
-                      key={lead.id}
-                      className="group border-b border-white/[0.03] last:border-b-0 transition-colors hover:bg-white/[0.02]"
-                    >
-                      <td className="px-5 py-3.5">
-                        <Link
-                          href={`/admin/leads/${lead.id}`}
-                          className="font-semibold text-white"
-                        >
-                          {lead.name}
-                        </Link>
-                        {lead.message && (
-                          <p className="mt-0.5 line-clamp-1 text-[12px] text-white/40">
-                            {lead.message}
-                          </p>
-                        )}
-                      </td>
-                      <td className="px-3 py-3.5">
-                        <SourceBadge source={lead.source} />
-                      </td>
-                      <td className="px-3 py-3.5">
-                        <div className="flex flex-col text-[12px]">
-                          {lead.email && (
-                            <span className="text-white/75">{lead.email}</span>
-                          )}
-                          {lead.phone && (
-                            <span className="text-white/45">{lead.phone}</span>
-                          )}
-                          {!lead.email && !lead.phone && (
-                            <span className="text-white/25">—</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-3 py-3.5 text-[12px] text-white/55">
-                        <div className="flex flex-col">
-                          {lead.projectType && (
-                            <span>{lead.projectType}</span>
-                          )}
-                          {lead.ralCode && (
-                            <span className="font-mono text-[11px] text-white/35">
-                              RAL {lead.ralCode}
-                            </span>
-                          )}
-                          {!lead.projectType && !lead.ralCode && (
-                            <span className="text-white/25">—</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-3 py-3.5">
-                        <StatusBadge status={lead.status} />
-                      </td>
-                      <td className="px-3 py-3.5 whitespace-nowrap text-[12px] tabular-nums text-white/40">
-                        {formatRelativeFr(lead.createdAt)}
-                      </td>
-                      <td className="px-5 py-3.5 text-right">
-                        <Link
-                          href={`/admin/leads/${lead.id}`}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-white/40 transition-colors group-hover:text-[#FFB780]"
-                        >
-                          Ouvrir
-                          <ArrowUpRight className="h-3 w-3" />
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
+          <LeadsTable rows={rows} />
         )}
       </div>
     </>

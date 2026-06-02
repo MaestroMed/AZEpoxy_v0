@@ -2,85 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Users,
-  KanbanSquare,
-  LineChart,
-  FileText,
-  Image as ImageIcon,
-  Star,
-  Building,
-  Radar,
-  Activity,
-  Settings,
-  LogOut,
-  type LucideIcon,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
+import { ADMIN_NAV, isNavActive } from "@/components/admin/nav-config";
 
 interface SidebarProps {
   adminEmail: string;
   leadCount?: number;
 }
 
-interface NavItem {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-  badge?: number;
-  exact?: boolean;
-}
-
-interface NavGroup {
-  title: string;
-  items: NavItem[];
-}
-
 export function Sidebar({ adminEmail, leadCount }: SidebarProps) {
   const pathname = usePathname() ?? "";
 
-  const groups: NavGroup[] = [
-    {
-      title: "Pilotage",
-      items: [
-        {
-          href: "/admin",
-          label: "Tableau de bord",
-          icon: LayoutDashboard,
-          exact: true,
-        },
-        { href: "/admin/analytics", label: "Analytics", icon: LineChart },
-      ],
-    },
-    {
-      title: "CRM",
-      items: [
-        { href: "/admin/leads", label: "Leads", icon: Users, badge: leadCount },
-        { href: "/admin/leads?view=kanban", label: "Pipeline", icon: KanbanSquare },
-        { href: "/admin/devis", label: "Devis", icon: FileText },
-      ],
-    },
-    {
-      title: "Contenu",
-      items: [
-        {
-          href: "/admin/contenu/realisations",
-          label: "Réalisations",
-          icon: ImageIcon,
-        },
-        { href: "/admin/contenu/avis", label: "Avis clients", icon: Star },
-        { href: "/admin/contenu/entreprise", label: "Entreprise", icon: Building },
-      ],
-    },
-    {
-      title: "Système",
-      items: [
-        { href: "/admin/seo", label: "Santé SEO", icon: Radar },
-        { href: "/admin/activite", label: "Activité", icon: Activity },
-        { href: "/admin/settings", label: "Paramètres", icon: Settings },
-      ],
-    },
-  ];
+  const groups = ADMIN_NAV.map((g) => ({
+    title: g.title,
+    items: g.items.map((it) => ({
+      ...it,
+      badge: it.badgeKey === "leads" ? leadCount : undefined,
+    })),
+  }));
 
   return (
     <aside

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { Sidebar } from "@/components/admin/sidebar";
+import { AdminMobileNav } from "@/components/admin/mobile-nav";
 import { getCurrentAdmin } from "@/lib/admin/session";
 import { getDb, leads } from "@/lib/db";
 
@@ -34,7 +35,10 @@ export default async function AdminShellLayout({
   return (
     <div className="flex min-h-svh">
       <Sidebar adminEmail={session.email} leadCount={newCount} />
-      <div className="flex-1 min-w-0">{children}</div>
+      <div className="flex-1 min-w-0">
+        <AdminMobileNav adminEmail={session.email} leadCount={newCount} />
+        {children}
+      </div>
     </div>
   );
 }
