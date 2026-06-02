@@ -30,6 +30,15 @@ interface PageHeroProps {
    */
   image?: string;
   /**
+   * Optional background video (MP4 URL). When set, an autoplaying muted loop
+   * replaces the static `image` as the hero backdrop, while `image` — if also
+   * provided — becomes the video `poster` (first paint + a still for
+   * reduced-data / autoplay-blocked clients). Same left-anchored gradient
+   * overlays as the image variant keep the headline legible. Used by the
+   * department hubs for the atelier loop; pages without motion omit it.
+   */
+  video?: string;
+  /**
    * Trail of breadcrumbs to display *after* "Accueil". Passing a leading
    * "Accueil" entry is supported for back-compat — it is silently stripped.
    * The resulting list is also serialized as a BreadcrumbList JSON-LD script.
@@ -44,11 +53,13 @@ export function PageHero({
   description,
   variant = "transparent",
   image,
+  video,
   breadcrumbs,
   children,
 }: PageHeroProps) {
   const trail = stripLeadingHome(breadcrumbs);
   const showCrumbs = trail.length > 0;
+  const hasMedia = Boolean(image || video);
 
   return (
     <section
@@ -56,34 +67,52 @@ export function PageHero({
         "relative min-h-[60vh] overflow-hidden text-white",
         // Transparent variant does NOT use `isolate` — the stacking
         // context would block the persistent canvas from showing through.
-        // When an `image` is set we DO want isolate so the photo sits in
-        // its own stacking context above the persistent canvas.
-        (variant !== "transparent" || image) && "isolate",
-        !image && variant === "night" && "bg-brand-night",
-        !image && variant === "ember" && "bg-gradient-ember",
-        image && "bg-brand-night"
+        // When media (image or video) is set we DO want isolate so the
+        // backdrop sits in its own stacking context above the persistent
+        // canvas.
+        (variant !== "transparent" || hasMedia) && "isolate",
+        !hasMedia && variant === "night" && "bg-brand-night",
+        !hasMedia && variant === "ember" && "bg-gradient-ember",
+        hasMedia && "bg-brand-night"
       )}
     >
       {showCrumbs && <JsonLd data={breadcrumbLd(trail)} />}
 
-      {image && (
+      {hasMedia && (
         <>
-          <Image
-            src={image}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
+          {video ? (
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={image}
+              preload="metadata"
+              aria-hidden="true"
+            >
+              <source src={video} type="video/mp4" />
+            </video>
+          ) : (
+            image && (
+              <Image
+                src={image}
+                alt=""
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover"
+              />
+            )
+          )}
           {/* Left-anchored gradient keeps the headline legible without
-              flattening the right-hand image silhouette. */}
+              flattening the right-hand backdrop silhouette. */}
           <div className="absolute inset-0 bg-gradient-to-r from-brand-night/90 via-brand-night/55 to-brand-night/10" />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-night/80 via-transparent to-brand-night/30" />
         </>
       )}
 
-      {!image && variant === "transparent" && (
+      {!hasMedia && variant === "transparent" && (
         <>
           {/* Desktop : left-biased dim so the text zone reads on any
               phase, the right half stays open for the swarm to show. */}
@@ -99,7 +128,7 @@ export function PageHero({
           />
         </>
       )}
-      {!image && variant === "night" && (
+      {!hasMedia && variant === "night" && (
         <>
           <div className="absolute inset-0 bg-gradient-night" />
           <div className="absolute inset-0 bg-industrial-grid-dark opacity-40" />
@@ -107,7 +136,7 @@ export function PageHero({
           <div className="absolute right-0 top-0 h-[400px] w-[400px] rounded-full bg-brand-orange/10 blur-[120px]" />
         </>
       )}
-      {!image && variant === "ember" && (
+      {!hasMedia && variant === "ember" && (
         <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay" />
       )}
 

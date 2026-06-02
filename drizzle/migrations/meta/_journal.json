@@ -15,6 +15,13 @@
       "when": 1779294029840,
       "tag": "0001_rainy_lorna_dane",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780406879224,
+      "tag": "0002_third_steve_rogers",
+      "breakpoints": true
     }
   ]
 }

@@ -33,7 +33,10 @@ interface DeptHubViewProps {
  */
 export function DeptHubView({ code }: DeptHubViewProps) {
   const dept = getDeptOverview(code);
+  // Per-dept still — doubles as the hero video poster (first paint +
+  // autoplay-blocked / reduced-data fallback).
   const heroImage = `/images/villes/${code}.webp`;
+  const heroVideo = "/video/atelier-loop.mp4";
   const longform = DEPT_LONGFORM[code];
 
   // BreadcrumbList émis par PageHero depuis `breadcrumbs` (source unique).
@@ -94,6 +97,7 @@ export function DeptHubView({ code }: DeptHubViewProps) {
         description={`AZ Époxy intervient dans ${dept.count} communes du ${dept.name}. Accès rapide depuis notre atelier de Bruyères-sur-Oise — entre ${dept.minDistanceMin} et ${dept.maxDistanceMin} minutes selon la commune.`}
         variant="transparent"
         image={heroImage}
+        video={heroVideo}
         breadcrumbs={[
           { label: "Accueil", href: "/" },
           { label: `Thermolaquage ${dept.name}` },

@@ -1,11 +1,20 @@
 import Link from "next/link";
-import { ArrowUpRight, Inbox, Search, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  Download,
+  Inbox,
+  KanbanSquare,
+  List,
+  Search,
+  X,
+} from "lucide-react";
 import {
   Card,
   PageHeader,
   SourceBadge,
   StatusBadge,
 } from "@/components/admin/primitives";
+import { LeadsKanban } from "@/components/admin/leads-kanban";
 import { listLeads } from "@/lib/admin/queries";
 import { formatRelativeFr } from "@/lib/admin/format";
 import type { LeadSource, LeadStatus } from "@/lib/db";
@@ -15,6 +24,7 @@ interface LeadsPageProps {
     q?: string;
     status?: LeadStatus;
     source?: LeadSource;
+    view?: string;
   }>;
 }
 
@@ -36,30 +46,33 @@ const SOURCE_PILLS: { value: LeadSource | "all"; label: string }[] = [
 ];
 
 function buildQs(
-  current: { q?: string; status?: string; source?: string },
-  patch: Partial<{ q?: string; status?: string; source?: string }>,
+  current: { q?: string; status?: string; source?: string; view?: string },
+  patch: Partial<{ q?: string; status?: string; source?: string; view?: string }>,
 ): string {
   const next = { ...current, ...patch };
   const params = new URLSearchParams();
   if (next.q) params.set("q", next.q);
   if (next.status && next.status !== "all") params.set("status", next.status);
   if (next.source && next.source !== "all") params.set("source", next.source);
+  if (next.view) params.set("view", next.view);
   const s = params.toString();
   return s ? `?${s}` : "";
 }
 
 export default async function LeadsListPage({ searchParams }: LeadsPageProps) {
   const params = await searchParams;
-  const { q, status, source } = params;
+  const { q, status, source, view } = params;
+  const isKanban = view === "kanban";
 
   const { rows, total } = await listLeads({
     q,
     status,
     source,
-    limit: 200,
+    limit: isKanban ? 500 : 200,
   });
 
   const hasFilters = Boolean(q || status || source);
+  const exportQs = buildQs(params, {});
 
   return (
     <>
@@ -67,6 +80,38 @@ export default async function LeadsListPage({ searchParams }: LeadsPageProps) {
         eyebrow="Leads"
         title={total === 0 ? "Leads" : `${total} ${total === 1 ? "lead" : "leads"}`}
         description="Demandes entrantes — formulaires devis, contact, guide téléchargé."
+        actions={
+          <div className="flex items-center gap-2">
+            <div className="flex items-center rounded-full border border-white/10 bg-white/[0.03] p-0.5">
+              <Link
+                href={`/admin/leads${buildQs(params, {})}`}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                  !isKanban
+                    ? "bg-white/[0.1] text-white"
+                    : "text-white/50 hover:text-white"
+                }`}
+              >
+                <List className="h-3.5 w-3.5" /> Liste
+              </Link>
+              <Link
+                href={`/admin/leads${buildQs({ ...params, view: "kanban" }, {})}`}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                  isKanban
+                    ? "bg-white/[0.1] text-white"
+                    : "text-white/50 hover:text-white"
+                }`}
+              >
+                <KanbanSquare className="h-3.5 w-3.5" /> Pipeline
+              </Link>
+            </div>
+            <a
+              href={`/admin/leads/export${exportQs}`}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[11px] font-semibold text-white/70 transition-colors hover:border-white/25 hover:text-white"
+            >
+              <Download className="h-3.5 w-3.5" /> Export CSV
+            </a>
+          </div>
+        }
       />
 
       <div className="space-y-4 px-8 py-7">
@@ -163,6 +208,8 @@ export default async function LeadsListPage({ searchParams }: LeadsPageProps) {
         {/* Results */}
         {rows.length === 0 ? (
           <EmptyResults hasFilters={hasFilters} />
+        ) : isKanban ? (
+          <LeadsKanban leads={rows} />
         ) : (
           <Card>
             <div className="overflow-x-auto">

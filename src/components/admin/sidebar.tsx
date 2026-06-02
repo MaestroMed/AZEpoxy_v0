@@ -5,7 +5,14 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
+  KanbanSquare,
+  LineChart,
+  FileText,
+  Image as ImageIcon,
+  Star,
+  Building,
   Radar,
+  Activity,
   Settings,
   LogOut,
   type LucideIcon,
@@ -24,31 +31,54 @@ interface NavItem {
   exact?: boolean;
 }
 
+interface NavGroup {
+  title: string;
+  items: NavItem[];
+}
+
 export function Sidebar({ adminEmail, leadCount }: SidebarProps) {
   const pathname = usePathname() ?? "";
 
-  const items: NavItem[] = [
+  const groups: NavGroup[] = [
     {
-      href: "/admin",
-      label: "Tableau de bord",
-      icon: LayoutDashboard,
-      exact: true,
+      title: "Pilotage",
+      items: [
+        {
+          href: "/admin",
+          label: "Tableau de bord",
+          icon: LayoutDashboard,
+          exact: true,
+        },
+        { href: "/admin/analytics", label: "Analytics", icon: LineChart },
+      ],
     },
     {
-      href: "/admin/leads",
-      label: "Leads",
-      icon: Users,
-      badge: leadCount,
+      title: "CRM",
+      items: [
+        { href: "/admin/leads", label: "Leads", icon: Users, badge: leadCount },
+        { href: "/admin/leads?view=kanban", label: "Pipeline", icon: KanbanSquare },
+        { href: "/admin/devis", label: "Devis", icon: FileText },
+      ],
     },
     {
-      href: "/admin/seo",
-      label: "Santé SEO",
-      icon: Radar,
+      title: "Contenu",
+      items: [
+        {
+          href: "/admin/contenu/realisations",
+          label: "Réalisations",
+          icon: ImageIcon,
+        },
+        { href: "/admin/contenu/avis", label: "Avis clients", icon: Star },
+        { href: "/admin/contenu/entreprise", label: "Entreprise", icon: Building },
+      ],
     },
     {
-      href: "/admin/settings",
-      label: "Paramètres",
-      icon: Settings,
+      title: "Système",
+      items: [
+        { href: "/admin/seo", label: "Santé SEO", icon: Radar },
+        { href: "/admin/activite", label: "Activité", icon: Activity },
+        { href: "/admin/settings", label: "Paramètres", icon: Settings },
+      ],
     },
   ];
 
@@ -115,62 +145,67 @@ export function Sidebar({ adminEmail, leadCount }: SidebarProps) {
       </Link>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-5">
-        <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
-          Navigation
-        </p>
-        <ul className="flex flex-col gap-0.5">
-          {items.map((item) => {
-            const active = item.exact
-              ? pathname === item.href
-              : pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={`
-                    group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200
-                    ${
-                      active
-                        ? "bg-white/[0.05] text-white"
-                        : "text-white/55 hover:bg-white/[0.03] hover:text-white/90"
-                    }
-                  `}
-                >
-                  {active && (
-                    <span
-                      aria-hidden
-                      className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-gradient-to-b from-[#FF9A5C] to-[#E85D2C]"
-                    />
-                  )}
-                  <item.icon
-                    className={`h-[16px] w-[16px] shrink-0 transition-colors ${
-                      active
-                        ? "text-[#FF9A5C]"
-                        : "text-white/40 group-hover:text-white/70"
-                    }`}
-                  />
-                  <span className="flex-1 font-medium">{item.label}</span>
-                  {typeof item.badge === "number" && item.badge > 0 && (
-                    <span
+      <nav className="flex-1 overflow-y-auto px-3 py-4">
+        {groups.map((group) => (
+          <div key={group.title} className="mb-4">
+            <p className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
+              {group.title}
+            </p>
+            <ul className="flex flex-col gap-0.5">
+              {group.items.map((item) => {
+                const base = item.href.split("?")[0];
+                const active = item.exact
+                  ? pathname === base
+                  : pathname === base || pathname.startsWith(`${base}/`);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
                       className={`
-                        inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[10px] font-bold tabular-nums
+                        group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200
                         ${
                           active
-                            ? "bg-[#E85D2C] text-white"
-                            : "bg-white/10 text-white/70 group-hover:bg-white/15"
+                            ? "bg-white/[0.05] text-white"
+                            : "text-white/55 hover:bg-white/[0.03] hover:text-white/90"
                         }
                       `}
                     >
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+                      {active && (
+                        <span
+                          aria-hidden
+                          className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-gradient-to-b from-[#FF9A5C] to-[#E85D2C]"
+                        />
+                      )}
+                      <item.icon
+                        className={`h-[16px] w-[16px] shrink-0 transition-colors ${
+                          active
+                            ? "text-[#FF9A5C]"
+                            : "text-white/40 group-hover:text-white/70"
+                        }`}
+                      />
+                      <span className="flex-1 font-medium">{item.label}</span>
+                      {typeof item.badge === "number" && item.badge > 0 && (
+                        <span
+                          className={`
+                            inline-flex h-[18px] min-w-[20px] items-center justify-center rounded-full px-1.5 text-[10px] font-bold tabular-nums
+                            ${
+                              active
+                                ? "bg-[#E85D2C] text-white"
+                                : "bg-white/10 text-white/70 group-hover:bg-white/15"
+                            }
+                          `}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
 
       {/* User block */}

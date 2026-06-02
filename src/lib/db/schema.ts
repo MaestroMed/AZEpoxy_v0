@@ -6,6 +6,9 @@ import {
   jsonb,
   pgEnum,
   index,
+  integer,
+  numeric,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 /* ── Enums ─────────────────────────────────────────────────────────── */
@@ -149,6 +152,209 @@ export interface SeoQaPageResult {
   hasLocalBusiness?: boolean;
 }
 
+/* ══ DEVIS / QUOTES ════════════════════════════════════════════════ */
+
+export const quoteStatusEnum = pgEnum("quote_status", [
+  "draft",
+  "sent",
+  "accepted",
+  "rejected",
+  "expired",
+]);
+
+export const quotes = pgTable(
+  "quotes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** Numéro lisible AZ-2026-0001. */
+    number: text("number").notNull().unique(),
+    status: quoteStatusEnum("status").notNull().default("draft"),
+
+    /** Lead source optionnel (devis créé depuis un lead). */
+    leadId: uuid("lead_id").references(() => leads.id, {
+      onDelete: "set null",
+    }),
+
+    // Client
+    clientName: text("client_name").notNull(),
+    clientEmail: text("client_email"),
+    clientPhone: text("client_phone"),
+    clientCompany: text("client_company"),
+    clientAddress: text("client_address"),
+
+    // Montants — numeric en centimes via string pour précision.
+    /** Taux de TVA en % (ex "20"). */
+    taxRate: numeric("tax_rate", { precision: 5, scale: 2 })
+      .notNull()
+      .default("20"),
+    /** Sous-total HT, en euros (string décimal). */
+    subtotal: numeric("subtotal", { precision: 12, scale: 2 })
+      .notNull()
+      .default("0"),
+    taxAmount: numeric("tax_amount", { precision: 12, scale: 2 })
+      .notNull()
+      .default("0"),
+    total: numeric("total", { precision: 12, scale: 2 }).notNull().default("0"),
+
+    notes: text("notes"),
+    /** Date de validité du devis. */
+    validUntil: timestamp("valid_until", { withTimezone: true }),
+    /** Quand il a été envoyé / accepté. */
+    sentAt: timestamp("sent_at", { withTimezone: true }),
+    acceptedAt: timestamp("accepted_at", { withTimezone: true }),
+
+    createdBy: text("created_by").notNull().default("system"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    statusIdx: index("quotes_status_idx").on(table.status),
+    createdAtIdx: index("quotes_created_at_idx").on(table.createdAt),
+    leadIdIdx: index("quotes_lead_id_idx").on(table.leadId),
+  }),
+);
+
+export const quoteItems = pgTable(
+  "quote_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    quoteId: uuid("quote_id")
+      .notNull()
+      .references(() => quotes.id, { onDelete: "cascade" }),
+    label: text("label").notNull(),
+    description: text("description"),
+    quantity: numeric("quantity", { precision: 10, scale: 2 })
+      .notNull()
+      .default("1"),
+    unit: text("unit").notNull().default("u"),
+    unitPrice: numeric("unit_price", { precision: 12, scale: 2 })
+      .notNull()
+      .default("0"),
+    lineTotal: numeric("line_total", { precision: 12, scale: 2 })
+      .notNull()
+      .default("0"),
+    sortOrder: integer("sort_order").notNull().default(0),
+  },
+  (table) => ({
+    quoteIdIdx: index("quote_items_quote_id_idx").on(table.quoteId),
+  }),
+);
+
+/* ══ CONTENU — réalisations / avis / settings ══════════════════════ */
+
+export const realisationCategoryEnum = pgEnum("realisation_category", [
+  "jantes",
+  "moto",
+  "mobilier",
+  "industriel",
+  "portail",
+]);
+
+export const realisations = pgTable(
+  "realisations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    title: text("title").notNull(),
+    category: realisationCategoryEnum("category").notNull().default("portail"),
+    description: text("description").notNull().default(""),
+    /** Liste de codes RAL/teintes. */
+    colors: jsonb("colors").$type<string[]>().notNull().default([]),
+    /** Chemin image (/images/realisations/...). */
+    image: text("image"),
+    featured: boolean("featured").notNull().default(false),
+    published: boolean("published").notNull().default(true),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    publishedIdx: index("realisations_published_idx").on(table.published),
+    sortIdx: index("realisations_sort_idx").on(table.sortOrder),
+  }),
+);
+
+export const testimonials = pgTable(
+  "testimonials",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull(),
+    company: text("company"),
+    role: text("role"),
+    quote: text("quote").notNull(),
+    rating: integer("rating").notNull().default(5),
+    service: text("service"),
+    source: text("source").notNull().default("manual"),
+    published: boolean("published").notNull().default(true),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    publishedIdx: index("testimonials_published_idx").on(table.published),
+  }),
+);
+
+/** Singleton key-value pour les réglages du site (id fixe = 'default'). */
+export const siteSettings = pgTable("site_settings", {
+  id: text("id").primaryKey().default("default"),
+  data: jsonb("data").$type<SiteSettingsData>().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedBy: text("updated_by").notNull().default("system"),
+});
+
+export interface SiteSettingsData {
+  businessName?: string;
+  phone?: string;
+  email?: string;
+  addressStreet?: string;
+  addressZip?: string;
+  addressCity?: string;
+  openingHours?: string;
+  /** Notifier par email à chaque nouveau lead. */
+  notifyOnLead?: boolean;
+  notifyEmail?: string;
+}
+
+/* ══ JOURNAL D'ACTIVITÉ ADMIN ══════════════════════════════════════ */
+
+export const adminActivity = pgTable(
+  "admin_activity",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** Qui : email admin ou 'system'. */
+    actor: text("actor").notNull().default("system"),
+    /** Verbe : "lead.status", "quote.created", "content.updated"… */
+    action: text("action").notNull(),
+    /** Type d'entité concernée : "lead" | "quote" | "realisation"… */
+    entityType: text("entity_type"),
+    entityId: text("entity_id"),
+    /** Résumé lisible. */
+    summary: text("summary").notNull(),
+    meta: jsonb("meta").$type<Record<string, unknown>>(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    createdAtIdx: index("admin_activity_created_at_idx").on(table.createdAt),
+    entityIdx: index("admin_activity_entity_idx").on(
+      table.entityType,
+      table.entityId,
+    ),
+  }),
+);
+
 /* ── Inferred types ───────────────────────────────────────────────── */
 
 export type Lead = typeof leads.$inferSelect;
@@ -160,3 +366,18 @@ export type LeadStatus = (typeof leadStatusEnum.enumValues)[number];
 export type LeadEventType = (typeof leadEventTypeEnum.enumValues)[number];
 export type SeoQaRun = typeof seoQaRuns.$inferSelect;
 export type NewSeoQaRun = typeof seoQaRuns.$inferInsert;
+
+export type Quote = typeof quotes.$inferSelect;
+export type NewQuote = typeof quotes.$inferInsert;
+export type QuoteItem = typeof quoteItems.$inferSelect;
+export type NewQuoteItem = typeof quoteItems.$inferInsert;
+export type QuoteStatus = (typeof quoteStatusEnum.enumValues)[number];
+export type Realisation = typeof realisations.$inferSelect;
+export type NewRealisation = typeof realisations.$inferInsert;
+export type RealisationCategory =
+  (typeof realisationCategoryEnum.enumValues)[number];
+export type Testimonial = typeof testimonials.$inferSelect;
+export type NewTestimonial = typeof testimonials.$inferInsert;
+export type SiteSettingsRow = typeof siteSettings.$inferSelect;
+export type AdminActivity = typeof adminActivity.$inferSelect;
+export type NewAdminActivity = typeof adminActivity.$inferInsert;
