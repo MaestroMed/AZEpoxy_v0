@@ -184,25 +184,17 @@ html.has-custom-cursor textarea {
   animation: skeleton-shimmer 1.8s linear infinite;
 }
 
-/* ── TextReveal — entrée fade-in des titres hero ─────────────────────
-   CSS pur, état au repos VISIBLE (opacity 1). On anime opacity seule
-   (pas de transform) pour ne jamais casser le `background-clip: text`
-   des spans gradient ember. fill-mode both tient l'état final. Si
-   l'animation ne tourne pas (JS off, reduced-motion, throttling,
-   hydration), le texte reste à opacity 1. Remplace l'anim framer
-   mot-à-mot qui gelait à mi-course (H1 invisibles intermittents). */
-@keyframes az-text-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+/* ── TextReveal — titres hero TOUJOURS visibles ─────────────────────
+   Décision post-mortem : ce composant a connu 4 modes de défaillance
+   successifs (framer blur → bg-clip-text cassé ; framer mot-à-mot gelé
+   à mi-course ; CSS fade-in `both` figé au frame 0 en prod, getAnimations
+   vide). Le H1 est un élément SEO + UX critique : on abandonne
+   définitivement toute animation d'entrée au profit d'une visibilité
+   garantie. opacity:1 fixe, aucune dépendance JS/animation. Cette règle
+   neutralise aussi le HTML déjà en cache qui porte encore la classe. */
 .az-text-reveal {
-  animation: az-text-in 0.85s var(--ease-out-expo) both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .az-text-reveal {
-    animation: none;
-    opacity: 1;
-  }
+  opacity: 1;
+  animation: none;
 }
 
 /* ── Design system — easing + durations canoniques ─────────────────
