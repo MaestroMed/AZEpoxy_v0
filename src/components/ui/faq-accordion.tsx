@@ -60,7 +60,7 @@ export function FAQAccordion({ items }: FAQAccordionProps) {
               <span
                 className={cn(
                   "mt-1.5 shrink-0 font-mono text-xs font-semibold tabular-nums tracking-wider transition-colors",
-                  open ? "text-brand-orange" : "text-brand-charcoal/40"
+                  open ? "text-brand-orange" : "text-brand-charcoal/70"
                 )}
                 aria-hidden
               >

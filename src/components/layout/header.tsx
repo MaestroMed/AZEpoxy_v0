@@ -267,7 +267,7 @@ export function Header() {
           {/* ⌘K hint — fires the command palette on click (same shortcut too). */}
           <button
             type="button"
-            aria-label="Ouvrir la palette de commandes"
+            aria-label="Chercher un RAL — ouvrir la palette de commandes"
             onClick={() => {
               window.dispatchEvent(
                 new KeyboardEvent("keydown", { key: "k", metaKey: true, ctrlKey: true }),
@@ -289,7 +289,7 @@ export function Header() {
           </a>
           <Link
             href="/devis"
-            className="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-orange/30 transition-all hover:bg-brand-orange-dark hover:-translate-y-0.5"
+            className="rounded-full bg-brand-orange-dark px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-orange/30 transition-all hover:bg-[#A63A12] hover:-translate-y-0.5"
           >
             Devis gratuit
           </Link>

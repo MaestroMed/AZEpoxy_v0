@@ -258,9 +258,9 @@ export function Footer() {
           {/* Link columns */}
           {cols.map((col) => (
             <div key={col.title}>
-              <h4 className="mb-5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-orange">
+              <h2 className="mb-5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-orange">
                 {col.title}
-              </h4>
+              </h2>
               <ul className="space-y-3">
                 {col.links.map((link) => (
                   <li key={link.href}>
@@ -302,9 +302,9 @@ export function Footer() {
           aria-label="Villes desservies en Île-de-France"
           className="mt-16 border-t border-white/10 pt-10"
         >
-          <h3 className="mb-6 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-orange">
+          <h2 className="mb-6 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-orange">
             Thermolaquage en Île-de-France & Oise
-          </h3>
+          </h2>
           <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
             {(["95", "75", "92", "93", "94", "78", "91", "77", "60"] as DepartmentCode[])
               .map((code) => {

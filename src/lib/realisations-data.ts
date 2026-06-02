@@ -12,6 +12,9 @@ export interface Project {
   featured: boolean;
   /** Optional richer fields for editorial detail pages. */
   subtitle?: string;
+  /** Direct image URL — set for DB-managed realisations. Static items
+   * resolve their image via the numbered REALISATION_IMAGES map instead. */
+  image?: string;
   /** Piece origin / context — e.g. "M4 Competition 2020", "Yamaha MT-07 · custom build". */
   origin?: string;
   /** Surface prep level — "SA 2.5", "Phosphatation alcaline", etc. */
@@ -71,9 +74,11 @@ export const REALISATION_IMAGES: Record<number, string> = {
   16: "/images/realisations/16-portail-lames-noir.webp",
 };
 
-/** Retourne le chemin image réel d'un projet (ou undefined si aucun). */
+/** Retourne le chemin image réel d'un projet (ou undefined si aucun).
+ * Priorité à `p.image` (réalisations gérées en DB) puis au mapping
+ * numéroté statique. */
 export function getProjectImage(p: Project): string | undefined {
-  return REALISATION_IMAGES[p.id];
+  return p.image ?? REALISATION_IMAGES[p.id];
 }
 
 export const PROJECT_CATEGORIES = [
@@ -296,17 +301,9 @@ export function catalogNumber(project: Project): string {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Sanity-aware accessors                                                    */
+/*  Données statiques partagées (client-safe)                                 */
+/*  L'accès DB du portfolio vit dans `realisations-server.ts` (server-only)   */
+/*  pour ne pas embarquer drizzle dans les bundles client.                    */
 /* -------------------------------------------------------------------------- */
 
-import { sanityFetch } from "@/sanity/client";
-import { REALISATIONS_QUERY } from "@/sanity/queries";
-
 export const PROJECTS = PROJECTS_FALLBACK;
-
-export async function getProjects(): Promise<Project[]> {
-  const data = await sanityFetch<Project[]>(REALISATIONS_QUERY, {}, {
-    tags: ["realisation:list"],
-  });
-  return data?.length ? data : PROJECTS_FALLBACK;
-}

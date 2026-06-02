@@ -166,7 +166,7 @@ export function LiveAtelierBanner() {
 
         {/* Live clock — right side, monospaced */}
         {mounted && formattedTime && (
-          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.22em] text-white/35">
+          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.22em] text-white/60">
             {formattedTime} · Bruyères-sur-Oise
           </span>
         )}

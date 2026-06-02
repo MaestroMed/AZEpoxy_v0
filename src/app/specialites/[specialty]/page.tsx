@@ -32,12 +32,12 @@ import {
 } from "@/lib/specialites-data";
 import { RAL_COLORS } from "@/lib/ral-colors";
 import {
-  getProjects,
   getProjectSlug,
   catalogNumber,
   PROJECT_CATEGORIES,
   type Project,
 } from "@/lib/realisations-data";
+import { getProjects } from "@/lib/realisations-server";
 import { ArrowUpRight } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */

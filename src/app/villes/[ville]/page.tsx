@@ -277,13 +277,13 @@ export default async function VillePage({
                 )}
                 {ville.neighborhoods && ville.neighborhoods.length > 0 && (
                   <div className="mt-6 flex flex-wrap gap-2">
-                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-charcoal/45 mr-1 self-center">
+                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-charcoal/70 mr-1 self-center">
                       Quartiers desservis :
                     </span>
                     {ville.neighborhoods.map((q) => (
                       <span
                         key={q}
-                        className="inline-flex items-center rounded-md bg-brand-orange/[0.08] px-2 py-1 text-[12px] font-medium text-brand-orange"
+                        className="inline-flex items-center rounded-md bg-brand-orange/[0.08] px-2 py-1 text-[12px] font-medium text-brand-orange-dark"
                       >
                         {q}
                       </span>
@@ -406,20 +406,23 @@ export default async function VillePage({
           <div className="mx-auto mt-12 max-w-4xl">
             <ol className="space-y-3">
               {processSteps.map((step, i) => (
-                <ScrollReveal key={step.label} delay={i * 0.06}>
-                  <li className="flex gap-4 rounded-2xl border border-brand-night/10 bg-white p-5">
-                    <span className="font-display text-2xl font-black text-brand-orange leading-none w-8 shrink-0">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand-night">
-                        {step.label.replace(/^\d+\s—\s/, "")}
-                      </p>
-                      <p className="mt-1 text-sm leading-relaxed text-brand-charcoal/75">
-                        {step.description}
-                      </p>
-                    </div>
-                  </li>
+                <ScrollReveal
+                  as="li"
+                  key={step.label}
+                  delay={i * 0.06}
+                  className="flex gap-4 rounded-2xl border border-brand-night/10 bg-white p-5"
+                >
+                  <span className="font-display text-2xl font-black text-brand-orange leading-none w-8 shrink-0">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand-night">
+                      {step.label.replace(/^\d+\s—\s/, "")}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-brand-charcoal/75">
+                      {step.description}
+                    </p>
+                  </div>
                 </ScrollReveal>
               ))}
             </ol>
@@ -461,7 +464,7 @@ export default async function VillePage({
                   <div className="heading-display text-3xl text-brand-night sm:text-4xl">
                     {stat.value}
                   </div>
-                  <div className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-charcoal/50">
+                  <div className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-charcoal/70">
                     {stat.label}
                   </div>
                 </div>
@@ -500,7 +503,7 @@ export default async function VillePage({
                       transition-all hover:border-brand-orange/40 hover:shadow-md
                     "
                   >
-                    <span className="inline-flex items-center rounded-full bg-brand-orange/[0.08] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-orange">
+                    <span className="inline-flex items-center rounded-full bg-brand-orange/[0.08] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-orange-dark">
                       {project.category}
                     </span>
                     <h3 className="heading-display mt-3 text-lg text-brand-night">
@@ -509,7 +512,7 @@ export default async function VillePage({
                     <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-brand-charcoal/65">
                       {project.description}
                     </p>
-                    <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-brand-charcoal/45">
+                    <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-brand-charcoal/70">
                       {project.colors.slice(0, 3).map((c) => (
                         <span
                           key={c}
@@ -599,7 +602,7 @@ export default async function VillePage({
                   href={`/thermolaquage-${DEPT_HUB_SLUG[ville.departmentCode]}`}
                   className="
                     inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/[0.08]
-                    px-5 py-3 text-sm font-bold text-brand-orange
+                    px-5 py-3 text-sm font-bold text-brand-orange-dark
                     transition-all hover:border-brand-orange/55 hover:bg-brand-orange/[0.15]
                   "
                 >
@@ -618,7 +621,7 @@ export default async function VillePage({
                 >
                   <MapPin className="h-3.5 w-3.5" />
                   Thermolaquage à {nearby.name}
-                  <span className="text-xs font-normal text-brand-charcoal/45">
+                  <span className="text-xs font-normal text-brand-charcoal/70">
                     ({nearby.distance})
                   </span>
                 </Link>
@@ -658,7 +661,7 @@ function DistanceCard({
         {icon}
       </div>
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-charcoal/50">
+        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-charcoal/70">
           {label}
         </p>
         <p className="heading-display text-xl text-brand-night">{value}</p>

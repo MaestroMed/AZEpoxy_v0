@@ -356,7 +356,7 @@ function StatBox({
         {icon}
       </div>
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-charcoal/50">
+        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-charcoal/70">
           {label}
         </p>
         <p className="heading-display text-xl text-brand-night">{value}</p>

@@ -11,7 +11,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { ReviewsCarousel } from "@/components/ui/reviews-carousel";
 import { getTestimonials } from "@/lib/testimonials-data";
-import { getProjects } from "@/lib/realisations-data";
+import { getProjects } from "@/lib/realisations-server";
 import { averageRating, getReviews } from "@/lib/reviews-data";
 import { PortfolioSection } from "./portfolio-section";
 
@@ -21,6 +21,10 @@ export const metadata = buildMetadata({
     "Découvrez nos projets de thermolaquage, sablage et finitions spéciales. Jantes, moto, mobilier, portails et pièces industrielles.",
   path: "/realisations",
 });
+
+// ISR : régénère le portfolio toutes les 10 min pour refléter les
+// réalisations ajoutées via l'admin sans redéploiement.
+export const revalidate = 600;
 
 export default async function RealisationsPage() {
   const [projects, testimonials, reviews] = await Promise.all([

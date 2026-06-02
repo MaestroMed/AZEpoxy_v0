@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 export type RevealVariant = "fade" | "slide" | "scale" | "blur" | "rise";
 export type RevealDirection = "up" | "down" | "left" | "right";
 
+type RevealTag = "div" | "li" | "span";
+
 interface RevealProps {
   children: React.ReactNode;
   delay?: number;
@@ -14,6 +16,8 @@ interface RevealProps {
   duration?: number;
   className?: string;
   once?: boolean;
+  /** Élément HTML rendu — utile pour préserver la sémantique (ex. `li` dans une `ol`/`ul`). */
+  as?: RevealTag;
 }
 
 const offsets: Record<RevealDirection, { x: number; y: number }> = {
@@ -45,11 +49,14 @@ export function Reveal({
   duration,
   className,
   once = true,
+  as = "div",
 }: RevealProps) {
   const reduce = useReducedMotion();
   if (reduce) {
-    return <div className={cn(className)}>{children}</div>;
+    const Tag = as;
+    return <Tag className={cn(className)}>{children}</Tag>;
   }
+  const MotionTag = m[as];
 
   const offset = offsets[direction];
   let initial: Record<string, number | string>;
@@ -85,7 +92,7 @@ export function Reveal({
   }
 
   return (
-    <m.div
+    <MotionTag
       initial={initial}
       whileInView={animate}
       viewport={{ once, margin: "-80px", amount: 0.2 }}
@@ -97,6 +104,6 @@ export function Reveal({
       className={cn(className)}
     >
       {children}
-    </m.div>
+    </MotionTag>
   );
 }

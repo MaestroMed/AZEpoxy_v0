@@ -13,6 +13,7 @@ import {
   getBlogArticleBySlug,
   getBlogArticles,
 } from "@/lib/blog-data";
+import { injectCrossLinks } from "@/lib/blog-crosslinks";
 import { Calendar, Clock, ArrowLeft, ArrowRight } from "lucide-react";
 
 export function generateStaticParams() {
@@ -111,7 +112,9 @@ export default async function BlogArticlePage({
             <article
               data-reading-target
               className="prose prose-lg max-w-none prose-headings:font-outfit prose-headings:text-brand-night prose-headings:tracking-tight prose-h2:text-[1.875rem] md:prose-h2:text-[2.25rem] prose-h2:font-black prose-h2:leading-[1.15] prose-h2:mt-14 prose-h2:mb-4 prose-h2:border-t prose-h2:border-brand-orange/15 prose-h2:pt-8 prose-h3:text-xl md:prose-h3:text-2xl prose-h3:font-bold prose-h3:mt-10 prose-h3:mb-3 prose-p:text-brand-charcoal/80 prose-p:leading-relaxed prose-li:text-brand-charcoal/80 prose-strong:text-brand-night prose-a:text-brand-orange prose-a:no-underline hover:prose-a:underline"
-              dangerouslySetInnerHTML={{ __html: article.content }}
+              dangerouslySetInnerHTML={{
+                __html: injectCrossLinks(article.content, article.slug),
+              }}
             />
           </ScrollReveal>
 
