@@ -16,7 +16,6 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 import { JsonLd } from "@/components/seo/json-ld";
-import { localBusinessLd } from "@/lib/jsonld";
 import { INDUSTRY_LABEL, type Ville } from "@/lib/villes-data";
 import { SITE } from "@/lib/utils";
 import { getDeptOverview } from "@/lib/villes/departments";
@@ -37,34 +36,15 @@ export function DeptHubView({ code }: DeptHubViewProps) {
   const heroImage = `/images/villes/${code}.webp`;
   const longform = DEPT_LONGFORM[code];
 
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE.url },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: `Thermolaquage ${dept.name}`,
-      },
-    ],
-  };
-
+  // BreadcrumbList émis par PageHero depuis `breadcrumbs` (source unique).
+  // LocalBusiness #business émis globalement (layout). Service le
+  // référence par @id.
   const serviceLd = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: `Thermolaquage poudre époxy en ${dept.name} (${dept.code})`,
     serviceType: "Thermolaquage industriel poudre époxy",
-    provider: {
-      "@type": "LocalBusiness",
-      name: SITE.name,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Bruyères-sur-Oise",
-        postalCode: "95820",
-        addressCountry: "FR",
-      },
-    },
+    provider: { "@id": `${SITE.url}#business` },
     areaServed: {
       "@type": "AdministrativeArea",
       name: dept.name,
@@ -97,15 +77,6 @@ export function DeptHubView({ code }: DeptHubViewProps) {
 
   return (
     <>
-      <JsonLd
-        id={`ld-business-dept-${dept.slug}`}
-        data={localBusinessLd({
-          areaServed: [
-            { type: "AdministrativeArea", name: dept.name },
-          ],
-        })}
-      />
-      <JsonLd id={`ld-breadcrumb-dept-${dept.slug}`} data={breadcrumbLd} />
       <JsonLd id={`ld-service-dept-${dept.slug}`} data={serviceLd} />
       <JsonLd id={`ld-itemlist-dept-${dept.slug}`} data={itemListLd} />
 

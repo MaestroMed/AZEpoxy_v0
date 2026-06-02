@@ -38,6 +38,28 @@ const cols = [
     ],
   },
   {
+    title: "Guides & blog",
+    links: [
+      { label: "Tous les articles", href: "/blog" },
+      {
+        label: "Thermolaquage vs peinture",
+        href: "/blog/thermolaquage-vs-peinture-liquide",
+      },
+      {
+        label: "Guide complet du RAL",
+        href: "/blog/couleurs-ral-guide-complet",
+      },
+      {
+        label: "Préparer ses jantes",
+        href: "/blog/preparer-jantes-thermolaquage",
+      },
+      {
+        label: "Normes & qualité",
+        href: "/blog/normes-qualite-thermolaquage-qualicoat",
+      },
+    ],
+  },
+  {
     title: "Entreprise",
     links: [
       { label: "À propos", href: "/a-propos" },
@@ -75,7 +97,7 @@ export function Footer() {
       <div className="absolute -top-40 left-1/2 h-80 w-[90%] -translate-x-1/2 rounded-full bg-brand-orange/10 blur-3xl" />
 
       <div className="container-wide relative py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.3fr_repeat(4,1fr)]">
+        <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(5,1fr)]">
           {/* Brand block */}
           <div className="space-y-6">
             <Link

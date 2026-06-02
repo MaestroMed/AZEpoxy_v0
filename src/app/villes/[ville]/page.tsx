@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 
 import { buildMetadata } from "@/lib/seo";
-import { localBusinessLd } from "@/lib/jsonld";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
@@ -66,8 +65,8 @@ export async function generateMetadata({
   if (deptCode) {
     const dept = getDeptOverview(deptCode);
     return buildMetadata({
-      title: `Thermolaquage en ${dept.name} (${dept.code}) — ${dept.count} communes`,
-      description: `Thermolaquage poudre époxy professionnel dans toutes les communes du ${dept.name} (${dept.code}). ${dept.count} villes desservies depuis notre atelier de Bruyères-sur-Oise. 200+ couleurs RAL & NCS, sablage, finitions spéciales, express 48h.`,
+      title: `Thermolaquage ${dept.name} (${dept.code})`,
+      description: `Thermolaquage poudre époxy en ${dept.name} (${dept.code}) : ${dept.count} communes desservies, 200+ teintes RAL & NCS, sablage, express 48h. Devis gratuit sous 24h.`,
       path: `/thermolaquage-${dept.slug}`,
       image: `/images/villes/og/${deptCode}.webp`,
       keywords: [
@@ -89,7 +88,7 @@ export async function generateMetadata({
 
   return buildMetadata({
     title: `Thermolaquage à ${ville.name} (${ville.departmentCode}) — Poudre Époxy`,
-    description: `Thermolaquage poudre époxy professionnel à ${ville.name} (${ville.department}). ${ville.distance} de notre atelier de Bruyères-sur-Oise, ${ville.driveTime} de trajet via ${ville.access}. 200+ couleurs RAL & NCS, sablage, finitions spéciales, express 48h. Devis gratuit.`,
+    description: `Thermolaquage poudre époxy à ${ville.name} (${ville.departmentCode}) : ${ville.distance} de notre atelier, 200+ teintes RAL & NCS, sablage, express 48h. Devis gratuit.`,
     path: `/thermolaquage-${ville.slug}`,
     image: `/images/villes/og/${ville.departmentCode}.webp`,
     keywords: [
@@ -183,45 +182,24 @@ export default async function VillePage({
   const relevantRealisations = getRelevantRealisationsForVille(ville, 3);
 
   /* ── Schema.org payloads ──────────────────────────────────── */
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Accueil",
-        item: SITE.url,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: ville.department,
-        item: `${SITE.url}/thermolaquage-${ville.slug}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: `Thermolaquage à ${ville.name}`,
-      },
-    ],
-  };
+  // Le LocalBusiness #business est émis UNE fois globalement (layout).
+  // Le Service le référence par @id pour ne pas dupliquer l'entité.
+  // Le BreadcrumbList est émis par PageHero depuis le prop `breadcrumbs`
+  // (source unique) — on ne ré-émet PAS de breadcrumb manuel ici.
+  const deptHubSlug = DEPT_HUB_SLUG[ville.departmentCode];
+  const heroBreadcrumbs = deptHubSlug
+    ? [
+        { label: ville.department, href: `/thermolaquage-${deptHubSlug}` },
+        { label: `Thermolaquage à ${ville.name}` },
+      ]
+    : [{ label: `Thermolaquage à ${ville.name}` }];
 
   const serviceLd = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: `Thermolaquage poudre époxy à ${ville.name}`,
     serviceType: "Thermolaquage industriel poudre époxy",
-    provider: {
-      "@type": "LocalBusiness",
-      name: SITE.name,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Bruyères-sur-Oise",
-        postalCode: "95820",
-        addressCountry: "FR",
-      },
-    },
+    provider: { "@id": `${SITE.url}#business` },
     areaServed: {
       "@type": "City",
       name: ville.name,
@@ -234,16 +212,6 @@ export default async function VillePage({
 
   return (
     <>
-      <JsonLd
-        id={`ld-business-${ville.slug}`}
-        data={localBusinessLd({
-          areaServed: [
-            { type: "City", name: ville.name, containedIn: ville.department },
-            { type: "AdministrativeArea", name: ville.department },
-          ],
-        })}
-      />
-      <JsonLd id={`ld-breadcrumb-${ville.slug}`} data={breadcrumbLd} />
       <JsonLd id={`ld-service-${ville.slug}`} data={serviceLd} />
       <JsonLd id={`ld-faq-${ville.slug}`} data={faqLd} />
 
@@ -261,10 +229,7 @@ export default async function VillePage({
         description={`Service professionnel de thermolaquage poudre époxy pour ${ville.name} et ses environs. ${ville.distance} de notre atelier de Bruyères-sur-Oise, ${ville.driveTime} de trajet via ${ville.access}.`}
         variant="transparent"
         image={`/images/villes/${ville.departmentCode}.webp`}
-        breadcrumbs={[
-          { label: "Accueil", href: "/" },
-          { label: `Thermolaquage à ${ville.name}` },
-        ]}
+        breadcrumbs={heroBreadcrumbs}
       />
 
       {/* ── Section 2 — Intro local + distance cards ───────────────── */}

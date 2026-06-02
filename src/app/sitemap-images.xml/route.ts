@@ -5,7 +5,11 @@ import {
   type DepartmentCode,
 } from "@/lib/villes-data";
 import { allDeptHubSlugs, DEPT_HUB_SLUG } from "@/lib/villes/departments";
-import { PROJECTS_FALLBACK, getProjectSlug } from "@/lib/realisations-data";
+import {
+  PROJECTS_FALLBACK,
+  getProjectSlug,
+  getProjectImage,
+} from "@/lib/realisations-data";
 
 /**
  * Image sitemap (protocole Google) — déclare les visuels associés à
@@ -108,15 +112,18 @@ export async function GET() {
     });
   }
 
-  // Réalisations — chaque projet pointe sur sa page (image générique du
-  // dossier realisations si dispo, sinon image hero générique).
+  // Réalisations — chaque projet pointe sur sa page avec le VRAI fichier
+  // image (mapping id → nom numéroté, via getProjectImage). On saute les
+  // projets sans image plutôt que de référencer une URL morte.
   for (const p of PROJECTS_FALLBACK) {
     const slug = getProjectSlug(p);
+    const imagePath = getProjectImage(p);
+    if (!imagePath) continue;
     urls.push({
       loc: `${BASE}/realisations/${slug}`,
       images: [
         {
-          loc: `${BASE}/images/realisations/${slug}.webp`,
+          loc: `${BASE}${imagePath}`,
           title: p.title,
           caption: p.description.slice(0, 200),
         },

@@ -184,6 +184,27 @@ html.has-custom-cursor textarea {
   animation: skeleton-shimmer 1.8s linear infinite;
 }
 
+/* ── TextReveal — entrée fade-in des titres hero ─────────────────────
+   CSS pur, état au repos VISIBLE (opacity 1). On anime opacity seule
+   (pas de transform) pour ne jamais casser le `background-clip: text`
+   des spans gradient ember. fill-mode both tient l'état final. Si
+   l'animation ne tourne pas (JS off, reduced-motion, throttling,
+   hydration), le texte reste à opacity 1. Remplace l'anim framer
+   mot-à-mot qui gelait à mi-course (H1 invisibles intermittents). */
+@keyframes az-text-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.az-text-reveal {
+  animation: az-text-in 0.85s var(--ease-out-expo) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .az-text-reveal {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* ── Design system — easing + durations canoniques ─────────────────
    Variables CSS partagées pour garantir la cohérence du motion.
    Toutes les transitions custom devraient pointer sur l'une de ces

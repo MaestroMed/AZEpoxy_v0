@@ -1,103 +1,41 @@
-"use client";
+import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
 
 /**
- * TextReveal — word-by-word blur+rise reveal for hero titles.
+ * TextReveal — entrée fade-in pour les titres hero.
  *
- * Splits plain strings into spans, staggers their entrance
- * (opacity 0 + y 18 + blur 10 → 0) with ease-out cubic. React children
- * are also supported — any non-string node renders as-is, inheriting a
- * slightly delayed reveal to stay in sync.
+ * IMPORTANT — historique : l'ancienne implémentation framer-motion
+ * découpait le titre mot-à-mot et animait chaque span via `m.span`
+ * (`animate="visible"`). Sous LazyMotion, ces animations GELAIENT de
+ * façon flaky à mi-parcours (opacity 0.3-0.55, et le span gradient
+ * bg-clip-text à 0) → des H1 entiers invisibles par intermittence sur
+ * toutes les pages PageHero / CtaBand. C'est un élément SEO majeur :
+ * inacceptable.
  *
- * A thin wrapper over framer-motion's `m` so the bundle cost is zero
- * incremental when the provider is already mounted.
- *
- * Reduced-motion → renders plain static text.
+ * Nouvelle implémentation : CSS pur, état au repos = VISIBLE. L'entrée
+ * est un simple fade-in (`az-text-reveal` dans globals.css) en
+ * animation-fill-mode both. Si l'animation ne tourne pas (JS off,
+ * reduced-motion, throttling, hydration), le texte reste à opacity 1.
+ * Zéro dépendance JS, zéro surface de gel, et pas de transform → le
+ * `background-clip: text` des spans gradient n'est jamais cassé.
  */
-
-import { m, useReducedMotion } from "framer-motion";
-import { Children, type ReactNode } from "react";
 
 interface TextRevealProps {
   children: ReactNode;
   className?: string;
-  /** Stagger between words in ms. Default 55. */
-  stagger?: number;
-  /** Base delay in ms before the whole reveal starts. Default 0. */
+  /** Conservé pour compat de signature — délai d'entrée en ms. */
   delay?: number;
+  /** Conservé pour compat — ignoré (plus de stagger mot-à-mot). */
+  stagger?: number;
 }
 
-/**
- * NOTE: pas de `filter: blur()` ici. `filter` sur un parent crée un
- * stacking context qui CASSE le `background-clip: text` des enfants —
- * le bug Chrome "bg-clip-text invisible sous filter". Le reveal reste
- * efficace avec opacity + translate seuls.
- */
-const REVEAL_VARIANTS = {
-  hidden: { opacity: 0, y: 18 },
-  visible: { opacity: 1, y: 0 },
-};
-
-export function TextReveal({ children, className, stagger = 55, delay = 0 }: TextRevealProps) {
-  const prefersReduced = useReducedMotion();
-  if (prefersReduced) {
-    return <span className={className}>{children}</span>;
-  }
-
-  let wordCount = 0;
-
-  // Flatten all children into pieces we can animate word-by-word.
-  const nodes: ReactNode[] = [];
-  Children.forEach(children, (child, childIndex) => {
-    if (typeof child === "string") {
-      const words = child.split(/(\s+)/);
-      words.forEach((word, i) => {
-        if (!word.trim()) {
-          nodes.push(<span key={`ws-${childIndex}-${i}`}>{word}</span>);
-          return;
-        }
-        const idx = wordCount++;
-        nodes.push(
-          <m.span
-            key={`w-${childIndex}-${i}`}
-            className="inline-block"
-            variants={REVEAL_VARIANTS}
-            initial="hidden"
-            animate="visible"
-            transition={{
-              duration: 0.7,
-              ease: [0.22, 1, 0.36, 1],
-              delay: delay / 1000 + (idx * stagger) / 1000,
-            }}
-            style={{ willChange: "transform, opacity" }}
-          >
-            {word}
-          </m.span>,
-        );
-      });
-    } else {
-      // Non-string child (typiquement un <span class="bg-clip-text"> avec
-      // gradient ember) — opacity-only reveal. PAS de transform ni de
-      // willChange, parce que les deux créent un stacking context qui
-      // casse `background-clip: text` sur les enfants. Sans ce traitement
-      // dédié, le span gradient reste invisible jusqu'à ce qu'on retire
-      // tout transform/willChange du wrapper.
-      const idx = wordCount++;
-      nodes.push(
-        <m.span
-          key={`n-${childIndex}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.6,
-            ease: [0.22, 1, 0.36, 1],
-            delay: delay / 1000 + (idx * stagger) / 1000,
-          }}
-        >
-          {child}
-        </m.span>,
-      );
-    }
-  });
-
-  return <span className={className}>{nodes}</span>;
+export function TextReveal({ children, className, delay }: TextRevealProps) {
+  return (
+    <span
+      className={cn("az-text-reveal", className)}
+      style={delay ? { animationDelay: `${delay}ms` } : undefined}
+    >
+      {children}
+    </span>
+  );
 }

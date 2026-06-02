@@ -18,8 +18,8 @@ import { DEPT_HUB_SLUG } from "@/lib/villes/departments";
 /* ── Metadata ────────────────────────────────────────────────────── */
 
 export const metadata: Metadata = buildMetadata({
-  title: "Toutes les villes desservies — Thermolaquage Île-de-France",
-  description: `AZ Époxy intervient dans ${VILLES_FALLBACK.length} communes d'Île-de-France et de l'Oise pour le thermolaquage poudre époxy. Trouvez votre ville et accédez à sa page dédiée — distance, accès, profil local, FAQ, devis.`,
+  title: "Villes desservies — Thermolaquage Île-de-France",
+  description: `${VILLES_FALLBACK.length} communes d'Île-de-France et de l'Oise desservies en thermolaquage poudre époxy. Trouvez votre ville : distance, accès, profil local, devis.`,
   path: "/villes",
   keywords: [
     "thermolaquage Île-de-France",

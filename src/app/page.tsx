@@ -37,10 +37,9 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { averageRating, getReviews } from "@/lib/reviews-data";
 
 export const metadata = buildMetadata({
-  title:
-    "AZ Époxy — Thermolaquage Poudre Époxy Professionnel | 200+ Couleurs RAL",
+  title: "AZ Époxy — Thermolaquage Poudre Époxy en Île-de-France",
   description:
-    "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL & NCS, cabine 7 × 3 × 4 m, service express 48h, 0 COV. Devis gratuit sous 24h.",
+    "Thermolaquage poudre époxy à Bruyères-sur-Oise (95). 200+ teintes RAL & NCS, cabine 7 × 3 × 4 m, express 48h, 0 COV. Devis gratuit sous 24h.",
   path: "/",
 });
 

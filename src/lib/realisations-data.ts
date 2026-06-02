@@ -46,6 +46,36 @@ export function getProjectSlug(p: Project): string {
   return slugify(p.title);
 }
 
+/**
+ * Map id → vrai fichier image (schéma numéroté sur disque). Source de
+ * vérité unique : le sitemap-images, la home et le portfolio doivent
+ * tous passer par `getProjectImage()` au lieu de dériver un nom depuis
+ * le slug du titre (qui ne correspond PAS au nom de fichier réel → 404).
+ */
+export const REALISATION_IMAGES: Record<number, string> = {
+  1: "/images/realisations/01-bmw-m4-noir.webp",
+  2: "/images/realisations/02-audi-rs3-graphite.webp",
+  3: "/images/realisations/03-mercedes-blanc.webp",
+  4: "/images/realisations/04-golf-gti-bicolor.webp",
+  5: "/images/realisations/05-triumph-vert.webp",
+  6: "/images/realisations/06-ducati-rouge.webp",
+  7: "/images/realisations/07-yamaha-noir-or.webp",
+  8: "/images/realisations/08-banquettes-anthracite.webp",
+  9: "/images/realisations/09-table-corten.webp",
+  10: "/images/realisations/10-etageres-blanches.webp",
+  11: "/images/realisations/11-charpente-gris.webp",
+  12: "/images/realisations/12-garde-corps-inox.webp",
+  13: "/images/realisations/13-supports-solaires.webp",
+  14: "/images/realisations/14-portail-coulissant.webp",
+  15: "/images/realisations/15-portail-vert.webp",
+  16: "/images/realisations/16-portail-lames-noir.webp",
+};
+
+/** Retourne le chemin image réel d'un projet (ou undefined si aucun). */
+export function getProjectImage(p: Project): string | undefined {
+  return REALISATION_IMAGES[p.id];
+}
+
 export const PROJECT_CATEGORIES = [
   { key: "all", label: "Tous" },
   { key: "jantes", label: "Jantes" },
