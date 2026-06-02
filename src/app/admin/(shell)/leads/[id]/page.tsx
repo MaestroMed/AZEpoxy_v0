@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
+  FileText,
   Mail,
   MessageSquare,
   Phone,
@@ -53,6 +54,17 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
         }
         actions={
           <div className="flex items-center gap-2">
+            <Link
+              href={`/admin/devis/nouveau?lead=${lead.id}`}
+              className="
+                inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-[#FF7A40] to-[#C84818] px-3.5 py-1.5
+                text-[11px] font-semibold uppercase tracking-[0.12em] text-white
+                shadow-[0_8px_24px_-12px_rgba(232,93,44,0.7)] transition-transform hover:-translate-y-px
+              "
+            >
+              <FileText className="h-3 w-3" />
+              Devis
+            </Link>
             {lead.email && (
               <a
                 href={`mailto:${lead.email}`}
