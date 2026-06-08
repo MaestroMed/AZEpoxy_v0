@@ -32,9 +32,9 @@ import { SITE } from "@/lib/utils";
 import { averageRating, getReviews } from "@/lib/reviews-data";
 
 export const metadata = buildMetadata({
-  title: "Professionnels — Partenariat B2B & Comptes Pros",
+  title: "Sous-traitance thermolaquage industriel & en série",
   description:
-    "AZ Époxy accompagne métalliers, serruriers, chaudronniers, architectes, bureaux d'études, industriels et carrossiers. Tarifs dégressifs, planning dédié, devis cadre, facturation mensuelle. Devis pro sous 24h.",
+    "Sous-traitant thermolaquage pour métalliers, serruriers, chaudronniers et industriels en Île-de-France et Oise. Cabine 7 × 3 × 4 m, four grande capacité, séries cadencées, comptes pro, enlèvement & livraison, qualité selon le référentiel Qualicoat / ISO 12944. Devis cadre sous 24 h.",
   path: "/professionnels",
 });
 

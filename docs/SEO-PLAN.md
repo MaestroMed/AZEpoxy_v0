@@ -48,10 +48,9 @@ Voir l'audit complet : `docs/seo-content/cro_audit.json` (14 findings + 9 trous 
 - [ ] MED — Fusionner / rendre skippable l'étape Couleur (4 → 3 étapes).
 - [ ] ⚠️ Vérifier que WhatsApp fonctionne sur le 09 (sinon ajouter `SITE.whatsapp` mobile ou retirer le bouton).
 
-### 4. Combos géo × service — `[CONTENU PRÊT, à implémenter]`
-30 pages haute intention prêtes : `docs/seo-content/combos_geo_service.json` (jantes × ville + portail × ville sur 15 communes prioritaires).
-- [ ] Créer la route dédiée (`/thermolaquage-jantes-{ville}`, `/thermolaquage-portail-{ville}`) — attention au rewrite `/thermolaquage-:slug` existant (prévoir une route spécifique ou un segment `/specialites/{service}/{ville}`).
-- [ ] Générer les pages depuis les données + les ajouter au sitemap.
+### 4. Combos géo × service — `[FAIT ✅]`
+- [x] **30 pages live** : `/thermolaquage-jantes-{ville}` + `/thermolaquage-portail-{ville}` sur 15 communes (Cergy, Pontoise, Argenteuil, Poissy, Sarcelles…).
+- [x] Route `/combos/[service]/[ville]` + rewrites next.config (avant le générique) + contenu unique par combo (angle local réel + bénéfices/prix + cross-links) + sitemap (priority 0.8).
 
 ### 5. Cluster blog (autorité thématique) — `[CONTENU PRÊT]`
 6 briefs prêts : `docs/seo-content/blog_cluster.json` (prix jantes, sablage vs aérogommage, couleur RAL jantes, prix portail, anticorrosion, durée de vie). Chacun lie vers les money pages.
