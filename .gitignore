@@ -46,3 +46,7 @@ next-env.d.ts
 adapta.zip
 .env*.local
 UsersMehdi*_audit.html
+
+# Lighthouse artifacts
+lh-*.json
+.lighthouseci/
