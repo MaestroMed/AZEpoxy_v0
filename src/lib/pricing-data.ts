@@ -94,7 +94,9 @@ export function estimateWizardPrice(input: {
   let mode: "total" | "perUnit" = "perUnit";
 
   if (pt.slug === "jantes" && pt.sizes) {
-    const pouces = parseInt((input.tailleJantes || "").replace(/\D/g, ""), 10);
+    // tailleJantes est une plage ("15-17 pouces"…) → on prend le PREMIER
+    // nombre (sinon "18-20" → "1820" tombe dans le mauvais palier).
+    const pouces = parseInt((input.tailleJantes || "").match(/\d+/)?.[0] || "0", 10);
     const idx = !pouces ? 0 : pouces <= 17 ? 0 : pouces <= 20 ? 1 : 2;
     base = pt.sizes[idx].range;
     qty = Math.max(1, parseInt(input.nbJantes || "4", 10) || 4);
