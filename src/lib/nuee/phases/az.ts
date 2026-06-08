@@ -143,13 +143,17 @@ const RAL_CYCLE_MS = RAL_DWELL_MS + RAL_BLEND_MS;
 /** Pick two consecutive RAL hues + blend factor based on time. */
 function ralColorAt(timeMs: number): [number, number, number] {
   const n = SAMPLE_POPULAR_ONLY.length;
-  const totalT = timeMs / RAL_CYCLE_MS;
-  const i = Math.floor(totalT) % n;
+  // Garde hot-loop : tableau vide ou temps non-fini (frame d'init / reprise)
+  // produiraient un index NaN → accès `.hex` sur undefined → crash runtime.
+  if (n === 0) return [232, 93, 44]; // fallback orange marque
+  const safeMs = Number.isFinite(timeMs) ? timeMs : 0;
+  const totalT = safeMs / RAL_CYCLE_MS;
+  const i = ((Math.floor(totalT) % n) + n) % n; // modulo positif sûr
   const j = (i + 1) % n;
   const frac = totalT - Math.floor(totalT);      // 0..1 within this slot
   const blendT = Math.max(0, Math.min(1, (frac * RAL_CYCLE_MS - RAL_DWELL_MS) / RAL_BLEND_MS));
-  const c1 = hexToRgb(SAMPLE_POPULAR_ONLY[i].hex);
-  const c2 = hexToRgb(SAMPLE_POPULAR_ONLY[j].hex);
+  const c1 = hexToRgb(SAMPLE_POPULAR_ONLY[i]?.hex ?? "#E85D2C");
+  const c2 = hexToRgb(SAMPLE_POPULAR_ONLY[j]?.hex ?? "#E85D2C");
   return [
     c1[0] + (c2[0] - c1[0]) * blendT,
     c1[1] + (c2[1] - c1[1]) * blendT,

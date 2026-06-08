@@ -20,7 +20,7 @@ const config: Config = {
         // AZ Époxy brand palette
         brand: {
           orange: "#E85D2C", // primary — industrial hot orange (oven heat)
-          "orange-dark": "#C84818",
+          "orange-dark": "#B5420F", // deep ember — AA sur fond clair (≥4.5:1) & blanc dessus
           "orange-light": "#FF7A48",
           night: "#1A1A2E", // secondary — deep night blue
           "night-deep": "#0F0F1A",

@@ -522,7 +522,7 @@ export default async function VillePage({
                         </span>
                       ))}
                     </div>
-                    <span className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-brand-orange transition-colors group-hover:text-brand-orange-dark">
+                    <span className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-brand-orange-dark transition-colors group-hover:text-brand-night">
                       Voir le projet
                       <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                     </span>
