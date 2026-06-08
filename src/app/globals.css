@@ -48,6 +48,17 @@ html.has-custom-cursor textarea {
   80%      { transform: translateY(0); opacity: 0.4; }
 }
 
+/* Entrée hero — transform SEULEMENT (opacity reste 1) pour ne jamais
+   retarder le LCP du texte above-the-fold. Le contenu est peint
+   immédiatement (visible), il se contente de remonter en douceur. */
+@keyframes hero-in {
+  from { transform: translateY(16px); }
+  to   { transform: translateY(0); }
+}
+.animate-hero-in {
+  animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* ── AZ monogram logo — system d'animation multi-couches ─────────────
    Le logo combine 4 animations qui tournent en parallèle pour un effet
    "alive but never noisy". Les easings + durées sont choisis pour ne

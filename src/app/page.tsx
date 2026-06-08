@@ -162,7 +162,10 @@ export default async function HomePage() {
 
         {/* Layer 1: HTML content (above canvas) */}
         <div className="container-wide relative z-10 flex h-[100svh] flex-col justify-center pt-36 pb-20 md:pt-52 pointer-events-none">
-          <ScrollReveal>
+          {/* Hero LCP-critique : rendu visible immédiatement (pas de reveal
+              opacity:0 qui retarde le LCP du texte sur mobile lent). Le
+              mouvement vient de la vidéo de fond, des compteurs et du scroll-hint. */}
+          <div className="motion-safe:animate-hero-in">
             <div className="max-w-4xl">
               <span className="section-label-light">
                 <Flame className="h-3 w-3" />
@@ -193,17 +196,17 @@ export default async function HomePage() {
                 </Link>
               </div>
             </div>
-          </ScrollReveal>
+          </div>
 
           {/* Hero quick stats — animated counters */}
-          <ScrollReveal delay={0.3}>
+          <div className="motion-safe:animate-hero-in [animation-delay:120ms]">
             <div className="relative mt-auto grid grid-cols-2 gap-6 border-t border-white/10 pt-10 sm:grid-cols-4">
               <StatCounter value="200+" label="Couleurs RAL" dark />
               <StatCounter value="7" label="Mètres — cabine max" dark />
               <StatCounter value="48" label="Heures — express" dark />
               <StatCounter value="0" label="COV — sans solvant" dark />
             </div>
-          </ScrollReveal>
+          </div>
         </div>
 
         {/* Scroll hint — subtle nudge at the bottom of the hero. */}
