@@ -173,8 +173,13 @@ async function notifyAdminOfLead(
       )
       .join("");
 
+    // `onboarding@resend.dev` (sandbox) marche avec juste une clé API mais
+    // n'envoie qu'au propriétaire du compte Resend. En prod : vérifier le
+    // domaine azepoxy.fr puis définir RESEND_FROM (ex. "AZ Époxy
+    // <contact@azepoxy.fr>") — aucun changement de code requis.
+    const from = process.env.RESEND_FROM || "AZ Époxy <onboarding@resend.dev>";
     await resend.emails.send({
-      from: "AZ Époxy <onboarding@resend.dev>",
+      from,
       to: [to],
       subject: `🔔 Nouveau lead — ${lead.name}${lead.projectType ? ` · ${lead.projectType}` : ""}`,
       html: `<div style="font-family:Arial,sans-serif;max-width:560px">
