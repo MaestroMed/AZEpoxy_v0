@@ -276,7 +276,7 @@ export function VisualConfigurator() {
               <p className="text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/70">
                 À partir de
               </p>
-              <p className="text-sm font-semibold text-brand-orange">
+              <p className="text-sm font-semibold text-brand-orange-dark">
                 {productOpt.priceFrom}
               </p>
             </div>
@@ -332,9 +332,9 @@ export function VisualConfigurator() {
         <div className="rounded-2xl border border-brand-night/10 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <Palette className="h-4 w-4 text-brand-orange" />
-            <h3 className="heading-display text-sm uppercase tracking-[0.15em] text-brand-night">
+            <h2 className="heading-display text-sm uppercase tracking-[0.15em] text-brand-night">
               Couleur RAL
-            </h3>
+            </h2>
           </div>
           <div className="grid grid-cols-4 gap-2.5">
             {CONFIGURATOR_PALETTE.map((c) => {
@@ -368,7 +368,7 @@ export function VisualConfigurator() {
           </div>
           <Link
             href="/couleurs-ral"
-            className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-brand-orange transition-colors hover:text-brand-night"
+            className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-brand-orange-dark transition-colors hover:text-brand-night"
           >
             Voir les 213 couleurs RAL
             <ArrowRight className="h-3 w-3" />
@@ -379,9 +379,9 @@ export function VisualConfigurator() {
         <div className="rounded-2xl border border-brand-night/10 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-brand-orange" />
-            <h3 className="heading-display text-sm uppercase tracking-[0.15em] text-brand-night">
+            <h2 className="heading-display text-sm uppercase tracking-[0.15em] text-brand-night">
               Finition
-            </h3>
+            </h2>
           </div>
           <div className="flex flex-col gap-2">
             {FINISHES.map((f) => {
@@ -403,7 +403,7 @@ export function VisualConfigurator() {
                     <p
                       className={cn(
                         "font-semibold",
-                        active ? "text-brand-orange" : "text-brand-night",
+                        active ? "text-brand-orange-dark" : "text-brand-night",
                       )}
                     >
                       {f.label}

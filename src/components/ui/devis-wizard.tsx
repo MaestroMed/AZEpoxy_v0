@@ -279,15 +279,15 @@ export function DevisWizard() {
                   idx < step && "cursor-pointer"
                 )}
                 aria-current={active ? "step" : undefined}
-                aria-label={`Étape ${idx} : ${label}`}
+                aria-label={`Étape ${idx} ${label}`}
               >
                 <span
                   className={cn(
                     "relative flex h-9 w-9 items-center justify-center rounded-full font-mono text-sm font-bold tabular-nums transition-all duration-300 sm:h-10 sm:w-10",
                     active &&
-                      "bg-brand-orange text-white shadow-[0_0_0_4px_rgba(232,93,44,0.18),0_8px_20px_-8px_rgba(232,93,44,0.5)]",
+                      "bg-brand-orange-dark text-white shadow-[0_0_0_4px_rgba(232,93,44,0.18),0_8px_20px_-8px_rgba(232,93,44,0.5)]",
                     completed &&
-                      "bg-brand-orange/15 text-brand-orange ring-1 ring-brand-orange/30 group-hover:bg-brand-orange/25",
+                      "bg-brand-orange/15 text-brand-orange-dark ring-1 ring-brand-orange/30 group-hover:bg-brand-orange/25",
                     !active &&
                       !completed &&
                       "bg-brand-night/5 text-brand-charcoal/70 ring-1 ring-brand-night/10"
@@ -340,7 +340,7 @@ export function DevisWizard() {
             {/* Step 1 — Type */}
             {step === 1 && (
               <div>
-                <h3 className="heading-display text-xl text-brand-night mb-2">Quel est votre projet ?</h3>
+                <h2 className="heading-display text-xl text-brand-night mb-2">Quel est votre projet ?</h2>
                 <p className="text-sm text-brand-charcoal/70 mb-6">Sélectionnez le type de pièce à traiter.</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {PROJECT_TYPES.map(({ slug, label, Icon }) => (
@@ -364,7 +364,7 @@ export function DevisWizard() {
             {/* Step 2 — Details */}
             {step === 2 && (
               <div className="space-y-5">
-                <h3 className="heading-display text-xl text-brand-night mb-2">Détails du projet</h3>
+                <h2 className="heading-display text-xl text-brand-night mb-2">Détails du projet</h2>
 
                 {data.projectType === "jantes" && (
                   <>
@@ -474,7 +474,7 @@ export function DevisWizard() {
             {/* Step 3 — Color */}
             {step === 3 && (
               <div className="space-y-6">
-                <h3 className="heading-display text-xl text-brand-night mb-2">Choisissez votre couleur</h3>
+                <h2 className="heading-display text-xl text-brand-night mb-2">Choisissez votre couleur</h2>
                 <div>
                   <label className={labelClass}>Couleur RAL</label>
                   <div className="grid grid-cols-7 gap-2">
@@ -539,7 +539,7 @@ export function DevisWizard() {
             {/* Step 4 — Contact + Recap */}
             {step === 4 && (
               <form onSubmit={handleSubmit} className="space-y-5">
-                <h3 className="heading-display text-xl text-brand-night mb-2">Vos coordonnées</h3>
+                <h2 className="heading-display text-xl text-brand-night mb-2">Vos coordonnées</h2>
 
                 {/* Honeypot */}
                 <div className="absolute -left-[9999px]" aria-hidden="true">

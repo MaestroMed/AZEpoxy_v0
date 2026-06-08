@@ -120,7 +120,7 @@ export function BeforeAfter({
         </span>
         <span
           className={cn(
-            "absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-brand-orange px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-lg shadow-brand-orange/40 transition-opacity duration-300",
+            "absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-brand-orange-dark px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-lg shadow-brand-orange/40 transition-opacity duration-300",
             pct > 90 ? "opacity-0" : "opacity-100"
           )}
         >

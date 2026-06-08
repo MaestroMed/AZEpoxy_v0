@@ -252,7 +252,7 @@ export function RalPickerSection() {
                 <Link
                   href={`/devis?ral=${cart.join(",")}`}
                   data-magnetic
-                  className="group/cta relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-orange/35 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-orange/50"
+                  className="group/cta relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-brand-orange-dark px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-orange/35 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-orange/50"
                 >
                   <span
                     aria-hidden

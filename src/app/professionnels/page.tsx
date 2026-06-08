@@ -189,7 +189,7 @@ export default async function ProfessionnelsPage() {
         <div className="flex flex-wrap gap-4">
           <Link
             href="/devis"
-            className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-8 py-4 font-semibold text-white shadow-xl shadow-brand-orange/30 transition-all hover:bg-brand-orange-dark hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-orange-dark px-8 py-4 font-semibold text-white shadow-xl shadow-brand-orange/30 transition-all hover:bg-[#8B2E0A] hover:-translate-y-0.5"
           >
             Ouvrir un compte pro
             <ArrowRight className="h-4 w-4" />
