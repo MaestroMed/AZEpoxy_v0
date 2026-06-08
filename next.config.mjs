@@ -45,7 +45,13 @@ const nextConfig = {
   // internally; we rewrite /thermolaquage-{slug} ↔ /villes/{slug}
   // so the public URL stays SEO-friendly without a real folder prefix.
   async rewrites() {
+    // Ordre = priorité (premier match gagne). Les combos service×ville
+    // (/thermolaquage-jantes-{ville}, /thermolaquage-portail-{ville}) DOIVENT
+    // précéder le rewrite ville générique, sinon "jantes-cergy" serait traité
+    // comme un slug de ville inexistant.
     return [
+      { source: "/thermolaquage-jantes-:ville", destination: "/combos/jantes/:ville" },
+      { source: "/thermolaquage-portail-:ville", destination: "/combos/portail/:ville" },
       { source: "/thermolaquage-:slug", destination: "/villes/:slug" },
     ];
   },

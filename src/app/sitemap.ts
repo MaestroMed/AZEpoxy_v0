@@ -5,6 +5,7 @@ import { getBlogArticles } from "@/lib/blog-data";
 import { RAL_COLORS } from "@/lib/ral-colors";
 import { getProjectSlug } from "@/lib/realisations-data";
 import { getProjects } from "@/lib/realisations-server";
+import { COMBOS } from "@/lib/combos-data";
 
 const BASE = "https://www.azepoxy.fr";
 
@@ -87,10 +88,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
+  // Combos service × ville — haute intention commerciale locale.
+  const comboPages: MetadataRoute.Sitemap = COMBOS.map((c) => ({
+    url: `${BASE}/thermolaquage-${c.service}-${c.villeSlug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
   return [
     ...staticPages,
     ...deptPages,
     ...villePages,
+    ...comboPages,
     ...blogPages,
     ...realisationPages,
     ...ralPages,
