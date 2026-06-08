@@ -164,7 +164,7 @@ export default async function BlogArticlePage({
             <div className="mt-8 text-center">
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-orange hover:underline"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-brand-orange-dark hover:underline"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Retour au blog

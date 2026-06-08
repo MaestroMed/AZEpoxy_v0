@@ -233,7 +233,7 @@ export function DevisWizard() {
           <button
             type="button"
             onClick={resetDraft}
-            className="font-semibold text-brand-orange hover:underline"
+            className="font-semibold text-brand-orange-dark hover:underline"
           >
             Recommencer à zéro
           </button>
@@ -502,7 +502,7 @@ export function DevisWizard() {
                       Je ne sais pas encore
                     </button>
                     <span className="text-brand-charcoal/30">·</span>
-                    <a href="/couleurs-ral" target="_blank" className="text-sm text-brand-orange hover:underline">
+                    <a href="/couleurs-ral" target="_blank" className="text-sm text-brand-orange-dark hover:underline">
                       Voir les 200+ couleurs →
                     </a>
                   </div>

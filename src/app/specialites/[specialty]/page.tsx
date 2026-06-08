@@ -440,7 +440,7 @@ export default async function SpecialtyPage({
           <p className="mt-6 text-sm text-brand-charcoal/70">
             <Link
               href="/couleurs-ral"
-              className="inline-flex items-center gap-1 font-semibold text-brand-orange hover:underline"
+              className="inline-flex items-center gap-1 font-semibold text-brand-orange-dark hover:underline"
             >
               Explorer le nuancier complet
               <ArrowRight className="h-3 w-3" />

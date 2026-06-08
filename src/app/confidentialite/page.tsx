@@ -134,7 +134,7 @@ const SECTIONS = [
           Pour exercer ces droits, contactez-nous par email à{" "}
           <a
             href="mailto:contact@azepoxy.fr"
-            className="text-brand-orange hover:underline font-medium"
+            className="text-brand-orange-dark hover:underline font-medium"
           >
             contact@azepoxy.fr
           </a>{" "}
@@ -182,7 +182,7 @@ const SECTIONS = [
             Par email :{" "}
             <a
               href="mailto:contact@azepoxy.fr"
-              className="text-brand-orange hover:underline font-medium"
+              className="text-brand-orange-dark hover:underline font-medium"
             >
               contact@azepoxy.fr
             </a>
