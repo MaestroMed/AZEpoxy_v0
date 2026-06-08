@@ -30,7 +30,16 @@ export function NarrativeSwarm() {
     // Respect the user's reduced-motion preference outright — no WebGL, no
     // render loop. The canvas simply stays blank.
     const prefersReduced = matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-    if (prefersReduced) {
+
+    // Perf mobile : la nuée est pilotée à la souris (inutile au tactile) et
+    // sature le main-thread WebGL sur CPU mobile, retardant le LCP du hero.
+    // On la saute sur les appareils à pointeur grossier (téléphones/tablettes)
+    // ou très petit viewport. Le desktop garde l'expérience complète.
+    const isTouchOrSmall =
+      matchMedia?.("(pointer: coarse)")?.matches === true ||
+      matchMedia?.("(max-width: 768px)")?.matches === true;
+
+    if (prefersReduced || isTouchOrSmall) {
       setPaused(true);
       return;
     }

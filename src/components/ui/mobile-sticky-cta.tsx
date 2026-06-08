@@ -38,7 +38,10 @@ export function MobileStickyCta() {
 
   return (
     <div
-      aria-hidden={!visible}
+      // `inert` (React 19) retire la barre du tab-order ET de l'arbre a11y
+      // quand elle est masquée → évite l'erreur aria-hidden-focus (liens
+      // focusables sous un conteneur masqué). Réactive tout quand visible.
+      inert={!visible}
       className={cn(
         "fixed inset-x-0 bottom-0 z-40 flex items-stretch gap-px border-t border-white/10 bg-brand-night/95 backdrop-blur-xl shadow-[0_-12px_32px_rgba(0,0,0,0.3)] transition-[transform,opacity] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden",
         visible
@@ -85,7 +88,7 @@ export function MobileStickyCta() {
             label: "Devis",
           })
         }
-        className="group/devis relative flex flex-1 items-center justify-center gap-2 overflow-hidden bg-brand-orange px-3 py-3.5 text-sm font-semibold text-white active:bg-brand-orange-dark"
+        className="group/devis relative flex flex-1 items-center justify-center gap-2 overflow-hidden bg-brand-orange-dark px-3 py-3.5 text-sm font-semibold text-white active:bg-[#8B2E0A]"
       >
         {/* Sheen */}
         <span

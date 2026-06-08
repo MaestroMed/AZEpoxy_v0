@@ -148,11 +148,12 @@ export function RalPickerSection() {
             <button
               onClick={() => setCartOpen(!cartOpen)}
               aria-expanded={cartOpen}
+              aria-label="Ma sélection"
               data-magnetic
               className={cn(
                 "group relative flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-semibold transition-all duration-300",
                 cart.length > 0
-                  ? "border-brand-orange bg-brand-orange/10 text-brand-orange shadow-[0_6px_18px_-10px_rgba(232,93,44,0.45)] hover:bg-brand-orange/15"
+                  ? "border-brand-orange bg-brand-orange/10 text-brand-orange-dark shadow-[0_6px_18px_-10px_rgba(232,93,44,0.45)] hover:bg-brand-orange/15"
                   : "border-brand-night/15 bg-white text-brand-charcoal/75 hover:border-brand-night/30 hover:text-brand-night",
               )}
             >
