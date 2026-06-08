@@ -123,6 +123,15 @@ export default async function HomePage() {
   const reviewsAvg = averageRating(reviews);
   return (
     <>
+      {/* Préchargement du poster hero (élément LCP) en haute priorité —
+          Next hoiste ce <link> dans le <head>. Poster léger (50KB, 1920px)
+          → peint tôt, avant que la vidéo .mp4 (1.7MB) ne se charge. */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero/hero-poster.webp"
+        fetchPriority="high"
+      />
       {/* ExitIntentModal désactivé pour l'instant — popup trop intrusif
           pendant la phase de design. À réactiver au lancement. */}
       {/* <ExitIntentModal /> */}
