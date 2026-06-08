@@ -1,11 +1,10 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export type RevealVariant = "fade" | "slide" | "scale" | "blur" | "rise";
 export type RevealDirection = "up" | "down" | "left" | "right";
-
 type RevealTag = "div" | "li" | "span";
 
 interface RevealProps {
@@ -16,30 +15,26 @@ interface RevealProps {
   duration?: number;
   className?: string;
   once?: boolean;
-  /** Élément HTML rendu — utile pour préserver la sémantique (ex. `li` dans une `ol`/`ul`). */
+  /** Élément HTML rendu — utile pour préserver la sémantique (ex. `li`). */
   as?: RevealTag;
 }
 
-const offsets: Record<RevealDirection, { x: number; y: number }> = {
-  up: { x: 0, y: 30 },
-  down: { x: 0, y: -30 },
-  left: { x: -30, y: 0 },
-  right: { x: 30, y: 0 },
-};
-
-// Award-tier easing — smooth stop without overshoot.
-const EASE_OUT_EXPO: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
 /**
- * On-scroll reveal. Five variants :
- *   • "slide" (default, back-compat) — offset slide + fade
- *   • "fade"  — pure opacity, zero movement
- *   • "scale" — scale 0.92 → 1 + fade (cards, features)
- *   • "blur"  — blur 12px → 0 + opacity (poetic, text)
- *   • "rise"  — big y offset + scale + fade (hero sub-elements)
+ * Reveal on-scroll — implémenté en IntersectionObserver + CSS (pas de
+ * framer-motion).
  *
- * All variants respect prefers-reduced-motion by rendering static.
- * Uses ease-out-expo cubic for the Awwwards-grade smooth stop.
+ * Pourquoi : framer-motion `whileInView` lit la géométrie (getBoundingClientRect)
+ * de chaque élément au montage → reflow synchrone × N éléments = layout
+ * thrashing (≈1.4s de styleLayout sur l'accueil mobile, qui retardait le LCP).
+ * L'IntersectionObserver est asynchrone et hors main-thread : zéro thrash.
+ *
+ * Robustesse (jamais bloqué invisible) :
+ *   • reduced-motion → visible, sans animation (CSS)
+ *   • JS désactivé   → <noscript> dans le layout révèle tout
+ *   • IO en échec / onglet en arrière-plan → filet setTimeout 1.6s
+ *
+ * Le style initial (opacity:0 + transform) vit en CSS (.az-reveal dans
+ * globals.css), piloté par les attributs data-* ci-dessous.
  */
 export function Reveal({
   children,
@@ -51,59 +46,52 @@ export function Reveal({
   once = true,
   as = "div",
 }: RevealProps) {
-  const reduce = useReducedMotion();
-  if (reduce) {
-    const Tag = as;
-    return <Tag className={cn(className)}>{children}</Tag>;
-  }
-  const MotionTag = m[as];
+  const ref = useRef<HTMLElement | null>(null);
+  const [shown, setShown] = useState(false);
 
-  const offset = offsets[direction];
-  let initial: Record<string, number | string>;
-  let animate: Record<string, number | string>;
-  let defaultDuration = 0.6;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setShown(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setShown(true);
+            if (once) io.disconnect();
+          } else if (!once) {
+            setShown(false);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -80px 0px", threshold: 0.15 },
+    );
+    io.observe(el);
+    const safety = setTimeout(() => setShown(true), 1600);
+    return () => {
+      io.disconnect();
+      clearTimeout(safety);
+    };
+  }, [once]);
 
-  switch (variant) {
-    case "fade":
-      initial = { opacity: 0 };
-      animate = { opacity: 1 };
-      defaultDuration = 0.55;
-      break;
-    case "scale":
-      initial = { opacity: 0, scale: 0.92 };
-      animate = { opacity: 1, scale: 1 };
-      defaultDuration = 0.7;
-      break;
-    case "blur":
-      initial = { opacity: 0, filter: "blur(12px)" };
-      animate = { opacity: 1, filter: "blur(0px)" };
-      defaultDuration = 0.75;
-      break;
-    case "rise":
-      initial = { opacity: 0, y: 50, scale: 0.96 };
-      animate = { opacity: 1, y: 0, scale: 1 };
-      defaultDuration = 0.8;
-      break;
-    case "slide":
-    default:
-      initial = { opacity: 0, x: offset.x, y: offset.y };
-      animate = { opacity: 1, x: 0, y: 0 };
-      defaultDuration = 0.6;
-  }
+  const Tag = as as "div";
+  const style: React.CSSProperties = {};
+  if (delay) style.transitionDelay = `${delay}s`;
+  if (duration) style.transitionDuration = `${duration}s`;
 
   return (
-    <MotionTag
-      initial={initial}
-      whileInView={animate}
-      viewport={{ once, margin: "-80px", amount: 0.2 }}
-      transition={{
-        duration: duration ?? defaultDuration,
-        delay,
-        ease: EASE_OUT_EXPO,
-      }}
-      className={cn(className)}
+    <Tag
+      ref={ref as React.Ref<HTMLDivElement>}
+      data-reveal={variant}
+      data-dir={direction}
+      data-shown={shown ? "true" : "false"}
+      style={style}
+      className={cn("az-reveal", className)}
     >
       {children}
-    </MotionTag>
+    </Tag>
   );
 }

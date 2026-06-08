@@ -59,6 +59,38 @@ html.has-custom-cursor textarea {
   animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* ── Reveal on-scroll (IntersectionObserver + CSS, voir Reveal.tsx) ──────
+   État initial caché en CSS, révélé via data-shown="true". Pas de
+   getBoundingClientRect synchrone (contrairement à framer whileInView) →
+   pas de layout thrashing. */
+.az-reveal {
+  opacity: 0;
+  transition-property: opacity, transform, filter;
+  transition-duration: 0.65s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+.az-reveal[data-reveal="slide"][data-dir="up"] { transform: translateY(30px); }
+.az-reveal[data-reveal="slide"][data-dir="down"] { transform: translateY(-30px); }
+.az-reveal[data-reveal="slide"][data-dir="left"] { transform: translateX(-30px); }
+.az-reveal[data-reveal="slide"][data-dir="right"] { transform: translateX(30px); }
+.az-reveal[data-reveal="scale"] { transform: scale(0.92); }
+.az-reveal[data-reveal="rise"] { transform: translateY(50px) scale(0.96); }
+.az-reveal[data-reveal="blur"] { filter: blur(12px); }
+.az-reveal[data-reveal="fade"] { transform: none; }
+.az-reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .az-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
 /* ── AZ monogram logo — system d'animation multi-couches ─────────────
    Le logo combine 4 animations qui tournent en parallèle pour un effet
    "alive but never noisy". Les easings + durées sont choisis pour ne
