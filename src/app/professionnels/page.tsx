@@ -30,6 +30,9 @@ import { CtaBand } from "@/components/ui/cta-band";
 import { ReviewsCarousel } from "@/components/ui/reviews-carousel";
 import { SITE } from "@/lib/utils";
 import { averageRating, getReviews } from "@/lib/reviews-data";
+import { JsonLd } from "@/components/seo/json-ld";
+import { faqPageLd } from "@/lib/jsonld";
+import { FAQAccordion } from "@/components/ui/faq-accordion";
 
 export const metadata = buildMetadata({
   title: "Sous-traitance thermolaquage industriel & en série",
@@ -160,6 +163,37 @@ const CAPACITIES = [
   "Service express 48h sur demande",
   "Traitement anti-corrosion C5 disponible",
   "Zone de contrôle qualité dédiée",
+];
+
+const PROS_FAQS = [
+  {
+    question: "Faites-vous de la sous-traitance de thermolaquage pour les métalliers et chaudronniers ?",
+    answer: "Oui, c'est notre cœur de métier B2B. Nous prenons en charge le thermolaquage de vos pièces et ensembles métalliques — garde-corps, portails, escaliers, châssis, structures chaudronnées — à l'unité comme en série. Notre cabine 7 × 3 × 4 m et notre four grande capacité sont dimensionnés pour les grandes longueurs et les ouvrages volumineux. Demandez un devis cadre pour fixer vos conditions sur l'année."
+  },
+  {
+    question: "Quelle est votre capacité pour le thermolaquage en série ?",
+    answer: "Notre atelier de 1 800 m² à Bruyères-sur-Oise (95820) intègre une cabine de thermolaquage 7 × 3 × 4 m, un four de polymérisation grande capacité et une zone de contrôle qualité dédiée. Nous traitons des séries moyennes à grandes avec des créneaux de production réservés pour nos comptes pro, et un service express 48 h pour les urgences. Parlons de vos cadences pour caler un planning contractuel."
+  },
+  {
+    question: "Comment garantissez-vous la qualité constante d'un lot à l'autre ?",
+    answer: "Nous appliquons une procédure de préparation et d'application maîtrisée — dégraissage, sablage, accrochage, application poudre, polymérisation four, contrôle d'épaisseur — suivant le référentiel Qualicoat / ISO 12944. Nous utilisons exclusivement des poudres neuves certifiées de qualité architecturale et un contrôle d'épaisseur systématique, pour une teinte et une tenue identiques de la première à la dernière pièce. La durée et la température de cuisson sont ajustées à chaque pièce."
+  },
+  {
+    question: "Proposez-vous des tarifs dégressifs et un compte pro ?",
+    answer: "Oui. Nous ouvrons un compte client avec grille tarifaire B2B dégressive sur volumes, devis cadre négocié à l'année, facturation mensuelle groupée et règlement à 30 jours net. Une fois le devis cadre signé, vos commandes passent par bon simplifié, sans re-devis à chaque lot. Les prix publics restent indicatifs (à partir de X €) : votre tarif partenaire est arrêté dans le devis cadre."
+  },
+  {
+    question: "Assurez-vous l'enlèvement et la livraison de nos pièces ?",
+    answer: "Oui, nous proposons un service de collecte et de restitution sur votre site en Île-de-France et dans l'Oise, avec conditionnement soigné et transport sécurisé. Vous externalisez le laquage sans mobiliser votre logistique. Pour les pièces non démontables, une intervention sur chantier est possible selon les cas."
+  },
+  {
+    question: "Respectez-vous les normes Qualicoat et ISO 12944 ?",
+    answer: "Nous travaillons selon le référentiel Qualicoat et la norme ISO 12944, avec un traitement anti-corrosion disponible jusqu'en catégorie C5 et un primaire d'accrochage époxy sans zinc ni plomb. Nous ne portons pas le label Qualicoat : nous en suivons les exigences de préparation, d'application et de contrôle, et nous fournissons un reporting qualité sur demande pour vos dossiers d'ouvrage."
+  },
+  {
+    question: "Quel délai pour ouvrir un compte et démarrer la production ?",
+    answer: "Après la prise de contact et la validation du devis cadre, l'ouverture de compte (KBIS, RIB, attestations, conditions de paiement) se finalise sous 5 jours ouvrés. Notre équipe revient vers vous sous 24 h ouvrées après votre demande pour qualifier vos volumes et bâtir une grille tarifaire adaptée."
+  }
 ];
 
 export default async function ProfessionnelsPage() {
@@ -495,6 +529,30 @@ export default async function ProfessionnelsPage() {
       </section>
 
       {/* ── CTA ────────────────────────────────────────── */}
+      {/* ── FAQ B2B + schema FAQPage ─────────────────────────────── */}
+      <section className="bg-brand-cream py-24">
+        <div className="container-wide">
+          <ScrollReveal>
+            <SectionHeader
+              label="Questions fréquentes"
+              title={
+                <>
+                  Sous-traitance thermolaquage —{" "}
+                  <span className="bg-gradient-ember bg-clip-text text-transparent">
+                    vos questions
+                  </span>
+                </>
+              }
+              description="Capacité, séries, comptes pro, qualité, logistique : tout ce que les métalliers, serruriers, chaudronniers et industriels nous demandent."
+            />
+          </ScrollReveal>
+          <div className="mx-auto mt-12 max-w-3xl">
+            <FAQAccordion items={PROS_FAQS} />
+          </div>
+        </div>
+      </section>
+      <JsonLd id="ld-faq-professionnels" data={faqPageLd(PROS_FAQS)} />
+
       <CtaBand
         title="Un volume récurrent à thermolaquer ?"
         description="Ouvrez un compte pro et bénéficiez de tarifs dégressifs, créneaux réservés et facturation mensuelle."
