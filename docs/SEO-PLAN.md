@@ -41,8 +41,8 @@ Voir l'audit complet : `docs/seo-content/cro_audit.json` (14 findings + 9 trous 
 - [x] **Champ « Comment nous avez-vous trouvé ? » retiré** (friction).
 - [x] **CTA secondaires sur l'écran de succès** (Appeler + Voir réalisations).
 - [x] **Barre de réassurance sur `/devis`** (atelier, particuliers & pros, 24 h, IDF+Oise).
-- [ ] **HIGH — Fourchette de prix live dans le wizard** (réutiliser `pricing-data.ts`).
-- [ ] **HIGH — Notification temps réel du lead** (SMS/WhatsApp au gérant via `LEAD_WEBHOOK_URL` — speed-to-lead < 5 min).
+- [x] **Fourchette de prix live dans le wizard** (helper `estimateWizardPrice`, étape Détails).
+- [x] **Speed-to-lead** : webhook enrichi (`summary` prêt SMS/WhatsApp + `callUrl` tel:) + téléphone/email cliquables dans l'email admin. *(Reste à toi : brancher `LEAD_WEBHOOK_URL` → SMS via Make/Zapier.)*
 - [ ] MED — Brancher la vraie note Google sur la barre de réassurance (quand avis GBP en place).
 - [ ] MED — Lien téléphone cliquable visible dès le hero/header desktop.
 - [ ] MED — POST `/api/devis` : persister le lead AVANT d'envoyer les emails (découpler de la latence Resend).
