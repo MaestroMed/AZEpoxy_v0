@@ -4,7 +4,7 @@ import { useCallback, useState, useEffect, useRef, type FormEvent } from "react"
 import { useSearchParams } from "next/navigation";
 import { m, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Check, CircleDot, Bike, DoorOpen, Armchair, Factory, Package } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, SITE } from "@/lib/utils";
 import { POPULAR_RAL, RAL_COLORS } from "@/lib/ral-colors";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { TurnstileWidget } from "@/components/ui/turnstile";
@@ -85,6 +85,7 @@ export function DevisWizard() {
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [draftRestored, setDraftRestored] = useState(false);
   const submittedRef = useRef(false);
+  const startedRef = useRef(false);
   const searchParams = useSearchParams();
 
   const handleTurnstile = useCallback((token: string | null) => {
@@ -138,17 +139,41 @@ export function DevisWizard() {
       const draft = loadDevisDraft();
       if (draft) reportAbandonedDevis(draft);
     };
+    // `pagehide` complète `visibilitychange` : sur mobile (Safari iOS), la
+    // page peut se masquer sans visibilitychange → sinon abandon non capté.
     document.addEventListener("visibilitychange", handler);
-    return () => document.removeEventListener("visibilitychange", handler);
+    window.addEventListener("pagehide", handler);
+    return () => {
+      document.removeEventListener("visibilitychange", handler);
+      window.removeEventListener("pagehide", handler);
+    };
   }, []);
 
   const set = (field: keyof FormData, value: string | boolean) =>
     setData((d) => ({ ...d, [field]: value }));
 
-  const next = () => { setDirection(1); setStep((s) => Math.min(s + 1, 4)); };
-  const prev = () => { setDirection(-1); setStep((s) => Math.max(s - 1, 1)); };
+  const next = () => {
+    setDirection(1);
+    setStep((s) => {
+      const ns = Math.min(s + 1, 4);
+      if (ns !== s) track("form_step", { variant: "wizard", step: ns, label: STEPS[ns - 1] });
+      return ns;
+    });
+  };
+  const prev = () => {
+    setDirection(-1);
+    setStep((s) => {
+      const ps = Math.max(s - 1, 1);
+      if (ps !== s) track("form_step", { variant: "wizard", step: ps, label: STEPS[ps - 1] });
+      return ps;
+    });
+  };
 
   const selectType = (slug: string) => {
+    if (!startedRef.current) {
+      startedRef.current = true;
+      track("form_start", { variant: "wizard" });
+    }
     set("projectType", slug);
     next();
   };
@@ -173,7 +198,7 @@ export function DevisWizard() {
         : data.description);
       fd.append("dimensions", data.dimensions || `${data.largeur}×${data.hauteur}`);
       fd.append("ral", data.selectedRal || "Non défini");
-      const msg = `Finition: ${data.finition}\nSource: ${data.source || "Non renseigné"}\nAdresse: ${data.address || "Non renseignée"}`;
+      const msg = `Finition: ${data.finition}\nAdresse: ${data.address || "Non renseignée"}`;
       fd.append("message", msg);
       for (const photo of photos) fd.append("photos", photo);
       if (turnstileToken) fd.set("turnstileToken", turnstileToken);
@@ -196,6 +221,10 @@ export function DevisWizard() {
       }
     } catch (err) {
       setStatus("error");
+      track("form_error", {
+        variant: "wizard",
+        reason: err instanceof Error ? err.message : "unknown",
+      });
       setErrorMsg(err instanceof Error ? err.message : "Erreur. Appelez-nous au 09 71 35 74 96.");
     }
   };
@@ -210,6 +239,26 @@ export function DevisWizard() {
         <p className="mt-3 text-brand-charcoal/70 max-w-md mx-auto">
           Nous avons bien reçu votre demande de devis. Notre équipe vous recontactera sous 24h avec un chiffrage personnalisé.
         </p>
+        <div className="mt-7 border-t border-brand-success/20 pt-6">
+          <p className="text-sm font-semibold text-brand-night">
+            Besoin d&apos;une réponse immédiate ?
+          </p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={SITE.phoneHref}
+              onClick={() => track("cta_click", { placement: "devis_success", target: SITE.phoneHref, label: "Appeler" })}
+              className="inline-flex items-center gap-2 rounded-full bg-brand-orange-dark px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:-translate-y-px"
+            >
+              Appeler le {SITE.phone}
+            </a>
+            <a
+              href="/realisations"
+              className="inline-flex items-center gap-2 rounded-full border border-brand-night/15 px-5 py-2.5 text-sm font-semibold text-brand-night transition-colors hover:border-brand-night/40"
+            >
+              Voir nos réalisations
+            </a>
+          </div>
+        </div>
       </div>
     );
   }
@@ -459,6 +508,25 @@ export function DevisWizard() {
                   <PhotoUpload files={photos} onChange={setPhotos} />
                 </div>
 
+                {/* Email capturé tôt : permet la relance si l'utilisateur
+                    abandonne avant l'étape finale (90 % des abandons sinon
+                    perdus sans coordonnée). */}
+                <div className="rounded-xl border border-brand-orange/20 bg-brand-orange/[0.04] p-4">
+                  <label className={labelClass}>
+                    Votre email{" "}
+                    <span className="font-normal text-brand-charcoal/70">
+                      — pour recevoir votre estimation et reprendre votre demande
+                    </span>
+                  </label>
+                  <input
+                    value={data.email}
+                    onChange={(e) => set("email", e.target.value)}
+                    type="email"
+                    placeholder="jean@exemple.fr"
+                    className={inputClass}
+                  />
+                </div>
+
                 <div className="flex justify-between pt-4">
                   <button type="button" onClick={prev} className="inline-flex items-center gap-2 rounded-full border border-brand-night/15 px-6 py-3 text-sm font-semibold text-brand-night hover:bg-brand-cream">
                     <ArrowLeft className="h-4 w-4" /> Retour
@@ -561,16 +629,8 @@ export function DevisWizard() {
                   <label className={labelClass}>Adresse <span className="font-normal text-brand-charcoal/70">(optionnel)</span></label>
                   <input value={data.address} onChange={(e) => set("address", e.target.value)} placeholder="Pour estimer la livraison" className={inputClass} />
                 </div>
-                <div>
-                  <label className={labelClass}>Comment nous avez-vous trouvé ? <span className="font-normal text-brand-charcoal/70">(optionnel)</span></label>
-                  <select value={data.source} onChange={(e) => set("source", e.target.value)} className={cn(inputClass, "appearance-none")}>
-                    <option value="">— Sélectionner —</option>
-                    <option value="google">Google</option>
-                    <option value="bouche-a-oreille">Bouche-à-oreille</option>
-                    <option value="reseaux-sociaux">Réseaux sociaux</option>
-                    <option value="autre">Autre</option>
-                  </select>
-                </div>
+                {/* Champ "Comment nous avez-vous trouvé ?" retiré : friction au
+                    pire moment du funnel, info mesurée bien mieux via GA4/UTM. */}
 
                 {/* Recap */}
                 <div className="rounded-xl bg-brand-cream p-5 space-y-2">

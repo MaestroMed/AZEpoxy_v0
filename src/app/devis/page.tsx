@@ -82,6 +82,16 @@ export default function DevisPage() {
       {/* ── Wizard Section ────────────────────────────────── */}
       <section className="bg-brand-cream bg-industrial-grid py-24">
         <div className="container-wide max-w-3xl mx-auto">
+          {/* Barre de réassurance au point de conversion */}
+          <div className="mb-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-sm text-brand-charcoal/75">
+            <span className="font-semibold text-brand-night">Atelier 1 800 m² · Bruyères-sur-Oise</span>
+            <span className="hidden h-3 w-px bg-brand-night/15 sm:inline-block" />
+            <span>Particuliers &amp; professionnels</span>
+            <span className="hidden h-3 w-px bg-brand-night/15 sm:inline-block" />
+            <span>Devis gratuit sous 24 h</span>
+            <span className="hidden h-3 w-px bg-brand-night/15 sm:inline-block" />
+            <span>Enlèvement &amp; livraison IDF + Oise</span>
+          </div>
           <ScrollReveal>
             <Suspense
               fallback={

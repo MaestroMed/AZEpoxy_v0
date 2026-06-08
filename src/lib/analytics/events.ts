@@ -24,7 +24,8 @@ type CtaPlacement =
   | "gallery"
   | "services"
   | "specialite"
-  | "whatsapp_float";
+  | "whatsapp_float"
+  | "devis_success";
 
 export interface AnalyticsEvents {
   cta_click: {
