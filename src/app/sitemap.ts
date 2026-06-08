@@ -2,14 +2,18 @@ import type { MetadataRoute } from "next";
 import { getVilles } from "@/lib/villes-data";
 import { allDeptHubSlugs } from "@/lib/villes/departments";
 import { getBlogArticles } from "@/lib/blog-data";
+import { RAL_COLORS } from "@/lib/ral-colors";
+import { getProjectSlug } from "@/lib/realisations-data";
+import { getProjects } from "@/lib/realisations-server";
 
 const BASE = "https://www.azepoxy.fr";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const [villes, articles] = await Promise.all([
+  const [villes, articles, projects] = await Promise.all([
     getVilles(),
     getBlogArticles(),
+    getProjects(),
   ]);
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -24,7 +28,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/couleurs-ral/polaris`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/couleurs-ral/dichroic`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/couleurs-ral/sfera`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${BASE}/specialites/jantes`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/specialites/jantes`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE}/specialites/portail`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE}/specialites/sablage-aerogommage`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/specialites/moto`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/specialites/voiture`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/specialites/pieces`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
@@ -64,5 +70,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  return [...staticPages, ...deptPages, ...villePages, ...blogPages];
+  // Fiches teintes RAL (long-tail "thermolaquage RAL xxxx") — priorité basse
+  // pour que Google priorise les money pages, mais soumises pour couverture.
+  const ralPages: MetadataRoute.Sitemap = RAL_COLORS.map((c) => ({
+    url: `${BASE}/couleurs-ral/teinte/${c.code.replace(/^RAL\s*/i, "")}`,
+    lastModified: now,
+    changeFrequency: "yearly" as const,
+    priority: 0.3,
+  }));
+
+  // Fiches réalisations (preuve sociale, images uniques).
+  const realisationPages: MetadataRoute.Sitemap = projects.map((p) => ({
+    url: `${BASE}/realisations/${getProjectSlug(p)}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  }));
+
+  return [
+    ...staticPages,
+    ...deptPages,
+    ...villePages,
+    ...blogPages,
+    ...realisationPages,
+    ...ralPages,
+  ];
 }

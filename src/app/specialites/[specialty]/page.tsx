@@ -98,6 +98,8 @@ const SLUG_TO_CATEGORY: Record<string, string> = {
   moto: "moto",
   voiture: "jantes", // auto parts share jantes gallery as fallback
   pieces: "industriel", // pieces maps to industriel category
+  portail: "portail",
+  "sablage-aerogommage": "industriel",
 };
 
 /* buildGalleryItems was removed — specialty pages now surface real
@@ -120,8 +122,8 @@ export async function generateMetadata({
   }
 
   return buildMetadata({
-    title: `${specialty.title} — Thermolaquage`,
-    description: specialty.description.slice(0, 160),
+    title: specialty.metaTitle ?? `${specialty.title} — Thermolaquage`,
+    description: specialty.metaDescription ?? specialty.description.slice(0, 160),
     path: `/specialites/${specialty.slug}`,
   });
 }
@@ -481,6 +483,29 @@ export default async function SpecialtyPage({
                   </span>
                 </div>
 
+                {specialty.pricingTiers && specialty.pricingTiers.length > 0 && (
+                  <div className="mt-8 w-full space-y-3 text-left">
+                    {specialty.pricingTiers.map((tier) => (
+                      <div
+                        key={tier.label}
+                        className="rounded-xl border border-brand-night/10 bg-brand-cream/50 p-4"
+                      >
+                        <div className="flex items-baseline justify-between gap-3">
+                          <p className="text-sm font-semibold text-brand-night">
+                            {tier.label}
+                          </p>
+                          <p className="shrink-0 font-mono text-sm font-bold text-brand-orange-dark">
+                            {tier.priceFrom}
+                          </p>
+                        </div>
+                        <p className="mt-1.5 text-[13px] leading-relaxed text-brand-charcoal/70">
+                          {tier.includes}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <p className="mt-6 text-sm text-brand-charcoal/70">
                   Le tarif final dépend de la taille, de l&apos;état initial et
                   de la finition souhaitée. Envoyez-nous vos photos pour un
@@ -488,7 +513,7 @@ export default async function SpecialtyPage({
                 </p>
 
                 <Link href="/devis" className="btn-primary mt-8">
-                  Demander un devis gratuit
+                  {specialty.ctaText ?? "Demander un devis gratuit"}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -496,6 +521,26 @@ export default async function SpecialtyPage({
           </ScrollReveal>
         </div>
       </section>
+
+      {/* ── Section 6b — Réassurance (trust signals) ─────────────────── */}
+      {specialty.trustSignals && specialty.trustSignals.length > 0 && (
+        <section className="bg-white py-16">
+          <div className="container-wide">
+            <ScrollReveal>
+              <div className="mx-auto grid max-w-4xl gap-x-8 gap-y-4 sm:grid-cols-2">
+                {specialty.trustSignals.map((signal) => (
+                  <div key={signal} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-orange" />
+                    <p className="text-sm leading-relaxed text-brand-charcoal/80">
+                      {signal}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
 
       {/* ── Section 7 — FAQs ─────────────────────────────────────────── */}
       <section className="bg-brand-cream py-24">

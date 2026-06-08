@@ -41,6 +41,8 @@ const navGroups = [
     href: "/specialites/jantes",
     children: [
       { label: "Jantes auto", href: "/specialites/jantes" },
+      { label: "Portail & ferronnerie", href: "/specialites/portail" },
+      { label: "Sablage & aérogommage", href: "/specialites/sablage-aerogommage" },
       { label: "Moto Art", href: "/specialites/moto" },
       { label: "Pièces auto", href: "/specialites/voiture" },
       { label: "Pièces métalliques", href: "/specialites/pieces" },
