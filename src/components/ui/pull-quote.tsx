@@ -35,11 +35,11 @@ export function PullQuote({ quote, author, source }: PullQuoteProps) {
         {quote}
       </p>
       {(author || source) && (
-        <footer className="mt-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand-charcoal/60">
+        <footer className="mt-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-brand-charcoal/70">
           <span className="h-px w-8 bg-brand-orange" aria-hidden />
           {author && <span>{author}</span>}
           {author && source && <span className="text-brand-charcoal/30">·</span>}
-          {source && <span className="text-brand-charcoal/45">{source}</span>}
+          {source && <span className="text-brand-charcoal/70">{source}</span>}
         </footer>
       )}
     </blockquote>

@@ -236,7 +236,7 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
           <div>
             <label htmlFor="contact-ral" className={labelClass}>
               Couleur RAL souhaitée{" "}
-              <span className="font-normal text-brand-charcoal/50">
+              <span className="font-normal text-brand-charcoal/70">
                 (optionnel)
               </span>
             </label>
@@ -253,7 +253,7 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
           <div>
             <label className={labelClass}>
               Photos de vos pièces{" "}
-              <span className="font-normal text-brand-charcoal/50">
+              <span className="font-normal text-brand-charcoal/70">
                 (optionnel)
               </span>
             </label>

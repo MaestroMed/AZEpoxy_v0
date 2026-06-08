@@ -89,7 +89,7 @@ export default async function BlogArticlePage({
       <section className="bg-brand-cream bg-industrial-grid py-24">
         <div className="container-wide max-w-3xl mx-auto">
           <ScrollReveal>
-            <div className="flex items-center gap-4 text-sm text-brand-charcoal/50 mb-8">
+            <div className="flex items-center gap-4 text-sm text-brand-charcoal/70 mb-8">
               <span className="inline-flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
                 {new Date(article.date).toLocaleDateString("fr-FR", {
@@ -128,7 +128,7 @@ export default async function BlogArticlePage({
                 >
                   <ArrowLeft className="h-5 w-5 shrink-0 text-brand-orange transition-transform group-hover:-translate-x-1" />
                   <div className="min-w-0">
-                    <p className="text-xs text-brand-charcoal/40 uppercase tracking-wider">
+                    <p className="text-xs text-brand-charcoal/70 uppercase tracking-wider">
                       Précédent
                     </p>
                     <p className="truncate font-semibold text-brand-night text-sm">
@@ -145,7 +145,7 @@ export default async function BlogArticlePage({
                   className="group flex items-center justify-end gap-3 rounded-xl border border-brand-night/10 bg-white p-5 transition hover:shadow-md text-right"
                 >
                   <div className="min-w-0">
-                    <p className="text-xs text-brand-charcoal/40 uppercase tracking-wider">
+                    <p className="text-xs text-brand-charcoal/70 uppercase tracking-wider">
                       Suivant
                     </p>
                     <p className="truncate font-semibold text-brand-night text-sm">

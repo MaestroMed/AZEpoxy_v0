@@ -79,7 +79,7 @@ export function FAQAccordion({ items }: FAQAccordionProps) {
                   "mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300",
                   open
                     ? "border-brand-orange bg-brand-orange text-white rotate-45"
-                    : "border-brand-night/15 text-brand-charcoal/60 group-hover:border-brand-night/30"
+                    : "border-brand-night/15 text-brand-charcoal/70 group-hover:border-brand-night/30"
                 )}
                 aria-hidden
               >

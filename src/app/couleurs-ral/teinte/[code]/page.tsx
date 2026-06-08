@@ -242,7 +242,7 @@ export default async function RalTeintePage({
                     </span>
                   </h2>
                 </div>
-                <span className="hidden font-mono text-[11px] uppercase tracking-[0.22em] text-brand-charcoal/55 md:inline">
+                <span className="hidden font-mono text-[11px] uppercase tracking-[0.22em] text-brand-charcoal/70 md:inline">
                   {color.code}
                 </span>
               </div>
@@ -275,7 +275,7 @@ export default async function RalTeintePage({
                         />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-3">
-                            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/55 transition-colors duration-300 group-hover:text-brand-orange">
+                            <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/70 transition-colors duration-300 group-hover:text-brand-orange">
                               {pCat}
                             </span>
                             {p.featured && (

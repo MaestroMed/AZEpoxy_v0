@@ -99,7 +99,7 @@ export default async function CollectionPage({
             <div className="mt-12 rounded-2xl border border-brand-night/10 bg-brand-cream/50 p-6">
               <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-charcoal/60">
+                  <p className="text-xs font-semibold uppercase tracking-[0.15em] text-brand-charcoal/70">
                     Disponible sur demande
                   </p>
                   <p className="mt-1 text-sm text-brand-charcoal/80">
@@ -261,7 +261,7 @@ export default async function CollectionPage({
                     </div>
                     <div className="p-6">
                       <div
-                        className="mb-2 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-brand-charcoal/60"
+                        className="mb-2 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-brand-charcoal/70"
                       >
                         <span
                           className="h-1.5 w-1.5 rounded-full"

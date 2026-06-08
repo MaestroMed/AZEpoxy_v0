@@ -254,7 +254,7 @@ export function VisualConfigurator() {
                 style={{ backgroundColor: color.hex }}
               />
               <div>
-                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/60">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/70">
                   {color.code}
                 </p>
                 <p className="text-sm font-semibold text-brand-night">
@@ -264,7 +264,7 @@ export function VisualConfigurator() {
             </div>
             <div className="hidden h-10 w-px bg-brand-night/10 sm:block" />
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/60">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/70">
                 Finition
               </p>
               <p className="text-sm font-semibold text-brand-night">
@@ -273,7 +273,7 @@ export function VisualConfigurator() {
             </div>
             <div className="hidden h-10 w-px bg-brand-night/10 sm:block" />
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/60">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/70">
                 À partir de
               </p>
               <p className="text-sm font-semibold text-brand-orange">
@@ -408,7 +408,7 @@ export function VisualConfigurator() {
                     >
                       {f.label}
                     </p>
-                    <p className="mt-0.5 text-xs text-brand-charcoal/60">
+                    <p className="mt-0.5 text-xs text-brand-charcoal/70">
                       {f.description}
                     </p>
                   </div>
@@ -423,7 +423,7 @@ export function VisualConfigurator() {
 
         {/* Product info */}
         <div className="rounded-2xl border border-brand-night/10 bg-brand-cream p-5">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/60">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/70">
             Pièce sélectionnée
           </p>
           <p className="mt-1 heading-display text-lg text-brand-night">

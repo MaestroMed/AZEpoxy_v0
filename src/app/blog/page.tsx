@@ -88,10 +88,10 @@ export default async function BlogPage() {
                       <h2 className="mb-2 font-display text-lg font-bold text-brand-night leading-snug transition-colors group-hover:text-brand-orange">
                         {article.title}
                       </h2>
-                      <p className="mb-4 flex-1 text-sm text-brand-charcoal/60 leading-relaxed">
+                      <p className="mb-4 flex-1 text-sm text-brand-charcoal/70 leading-relaxed">
                         {article.description}
                       </p>
-                      <div className="flex items-center gap-4 text-xs text-brand-charcoal/40">
+                      <div className="flex items-center gap-4 text-xs text-brand-charcoal/70">
                         <span className="flex items-center gap-1">
                           <Calendar className="h-3.5 w-3.5" />
                           {new Date(article.date).toLocaleDateString("fr-FR", {

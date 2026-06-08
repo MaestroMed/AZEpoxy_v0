@@ -149,7 +149,7 @@ export default function VillesIndexPage() {
                       {code}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm text-brand-charcoal/55">
+                  <p className="mt-2 text-sm text-brand-charcoal/70">
                     {villesInDept.length} communes
                   </p>
                   <span className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-brand-orange transition-colors group-hover:text-brand-orange-dark">
@@ -194,7 +194,7 @@ export default function VillesIndexPage() {
                   <div className="mb-4 flex items-baseline justify-between border-b border-brand-night/10 pb-3">
                     <h2 className="font-display text-lg font-black text-brand-night">
                       {DEPARTMENT_NAMES[code]}{" "}
-                      <span className="font-mono text-sm text-brand-charcoal/45">
+                      <span className="font-mono text-sm text-brand-charcoal/70">
                         ({code})
                       </span>
                     </h2>
@@ -219,7 +219,7 @@ export default function VillesIndexPage() {
                           "
                         >
                           <span className="truncate">{v.name}</span>
-                          <span className="shrink-0 font-mono text-[11px] text-brand-charcoal/40">
+                          <span className="shrink-0 font-mono text-[11px] text-brand-charcoal/70">
                             {v.distance}
                           </span>
                         </Link>

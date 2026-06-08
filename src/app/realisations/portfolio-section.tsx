@@ -101,7 +101,7 @@ export function PortfolioSection({ projects }: PortfolioSectionProps) {
           </div>
 
           {/* Counter — museum-inventory vibe */}
-          <div className="flex items-baseline gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-brand-charcoal/55">
+          <div className="flex items-baseline gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-brand-charcoal/70">
             <span className="font-bold text-brand-night">
               {String(filtered.length).padStart(2, "0")}
             </span>
@@ -176,14 +176,14 @@ export function PortfolioSection({ projects }: PortfolioSectionProps) {
         {/* ── Empty state ───────────────────────────────────────── */}
         {filtered.length === 0 && (
           <div className="py-20 text-center">
-            <p className="text-brand-charcoal/50">
+            <p className="text-brand-charcoal/70">
               Aucune pièce dans cette section du catalogue.
             </p>
           </div>
         )}
 
         {/* ── Colophon — museum-card footer ─────────────────────── */}
-        <p className="mt-14 max-w-xl text-sm leading-relaxed text-brand-charcoal/55">
+        <p className="mt-14 max-w-xl text-sm leading-relaxed text-brand-charcoal/70">
           Chaque pièce ci-dessus est une réalisation réelle passée par notre
           atelier de Bruyères-sur-Oise. Les numéros de catalogue sont stables —
           une pièce conserve sa référence à vie.
@@ -256,12 +256,12 @@ function FeatureRow({ project }: { project: Project }) {
         {/* Middle — title + description */}
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/55">
+            <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/70">
               <span aria-hidden className="h-1 w-1 rounded-full bg-brand-orange" />
               {catLabel}
             </span>
             {project.colors.length > 0 && (
-              <span className="font-mono text-[11px] text-brand-charcoal/45">
+              <span className="font-mono text-[11px] text-brand-charcoal/70">
                 {project.colors.join(" · ")}
               </span>
             )}
@@ -355,7 +355,7 @@ function IndexRow({ project }: { project: Project }) {
       {/* Title + category */}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/55 transition-colors duration-300 group-hover:text-brand-orange">
+          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/70 transition-colors duration-300 group-hover:text-brand-orange">
             {catLabel}
           </span>
           {project.featured && (
@@ -371,7 +371,7 @@ function IndexRow({ project }: { project: Project }) {
 
       {/* RAL code mono — desktop only */}
       {project.colors[0] && (
-        <span className="hidden font-mono text-xs text-brand-charcoal/45 sm:inline sm:text-sm">
+        <span className="hidden font-mono text-xs text-brand-charcoal/70 sm:inline sm:text-sm">
           {project.colors[0]}
         </span>
       )}

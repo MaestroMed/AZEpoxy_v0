@@ -21,7 +21,7 @@ import {
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 const inputClass =
-  "w-full rounded-xl border border-brand-night/15 bg-white px-4 py-3 text-brand-night placeholder:text-brand-charcoal/40 focus:outline-none focus:ring-2 focus:ring-brand-orange transition-shadow";
+  "w-full rounded-xl border border-brand-night/15 bg-white px-4 py-3 text-brand-night placeholder:text-brand-charcoal/70 focus:outline-none focus:ring-2 focus:ring-brand-orange transition-shadow";
 const labelClass = "mb-1.5 block text-sm font-semibold text-brand-night";
 
 const PROJECT_TYPES = [
@@ -290,7 +290,7 @@ export function DevisWizard() {
                       "bg-brand-orange/15 text-brand-orange ring-1 ring-brand-orange/30 group-hover:bg-brand-orange/25",
                     !active &&
                       !completed &&
-                      "bg-brand-night/5 text-brand-charcoal/50 ring-1 ring-brand-night/10"
+                      "bg-brand-night/5 text-brand-charcoal/70 ring-1 ring-brand-night/10"
                   )}
                 >
                   {completed ? (
@@ -316,7 +316,7 @@ export function DevisWizard() {
                       ? "text-brand-night"
                       : completed
                         ? "text-brand-orange"
-                        : "text-brand-charcoal/40"
+                        : "text-brand-charcoal/70"
                   )}
                 >
                   {label}
@@ -341,7 +341,7 @@ export function DevisWizard() {
             {step === 1 && (
               <div>
                 <h3 className="heading-display text-xl text-brand-night mb-2">Quel est votre projet ?</h3>
-                <p className="text-sm text-brand-charcoal/60 mb-6">Sélectionnez le type de pièce à traiter.</p>
+                <p className="text-sm text-brand-charcoal/70 mb-6">Sélectionnez le type de pièce à traiter.</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {PROJECT_TYPES.map(({ slug, label, Icon }) => (
                     <button
@@ -456,7 +456,7 @@ export function DevisWizard() {
                 )}
 
                 <div>
-                  <label className={labelClass}>Photos <span className="font-normal text-brand-charcoal/50">(optionnel)</span></label>
+                  <label className={labelClass}>Photos <span className="font-normal text-brand-charcoal/70">(optionnel)</span></label>
                   <PhotoUpload files={photos} onChange={setPhotos} />
                 </div>
 
@@ -498,7 +498,7 @@ export function DevisWizard() {
                     </p>
                   )}
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <button type="button" onClick={() => set("selectedRal", "")} className="text-sm text-brand-charcoal/50 hover:text-brand-orange">
+                    <button type="button" onClick={() => set("selectedRal", "")} className="text-sm text-brand-charcoal/70 hover:text-brand-orange">
                       Je ne sais pas encore
                     </button>
                     <span className="text-brand-charcoal/30">·</span>
@@ -559,11 +559,11 @@ export function DevisWizard() {
                   <input value={data.phone} onChange={(e) => set("phone", e.target.value)} type="tel" placeholder="06 12 34 56 78" className={inputClass} />
                 </div>
                 <div>
-                  <label className={labelClass}>Adresse <span className="font-normal text-brand-charcoal/50">(optionnel)</span></label>
+                  <label className={labelClass}>Adresse <span className="font-normal text-brand-charcoal/70">(optionnel)</span></label>
                   <input value={data.address} onChange={(e) => set("address", e.target.value)} placeholder="Pour estimer la livraison" className={inputClass} />
                 </div>
                 <div>
-                  <label className={labelClass}>Comment nous avez-vous trouvé ? <span className="font-normal text-brand-charcoal/50">(optionnel)</span></label>
+                  <label className={labelClass}>Comment nous avez-vous trouvé ? <span className="font-normal text-brand-charcoal/70">(optionnel)</span></label>
                   <select value={data.source} onChange={(e) => set("source", e.target.value)} className={cn(inputClass, "appearance-none")}>
                     <option value="">— Sélectionner —</option>
                     <option value="google">Google</option>
@@ -576,10 +576,10 @@ export function DevisWizard() {
                 {/* Recap */}
                 <div className="rounded-xl bg-brand-cream p-5 space-y-2">
                   <p className="text-xs font-semibold uppercase tracking-wider text-brand-orange mb-3">Récapitulatif</p>
-                  <p className="text-sm"><span className="text-brand-charcoal/50">Type :</span> <strong>{PROJECT_TYPES.find((t) => t.slug === data.projectType)?.label || data.projectType}</strong></p>
-                  {data.selectedRal && <p className="text-sm"><span className="text-brand-charcoal/50">Couleur :</span> <strong>{data.selectedRal}</strong></p>}
-                  <p className="text-sm"><span className="text-brand-charcoal/50">Finition :</span> <strong>{data.finition}</strong></p>
-                  {photos.length > 0 && <p className="text-sm"><span className="text-brand-charcoal/50">Photos :</span> <strong>{photos.length} fichier(s)</strong></p>}
+                  <p className="text-sm"><span className="text-brand-charcoal/70">Type :</span> <strong>{PROJECT_TYPES.find((t) => t.slug === data.projectType)?.label || data.projectType}</strong></p>
+                  {data.selectedRal && <p className="text-sm"><span className="text-brand-charcoal/70">Couleur :</span> <strong>{data.selectedRal}</strong></p>}
+                  <p className="text-sm"><span className="text-brand-charcoal/70">Finition :</span> <strong>{data.finition}</strong></p>
+                  {photos.length > 0 && <p className="text-sm"><span className="text-brand-charcoal/70">Photos :</span> <strong>{photos.length} fichier(s)</strong></p>}
                 </div>
 
                 <label className="flex items-start gap-3 cursor-pointer">

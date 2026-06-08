@@ -317,7 +317,7 @@ export default async function SpecialtyPage({
                   sa propre fiche éditoriale.
                 </p>
               </div>
-              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-brand-charcoal/55">
+              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-brand-charcoal/70">
                 {String(catalogueRows.length).padStart(2, "0")} pièces · {projectCategoryLabel.toLowerCase()}
               </span>
             </div>
@@ -355,7 +355,7 @@ export default async function SpecialtyPage({
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-3">
-                          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/55 transition-colors duration-300 group-hover:text-brand-orange">
+                          <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-charcoal/70 transition-colors duration-300 group-hover:text-brand-orange">
                             {pCat}
                           </span>
                           {p.featured && (
@@ -369,7 +369,7 @@ export default async function SpecialtyPage({
                         </h3>
                       </div>
                       {p.colors[0] && (
-                        <span className="hidden font-mono text-xs text-brand-charcoal/45 sm:inline sm:text-sm">
+                        <span className="hidden font-mono text-xs text-brand-charcoal/70 sm:inline sm:text-sm">
                           {p.colors[0]}
                         </span>
                       )}
@@ -437,7 +437,7 @@ export default async function SpecialtyPage({
             )}
           </div>
 
-          <p className="mt-6 text-sm text-brand-charcoal/50">
+          <p className="mt-6 text-sm text-brand-charcoal/70">
             <Link
               href="/couleurs-ral"
               className="inline-flex items-center gap-1 font-semibold text-brand-orange hover:underline"
@@ -481,7 +481,7 @@ export default async function SpecialtyPage({
                   </span>
                 </div>
 
-                <p className="mt-6 text-sm text-brand-charcoal/60">
+                <p className="mt-6 text-sm text-brand-charcoal/70">
                   Le tarif final dépend de la taille, de l&apos;état initial et
                   de la finition souhaitée. Envoyez-nous vos photos pour un
                   chiffrage précis sous 24h.

@@ -216,7 +216,7 @@ export default async function ServicesPage() {
                   <div className="heading-display text-4xl text-brand-night sm:text-5xl">
                     {stat.value}
                   </div>
-                  <div className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-charcoal/50">
+                  <div className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-charcoal/70">
                     {stat.label}
                   </div>
                 </div>

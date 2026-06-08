@@ -247,7 +247,7 @@ export default async function SablagePage() {
             {service.specs.map((spec, index) => (
               <ScrollReveal key={spec.label} delay={index * 0.08}>
                 <div className="rounded-xl border border-brand-night/10 bg-white p-6">
-                  <p className="text-sm text-brand-charcoal/60">
+                  <p className="text-sm text-brand-charcoal/70">
                     {spec.label}
                   </p>
                   <p className="heading-display mt-2 text-2xl text-brand-night">

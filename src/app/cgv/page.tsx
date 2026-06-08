@@ -188,7 +188,7 @@ export default function CgvPage() {
       <section className="bg-brand-cream py-24">
         <div className="container-tight">
           <ScrollReveal>
-            <p className="text-brand-charcoal/60 text-sm mb-12">
+            <p className="text-brand-charcoal/70 text-sm mb-12">
               Dernière mise à jour : avril 2026
             </p>
 

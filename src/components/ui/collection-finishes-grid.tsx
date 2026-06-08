@@ -103,7 +103,7 @@ function StickyPreview({
 
             <div className="px-5 py-4">
               <div
-                className="mb-1 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-brand-charcoal/60"
+                className="mb-1 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-brand-charcoal/70"
               >
                 <span
                   className="h-1.5 w-1.5 rounded-full"
@@ -178,7 +178,7 @@ export function CollectionFinishesGrid({
                     {sub.description}
                   </p>
                 )}
-                <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-brand-charcoal/40">
+                <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-brand-charcoal/70">
                   {sub.finishes.length} finition{sub.finishes.length > 1 ? "s" : ""}
                 </p>
               </div>

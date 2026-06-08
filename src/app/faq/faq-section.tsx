@@ -60,21 +60,21 @@ export function FaqSection({ items }: FaqSectionProps) {
         {/* Search bar */}
         <ScrollReveal delay={0.05}>
           <div className="mx-auto mb-8 flex max-w-xl items-center gap-2 rounded-full border border-brand-night/10 bg-white px-5 py-3 shadow-sm focus-within:ring-2 focus-within:ring-brand-orange">
-            <Search className="h-4 w-4 text-brand-charcoal/50" />
+            <Search className="h-4 w-4 text-brand-charcoal/70" />
             <input
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Rechercher une question (ex: délai, jantes, tarif)…"
               aria-label="Rechercher dans la FAQ"
-              className="flex-1 bg-transparent text-sm text-brand-night placeholder:text-brand-charcoal/40 focus:outline-none"
+              className="flex-1 bg-transparent text-sm text-brand-night placeholder:text-brand-charcoal/70 focus:outline-none"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => setQuery("")}
                 aria-label="Effacer la recherche"
-                className="rounded-full p-1 text-brand-charcoal/60 transition-colors hover:bg-brand-cream hover:text-brand-night"
+                className="rounded-full p-1 text-brand-charcoal/70 transition-colors hover:bg-brand-cream hover:text-brand-night"
               >
                 <X className="h-4 w-4" />
               </button>

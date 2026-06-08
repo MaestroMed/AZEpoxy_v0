@@ -111,7 +111,7 @@ export default function DevisPage() {
                   <h3 className="font-semibold text-brand-night text-sm mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-brand-charcoal/60 leading-relaxed">
+                  <p className="text-xs text-brand-charcoal/70 leading-relaxed">
                     {item.description}
                   </p>
                 </div>

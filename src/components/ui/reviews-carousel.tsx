@@ -38,7 +38,7 @@ export function ReviewsCarousel({ reviews, average }: ReviewsCarouselProps) {
                 {average.toFixed(1)}
               </span>
               <Stars rating={Math.round(average)} size="lg" />
-              <span className="text-sm text-brand-charcoal/60">
+              <span className="text-sm text-brand-charcoal/70">
                 ({reviews.length} avis)
               </span>
             </div>
@@ -70,7 +70,7 @@ export function ReviewsCarousel({ reviews, average }: ReviewsCarouselProps) {
               <div>
                 <p className="font-semibold text-brand-night">{r.author}</p>
                 {r.publishedAt && (
-                  <p className="text-xs text-brand-charcoal/50">
+                  <p className="text-xs text-brand-charcoal/70">
                     {new Date(r.publishedAt).toLocaleDateString("fr-FR", {
                       month: "long",
                       year: "numeric",
@@ -79,7 +79,7 @@ export function ReviewsCarousel({ reviews, average }: ReviewsCarouselProps) {
                 )}
               </div>
               {r.source === "google" && (
-                <span className="text-xs font-semibold uppercase tracking-wider text-brand-charcoal/40">
+                <span className="text-xs font-semibold uppercase tracking-wider text-brand-charcoal/70">
                   Google
                 </span>
               )}

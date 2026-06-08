@@ -378,7 +378,7 @@ function VilleGroup({
 
   return (
     <div>
-      <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-charcoal/55">
+      <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-charcoal/70">
         {title} · {villes.length} commune{villes.length > 1 ? "s" : ""}
       </p>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -399,7 +399,7 @@ function VilleGroup({
               <p className="truncate text-sm font-semibold text-brand-night">
                 {v.name}
               </p>
-              <p className="text-[11px] text-brand-charcoal/55">
+              <p className="text-[11px] text-brand-charcoal/70">
                 {v.distance} · {v.driveTime}
               </p>
             </div>

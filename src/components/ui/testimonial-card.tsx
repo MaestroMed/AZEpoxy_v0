@@ -93,7 +93,7 @@ export function TestimonialCard({
               <p
                 className={cn(
                   "text-xs uppercase tracking-[0.14em]",
-                  dark ? "text-white/50" : "text-brand-charcoal/50"
+                  dark ? "text-white/50" : "text-brand-charcoal/70"
                 )}
               >
                 {company}

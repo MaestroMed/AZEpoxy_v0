@@ -99,7 +99,7 @@ export function RalPickerSection() {
         {/* Toolbar: count + view toggle + cart */}
         <div className="mt-6 mb-8 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <p className="text-sm font-semibold text-brand-charcoal/60">
+            <p className="text-sm font-semibold text-brand-charcoal/75">
               {filtered.length} couleur{filtered.length !== 1 ? "s" : ""}
             </p>
             {(activeFamily || searchQuery) && (
@@ -124,7 +124,7 @@ export function RalPickerSection() {
                   "rounded-md p-1.5 transition-colors",
                   viewMode === "grid"
                     ? "bg-brand-orange text-white"
-                    : "text-brand-charcoal/50 hover:text-brand-night"
+                    : "text-brand-charcoal/70 hover:text-brand-night"
                 )}
                 aria-label="Vue grille"
               >
@@ -136,7 +136,7 @@ export function RalPickerSection() {
                   "rounded-md p-1.5 transition-colors",
                   viewMode === "list"
                     ? "bg-brand-orange text-white"
-                    : "text-brand-charcoal/50 hover:text-brand-night"
+                    : "text-brand-charcoal/70 hover:text-brand-night"
                 )}
                 aria-label="Vue liste"
               >
@@ -153,7 +153,7 @@ export function RalPickerSection() {
                 "group relative flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-semibold transition-all duration-300",
                 cart.length > 0
                   ? "border-brand-orange bg-brand-orange/10 text-brand-orange shadow-[0_6px_18px_-10px_rgba(232,93,44,0.45)] hover:bg-brand-orange/15"
-                  : "border-brand-night/15 bg-white text-brand-charcoal/60 hover:border-brand-night/30 hover:text-brand-night",
+                  : "border-brand-night/15 bg-white text-brand-charcoal/75 hover:border-brand-night/30 hover:text-brand-night",
               )}
             >
               <ShoppingBag className="h-4 w-4 transition-transform duration-300 group-hover:-rotate-6" />
@@ -203,7 +203,7 @@ export function RalPickerSection() {
               {cart.length > 0 && (
                 <button
                   onClick={clearCart}
-                  className="text-[11px] font-semibold uppercase tracking-wider text-brand-charcoal/45 transition-colors hover:text-red-500"
+                  className="text-[11px] font-semibold uppercase tracking-wider text-brand-charcoal/70 transition-colors hover:text-red-500"
                 >
                   Tout supprimer
                 </button>
@@ -211,7 +211,7 @@ export function RalPickerSection() {
             </div>
 
             {cart.length === 0 ? (
-              <p className="relative text-sm text-brand-charcoal/55">
+              <p className="relative text-sm text-brand-charcoal/75">
                 Cliquez sur le <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-orange/15 text-[11px] font-bold text-brand-orange align-middle">+</span> d&apos;une couleur pour l&apos;ajouter à votre sélection.
               </p>
             ) : (
@@ -235,7 +235,7 @@ export function RalPickerSection() {
                         <span className="font-mono text-[11px] font-bold text-brand-night">
                           {color.code}
                         </span>
-                        <span className="max-w-[8rem] truncate text-[11px] text-brand-charcoal/55">
+                        <span className="max-w-[8rem] truncate text-[11px] text-brand-charcoal/75">
                           {color.name}
                         </span>
                         <button
@@ -299,11 +299,11 @@ export function RalPickerSection() {
                     <p className="font-mono text-sm font-semibold text-brand-night">
                       {color.code}
                     </p>
-                    <p className="text-sm text-brand-charcoal/60 truncate">
+                    <p className="text-sm text-brand-charcoal/75 truncate">
                       {color.name}
                     </p>
                   </div>
-                  <span className="hidden sm:block font-mono text-xs text-brand-charcoal/40">
+                  <span className="hidden sm:block font-mono text-xs text-brand-charcoal/70">
                     {color.hex}
                   </span>
                   <button
@@ -312,7 +312,7 @@ export function RalPickerSection() {
                       "rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all",
                       cart.includes(color.code)
                         ? "border-brand-orange bg-brand-orange/10 text-brand-orange"
-                        : "border-brand-night/15 text-brand-charcoal/50 hover:border-brand-orange hover:text-brand-orange"
+                        : "border-brand-night/15 text-brand-charcoal/70 hover:border-brand-orange hover:text-brand-orange"
                     )}
                   >
                     {cart.includes(color.code) ? "Sélectionnée" : "Sélectionner"}
@@ -341,7 +341,7 @@ export function RalPickerSection() {
             <p className="text-lg font-semibold text-brand-night">
               Aucune couleur trouvée
             </p>
-            <p className="mt-2 text-sm text-brand-charcoal/60">
+            <p className="mt-2 text-sm text-brand-charcoal/75">
               Essayez un autre terme de recherche ou changez de famille de couleurs.
             </p>
           </div>

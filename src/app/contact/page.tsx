@@ -103,14 +103,14 @@ export default function ContactPage() {
                         <Icon className="h-5 w-5 text-brand-orange transition-colors duration-300 group-hover:text-white" />
                       </div>
                       <div className="relative">
-                        <p className="text-xs font-medium uppercase tracking-wider text-brand-charcoal/50 mb-0.5">
+                        <p className="text-xs font-medium uppercase tracking-wider text-brand-charcoal/70 mb-0.5">
                           {card.label}
                         </p>
                         <p className="font-semibold text-brand-night">
                           {card.value}
                         </p>
                         {card.sub && (
-                          <p className="text-sm text-brand-charcoal/60 mt-0.5">
+                          <p className="text-sm text-brand-charcoal/70 mt-0.5">
                             {card.sub}
                           </p>
                         )}

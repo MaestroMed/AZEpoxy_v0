@@ -72,7 +72,7 @@ export function PriceEstimator() {
   };
 
   const inputClass =
-    "w-full rounded-xl border border-brand-night/15 bg-white px-4 py-3 text-brand-night placeholder:text-brand-charcoal/40 focus:outline-none focus:ring-2 focus:ring-brand-orange transition-shadow";
+    "w-full rounded-xl border border-brand-night/15 bg-white px-4 py-3 text-brand-night placeholder:text-brand-charcoal/70 focus:outline-none focus:ring-2 focus:ring-brand-orange transition-shadow";
 
   const labelClass = "mb-1.5 block text-sm font-semibold text-brand-night";
 
@@ -108,7 +108,7 @@ export function PriceEstimator() {
             <button
               type="button"
               onClick={reset}
-              className="inline-flex items-center gap-1.5 text-sm text-brand-charcoal/60 hover:text-brand-orange transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-brand-charcoal/70 hover:text-brand-orange transition-colors"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Changer de pièce
@@ -168,7 +168,7 @@ export function PriceEstimator() {
               />
               <span className="text-sm text-brand-charcoal/80">
                 {OPTIONS.premium.label}{" "}
-                <span className="text-brand-charcoal/50">(+20%)</span>
+                <span className="text-brand-charcoal/70">(+20%)</span>
               </span>
             </label>
           </div>
@@ -176,12 +176,12 @@ export function PriceEstimator() {
           {/* Estimate display */}
           {estimate && (
             <div className="rounded-xl bg-brand-orange/5 border border-brand-orange/20 p-5 text-center">
-              <p className="text-sm text-brand-charcoal/60 mb-1">
+              <p className="text-sm text-brand-charcoal/70 mb-1">
                 Estimation indicative
               </p>
               <p className="text-3xl font-bold text-brand-night">
                 Entre {estimate.min}&euro; et {estimate.max}&euro;{" "}
-                <span className="text-base font-normal text-brand-charcoal/50">
+                <span className="text-base font-normal text-brand-charcoal/70">
                   HT
                 </span>
               </p>
@@ -189,7 +189,7 @@ export function PriceEstimator() {
           )}
 
           {/* Disclaimer */}
-          <p className="text-xs text-brand-charcoal/50 leading-relaxed">
+          <p className="text-xs text-brand-charcoal/70 leading-relaxed">
             Estimation indicative. Le tarif final dépend de l&apos;état initial
             de la pièce et de la complexité du traitement.
           </p>

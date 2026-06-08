@@ -421,7 +421,9 @@ select:focus-visible {
     }
 
   .section-label {
-    @apply inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-orange shadow-[0_2px_12px_-6px_rgba(232,93,44,0.35)];
+    /* texte orange-dark (#B5420F) → AA sur le fond tinté clair (l'orange vif
+       #E85D2C tombait à 2.85:1 sur bg-brand-orange/10). */
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-orange-dark shadow-[0_2px_12px_-6px_rgba(232,93,44,0.35)];
   }
 
   .section-label-light {

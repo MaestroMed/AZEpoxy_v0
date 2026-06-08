@@ -75,7 +75,7 @@ export default function GlossairePage() {
             aria-label="Catégories du glossaire"
             className="flex flex-wrap items-center gap-2"
           >
-            <span className="mr-2 text-xs font-semibold uppercase tracking-[0.15em] text-brand-charcoal/60">
+            <span className="mr-2 text-xs font-semibold uppercase tracking-[0.15em] text-brand-charcoal/70">
               Sauter à
             </span>
             {GLOSSARY_CATEGORIES.map((cat) => (
@@ -133,7 +133,7 @@ export default function GlossairePage() {
                       <h2 className="heading-display mt-3 text-3xl text-brand-night sm:text-4xl">
                         {cat.label}
                       </h2>
-                      <p className="mt-2 text-brand-charcoal/60">
+                      <p className="mt-2 text-brand-charcoal/70">
                         {cat.description}
                       </p>
                     </div>
@@ -153,7 +153,7 @@ export default function GlossairePage() {
                             <a
                               href={`#${term.slug}`}
                               aria-label={`Lien permanent vers ${term.term}`}
-                              className="inline-flex items-center gap-1 rounded-full border border-brand-night/10 bg-brand-cream px-3 py-1 text-xs font-mono text-brand-charcoal/60 transition-colors hover:border-brand-orange hover:text-brand-orange"
+                              className="inline-flex items-center gap-1 rounded-full border border-brand-night/10 bg-brand-cream px-3 py-1 text-xs font-mono text-brand-charcoal/70 transition-colors hover:border-brand-orange hover:text-brand-orange"
                             >
                               <Hash className="h-3 w-3" />
                               {term.slug}
@@ -177,7 +177,7 @@ export default function GlossairePage() {
                           )}
                           {term.related && term.related.length > 0 && (
                             <div className="mt-5 flex flex-wrap items-center gap-2">
-                              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-brand-charcoal/50">
+                              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-brand-charcoal/70">
                                 Voir aussi
                               </span>
                               {term.related.map((slug) => {

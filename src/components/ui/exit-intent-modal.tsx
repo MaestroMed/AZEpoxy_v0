@@ -105,7 +105,7 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
           type="button"
           onClick={() => dismiss("close")}
           aria-label="Fermer la fenêtre"
-          className="absolute right-4 top-4 z-10 rounded-full p-1 text-brand-charcoal/60 transition-colors hover:bg-brand-cream hover:text-brand-night"
+          className="absolute right-4 top-4 z-10 rounded-full p-1 text-brand-charcoal/70 transition-colors hover:bg-brand-cream hover:text-brand-night"
         >
           <X className="h-5 w-5" />
         </button>
@@ -147,7 +147,7 @@ export function ExitIntentModal({ enabled = true }: ExitIntentModalProps) {
             <button
               type="button"
               onClick={() => dismiss("close")}
-              className="text-xs text-brand-charcoal/50 hover:text-brand-charcoal"
+              className="text-xs text-brand-charcoal/70 hover:text-brand-charcoal"
             >
               Non merci, je continue ma visite
             </button>

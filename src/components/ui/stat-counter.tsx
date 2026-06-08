@@ -94,7 +94,7 @@ export function StatCounter({ value, label, dark = false }: StatCounterProps) {
       <div
         className={cn(
           "mt-2 text-xs font-semibold uppercase tracking-[0.2em] transition-opacity duration-500",
-          dark ? "text-white/50" : "text-brand-charcoal/50",
+          dark ? "text-white/50" : "text-brand-charcoal/70",
           landed && (dark ? "text-white/70" : "text-brand-charcoal/70")
         )}
         style={{ transitionDelay: landed ? "120ms" : "0ms" }}

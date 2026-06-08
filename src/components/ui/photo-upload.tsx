@@ -181,7 +181,7 @@ export function PhotoUpload({ files, onChange }: PhotoUploadProps) {
               ? "Déposez vos photos ici"
               : "Glissez vos photos ou cliquez"}
           </p>
-          <p className="mt-1.5 text-xs text-brand-charcoal/55">
+          <p className="mt-1.5 text-xs text-brand-charcoal/70">
             Jusqu&apos;à {MAX_FILES} photos · 10 Mo/photo · JPG · PNG · WEBP · HEIC
           </p>
           {files.length > 0 && (

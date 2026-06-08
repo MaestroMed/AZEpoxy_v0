@@ -127,7 +127,7 @@ export function RalRecommender() {
               >
                 <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-br from-transparent via-white/30 to-transparent mix-blend-overlay transition-transform duration-700 group-hover:translate-x-full" />
               </div>
-              <p className="mt-2 font-mono text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/50">
+              <p className="mt-2 font-mono text-[10px] font-bold uppercase tracking-wider text-brand-charcoal/70">
                 {color.code}
               </p>
               <p className="text-sm font-semibold text-brand-night leading-tight line-clamp-2 transition-colors group-hover:text-brand-orange">

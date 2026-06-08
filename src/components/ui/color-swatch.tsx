@@ -62,7 +62,6 @@ export function ColorSwatch({
       style={{ backgroundColor: hex }}
       role="button"
       tabIndex={0}
-      aria-label={`${code} ${name} — cliquer pour copier ${hex}`}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -137,6 +136,10 @@ export function ColorSwatch({
           )}
         </p>
         <p className="text-sm font-semibold text-white leading-snug">{name}</p>
+        {/* Indice action pour lecteurs d'écran — pas d'aria-label parent
+            (évite tout label-in-name mismatch : le nom accessible = le texte
+            visible + cet indice). */}
+        <span className="sr-only">, cliquer pour copier le code couleur {hex}</span>
       </div>
 
       {/* Copied toast — avec framer-motion fade+scale */}

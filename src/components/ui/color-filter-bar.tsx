@@ -48,7 +48,7 @@ export function ColorFilterBar({
           className={cn(
             "group flex-shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300",
             activeFamily === null
-              ? "bg-brand-orange text-white shadow-[0_6px_16px_-8px_rgba(232,93,44,0.5)] ring-1 ring-brand-orange/40 ring-offset-2 ring-offset-brand-cream"
+              ? "bg-brand-orange-dark text-white shadow-[0_6px_16px_-8px_rgba(232,93,44,0.5)] ring-1 ring-brand-orange/40 ring-offset-2 ring-offset-brand-cream"
               : "border border-brand-night/15 bg-white text-brand-night hover:-translate-y-0.5 hover:border-brand-night/30 hover:shadow-sm",
           )}
         >
@@ -67,7 +67,7 @@ export function ColorFilterBar({
               className={cn(
                 "group flex flex-shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300",
                 isActive
-                  ? "bg-brand-orange text-white shadow-[0_6px_16px_-8px_rgba(232,93,44,0.5)] ring-1 ring-brand-orange/40 ring-offset-2 ring-offset-brand-cream"
+                  ? "bg-brand-orange-dark text-white shadow-[0_6px_16px_-8px_rgba(232,93,44,0.5)] ring-1 ring-brand-orange/40 ring-offset-2 ring-offset-brand-cream"
                   : "border border-brand-night/15 bg-white text-brand-night hover:-translate-y-0.5 hover:border-brand-night/30 hover:shadow-sm",
               )}
             >
@@ -93,7 +93,7 @@ export function ColorFilterBar({
               "absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 transition-all duration-300",
               hasQuery
                 ? "text-brand-orange scale-110"
-                : "text-brand-charcoal/40 group-focus-within:text-brand-orange group-focus-within:scale-110",
+                : "text-brand-charcoal/70 group-focus-within:text-brand-orange group-focus-within:scale-110",
             )}
           />
           <input
@@ -102,14 +102,14 @@ export function ColorFilterBar({
             value={searchQuery ?? ""}
             onChange={(e) => onSearchChange(e.target.value)}
             aria-label="Rechercher parmi les RAL"
-            className="w-full rounded-full border border-brand-night/15 bg-white py-2.5 pl-10 pr-10 text-sm text-brand-night placeholder:text-brand-charcoal/40 focus:outline-none sm:w-72"
+            className="w-full rounded-full border border-brand-night/15 bg-white py-2.5 pl-10 pr-10 text-sm text-brand-night placeholder:text-brand-charcoal/70 focus:outline-none sm:w-72"
           />
           {hasQuery && (
             <button
               type="button"
               onClick={() => onSearchChange("")}
               aria-label="Effacer la recherche"
-              className="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full bg-brand-night/8 text-brand-charcoal/50 transition-all hover:bg-brand-orange hover:text-white hover:scale-110"
+              className="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full bg-brand-night/8 text-brand-charcoal/70 transition-all hover:bg-brand-orange hover:text-white hover:scale-110"
             >
               <X className="h-3 w-3" />
             </button>

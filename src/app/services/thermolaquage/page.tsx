@@ -138,7 +138,7 @@ export default async function ThermolaquagePage() {
               <div className="flex aspect-[4/3] items-center justify-center rounded-2xl bg-brand-night/5">
                 <div className="text-center">
                   <Flame className="mx-auto h-12 w-12 text-brand-orange/40" />
-                  <p className="mt-4 text-sm font-semibold uppercase tracking-[0.15em] text-brand-charcoal/40">
+                  <p className="mt-4 text-sm font-semibold uppercase tracking-[0.15em] text-brand-charcoal/70">
                     Cabine de thermolaquage
                   </p>
                 </div>
@@ -200,7 +200,7 @@ export default async function ThermolaquagePage() {
             {service.specs.map((spec, index) => (
               <ScrollReveal key={spec.label} delay={index * 0.08}>
                 <div className="rounded-xl border border-brand-night/10 bg-white p-6">
-                  <p className="text-sm text-brand-charcoal/60">
+                  <p className="text-sm text-brand-charcoal/70">
                     {spec.label}
                   </p>
                   <p className="heading-display mt-2 text-2xl text-brand-night">
