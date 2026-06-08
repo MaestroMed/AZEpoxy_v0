@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import { buildMetadata } from "@/lib/seo";
-import { serviceLd } from "@/lib/jsonld";
+import { serviceLd, faqPageLd } from "@/lib/jsonld";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
@@ -57,6 +57,9 @@ export default async function ThermolaquagePage() {
           url: "/services/thermolaquage",
         })}
       />
+      {service.faqs.length > 0 && (
+        <JsonLd id="ld-faq-thermolaquage" data={faqPageLd(service.faqs)} />
+      )}
 
       {/* ── Section 1 — Hero ─────────────────────────────────────────── */}
       <PageHero

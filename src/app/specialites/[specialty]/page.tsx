@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/seo";
-import { serviceLd } from "@/lib/jsonld";
+import { serviceLd, faqPageLd } from "@/lib/jsonld";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
   ArrowRight,
@@ -202,6 +202,12 @@ export default async function SpecialtyPage({
           url: `/specialites/${specialty.slug}`,
         })}
       />
+      {specialty.faqs.length > 0 && (
+        <JsonLd
+          id={`ld-faq-${specialty.slug}`}
+          data={faqPageLd(specialty.faqs)}
+        />
+      )}
 
       {/* ── Section 1 — Hero (chapitre du catalogue) ────────────────── */}
       <PageHero
