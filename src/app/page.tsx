@@ -12,6 +12,7 @@ import {
   Award,
   Users,
 } from "lucide-react";
+import { HeroBackground } from "@/components/ui/hero-background";
 import { POPULAR_RAL, RAL_COLORS } from "@/lib/ral-colors";
 import { getServices } from "@/lib/services-data";
 import { PROCESS_STEPS } from "@/lib/process-data";
@@ -141,22 +142,9 @@ export default async function HomePage() {
 
       {/* ── Section 1 — Hero (cinematic video + readability overlays) ─── */}
       <section className="relative h-[100svh] overflow-hidden bg-brand-night text-white">
-        {/* Layer 0 : background hero video (with poster fallback). The
-            cinematic loop drives the visual identity from the very first
-            paint; the swarm canvas, when it shows, blends in via the
-            overlays declared just below. */}
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/images/hero/hero-poster.webp"
-          preload="metadata"
-          aria-hidden="true"
-        >
-          <source src="/video/hero.mp4" type="video/mp4" />
-        </video>
+        {/* Layer 0 : poster (LCP, toujours) + vidéo cinématique (desktop
+            non-tactile uniquement). Voir HeroBackground pour la stratégie. */}
+        <HeroBackground />
 
         {/* Text-readability overlays — responsive :
             • Desktop / landscape : left-biased (image silhouette breathes
