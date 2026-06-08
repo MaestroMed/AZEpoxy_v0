@@ -6,6 +6,7 @@ import { m, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Check, CircleDot, Bike, DoorOpen, Armchair, Factory, Package } from "lucide-react";
 import { cn, SITE } from "@/lib/utils";
 import { POPULAR_RAL, RAL_COLORS } from "@/lib/ral-colors";
+import { estimateWizardPrice } from "@/lib/pricing-data";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { TurnstileWidget } from "@/components/ui/turnstile";
 import { track } from "@/lib/analytics/events";
@@ -526,6 +527,29 @@ export function DevisWizard() {
                     className={inputClass}
                   />
                 </div>
+
+                {/* Estimation indicative live — réduit l'angoisse du prix
+                    inconnu (1re cause d'abandon). Politique devis cadre :
+                    fourchette, jamais un prix ferme. */}
+                {(() => {
+                  const est = estimateWizardPrice(data);
+                  if (!est) return null;
+                  return (
+                    <div className="rounded-xl border border-brand-orange/25 bg-brand-orange/[0.06] p-4 text-center">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-orange-dark">
+                        Estimation indicative
+                      </p>
+                      <p className="mt-1 heading-display text-2xl text-brand-night">
+                        {est.mode === "total"
+                          ? `entre ${est.min} € et ${est.max} €`
+                          : `à partir de ${est.min} €/${est.unit}`}
+                      </p>
+                      <p className="mt-1 text-xs text-brand-charcoal/60">
+                        Fourchette indicative — votre devis personnalisé est gratuit, sous 24 h.
+                      </p>
+                    </div>
+                  );
+                })()}
 
                 <div className="flex justify-between pt-4">
                   <button type="button" onClick={prev} className="inline-flex items-center gap-2 rounded-full border border-brand-night/15 px-6 py-3 text-sm font-semibold text-brand-night hover:bg-brand-cream">

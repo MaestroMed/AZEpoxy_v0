@@ -72,3 +72,47 @@ export const OPTIONS = {
   primaire: { label: "Primaire anti-corrosion", multiplier: 1.3 },
   premium: { label: "Effets architecturaux (corten, métalliques, irisés…)", multiplier: 1.2 },
 };
+
+/**
+ * Estimation indicative live pour le wizard de devis — même source que le
+ * PriceEstimator. Renvoie une fourchette + un mode d'affichage selon le type :
+ *   • "total"   : jantes (quantité × taille connues) → fourchette totale
+ *   • "perUnit" : autres pièces → fourchette par unité ("à partir de … /unité")
+ * Renvoie null si le type est inconnu (pas d'estimation fiable).
+ */
+export function estimateWizardPrice(input: {
+  projectType?: string;
+  nbJantes?: string;
+  tailleJantes?: string;
+  finition?: string;
+}): { min: number; max: number; unit: string; mode: "total" | "perUnit" } | null {
+  const pt = PIECE_TYPES.find((p) => p.slug === input.projectType);
+  if (!pt) return null;
+
+  let base: PriceRange | null = null;
+  let qty = 1;
+  let mode: "total" | "perUnit" = "perUnit";
+
+  if (pt.slug === "jantes" && pt.sizes) {
+    const pouces = parseInt((input.tailleJantes || "").replace(/\D/g, ""), 10);
+    const idx = !pouces ? 0 : pouces <= 17 ? 0 : pouces <= 20 ? 1 : 2;
+    base = pt.sizes[idx].range;
+    qty = Math.max(1, parseInt(input.nbJantes || "4", 10) || 4);
+    mode = "total";
+  } else if (pt.baseRange) {
+    base = pt.baseRange;
+    mode = "perUnit";
+  }
+  if (!base) return null;
+
+  let { min, max } = base;
+  // Finition à effet → léger surcoût (même multiplicateur que le PriceEstimator).
+  if (input.finition && /effet|m[ée]tall|corten|iris|premium/i.test(input.finition)) {
+    min *= OPTIONS.premium.multiplier;
+    max *= OPTIONS.premium.multiplier;
+  }
+  min *= qty;
+  max *= qty;
+
+  return { min: Math.round(min), max: Math.round(max), unit: pt.unit, mode };
+}

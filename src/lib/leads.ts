@@ -97,6 +97,24 @@ async function dispatchWebhook(
   if (!url) return "skipped";
 
   const secret = process.env.LEAD_WEBHOOK_SECRET;
+
+  // Champs de confort "speed-to-lead" : un résumé prêt à pousser en SMS/
+  // WhatsApp et un lien d'appel cliquable, pour qu'un automatisme (Make,
+  // Zapier…) alerte le gérant en < 5 min sans retraiter le payload.
+  const callUrl = lead.phone
+    ? `tel:${lead.phone.replace(/[^\d+]/g, "")}`
+    : undefined;
+  const summary = [
+    "🔔 Nouveau lead AZ Époxy",
+    lead.name,
+    lead.projectType ? `· ${lead.projectType}` : "",
+    lead.phone ? `· 📞 ${lead.phone}` : "",
+    lead.email ? `· ${lead.email}` : "",
+    "— à rappeler vite",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const body = JSON.stringify({
     source: lead.source,
     name: lead.name,
@@ -108,6 +126,10 @@ async function dispatchWebhook(
     ralCode: lead.ralCode,
     extra: lead.extra,
     submittedAt: new Date().toISOString(),
+    // Confort pour automatisations d'alerte
+    summary,
+    callUrl,
+    adminUrl: "https://www.azepoxy.fr/admin/leads",
   });
 
   const headers: Record<string, string> = {
@@ -167,10 +189,16 @@ async function notifyAdminOfLead(
       ["Code RAL", lead.ralCode],
     ]
       .filter(([, v]) => v)
-      .map(
-        ([k, v]) =>
-          `<tr><td style="padding:4px 12px 4px 0;color:#666">${k}</td><td style="padding:4px 0;font-weight:600">${escapeHtml(String(v))}</td></tr>`,
-      )
+      .map(([k, v]) => {
+        const sv = escapeHtml(String(v));
+        // Téléphone et email cliquables → rappel en 1 tap (speed-to-lead).
+        let cell = sv;
+        if (k === "Téléphone")
+          cell = `<a href="tel:${String(v).replace(/[^\d+]/g, "")}" style="color:#B5420F;font-weight:700;text-decoration:none">📞 ${sv}</a>`;
+        else if (k === "Email")
+          cell = `<a href="mailto:${sv}" style="color:#B5420F;text-decoration:none">${sv}</a>`;
+        return `<tr><td style="padding:4px 12px 4px 0;color:#666">${k}</td><td style="padding:4px 0;font-weight:600">${cell}</td></tr>`;
+      })
       .join("");
 
     // `onboarding@resend.dev` (sandbox) marche avec juste une clé API mais
