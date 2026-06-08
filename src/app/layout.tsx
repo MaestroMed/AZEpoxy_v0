@@ -87,10 +87,6 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground antialiased font-sans">
-        {/* Sans JS, les blocs Reveal (cachés par défaut) restent visibles. */}
-        <noscript>
-          <style>{`.az-reveal{opacity:1!important;transform:none!important;filter:none!important}`}</style>
-        </noscript>
         <JsonLd id="ld-business" data={localBusinessLd({ reviews })} />
         <JsonLd id="ld-organization" data={organizationLd()} />
         <JsonLd id="ld-website" data={websiteLd()} />
