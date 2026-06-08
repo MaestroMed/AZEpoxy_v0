@@ -14,7 +14,16 @@ import {
 } from "@/lib/jsonld";
 import { getReviews } from "@/lib/reviews-data";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+// `display: optional` sur le corps (Inter) : si la police n'est pas prête en
+// ~100ms, le fallback est conservé pour ce chargement — pas de re-peint tardif
+// au font-swap qui recalait le LCP du texte hero (~4.4s) sur mobile lent.
+// Outfit (titres, marque) garde `swap` pour toujours afficher la police.
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "optional",
+  preload: true,
+});
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
 
 export const viewport: Viewport = {
