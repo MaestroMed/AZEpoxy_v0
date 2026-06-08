@@ -50,7 +50,7 @@ export function TestimonialCard({
 
       <div className="relative pt-10">
         {/* Star rating */}
-        <div className="mb-4 flex items-center gap-0.5" aria-label={`Note : ${rating} sur 5`}>
+        <div className="mb-4 flex items-center gap-0.5" role="img" aria-label={`Note : ${rating} sur 5`}>
           {Array.from({ length: 5 }).map((_, i) => (
             <Star
               key={i}

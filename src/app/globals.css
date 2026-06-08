@@ -407,7 +407,9 @@ select:focus-visible {
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-semibold text-white shadow-lg shadow-brand-orange/30 transition-all duration-300 hover:bg-brand-orange-dark hover:shadow-xl hover:shadow-brand-orange/40 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2;
+    /* bg orange-dark (#B5420F) → texte blanc AA (~5.6:1) ; hover plus profond
+       (#8B2E0A) reste AA. L'ancien bg-brand-orange (#E85D2C) échouait à 3.48. */
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange-dark px-7 py-3.5 font-semibold text-white shadow-lg shadow-brand-orange/30 transition-all duration-300 hover:bg-[#8B2E0A] hover:shadow-xl hover:shadow-brand-orange/40 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2;
   }
 
   .btn-secondary {
