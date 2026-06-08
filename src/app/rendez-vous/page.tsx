@@ -98,7 +98,7 @@ export default function RendezVousPage() {
                     {/* Numéro discret en filigrane */}
                     <span
                       aria-hidden
-                      className="absolute right-4 top-3 font-mono text-xs font-semibold tabular-nums text-brand-charcoal/30 transition-colors group-hover:text-brand-orange"
+                      className="absolute right-4 top-3 font-mono text-xs font-semibold tabular-nums text-brand-charcoal/70 transition-colors group-hover:text-brand-orange"
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
