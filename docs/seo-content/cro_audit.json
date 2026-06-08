@@ -1,0 +1,113 @@
+{
+  "findings": [
+    {
+      "area": "DevisWizard (src/components/ui/devis-wizard.tsx) — funnel à 4 étapes",
+      "problem": "Le contact (nom/email/tél) n'arrive qu'à l'ÉTAPE 4. L'utilisateur doit franchir Type → Détails → Couleur avant de laisser la moindre coordonnée. Tout abandon avant l'étape 4 = lead 100% perdu, sans même un email pour relancer. C'est la plus grosse fuite du funnel : on demande l'effort AVANT de capturer l'identité.",
+      "fix": "Inverser ou dédoubler la capture : soit déplacer email+téléphone en étape 1/2 (juste après le choix du type), soit ajouter un champ email léger dès l'étape 1 (\"Recevez votre estimation par email\"). Au minimum, capturer l'email à l'étape 2 pour activer la relance d'abandon. Garder les détails techniques après.",
+      "effort": "med",
+      "leadImpact": "high"
+    },
+    {
+      "area": "Relance devis abandonné (src/lib/devis-storage.ts ligne 62-65 + wizard)",
+      "problem": "Bug logique qui NEUTRALISE toute la mécanique de relance : reportAbandonedDevis exige draft.step>=2 ET un email, mais l'email n'est saisi qu'à l'étape 4. Donc un abandon aux étapes 2 ou 3 n'a jamais d'email → aucune relance n'est jamais envoyée sauf si l'utilisateur a atteint l'étape 4 sans soumettre. Tout l'investissement QStash/Resend de récupération est mort pour 90% des abandons.",
+      "fix": "Conséquence directe du point précédent : une fois l'email capturé tôt, la condition step>=2 fonctionne. Sinon, ajuster la garde et surtout collecter l'email avant l'étape finale. Vérifier aussi que le beacon part sur visibilitychange ET sur beforeunload (mobile ne déclenche pas toujours visibilitychange).",
+      "effort": "low",
+      "leadImpact": "high"
+    },
+    {
+      "area": "Événements GA4 wizard (src/components/ui/devis-wizard.tsx)",
+      "problem": "form_start et form_step sont définis dans events.ts et importés, mais JAMAIS appelés dans le wizard : seuls form_submit et swarm_burst sont émis. Impossible de mesurer le taux d'abandon par étape ni le taux d'entrée dans le funnel. On pilote la plus grosse source de leads à l'aveugle — on ne sait pas QUELLE étape fait fuir.",
+      "fix": "Émettre track(\"form_start\",{variant:\"wizard\"}) à la première interaction (selectType), et track(\"form_step\",{variant:\"wizard\",step,label}) dans next()/prev() et au clic sur les chips de progression. Ajouter aussi form_error sur l'échec de soumission (catch du handleSubmit).",
+      "effort": "low",
+      "leadImpact": "med"
+    },
+    {
+      "area": "WhatsApp sticky CTA (src/components/ui/mobile-sticky-cta.tsx ligne 37)",
+      "problem": "Le lien WhatsApp est construit depuis SITE.phoneHref (tel:+33971357496, un numéro fixe 09) → wa.me/33971357496. WhatsApp Business ne s'enregistre quasi jamais sur une ligne fixe : ce lien tombe très probablement sur \"numéro invalide / pas de compte WhatsApp\". Un des 3 CTA mobiles principaux est donc cassé — chaque tap WhatsApp = lead perdu + perte de confiance.",
+      "fix": "Introduire SITE.whatsapp (numéro mobile FR réel au format international, ex 33 6 XX). Faire pointer le bouton et le message pré-rempli (?text=Bonjour, je souhaite un devis pour...) dessus. Si aucun mobile WhatsApp n'existe, retirer le bouton plutôt que d'exposer un lien mort, et le remplacer par un 2e accès devis ou un SMS.",
+      "effort": "low",
+      "leadImpact": "high"
+    },
+    {
+      "area": "Preuve sociale absente sur le point de conversion (src/app/devis/page.tsx + DevisWizard)",
+      "problem": "La page /devis et le wizard ne contiennent AUCUNE preuve sociale : pas de note Google, pas d'avis, pas de compteur \"2000+ projets\", pas de logos clients B2B. Les blocs de réassurance se limitent à \"Gratuit / Sans engagement / 24h\". Au moment précis où l'on demande l'engagement, on ne rassure pas sur la crédibilité.",
+      "fix": "Ajouter au-dessus ou à côté du wizard une barre de preuve : note Google moyenne (déjà calculée via averageRating/getReviews), \"2000+ pièces traitées · 15 ans\", 1-2 verbatims courts, et mention \"Particuliers & pros (métalliers, serruriers, carrossiers)\". Réutiliser ReviewsCarousel/TestimonialCard déjà existants.",
+      "effort": "med",
+      "leadImpact": "high"
+    },
+    {
+      "area": "Absence de fourchette de prix dans le wizard (src/components/ui/devis-wizard.tsx)",
+      "problem": "Le PriceEstimator (fourchettes \"Entre X€ et Y€\") existe et est branché, mais il vit AILLEURS. Dans le wizard de devis lui-même, l'utilisateur choisit type + quantité + finition sans jamais voir d'ordre de grandeur. L'angoisse du prix inconnu est la 1re cause d'abandon de formulaire de devis. Les pages spécialités affichent \"À partir de X€\" mais pas le wizard.",
+      "fix": "Afficher une estimation indicative live dans l'étape Détails/Récap du wizard en réutilisant pricing-data.ts (même source que PriceEstimator), avec le disclaimer \"fourchette indicative, devis personnalisé sous 24h\". Cohérent avec la politique devis-cadre (fourchette, pas de prix ferme).",
+      "effort": "med",
+      "leadImpact": "high"
+    },
+    {
+      "area": "Champ 'Comment nous avez-vous trouvé ?' (src/components/ui/devis-wizard.tsx ligne 564-573, étape 4)",
+      "problem": "L'étape finale Contact ajoute un champ source (Google/bouche-à-oreille/...) juste avant le bouton d'envoi. C'est un champ purement interne (analytics), placé au moment le plus fragile du funnel, qui allonge la friction perçue sans bénéfice pour le visiteur et peut faire décrocher au dernier mètre.",
+      "fix": "Supprimer ce champ du formulaire (le canal d'acquisition se mesure déjà via GA4/UTM, bien plus fiablement que par déclaratif). Réduire l'étape 4 au strict minimum : Nom, Email, Téléphone, consentement. Déplacer l'adresse en optionnel discret.",
+      "effort": "low",
+      "leadImpact": "med"
+    },
+    {
+      "area": "Sticky CTA mobile : seuil d'apparition (src/components/ui/mobile-sticky-cta.tsx ligne 24)",
+      "problem": "La barre sticky n'apparaît qu'après window.scrollY > 280px. Sur les pages spécialités/accueil, le hero plein écran (100svh) fait que l'utilisateur peut lire tout le hero (CTA principal compris) sans jamais voir la barre tant qu'il n'a pas scrollé. Sur mobile, où la barre EST le principal raccourci vers le devis, ce délai retarde l'accès au CTA permanent.",
+      "fix": "Abaisser le seuil (~120px) ou déclencher sur l'IntersectionObserver de sortie du hero plutôt qu'une valeur fixe en px. Garder l'objectif (ne pas masquer le tout début) mais exposer la barre bien plus tôt.",
+      "effort": "low",
+      "leadImpact": "med"
+    },
+    {
+      "area": "Speed-to-lead — pas d'alerte temps réel exploitable (src/lib/leads.ts notifyAdminOfLead + src/app/api/devis/route.ts)",
+      "problem": "La seule notification de nouveau lead est un email admin (notifyOnLead), et il est gated derrière DATABASE_URL ET RESEND_API_KEY ET le toggle settings. Aucune alerte instantanée (SMS/WhatsApp/push) au commercial. Pour un atelier B2B/B2C, rappeler un prospect en <5 min multiplie le taux de conversion vs quelques heures. Un email noyé dans une boîte ne garantit pas le rappel rapide.",
+      "fix": "Ajouter un canal de notification temps réel à fort taux d'ouverture : webhook vers WhatsApp Business / SMS (le LEAD_WEBHOOK_URL existe déjà — y brancher un flux Make/Zapier → SMS au gérant). Afficher dans l'email/le webhook le téléphone du prospect en évidence avec un lien tel: cliquable pour rappel en 1 tap.",
+      "effort": "med",
+      "leadImpact": "high"
+    },
+    {
+      "area": "Confirmation de soumission sans relance (src/components/ui/devis-wizard.tsx ligne 203-214)",
+      "problem": "L'écran de succès dit juste \"recontactés sous 24h\". Aucun CTA secondaire pour maintenir l'engagement (appeler tout de suite, WhatsApp, voir les réalisations) ni promesse d'action immédiate. Un prospect chaud qui vient de convertir est laissé sans next step — on perd l'opportunité d'un contact direct pendant qu'il est motivé.",
+      "fix": "Sur l'écran succès, ajouter \"Besoin d'une réponse immédiate ?\" + bouton Appeler (tel:) et WhatsApp, plus un lien \"Voir nos réalisations\" pour nourrir la confiance pendant l'attente. Optionnel : rappeler le numéro de demande.",
+      "effort": "low",
+      "leadImpact": "med"
+    },
+    {
+      "area": "Numéro de téléphone non cliquable dans le hero / header (src/app/page.tsx hero, header)",
+      "problem": "Le hero (CTA le plus vu) propose seulement \"Demander un devis\" et \"Voir les couleurs\". Le téléphone n'apparaît cliquable qu'en bas de page (CtaBand) et dans la barre mobile. Une partie des visiteurs (surtout B2B pressés et seniors particuliers) préfèrent appeler immédiatement : ne pas exposer un tel: visible en haut de page perd ces leads-là.",
+      "fix": "Ajouter un lien téléphone cliquable visible dès le hero/header desktop (ex \"ou appelez le 09 71 35 74 96\") avec tracking cta_click placement:hero/header. Le numéro est déjà dans SITE.phoneHref — il suffit de l'exposer haut de page.",
+      "effort": "low",
+      "leadImpact": "med"
+    },
+    {
+      "area": "Email expéditeur sandbox Resend (src/app/api/devis/route.ts ligne 127 & 157, leads.ts ligne 180, abandoned/route.ts ligne 59)",
+      "problem": "Les emails partent de onboarding@resend.dev (sandbox). En sandbox, Resend ne délivre qu'au propriétaire du compte : l'email de CONFIRMATION client et l'email de RELANCE abandon ne parviennent probablement jamais au prospect (et risquent le spam). La confirmation client est un pilier de réassurance speed-to-lead ; si elle n'arrive pas, le prospect doute que sa demande a été reçue.",
+      "fix": "Vérifier le domaine azepoxy.fr dans Resend et définir RESEND_FROM (ex \"AZ Époxy <contact@azepoxy.fr>\") partout. Le code de leads.ts lit déjà RESEND_FROM ; aligner devis/route.ts et abandoned/route.ts (actuellement en dur) sur la même variable.",
+      "effort": "low",
+      "leadImpact": "med"
+    },
+    {
+      "area": "Soumission lente / bloquée par l'envoi email synchrone (src/app/api/devis/route.ts ligne 126-185)",
+      "problem": "Le POST /api/devis envoie DEUX emails Resend (admin + client) en await séquentiel AVANT de répondre au navigateur, puis attend fanoutLead. Si Resend est lent ou en erreur, l'utilisateur reste sur \"Envoi...\" longtemps, voire voit une erreur alors que le lead pourrait être sauvé. Sur mobile/réseau faible, une soumission qui traîne = abandon juste au moment de convertir.",
+      "fix": "Persister le lead en base (writeLeadToDb) en premier et répondre 200 au client dès que la donnée est sécurisée, puis envoyer les emails en tâche de fond (waitUntil / after) ou via la file QStash. Découpler la réponse UX de la latence Resend pour ne jamais perdre un lead déjà rempli.",
+      "effort": "med",
+      "leadImpact": "med"
+    },
+    {
+      "area": "Étape Couleur obligatoire dans le parcours (src/components/ui/devis-wizard.tsx étape 3)",
+      "problem": "L'étape 3 \"Choisissez votre couleur\" est une étape complète du funnel alors que la couleur n'est PAS bloquante pour un devis (beaucoup de prospects ne la connaissent pas encore — d'où le bouton \"Je ne sais pas encore\"). Une étape entière de plus = un palier d'abandon supplémentaire pour une info non indispensable au chiffrage.",
+      "fix": "Fusionner Couleur dans l'étape Détails (sélecteur RAL compact + \"décider plus tard\") pour passer de 4 à 3 étapes, ou la rendre clairement skippable d'un clic \"Passer cette étape\". Moins d'étapes visibles = meilleur taux de complétion.",
+      "effort": "med",
+      "leadImpact": "med"
+    }
+  ],
+  "trackingGaps": [
+    "form_start (variant:wizard) — défini dans events.ts mais JAMAIS émis dans le wizard : impossible de mesurer le taux d'entrée dans le funnel devis (principale source de leads).",
+    "form_step (variant:wizard, step, label) — défini mais jamais émis : aucune visibilité sur l'étape exacte où les prospects abandonnent (Type/Détails/Couleur/Contact).",
+    "form_error (variant, reason) — défini mais jamais émis : les échecs de soumission (Turnstile, 429 rate-limit, 500 Resend) ne sont pas tracés alors qu'ils tuent des leads chauds. À ajouter dans le catch de handleSubmit (wizard + contact-form).",
+    "form_submit en conversion GA4 — l'événement existe mais doit être explicitement marqué comme CONVERSION (Key Event) dans l'interface GA4, sinon il ne remonte pas dans les rapports de conversion ni vers Google Ads.",
+    "Clic téléphone (tel:) — aucun événement n'est émis sur les liens tel: (CtaBand, hero, header, écran de succès). Ajouter track(\"cta_click\",{target:tel...}) sur chaque lien d'appel ET le marquer comme conversion GA4 — l'appel est un lead au même titre qu'un formulaire.",
+    "Clic WhatsApp — seul le bouton WhatsApp de la sticky mobile émet cta_click ; à marquer comme conversion GA4. Et le lien lui-même est cassé (numéro fixe) — à corriger avant de compter la conversion.",
+    "Soumission abandon/recovery — aucun événement front n'est émis quand reportAbandonedDevis part (abandon) ni quand l'utilisateur revient via le lien de relance. Ajouter un marqueur (ex utm ou track) pour mesurer le ROI de la séquence de récupération.",
+    "price_estimate_calculated → devis — l'estimateur émet bien l'événement, mais il n'existe aucun lien de conversion mesuré entre 'a calculé une estimation' et 'a soumis un devis'. Marquer le clic 'Confirmer avec un devis précis' (cta_click placement:pricing) comme micro-conversion pour suivre ce chemin.",
+    "Consentement cookies / GA4 — gtag ne se charge qu'après consentement (cookie-consent accepted). Sans Consent Mode v2, tous les leads des visiteurs qui n'acceptent pas les cookies sont invisibles dans GA4 : envisager Consent Mode v2 (signaux anonymisés) pour ne pas sous-compter les conversions."
+  ]
+}

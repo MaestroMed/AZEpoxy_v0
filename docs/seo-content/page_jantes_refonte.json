@@ -1,0 +1,160 @@
+{
+  "slug": "jantes",
+  "title": "Thermolaquage de Jantes Auto",
+  "tagline": "Rénovation, peinture et personnalisation de jantes alliage — finition four, tenue garantie",
+  "metaTitle": "Thermolaquage Jantes Alu 95 — Dès 80 €/jante | AZ Époxy",
+  "metaDescription": "Thermolaquage et peinture de jantes alu à Bruyères-sur-Oise (95). Sablage + cuisson four, finition durable. Devis gratuit sous 24 h, dès 80 €/jante. Île-de-France & Oise.",
+  "heroIntro": "Vos jantes piquées, écaillées ou ternies retrouvent un éclat de neuf — ou la couleur exacte que vous voulez. Sablage, primaire d'accrochage, poudre cuite au four : une finition qui résiste à la poussière de frein, au sel et aux graviers, là où la peinture aérosol s'écaille en une saison. Devis gratuit sous 24 h.",
+  "benefits": [
+    {
+      "title": "Une finition four, pas un coup de bombe",
+      "description": "Sablage complet, primaire d'accrochage époxy sans zinc ni plomb, puis poudre cuite au four : le revêtement fait corps avec l'aluminium. Résultat homogène, sans coulure ni reprise, avec une épaisseur régulière de 60 à 80 µm sur toute la jante, y compris les rayons et le creux de barrette."
+    },
+    {
+      "title": "Résiste à la poussière de frein incandescente",
+      "description": "Les particules de frein brûlantes s'incrustent dans une peinture classique et ternissent vos jantes en quelques mois. Le revêtement époxy forme une barrière chimique qui se nettoie d'un coup d'éponge — vos jantes restent nettes lavage après lavage."
+    },
+    {
+      "title": "Protégées contre le sel et la corrosion hivernale",
+      "description": "Sel de déneigement et fondants routiers attaquent l'aluminium nu et font cloquer les anciennes finitions. Notre traitement (sablage + primaire d'accrochage + poudre époxy) referme la surface de façon hermétique : pas d'oxydation blanche, pas de cloquage, même après plusieurs hivers."
+    },
+    {
+      "title": "Encaisse les graviers sans écailler",
+      "description": "Avec sa résistance aux chocs et son adhérence classe 0 au test de quadrillage, le thermolaquage absorbe les impacts de cailloux sans sauter en éclats comme un vernis. Le rebord de jante, zone la plus exposée, reste protégé."
+    },
+    {
+      "title": "Teinte et brillant qui ne passent pas",
+      "description": "Nos poudres certifiées de qualité architecturale conservent leur couleur et leur brillance des années, même en plein soleil. Pas de jaunissement, pas de farinage : un noir brillant reste profond, un satiné reste satiné."
+    },
+    {
+      "title": "Toutes finitions : RAL, NCS et effets premium",
+      "description": "Au-delà des teintes RAL & NCS classiques (noir brillant, gris anthracite, blanc, gris graphite), nous réalisons des effets métalliques, des finitions bicolores face usinée / flanc peint, et nos Effets Anodisés pour un rendu haut de gamme. Nuancier sur demande."
+    }
+  ],
+  "process": [
+    {
+      "label": "1. Devis & dépose",
+      "description": "Envoyez-nous photos et diamètre, ou déposez vos jantes à l'atelier de Bruyères-sur-Oise. Inspection visuelle et devis ferme avant tout démarrage. Enlèvement et livraison possibles en Île-de-France et dans l'Oise."
+    },
+    {
+      "label": "2. Sablage à nu",
+      "description": "Décapage intégral par sablage : ancienne peinture, vernis, oxydation et incrustations de frein sont retirés jusqu'au métal sain. Pression adaptée à l'alliage pour préserver les jantes forgées et les tolérances de montage."
+    },
+    {
+      "label": "3. Primaire d'accrochage",
+      "description": "Application d'un primaire d'accrochage époxy sans zinc ni plomb sur métal fraîchement mis à nu. C'est cette étape, sautée par beaucoup, qui garantit l'adhérence longue durée et la tenue à la corrosion."
+    },
+    {
+      "label": "4. Poudrage & cuisson four",
+      "description": "Application électrostatique de la poudre dans la teinte choisie, puis polymérisation en four — durée et température ajustées à chaque jante. Le revêtement se vitrifie et devient indéformable."
+    },
+    {
+      "label": "5. Contrôle & remise",
+      "description": "Contrôle d'épaisseur et d'aspect sur chaque jante avant restitution. Vos jantes vous reviennent prêtes à remonter — il ne reste qu'à confier pneus, valves et équilibrage à votre garagiste."
+    }
+  ],
+  "pricingTiers": [
+    {
+      "label": "Jantes 15 à 17\" — teinte unie RAL/NCS",
+      "priceFrom": "à partir de 80 €/jante",
+      "includes": "Sablage à nu, primaire d'accrochage époxy, poudre époxy teinte unie (noir, anthracite, blanc, gris…), cuisson four et contrôle. Soit dès 320 € le jeu de 4."
+    },
+    {
+      "label": "Jantes 18 à 20\" — teinte unie RAL/NCS",
+      "priceFrom": "à partir de 95 €/jante",
+      "includes": "Même process complet, adapté aux grands diamètres et aux jantes larges. Sablage, primaire, poudrage et cuisson four inclus. Devis précis selon état initial."
+    },
+    {
+      "label": "Finition métallisée ou satinée premium",
+      "priceFrom": "à partir de 110 €/jante",
+      "includes": "Effets métalliques, gris graphite à paillettes, satinés profonds. Poudres certifiées de qualité architecturale. Diamètre et complexité de teinte chiffrés au devis."
+    },
+    {
+      "label": "Bicolore face usinée / flanc peint",
+      "priceFrom": "sur devis personnalisé",
+      "includes": "Masquage de la face diamantée, peinture du flanc et du creux, double passage. Rendu type monte d'origine sportive. Tarif établi après inspection des jantes."
+    }
+  ],
+  "popularColors": [
+    "RAL 9005",
+    "RAL 7016",
+    "RAL 9006",
+    "RAL 7024",
+    "RAL 9010",
+    "RAL 7021"
+  ],
+  "turnaround": "5 à 7 jours ouvrés pour un jeu de 4 jantes — date de retrait confirmée à la dépose. Service express possible selon planning.",
+  "trustSignals": [
+    "Atelier 1 800 m² à Bruyères-sur-Oise (95820) — process maîtrisé de A à Z, rien n'est sous-traité",
+    "Sablage, primaire d'accrochage et cuisson four réalisés sur place sous un même toit",
+    "Préparation et application selon le référentiel Qualicoat et la norme ISO 12944",
+    "Poudres certifiées de qualité architecturale — tenue UV et anti-corrosion durables",
+    "Contrôle d'épaisseur et d'adhérence sur chaque jante avant restitution",
+    "Particuliers et professionnels (préparateurs, centres auto) — enlèvement & livraison IDF + Oise"
+  ],
+  "faqs": [
+    {
+      "question": "Combien coûte le thermolaquage de 4 jantes ?",
+      "answer": "Cela dépend du diamètre, de l'état initial et de la finition. Pour un jeu de 4 jantes de 15 à 17 pouces en bon état, en teinte unie, comptez à partir de 320 € TTC (80 €/jante), sablage, primaire d'accrochage et cuisson four compris. Au-delà de 18 pouces, comptez dès 95 €/jante ; les finitions métallisées démarrent à 110 €/jante. Vous recevez un devis ferme et gratuit sous 24 h après envoi de quelques photos."
+    },
+    {
+      "question": "Le thermolaquage de jantes, ça tient combien de temps ?",
+      "answer": "Bien plus longtemps qu'une peinture aérosol ou qu'un vernis. Grâce au sablage à nu, au primaire d'accrochage et à la cuisson au four, le revêtement fait corps avec l'aluminium : il résiste aux UV, au sel, à la poussière de frein et aux graviers pendant des années, sans farinage ni écaillage. C'est aujourd'hui la solution la plus durable pour rénover des jantes alu."
+    },
+    {
+      "question": "Faut-il démonter les pneus avant de vous envoyer les jantes ?",
+      "answer": "Oui. Les jantes doivent nous parvenir nues : sans pneu, sans capteur de pression (TPMS) et sans plombs d'équilibrage. Votre garagiste ou centre auto réalise le démontage avant et le remontage + équilibrage après notre intervention. Si vous le souhaitez, nous pouvons vous orienter vers un monteur partenaire proche de l'atelier."
+    },
+    {
+      "question": "Quel délai pour récupérer mes jantes ?",
+      "answer": "Comptez 5 à 7 jours ouvrés pour un jeu de 4 jantes (sablage + primaire + poudrage + cuisson four + contrôle). En forte affluence (sortie d'hiver, printemps), le délai peut s'allonger légèrement. Nous vous confirmons une date de retrait précise dès la dépose — et un service express est possible selon notre planning."
+    },
+    {
+      "question": "Peut-on thermolaquer des jantes en aluminium forgé ou des jantes de marque ?",
+      "answer": "Absolument. Les jantes forgées comme les jantes coulées supportent parfaitement la cuisson au four. Nous adaptons la pression de sablage pour préserver la dureté, la face diamantée et les tolérances de montage des jantes haut de gamme. La finition et la durabilité sont identiques, quel que soit le type de jante."
+    },
+    {
+      "question": "Mes jantes sont piquées / corrodées / déjà repeintes — c'est rattrapable ?",
+      "answer": "Dans la grande majorité des cas, oui. Le sablage retire toute ancienne peinture, vernis et oxydation jusqu'au métal sain, ce qui efface les micro-piqûres et les départs de corrosion. Une jante voilée ou fissurée relève en revanche d'une réparation structurelle préalable, hors de notre champ — nous vous le signalons honnêtement à l'inspection plutôt que de masquer le défaut sous la poudre."
+    },
+    {
+      "question": "Quelle couleur ou finition choisir pour mes jantes ?",
+      "answer": "Les valeurs sûres : noir brillant (RAL 9005) pour un look intemporel, gris anthracite (RAL 7016) ou gris graphite (RAL 7024) pour un rendu sportif discret, blanc (RAL 9010) ou gris argent (RAL 9006) pour éclaircir. Nous travaillons toutes les teintes RAL & NCS, ainsi que des effets métallisés, satinés et bicolores. Demandez le nuancier : on vous conseille selon la couleur de votre voiture."
+    }
+  ],
+  "internalLinks": [
+    {
+      "anchor": "Demander un devis jantes gratuit",
+      "href": "/devis"
+    },
+    {
+      "anchor": "Le thermolaquage en détail",
+      "href": "/services/thermolaquage"
+    },
+    {
+      "anchor": "Sablage & préparation des surfaces",
+      "href": "/services/sablage"
+    },
+    {
+      "anchor": "Nuancier RAL & NCS",
+      "href": "/couleurs-ral"
+    },
+    {
+      "anchor": "Effets & finitions premium",
+      "href": "/services/finitions"
+    },
+    {
+      "anchor": "Thermolaquage moto (cadres & jantes)",
+      "href": "/specialites/moto"
+    },
+    {
+      "anchor": "Pièces auto (étriers, caches moteur)",
+      "href": "/specialites/voiture"
+    },
+    {
+      "anchor": "Espace professionnels & préparateurs",
+      "href": "/professionnels"
+    }
+  ],
+  "ctaText": "Recevez votre devis jantes gratuit sous 24 h"
+}

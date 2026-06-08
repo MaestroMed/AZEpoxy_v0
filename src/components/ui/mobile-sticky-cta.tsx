@@ -21,7 +21,9 @@ export function MobileStickyCta() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 280);
+    // Seuil bas (~120px) : la barre — principal raccourci devis sur mobile —
+    // s'expose dès la sortie du tout début de page, sans attendre un long scroll.
+    const onScroll = () => setVisible(window.scrollY > 120);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -34,7 +36,9 @@ export function MobileStickyCta() {
 
   if (hidden) return null;
 
-  const whatsappUrl = `https://wa.me/${SITE.phoneHref.replace(/\D/g, "")}`;
+  const whatsappUrl = `https://wa.me/${SITE.phoneHref.replace(/\D/g, "")}?text=${encodeURIComponent(
+    "Bonjour, je souhaite un devis pour un thermolaquage.",
+  )}`;
 
   return (
     <div

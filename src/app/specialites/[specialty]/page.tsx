@@ -121,8 +121,14 @@ export async function generateMetadata({
     return { title: "Spécialité introuvable" };
   }
 
+  // Le layout applique déjà le template "… | AZ Époxy" ; on retire un
+  // éventuel suffixe marque dans le metaTitle pour éviter le doublon.
+  const cleanTitle = specialty.metaTitle?.replace(
+    /\s*[|–—-]\s*AZ\s*[ÉE]poxy\s*$/i,
+    "",
+  );
   return buildMetadata({
-    title: specialty.metaTitle ?? `${specialty.title} — Thermolaquage`,
+    title: cleanTitle ?? `${specialty.title} — Thermolaquage`,
     description: specialty.metaDescription ?? specialty.description.slice(0, 160),
     path: `/specialites/${specialty.slug}`,
   });
