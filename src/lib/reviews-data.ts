@@ -1,6 +1,3 @@
-import { sanityFetch } from "@/sanity/client";
-import { REVIEWS_QUERY } from "@/sanity/queries";
-
 export interface Review {
   _id?: string;
   author: string;
@@ -11,15 +8,13 @@ export interface Review {
 }
 
 /**
- * Fetch synced reviews from Sanity. Returns an empty array when Sanity isn't
- * configured or the sync hasn't happened yet — the UI falls back to
- * testimonials and JSON-LD omits AggregateRating in that case.
+ * Avis externes synchronisés (Google/Trustpilot…). Aujourd'hui aucun flux
+ * branché : renvoie un tableau vide → l'UI retombe sur les témoignages et le
+ * JSON-LD omet AggregateRating. Les vrais avis saisis en admin transitent par
+ * `getPublicTestimonials` (table testimonials), pas par ce module.
  */
 export async function getReviews(): Promise<Review[]> {
-  const data = await sanityFetch<Review[]>(REVIEWS_QUERY, {}, {
-    tags: ["review:list"],
-  });
-  return data ?? [];
+  return [];
 }
 
 export function averageRating(reviews: Review[]): number | null {

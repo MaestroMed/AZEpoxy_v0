@@ -11,7 +11,6 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "cdn.sanity.io" },
     ],
     // Pré-déclare les valeurs `quality` que le code passe à <Image />
     // (Next 16 les exigera). Évite le warning dev + fige les niveaux
@@ -41,10 +40,6 @@ const nextConfig = {
     workerThreads: false,
     cpus: 2,
   },
-  // Sanity Studio (and next-sanity) call React 19.2 hooks like useEffectEvent
-  // that aren't exposed by Next's bundled "react-builtin". Letting Next
-  // transpile them forces resolution against the project's own React.
-  transpilePackages: ["sanity", "next-sanity", "@sanity/vision"],
   // `prefix-[param]` folder names aren't supported as dynamic routes
   // in App Router (Next 15). The villes pages live in /villes/[ville]
   // internally; we rewrite /thermolaquage-{slug} ↔ /villes/{slug}

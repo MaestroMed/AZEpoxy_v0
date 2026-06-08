@@ -95,9 +95,6 @@ export const TESTIMONIALS_FALLBACK: Testimonial[] = [
   },
 ];
 
-import { sanityFetch } from "@/sanity/client";
-import { TESTIMONIALS_QUERY } from "@/sanity/queries";
-
 export const TESTIMONIALS = TESTIMONIALS_FALLBACK;
 
 /**
