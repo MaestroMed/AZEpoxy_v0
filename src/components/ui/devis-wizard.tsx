@@ -279,7 +279,6 @@ export function DevisWizard() {
                   idx < step && "cursor-pointer"
                 )}
                 aria-current={active ? "step" : undefined}
-                aria-label={`Étape ${idx} ${label}`}
               >
                 <span
                   className={cn(
