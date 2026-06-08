@@ -35,14 +35,15 @@ Voir l'audit complet : `docs/seo-content/cro_audit.json` (14 findings + 9 trous 
 - [x] Seuil sticky CTA mobile 280 → 120 px (accès devis plus tôt).
 - [x] Lien WhatsApp avec message pré-rempli.
 - [x] `RESEND_FROM` configurable (déjà fait dans leads.ts).
-- [ ] **HIGH — Capturer l'email dès l'étape 1-2 du wizard** (aujourd'hui à l'étape 4 → 90 % des abandons sans email, relance impossible).
-- [ ] **HIGH — Corriger la relance d'abandon** (conséquence du point ci-dessus : `reportAbandonedDevis` exige un email jamais saisi tôt).
-- [ ] **HIGH — Preuve sociale sur `/devis`** (note Google, « 2000+ pièces », verbatims).
+- [x] **Email capturé dès l'étape 2 du wizard** → la relance d'abandon fonctionne enfin (avant : étape 4, 90 % des abandons sans email).
+- [x] **Beacon d'abandon sur `pagehide`** en plus de `visibilitychange` (mobile iOS).
+- [x] **Tracking funnel** `form_start` / `form_step` / `form_error` émis dans le wizard.
+- [x] **Champ « Comment nous avez-vous trouvé ? » retiré** (friction).
+- [x] **CTA secondaires sur l'écran de succès** (Appeler + Voir réalisations).
+- [x] **Barre de réassurance sur `/devis`** (atelier, particuliers & pros, 24 h, IDF+Oise).
 - [ ] **HIGH — Fourchette de prix live dans le wizard** (réutiliser `pricing-data.ts`).
 - [ ] **HIGH — Notification temps réel du lead** (SMS/WhatsApp au gérant via `LEAD_WEBHOOK_URL` — speed-to-lead < 5 min).
-- [ ] MED — Émettre `form_start` / `form_step` / `form_error` dans le wizard (mesure du funnel).
-- [ ] MED — Retirer le champ « Comment nous avez-vous trouvé ? » de l'étape Contact (friction inutile).
-- [ ] MED — CTA secondaires sur l'écran de succès (Appeler / WhatsApp / Voir réalisations).
+- [ ] MED — Brancher la vraie note Google sur la barre de réassurance (quand avis GBP en place).
 - [ ] MED — Lien téléphone cliquable visible dès le hero/header desktop.
 - [ ] MED — POST `/api/devis` : persister le lead AVANT d'envoyer les emails (découpler de la latence Resend).
 - [ ] MED — Fusionner / rendre skippable l'étape Couleur (4 → 3 étapes).
