@@ -50,3 +50,6 @@ UsersMehdi*_audit.html
 # Lighthouse artifacts
 lh-*.json
 .lighthouseci/
+
+# Workflow / SEO temp artifacts
+.asset-tmp/
