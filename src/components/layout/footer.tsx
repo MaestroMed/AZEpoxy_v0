@@ -32,6 +32,8 @@ const cols = [
     title: "Spécialités",
     links: [
       { label: "Jantes auto", href: "/specialites/jantes" },
+      { label: "Portail & ferronnerie", href: "/specialites/portail" },
+      { label: "Sablage & aérogommage", href: "/specialites/sablage-aerogommage" },
       { label: "Moto Art", href: "/specialites/moto" },
       { label: "Pièces auto", href: "/specialites/voiture" },
       { label: "Pièces métalliques", href: "/specialites/pieces" },

@@ -27,6 +27,8 @@ const RULES: CrossLinkRule[] = [
   { re: /\bsablage\b/i, href: "/services/sablage" },
   { re: /\b(?:nuancier|couleurs?)\s+RAL\b/i, href: "/couleurs-ral" },
   { re: /\bthermolaquage\s+(?:de\s+)?moto(?:s|cyclettes?)?\b/i, href: "/specialites/moto" },
+  { re: /\bthermolaquage\s+(?:de\s+)?portail\b/i, href: "/specialites/portail", skipForSlug: "thermolaquage-portail-prix-duree-entretien" },
+  { re: /\ba[ée]rogommage\b/i, href: "/specialites/sablage-aerogommage", skipForSlug: "sablage-ou-aerogommage-lequel-choisir" },
   { re: /\bfinitions?\s+(?:sp[ée]ciales?|mat(?:es?)?|satin[ée]es?|textur[ée]es?)\b/i, href: "/services/finitions" },
 ];
 
