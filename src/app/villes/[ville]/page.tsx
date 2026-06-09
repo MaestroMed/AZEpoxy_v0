@@ -46,6 +46,7 @@ import {
   getRelevantRealisationsForVille,
   getProjectSlug,
 } from "@/lib/villes/realisations-match";
+import { COMBOS } from "@/lib/combos-data";
 import { DeptHubView } from "@/components/villes/dept-hub-view";
 import { SITE } from "@/lib/utils";
 
@@ -187,6 +188,8 @@ export default async function VillePage({
   // Le BreadcrumbList est émis par PageHero depuis le prop `breadcrumbs`
   // (source unique) — on ne ré-émet PAS de breadcrumb manuel ici.
   const deptHubSlug = DEPT_HUB_SLUG[ville.departmentCode];
+  // Combos service×ville à forte intention commerciale pour cette commune.
+  const villeCombos = COMBOS.filter((c) => c.villeSlug === ville.slug);
   const heroBreadcrumbs = deptHubSlug
     ? [
         { label: ville.department, href: `/thermolaquage-${deptHubSlug}` },
@@ -579,6 +582,40 @@ export default async function VillePage({
       </section>
 
       {/* ── Section 8 — Nearby cities + dept hub (mesh) ────────────── */}
+      {villeCombos.length > 0 && (
+        <section className="bg-brand-cream py-16">
+          <div className="container-wide">
+            <ScrollReveal>
+              <h2 className="heading-display text-2xl text-brand-night sm:text-3xl">
+                Prestations ciblées à{" "}
+                <span className="bg-gradient-ember bg-clip-text text-transparent">
+                  {ville.name}
+                </span>
+              </h2>
+              <p className="mt-3 text-brand-charcoal/70">
+                Nos pages dédiées par type de pièce, pour {ville.name} et ses
+                alentours — enlèvement et livraison possibles.
+              </p>
+            </ScrollReveal>
+            <div className="mt-6 flex flex-wrap gap-3">
+              {villeCombos.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/${c.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/[0.08] px-5 py-3 text-sm font-bold text-brand-orange-dark transition-all hover:border-brand-orange/55 hover:bg-brand-orange/[0.15]"
+                >
+                  <ArrowRight className="h-3.5 w-3.5" />
+                  {c.service === "jantes"
+                    ? "Thermolaquage de jantes"
+                    : "Thermolaquage de portail"}{" "}
+                  à {ville.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {(nearbyVilles.length > 0 || DEPT_HUB_SLUG[ville.departmentCode]) && (
         <section className="bg-white py-16">
           <div className="container-wide">

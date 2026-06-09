@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/seo";
 import { serviceLd, faqPageLd } from "@/lib/jsonld";
+import { COMBOS } from "@/lib/combos-data";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
   ArrowRight,
@@ -184,6 +185,10 @@ export default async function SpecialtyPage({
   const projectCategoryLabel =
     PROJECT_CATEGORIES.find((c) => c.key === projectCategory)?.label ??
     projectCategory;
+
+  // Pages combo "service × ville" pour cette spécialité (maillage vers les
+  // pages haute-intention locale).
+  const serviceCombos = COMBOS.filter((c) => c.service === specialty.slug);
 
   // Resolve popular colors from RAL catalog
   const popularRalColors = specialty.popularColors
@@ -550,6 +555,40 @@ export default async function SpecialtyPage({
                 ))}
               </div>
             </ScrollReveal>
+          </div>
+        </section>
+      )}
+
+      {/* ── Section 6c — Zones d'intervention (combos service×ville) ─── */}
+      {serviceCombos.length > 0 && (
+        <section className="bg-white py-20">
+          <div className="container-wide">
+            <ScrollReveal>
+              <SectionHeader
+                label="Zones d'intervention"
+                labelIcon={<Tag className="h-3 w-3" />}
+                title={
+                  <>
+                    Thermolaquage de {specialty.title.toLowerCase()}{" "}
+                    <span className="bg-gradient-ember bg-clip-text text-transparent">
+                      près de chez vous
+                    </span>
+                  </>
+                }
+                description="Pages dédiées par commune — enlèvement et livraison en Île-de-France et dans l'Oise."
+              />
+            </ScrollReveal>
+            <div className="mx-auto mt-10 flex max-w-4xl flex-wrap justify-center gap-3">
+              {serviceCombos.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/${c.slug}`}
+                  className="rounded-full border border-brand-night/15 bg-brand-cream px-4 py-2 text-sm font-semibold text-brand-night transition-colors hover:border-brand-orange/50 hover:text-brand-orange-dark"
+                >
+                  {c.villeName}
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
       )}
