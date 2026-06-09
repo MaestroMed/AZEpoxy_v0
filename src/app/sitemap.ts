@@ -29,6 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/couleurs-ral/polaris`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/couleurs-ral/dichroic`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/couleurs-ral/sfera`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/specialites`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/specialites/jantes`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/specialites/portail`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/specialites/sablage-aerogommage`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },

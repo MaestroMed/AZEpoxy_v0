@@ -22,7 +22,7 @@ import { CtaBand } from "@/components/ui/cta-band";
 import { getServiceBySlugAsync } from "@/lib/services-data";
 
 const SERVICE_DESCRIPTION =
-  "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium Adaptacolor : Patina, Polaris, Dichroic, Sfera. AZ Époxy, Bruyères-sur-Oise.";
+  "Finitions thermolaquage spéciales : mat, satiné, brillant, texturé, moucheté, anti-graffiti. Collections premium : Patina, Polaris, Dichroic, Sfera. AZ Époxy, Bruyères-sur-Oise.";
 
 export const metadata = buildMetadata({
   title: "Finitions Spéciales",
@@ -237,11 +237,11 @@ export default async function FinitionsPage() {
                 <>
                   4 collections{" "}
                   <span className="bg-gradient-ember bg-clip-text text-transparent">
-                    Adaptacolor.
+                    exclusives.
                   </span>
                 </>
               }
-              description="En partenariat avec Adaptacolor, nous proposons des gammes de poudres exclusives qui transcendent le nuancier RAL classique."
+              description="Nous proposons des collections premium de poudres certifiées de qualité architecturale qui transcendent le nuancier RAL classique."
             />
           </ScrollReveal>
 

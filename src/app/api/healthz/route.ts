@@ -1,20 +1,29 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Minimal health check for uptime monitors and smoke tests. Reports which
- * integrations are wired up via env vars so it's easy to diagnose a misconfigured
- * deploy. No sensitive values are returned.
+ * Health check pour uptime monitors et smoke tests. La réponse publique est
+ * minimale ({ ok, timestamp }) — les détails (flags d'intégrations, région,
+ * commit) ne sont renvoyés qu'avec un header `Authorization: Bearer
+ * <CRON_SECRET>` valide, pour ne pas exposer la topologie du déploiement.
+ * Aucune valeur sensible n'est jamais retournée.
  */
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const base = { ok: true, timestamp: new Date().toISOString() };
+
+  const secret = process.env.CRON_SECRET;
+  const auth = request.headers.get("authorization");
+  if (!secret || auth !== `Bearer ${secret}`) {
+    return NextResponse.json(base);
+  }
+
   return NextResponse.json({
-    ok: true,
-    timestamp: new Date().toISOString(),
+    ...base,
     region: process.env.VERCEL_REGION ?? "unknown",
     commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
     integrations: {
-      sanity: Boolean(process.env.NEXT_PUBLIC_SANITY_PROJECT_ID),
+      database: Boolean(process.env.DATABASE_URL),
       resend: Boolean(process.env.RESEND_API_KEY),
       upstash: Boolean(
         process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN

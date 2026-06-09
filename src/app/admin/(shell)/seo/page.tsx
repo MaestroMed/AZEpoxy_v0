@@ -26,9 +26,9 @@ export default async function AdminSeoPage() {
     getVilles(),
   ]);
 
-  const totalPages = latest ? parseInt(latest.totalPages, 10) : 0;
-  const ok = latest ? parseInt(latest.okCount, 10) : 0;
-  const ko = latest ? parseInt(latest.koCount, 10) : 0;
+  const totalPages = latest ? latest.totalPages : 0;
+  const ok = latest ? latest.okCount : 0;
+  const ko = latest ? latest.koCount : 0;
   const successRate = totalPages > 0 ? Math.round((ok / totalPages) * 100) : 0;
 
   const koPages = latest
@@ -88,7 +88,7 @@ export default async function AdminSeoPage() {
             }
             hint={
               latest
-                ? `${parseInt(latest.durationMs, 10) / 1000}s · ${latest.trigger}`
+                ? `${latest.durationMs / 1000}s · ${latest.trigger}`
                 : "Lance un premier passage"
             }
           />
@@ -166,9 +166,9 @@ export default async function AdminSeoPage() {
           ) : (
             <ul className="divide-y divide-white/[0.04]">
               {history.map((run) => {
-                const total = parseInt(run.totalPages, 10);
-                const runOk = parseInt(run.okCount, 10);
-                const runKo = parseInt(run.koCount, 10);
+                const total = run.totalPages;
+                const runOk = run.okCount;
+                const runKo = run.koCount;
                 const rate = total > 0 ? Math.round((runOk / total) * 100) : 0;
                 return (
                   <li
@@ -182,7 +182,7 @@ export default async function AdminSeoPage() {
                       </p>
                       <p className="mt-0.5 text-[11px] text-white/40">
                         {runOk}/{total} OK · {runKo} KO ·{" "}
-                        {parseInt(run.durationMs, 10) / 1000}s · {run.trigger}
+                        {run.durationMs / 1000}s · {run.trigger}
                       </p>
                     </div>
                     <span

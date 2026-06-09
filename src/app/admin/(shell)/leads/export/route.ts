@@ -7,7 +7,10 @@ export const dynamic = "force-dynamic";
 
 function csvCell(v: unknown): string {
   if (v == null) return "";
-  const s = String(v);
+  let s = String(v);
+  // Anti-injection de formule tableur (Excel/LibreOffice) : préfixe une
+  // apostrophe si la valeur commence par =, +, -, @ ou une tabulation.
+  if (/^[=+\-@\t]/.test(s)) s = `'${s}`;
   if (/[",\n;]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
   return s;
 }

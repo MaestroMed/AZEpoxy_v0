@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { ArrowRight, MapPin, ShieldCheck, Euro, Clock } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbLd } from "@/lib/jsonld";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -66,13 +65,6 @@ export default async function ComboPage({ params }: Props) {
   return (
     <>
       <JsonLd id={`ld-service-${combo.slug}`} data={serviceLd} />
-      <JsonLd
-        id={`ld-breadcrumb-${combo.slug}`}
-        data={breadcrumbLd([
-          { label: "Spécialités", href: `/specialites/${combo.service}` },
-          { label: `${specialty?.title ?? serviceLabel} — ${combo.villeName}` },
-        ])}
-      />
 
       <PageHero
         label={`Thermolaquage ${serviceLabel} · ${combo.villeName}`}

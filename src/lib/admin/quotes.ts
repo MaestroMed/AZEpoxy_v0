@@ -60,11 +60,18 @@ async function nextQuoteNumber(): Promise<string> {
   const db = getDb();
   const year = new Date().getFullYear();
   const prefix = `AZ-${year}-`;
+  // MAX(number) plutôt que count(*)+1 : après suppression d'un devis le
+  // compteur ne recule pas, donc pas de numéro réattribué ni de collision
+  // sur l'année. Le suffixe étant zero-paddé à largeur fixe, l'ordre
+  // lexicographique DESC équivaut à l'ordre numérique.
   const [row] = await db
-    .select({ c: sql<number>`count(*)::int` })
+    .select({ number: quotes.number })
     .from(quotes)
-    .where(sql`${quotes.number} LIKE ${prefix + "%"}`);
-  const n = (row?.c ?? 0) + 1;
+    .where(sql`${quotes.number} LIKE ${prefix + "%"}`)
+    .orderBy(desc(quotes.number))
+    .limit(1);
+  const lastSuffix = row ? Number.parseInt(row.number.slice(prefix.length), 10) : 0;
+  const n = (Number.isFinite(lastSuffix) ? lastSuffix : 0) + 1;
   return `${prefix}${String(n).padStart(4, "0")}`;
 }
 

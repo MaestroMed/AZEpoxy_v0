@@ -95,6 +95,13 @@ export async function ratelimit(
     const r = await upstashLimiter.limit(identifier);
     return { success: r.success, remaining: r.remaining, reset: r.reset };
   }
+  // Fail-loud : en production le fallback mémoire est quasi inopérant
+  // (reset à chaque cold start). On le signale sans jamais bloquer.
+  if (process.env.NODE_ENV === "production") {
+    console.error(
+      "[security] rate limiting persistant désactivé : variable d'environnement manquante (UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN)"
+    );
+  }
   return inMemoryLimit(`${prefix}:${identifier}`, limit, window);
 }
 

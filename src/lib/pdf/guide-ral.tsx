@@ -196,7 +196,7 @@ function Guide({ customerName }: GuideOptions) {
           clients — jantes, portails, mobilier, pièces industrielles — pour
           vous aider à trouver la bonne finition avant devis. Chaque teinte est
           disponible en mat, satiné ou brillant, et peut être combinée en
-          bicolore ou avec nos finitions premium Adaptacolor.
+          bicolore ou avec nos finitions premium.
         </Text>
 
         <View style={styles.callout}>

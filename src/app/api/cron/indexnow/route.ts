@@ -10,7 +10,8 @@ import { allDeptHubSlugs } from "@/lib/villes/departments";
  * Pas de Google direct via IndexNow, mais Bingbot relaie souvent dans
  * Google. Couvre 30 %+ de la search en France via Yahoo!/Bing.
  *
- * Auth : CRON_SECRET en header Bearer (Vercel Cron) ou ?token=.
+ * Auth : CRON_SECRET en header Bearer (Vercel Cron) uniquement — pas de
+ * secret en query (les URLs fuitent dans les logs/proxies).
  */
 
 const SITE_URL =
@@ -21,8 +22,6 @@ function isAuthed(req: NextRequest): boolean {
   if (!secret) return process.env.NODE_ENV !== "production";
   const auth = req.headers.get("authorization");
   if (auth === `Bearer ${secret}`) return true;
-  const token = req.nextUrl.searchParams.get("token");
-  if (token === secret) return true;
   return false;
 }
 

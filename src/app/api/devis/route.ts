@@ -14,6 +14,16 @@ const MAX_FIELD_LENGTH = 5_000;
 const MAX_PHOTO_BYTES = 10 * 1024 * 1024; // 10 MB
 const MAX_PHOTOS = 8;
 
+// Extensions autorisées, dérivées du type MIME déclaré. On ne fait jamais
+// confiance au nom de fichier fourni par le client (risque d'injection).
+const MIME_EXTENSIONS: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/heic": "heic",
+  "image/heif": "heif",
+};
+
 function truncate(value: FormDataEntryValue | null): string {
   if (typeof value !== "string") return "";
   return value.slice(0, MAX_FIELD_LENGTH);
@@ -91,9 +101,20 @@ export async function POST(request: NextRequest) {
       if (attachments.length >= MAX_PHOTOS) break;
       if (entry instanceof File && entry.size > 0) {
         if (entry.size > MAX_PHOTO_BYTES) continue; // Skip files > 10MB
+        // N'accepte que les images ; ignore silencieusement le reste.
+        // Cas particulier : Windows sans codec HEIF envoie un .heic avec un
+        // MIME vide — on le rattrape par l'extension (sans réutiliser le nom).
+        const heicFallback =
+          entry.type === "" && /\.(heic|heif)$/i.test(entry.name)
+            ? "heic"
+            : null;
+        if (!entry.type.startsWith("image/") && !heicFallback) continue;
+        const ext = MIME_EXTENSIONS[entry.type] ?? heicFallback;
+        if (!ext) continue; // MIME image non supporté → ignoré
         const buffer = await entry.arrayBuffer();
         attachments.push({
-          filename: entry.name,
+          // Nom neutre généré côté serveur — jamais entry.name.
+          filename: `photo-${attachments.length + 1}.${ext}`,
           content: Buffer.from(buffer).toString("base64"),
         });
       }
@@ -124,7 +145,7 @@ export async function POST(request: NextRequest) {
 
     // Send to AZ Époxy
     await getResend().emails.send({
-      from: "AZ Époxy <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM ?? "AZ Époxy <onboarding@resend.dev>",
       to: ["contact@azepoxy.fr"],
       replyTo: email,
       subject: `Demande de devis — ${name}${service ? ` — ${service}` : ""}`,
@@ -154,7 +175,7 @@ export async function POST(request: NextRequest) {
 
     // Confirmation to client
     await getResend().emails.send({
-      from: "AZ Époxy <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM ?? "AZ Époxy <onboarding@resend.dev>",
       to: [email],
       subject: "Devis en cours — AZ Époxy",
       html: `

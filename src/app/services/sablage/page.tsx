@@ -22,7 +22,7 @@ import { BeforeAfter } from "@/components/ui/before-after";
 import { getServiceBySlugAsync } from "@/lib/services-data";
 
 const SERVICE_DESCRIPTION =
-  "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 mètres. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.";
+  "Sablage et grenaillage professionnel : décapage, préparation de surface SA 2.5, cabine 7 × 3 × 4 m. Indispensable avant thermolaquage ou peinture. AZ Époxy, Bruyères-sur-Oise.";
 
 export const metadata = buildMetadata({
   title: "Sablage & Grenaillage",
@@ -121,7 +121,7 @@ export default async function SablagePage() {
             </span>
           </>
         }
-        description="La préparation de surface est la clé de la tenue du revêtement. Notre cabine de sablage de 7 mètres accueille des pièces de grande dimension pour un décapage conforme à la norme ISO 8501-1."
+        description="La préparation de surface est la clé de la tenue du revêtement. Notre cabine de sablage de 7 × 3 × 4 m accueille des pièces de grande dimension pour un décapage conforme à la norme ISO 8501-1."
         variant="transparent"
         image="/images/heros/services-sablage.webp"
         breadcrumbs={[
@@ -325,7 +325,7 @@ export default async function SablagePage() {
       {/* ── Section 7 — CTA ──────────────────────────────────────────── */}
       <CtaBand
         title="Besoin d'un décapage professionnel ?"
-        description="Envoyez-nous vos photos pour un devis gratuit sous 24h. Cabine 7 mètres, tous métaux, bois et pierre."
+        description="Envoyez-nous vos photos pour un devis gratuit sous 24h. Cabine 7 × 3 × 4 m, tous métaux, bois et pierre."
         primaryHref="/devis"
         primaryLabel="Demander un devis gratuit"
       />

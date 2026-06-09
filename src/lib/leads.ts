@@ -41,7 +41,14 @@ export interface LeadFanoutResult {
 
 function hashIp(ip: string | undefined): string | undefined {
   if (!ip) return undefined;
-  return crypto.createHash("sha256").update(ip).digest("hex").slice(0, 16);
+  // HMAC plutôt que SHA-256 nu : l'espace IPv4 est trivial à énumérer, un
+  // hash sans clé se renverse donc par force brute. La clé reste côté serveur.
+  const key = process.env.ADMIN_JWT_SECRET ?? "az-ip-salt-dev";
+  return crypto
+    .createHmac("sha256", key)
+    .update(ip)
+    .digest("hex")
+    .slice(0, 16);
 }
 
 function nullable(value: string | undefined): string | null {
@@ -232,7 +239,8 @@ function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 /**

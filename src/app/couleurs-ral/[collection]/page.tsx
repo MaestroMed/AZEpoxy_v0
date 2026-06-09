@@ -29,7 +29,7 @@ export async function generateMetadata({
   const col = getCollectionBySlug(slug);
   if (!col) return { title: "Collection introuvable" };
   return buildMetadata({
-    title: `Collection ${col.name} — Adaptacolor`,
+    title: `Collection ${col.name} — Finitions Premium`,
     description: col.description,
     path: `/couleurs-ral/${col.slug}`,
   });
@@ -226,10 +226,10 @@ export default async function CollectionPage({
         <div className="container-wide">
           <ScrollReveal>
             <SectionHeader
-              label="Collections Adaptacolor"
+              label="Collections premium"
               labelIcon={<Sparkles className="h-3 w-3" />}
               title={<>Explorez les autres collections</>}
-              description="Trois autres univers Adaptacolor à découvrir."
+              description="Trois autres univers premium à découvrir."
             />
           </ScrollReveal>
 

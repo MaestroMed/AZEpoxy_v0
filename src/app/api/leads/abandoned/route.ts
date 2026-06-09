@@ -56,7 +56,7 @@ async function sendRecoveryEmail(payload: AbandonedPayload): Promise<void> {
   const devisUrl = `${SITE.url}/devis${query.size ? `?${query}` : ""}`;
 
   await getResend().emails.send({
-    from: "AZ Époxy <onboarding@resend.dev>",
+    from: process.env.RESEND_FROM ?? "AZ Époxy <onboarding@resend.dev>",
     to: [data.email],
     subject: "Votre devis AZ Époxy — on reprend où vous en étiez ?",
     html: `
@@ -160,6 +160,16 @@ export async function POST(request: NextRequest) {
 
   if (!payload?.data?.email) {
     return NextResponse.json({ ok: true }, { status: 202 });
+  }
+
+  // Throttle par email en plus du ratelimit IP : 2 envois / 24 h. En cas de
+  // dépassement, réponse 200 silencieuse (pas d'envoi) pour ne rien révéler.
+  const emailLimit = await ratelimit(
+    `abandon-email:${payload.data.email.toLowerCase()}`,
+    { prefix: "abandoned", limit: 2, window: "24 h" }
+  );
+  if (!emailLimit.success) {
+    return NextResponse.json({ ok: true });
   }
 
   if (!qstashClient) {

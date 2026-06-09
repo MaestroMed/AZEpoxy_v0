@@ -9,9 +9,9 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-    ],
+    // Toutes les images sont servies en local (/public) — aucun host
+    // distant autorisé.
+    remotePatterns: [],
     // Pré-déclare les valeurs `quality` que le code passe à <Image />
     // (Next 16 les exigera). Évite le warning dev + fige les niveaux
     // de compression utilisés dans le projet.

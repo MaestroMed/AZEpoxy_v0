@@ -124,10 +124,10 @@ export const seoQaRuns = pgTable(
     ranAt: timestamp("ran_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
-    durationMs: text("duration_ms").notNull().default("0"),
-    totalPages: text("total_pages").notNull().default("0"),
-    okCount: text("ok_count").notNull().default("0"),
-    koCount: text("ko_count").notNull().default("0"),
+    durationMs: integer("duration_ms").notNull().default(0),
+    totalPages: integer("total_pages").notNull().default(0),
+    okCount: integer("ok_count").notNull().default(0),
+    koCount: integer("ko_count").notNull().default(0),
     /** Per-page result map: { "/thermolaquage-cergy": { ok, issues, ... } } */
     pages: jsonb("pages").$type<Record<string, SeoQaPageResult>>().notNull(),
     /** "manual" | "cron" — provenance. */

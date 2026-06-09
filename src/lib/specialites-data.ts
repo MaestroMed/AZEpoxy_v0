@@ -268,13 +268,13 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
     title: "Pièces Métalliques",
     tagline: "Industriel, architectural et mobilier — toutes dimensions",
     description:
-      "Notre cabine de sablage et notre four de 7 mètres de longueur nous permettent de traiter des pièces métalliques de grande dimension : portails, garde-corps, escaliers, charpentes, mobilier urbain, structures industrielles. Du prototype unitaire à la série de plusieurs centaines de pièces, nous adaptons notre organisation pour respecter vos délais et vos exigences qualité.",
+      "Notre cabine de sablage de 7 × 3 × 4 m et notre four de polymérisation grande capacité nous permettent de traiter des pièces métalliques de grande dimension : portails, garde-corps, escaliers, charpentes, mobilier urbain, structures industrielles. Du prototype unitaire à la série de plusieurs centaines de pièces, nous adaptons notre organisation pour respecter vos délais et vos exigences qualité.",
     icon: "Factory",
     benefits: [
       {
         title: "Capacité grande dimension — cabine 7 × 3 × 4 m",
         description:
-          "Notre cabine de sablage et notre four de polymérisation de 7 mètres accueillent des pièces de grande envergure : portails coulissants, garde-corps de balcon, structures métalliques assemblées.",
+          "Notre cabine de sablage de 7 × 3 × 4 m et notre four de polymérisation accueillent des pièces de grande envergure : portails coulissants, garde-corps de balcon, structures métalliques assemblées.",
       },
       {
         title: "Protection anti-corrosion longue durée",
@@ -294,7 +294,7 @@ export const SPECIALTIES_FALLBACK: Specialty[] = [
       {
         question: "Quelle est la taille maximale des pièces que vous pouvez traiter ?",
         answer:
-          "Notre four et notre cabine de sablage mesurent 7 mètres de longueur. Pour les pièces dépassant cette dimension, nous étudions au cas par cas la possibilité d'un traitement en plusieurs passes ou d'une intervention sur site par finitions spéciales.",
+          "Notre cabine de sablage mesure 7 × 3 × 4 m, et notre four de polymérisation accepte des pièces de gabarit équivalent. Pour les pièces dépassant ces dimensions, nous étudions au cas par cas la possibilité d'un traitement en plusieurs passes ou d'une intervention sur site par finitions spéciales.",
       },
       {
         question: "Travaillez-vous avec les professionnels du bâtiment ?",

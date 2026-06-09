@@ -14,8 +14,8 @@ import { allDeptHubSlugs } from "@/lib/villes/departments";
  * Auth :
  *   - Vercel Cron passe automatiquement le header `Authorization: Bearer <CRON_SECRET>`
  *     quand on déclare le secret côté Project Settings.
- *   - Pour un trigger manuel depuis l'admin, on accepte aussi
- *     `?token=<CRON_SECRET>` en query.
+ *   - Header Bearer uniquement — pas de secret en query (les URLs fuitent
+ *     dans les logs/proxies).
  *
  * Schedule : voir vercel.json (`crons` array).
  */
@@ -33,9 +33,6 @@ function isAuthed(req: NextRequest): boolean {
 
   const auth = req.headers.get("authorization");
   if (auth === `Bearer ${secret}`) return true;
-
-  const token = req.nextUrl.searchParams.get("token");
-  if (token === secret) return true;
 
   return false;
 }
@@ -71,10 +68,10 @@ async function handler(req: NextRequest, trigger: "cron" | "manual") {
   // Persist for the /admin/seo dashboard.
   try {
     await getDb().insert(seoQaRuns).values({
-      durationMs: String(summary.durationMs),
-      totalPages: String(summary.totalPages),
-      okCount: String(summary.okCount),
-      koCount: String(summary.koCount),
+      durationMs: summary.durationMs,
+      totalPages: summary.totalPages,
+      okCount: summary.okCount,
+      koCount: summary.koCount,
       pages: summary.pages,
       trigger,
     });

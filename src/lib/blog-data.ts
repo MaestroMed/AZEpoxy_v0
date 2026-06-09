@@ -222,7 +222,7 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>Le décapage chimique utilise des produits corrosifs pour dissoudre les anciennes peintures. Il est efficace mais présente des inconvénients : temps de traitement long (12-48h), résidus chimiques à neutraliser, impact environnemental. Le sablage mécanique est plus rapide (quelques minutes), plus propre et crée directement le profil de rugosité nécessaire.</p>
 
       <h2>Notre processus</h2>
-      <p>Notre cabine de sablage professionnelle permet de traiter des pièces jusqu'à <strong>7 mètres de long</strong>. Chaque pièce est inspectée après sablage pour vérifier la propreté de surface et le profil de rugosité avant de passer à l'étape de poudrage. C'est cette rigueur qui garantit la tenue de nos thermolaquages dans le temps.</p>
+      <p>Notre cabine de sablage professionnelle de <strong>7 × 3 × 4 m</strong> permet de traiter des pièces de grande longueur. Chaque pièce est inspectée après sablage pour vérifier la propreté de surface et le profil de rugosité avant de passer à l'étape de poudrage. C'est cette rigueur qui garantit la tenue de nos thermolaquages dans le temps.</p>
     `,
   },
   {
@@ -277,13 +277,13 @@ export const BLOG_ARTICLES_FALLBACK: BlogArticle[] = [
       <p>La dépose du portail peut être réalisée par vos soins ou par notre équipe. Pensez à protéger les gonds et les motorisations. Si votre portail est motorisé, nous vous recommandons de faire intervenir votre installateur pour la déconnexion et la reconnexion.</p>
 
       <h2>Étape 3 : Sablage intégral</h2>
-      <p>Notre cabine de <strong>7 mètres</strong> accepte les portails de grande dimension. Le sablage retire toute trace de rouille, d'ancienne peinture et de calamine. Les barreaux, volutes et éléments décoratifs sont sablés dans leurs moindres recoins — un avantage majeur par rapport au ponçage manuel.</p>
+      <p>Notre cabine de <strong>7 × 3 × 4 m</strong> accepte les portails de grande dimension. Le sablage retire toute trace de rouille, d'ancienne peinture et de calamine. Les barreaux, volutes et éléments décoratifs sont sablés dans leurs moindres recoins — un avantage majeur par rapport au ponçage manuel.</p>
 
       <h2>Étape 4 : Traitement anticorrosion</h2>
-      <p>Après sablage, un primaire anticorrosion est appliqué dans les heures qui suivent pour éviter toute ré-oxydation. Pour les portails exposés (bord de mer, zone humide), nous appliquons une couche de finitions spéciales zinc avant le primaire.</p>
+      <p>Après sablage, un primaire anticorrosion est appliqué dans les heures qui suivent pour éviter toute ré-oxydation. Pour les portails exposés (bord de mer, zone humide), nous appliquons un primaire époxy anticorrosion haute performance — sans zinc ni plomb.</p>
 
       <h2>Étape 5 : Thermolaquage</h2>
-      <p>La poudre époxy ou polyester est appliquée par projection électrostatique. La charge électrique garantit que la poudre atteint chaque recoin, y compris l'intérieur des tubes et les zones difficiles d'accès. La pièce passe ensuite au four à 190°C pendant 20 minutes.</p>
+      <p>La poudre époxy ou polyester est appliquée par projection électrostatique. La charge électrique garantit que la poudre atteint chaque recoin, y compris l'intérieur des tubes et les zones difficiles d'accès. La pièce passe ensuite en cuisson au four de polymérisation, avec une durée et une température ajustées à chaque pièce.</p>
 
       <h2>Étape 6 : Contrôle et livraison</h2>
       <p>Chaque portail est inspecté visuellement et au moyen d'un contrôle d'épaisseur (60-120 µm requis). Nous vérifions l'uniformité de la couleur, l'absence de coulures et l'adhérence du revêtement. Le portail est ensuite emballé avec soin pour le transport.</p>

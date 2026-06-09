@@ -15,7 +15,7 @@ import { breadcrumbLd } from "@/lib/jsonld";
 export const metadata = buildMetadata({
   title: "Nuancier RAL — 200+ Couleurs",
   description:
-    "Plus de 200 teintes RAL Classic et 4 collections premium Adaptacolor. Trouvez la couleur parfaite pour votre projet de thermolaquage.",
+    "Plus de 200 teintes RAL Classic, teintes NCS sur demande et 4 collections premium. Trouvez la couleur parfaite pour votre projet de thermolaquage.",
   path: "/couleurs-ral",
 });
 
@@ -69,7 +69,7 @@ export default function CouleursRalPage() {
               </span>
             </h1>
             <p className="mt-8 max-w-2xl text-balance text-lg text-white/75 sm:text-xl">
-              213 teintes RAL Classic et 4 collections premium Adaptacolor.
+              213 teintes RAL Classic et 4 collections premium.
               Chaque particule que vous voyez derrière est une couleur possible —
               nous pouvons toutes les réaliser sur votre pièce.
             </p>
@@ -128,9 +128,9 @@ export default function CouleursRalPage() {
               labelIcon={<Sparkles className="h-3 w-3" />}
               title={
                 <>
-                  Collections Signature{" "}
+                  Collections{" "}
                   <span className="bg-gradient-ember bg-clip-text text-transparent">
-                    Adaptacolor
+                    Signature
                   </span>
                 </>
               }

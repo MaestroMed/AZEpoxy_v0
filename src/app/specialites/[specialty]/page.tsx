@@ -57,7 +57,7 @@ const BENEFIT_ICONS: Record<string, React.ReactNode> = {
   "Résistance à la chaleur du compartiment moteur": <Shield className="h-6 w-6" />,
   "Esthétique et personnalisation": <Paintbrush className="h-6 w-6" />,
   "Protection anti-corrosion renforcée": <Shield className="h-6 w-6" />,
-  "Capacité grande dimension — cabine 7 m": <Package className="h-6 w-6" />,
+  "Capacité grande dimension — cabine 7 × 3 × 4 m": <Package className="h-6 w-6" />,
   "Protection anti-corrosion longue durée": <Shield className="h-6 w-6" />,
   "Production en série et répétabilité": <CheckCircle2 className="h-6 w-6" />,
 };

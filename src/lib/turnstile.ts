@@ -25,6 +25,13 @@ export async function verifyTurnstile(
   remoteIp?: string
 ): Promise<TurnstileVerifyResult> {
   if (!TURNSTILE_SECRET) {
+    // Fail-loud : en production l'anti-bot est désactivé sans la clé. On le
+    // signale sans bloquer — ne jamais perdre un lead pour une env manquante.
+    if (process.env.NODE_ENV === "production") {
+      console.error(
+        "[security] vérification Turnstile désactivée : variable d'environnement TURNSTILE_SECRET_KEY manquante"
+      );
+    }
     return { success: true, skipped: true };
   }
   if (!token) {

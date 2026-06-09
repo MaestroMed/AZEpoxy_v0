@@ -92,7 +92,7 @@ const PROCESS_STEPS = [
   {
     n: "01",
     label: "Décapage",
-    note: "Dégraissage alcalin + rinçage",
+    note: "Dégraissage industriel + rinçage",
   },
   {
     n: "02",
@@ -175,6 +175,7 @@ export default async function RealisationDetailPage({
               name: SITE.name,
               url: SITE.url,
             },
+            license: `${SITE.url}/mentions-legales`,
             acquireLicensePage: `${SITE.url}/realisations`,
           }}
         />

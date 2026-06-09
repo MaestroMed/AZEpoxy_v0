@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import {
@@ -9,6 +9,7 @@ import {
   signSession,
   verifyAdminPassword,
 } from "@/lib/admin/auth";
+import { ratelimit } from "@/lib/ratelimit";
 
 const LoginInput = z.object({
   email: z.string().email("Email invalide"),
@@ -31,6 +32,23 @@ export async function loginAction(
   _prev: LoginState | null,
   formData: FormData,
 ): Promise<LoginState> {
+  // Rate limiting par IP — 5 tentatives / 15 min. En cas de dépassement on
+  // renvoie la même erreur générique qu'un mauvais mot de passe pour ne pas
+  // révéler la présence du limiteur à un attaquant.
+  const hdrs = await headers();
+  const ip =
+    hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    hdrs.get("x-real-ip") ||
+    "unknown";
+  const limit = await ratelimit(ip, {
+    prefix: "admin-login",
+    limit: 5,
+    window: "15 m",
+  });
+  if (!limit.success) {
+    return { ok: false, error: "Identifiants incorrects." };
+  }
+
   const parsed = LoginInput.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

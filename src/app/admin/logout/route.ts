@@ -4,8 +4,8 @@ import { getCookieName } from "@/lib/admin/auth";
 
 /**
  * Clear the admin session cookie and bounce back to /admin/login.
- * Accept both POST (CSRF-safe with hidden form button) and GET (so
- * the sidebar link can be a plain anchor).
+ * POST uniquement (CSRF-safe) — un GET déclenchable par simple lien ou
+ * image permettrait de déconnecter l'admin à son insu.
  */
 async function handler(req: NextRequest) {
   const jar = await cookies();
@@ -21,4 +21,3 @@ async function handler(req: NextRequest) {
 }
 
 export const POST = handler;
-export const GET = handler;

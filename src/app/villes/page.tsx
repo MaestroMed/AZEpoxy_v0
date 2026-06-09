@@ -52,15 +52,6 @@ const DEPT_ORDER: DepartmentCode[] = [
 export default function VillesIndexPage() {
   const total = VILLES_FALLBACK.length;
 
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE.url },
-      { "@type": "ListItem", position: 2, name: "Toutes les villes" },
-    ],
-  };
-
   const collectionLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -81,7 +72,6 @@ export default function VillesIndexPage() {
 
   return (
     <>
-      <JsonLd id="ld-breadcrumb-villes-index" data={breadcrumbLd} />
       <JsonLd id="ld-collection-villes-index" data={collectionLd} />
 
       <PageHero

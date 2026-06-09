@@ -30,9 +30,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   ...buildMetadata({
     title:
-      "AZ Époxy — Thermolaquage Poudre Époxy Professionnel | 200+ Couleurs RAL",
+      "AZ Époxy — Thermolaquage Poudre Époxy | 200+ couleurs RAL & NCS",
     description:
-      "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL, cabine 7m, service express 48h, 0 COV. Jantes, moto, pièces métalliques, mobilier.",
+      "Thermolaquage poudre époxy professionnel à Bruyères-sur-Oise (95). 200+ couleurs RAL & NCS, cabine 7 × 3 × 4 m, service express 48h, 0 COV. Jantes, moto, pièces métalliques, mobilier.",
     path: "/",
     keywords: [
       "thermolaquage",

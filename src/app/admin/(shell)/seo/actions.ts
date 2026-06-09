@@ -40,10 +40,10 @@ export async function triggerQaRunAction(): Promise<void> {
   });
 
   await getDb().insert(seoQaRuns).values({
-    durationMs: String(summary.durationMs),
-    totalPages: String(summary.totalPages),
-    okCount: String(summary.okCount),
-    koCount: String(summary.koCount),
+    durationMs: summary.durationMs,
+    totalPages: summary.totalPages,
+    okCount: summary.okCount,
+    koCount: summary.koCount,
     pages: summary.pages,
     trigger: `manual:${admin.email}`,
   });

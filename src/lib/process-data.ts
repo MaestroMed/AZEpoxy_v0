@@ -46,7 +46,7 @@ export const PROCESS_STEPS: ProcessStep[] = [
     step: 5,
     title: "Application poudre époxy 60-80 µ",
     description:
-      "La poudre époxy de qualité architecturale, certifiée QUALICOAT, est projetée uniformément au pistolet électrostatique dans notre cabine ventilée. L'épaisseur cible de 60 à 80 µm garantit une finition homogène et une résistance optimale aux UV, aux chocs et à la corrosion. Aucune réintégration de poudre dans le circuit d'application : finition irréprochable garantie.",
+      "La poudre époxy certifiée de qualité architecturale est projetée uniformément au pistolet électrostatique dans notre cabine ventilée. L'épaisseur cible de 60 à 80 µm garantit une finition homogène et une résistance optimale aux UV, aux chocs et à la corrosion. Aucune réintégration de poudre dans le circuit d'application : finition irréprochable garantie.",
     icon: "Paintbrush",
   },
   {

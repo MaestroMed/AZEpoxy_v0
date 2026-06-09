@@ -89,8 +89,7 @@ const SECTIONS = [
     title: "Crédits photographiques",
     content: (
       <p>
-        Images d&apos;illustration : Unsplash (licence libre). Les
-        photographies de réalisations sont la propriété d&apos;AZ Époxy.
+        Photographies : AZ Époxy — tous droits réservés.
       </p>
     ),
   },

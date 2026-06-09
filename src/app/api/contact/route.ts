@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
 
     // Send notification to AZ Époxy
     await getResend().emails.send({
-      from: "AZ Époxy <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM ?? "AZ Époxy <onboarding@resend.dev>",
       to: ["contact@azepoxy.fr"],
       replyTo: email,
       subject: `Nouveau message de ${name} — azepoxy.fr`,
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation to client
     await getResend().emails.send({
-      from: "AZ Époxy <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM ?? "AZ Époxy <onboarding@resend.dev>",
       to: [email],
       subject: "Bien reçu — AZ Époxy",
       html: `
