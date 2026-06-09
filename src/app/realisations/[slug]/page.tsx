@@ -40,6 +40,7 @@ import { getRalEditorial } from "@/lib/ral-editorial";
 import { buildMetadata } from "@/lib/seo";
 import { breadcrumbLd } from "@/lib/jsonld";
 import { JsonLd } from "@/components/seo/json-ld";
+import { SITE } from "@/lib/utils";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 
@@ -120,6 +121,15 @@ const PROCESS_STEPS = [
   },
 ];
 
+/** Catégorie de réalisation → page spécialité (cross-link + conversion). */
+const CATEGORY_TO_SPECIALTY: Record<string, { slug: string; label: string }> = {
+  jantes: { slug: "jantes", label: "vos jantes" },
+  moto: { slug: "moto", label: "votre moto" },
+  portail: { slug: "portail", label: "votre portail ou ferronnerie" },
+  mobilier: { slug: "pieces", label: "votre mobilier métal" },
+  industriel: { slug: "pieces", label: "vos pièces industrielles" },
+};
+
 /* ── Page ─────────────────────────────────────────────────────────── */
 export default async function RealisationDetailPage({
   params,
@@ -137,6 +147,7 @@ export default async function RealisationDetailPage({
   const primaryHex = primaryRal ? ralToHex(primaryRal) : undefined;
   const ref = internalReference(project);
   const heroImage = PROJECT_IMAGES[project.id];
+  const relatedSpecialty = CATEGORY_TO_SPECIALTY[project.category];
 
   return (
     <>
@@ -147,6 +158,27 @@ export default async function RealisationDetailPage({
           { label: project.title },
         ])}
       />
+      {/* ImageObject : signale une réalisation réelle d'AZ Époxy → Google
+          Images + E-E-A-T (preuve de travail authentique). */}
+      {heroImage && (
+        <JsonLd
+          id={`ld-image-${slug}`}
+          data={{
+            "@context": "https://schema.org",
+            "@type": "ImageObject",
+            contentUrl: `${SITE.url}${heroImage}`,
+            name: project.title,
+            description: project.description,
+            creditText: SITE.name,
+            creator: {
+              "@type": "Organization",
+              name: SITE.name,
+              url: SITE.url,
+            },
+            acquireLicensePage: `${SITE.url}/realisations`,
+          }}
+        />
+      )}
 
       {/* ── HERO — editorial catalog treatment ───────────────────── */}
       <section className="relative isolate min-h-[90vh] overflow-hidden bg-brand-night text-white">
@@ -383,6 +415,37 @@ export default async function RealisationDetailPage({
               </ScrollReveal>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* ── CTA conversion — un projet similaire ? ──────────────── */}
+      <section className="bg-white py-20">
+        <div className="container-wide">
+          <div className="mx-auto max-w-3xl rounded-2xl border border-brand-night/10 bg-brand-cream p-10 text-center shadow-sm">
+            <h2 className="heading-display text-2xl text-brand-night sm:text-3xl">
+              Un projet similaire&nbsp;?
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-brand-charcoal/70">
+              Nous redonnons une finition d&apos;usine à{" "}
+              {relatedSpecialty?.label ?? "vos pièces métalliques"} — teintes RAL
+              &amp; NCS, tenue durable, enlèvement &amp; livraison en Île-de-France
+              et dans l&apos;Oise. Devis gratuit sous 24&nbsp;h.
+            </p>
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+              <Link href="/devis" className="btn-primary">
+                Demander un devis gratuit
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              {relatedSpecialty && (
+                <Link
+                  href={`/specialites/${relatedSpecialty.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-brand-night/15 px-6 py-3 text-sm font-semibold text-brand-night transition-colors hover:border-brand-night/40"
+                >
+                  Thermolaquage de {categoryLabel(project.category).toLowerCase()}
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
