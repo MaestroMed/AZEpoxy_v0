@@ -19,9 +19,14 @@ async function isAuthed(req: NextRequest): Promise<boolean> {
   const secret = process.env.ADMIN_JWT_SECRET;
   if (!secret) return false;
   try {
-    await jwtVerify(token, new TextEncoder().encode(secret), {
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(secret), {
       algorithms: ["HS256"],
     });
+    // Levier de révocation : bumper ADMIN_SESSION_VERSION invalide toutes les
+    // sessions (cf. src/lib/admin/auth.ts). Absence de claim `v` → "1".
+    const expected = process.env.ADMIN_SESSION_VERSION ?? "1";
+    const tokenV = typeof payload.v === "string" ? payload.v : "1";
+    if (tokenV !== expected) return false;
     return true;
   } catch {
     return false;

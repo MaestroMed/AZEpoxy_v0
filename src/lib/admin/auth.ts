@@ -69,10 +69,20 @@ export async function hashPassword(plaintext: string): Promise<string> {
   return bcrypt.hash(plaintext, 12);
 }
 
+/**
+ * Version de session — levier de révocation "déconnexion partout".
+ * Par défaut "1" : bumper la variable d'env ADMIN_SESSION_VERSION (→ "2", "3"…)
+ * invalide instantanément TOUS les tokens émis avant, sans toucher au code.
+ * Utile si le secret fuit ou si un appareil est perdu.
+ */
+function sessionVersion(): string {
+  return process.env.ADMIN_SESSION_VERSION ?? "1";
+}
+
 /** Sign a JWT session token. */
 export async function signSession(email: string): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
-  return await new SignJWT({ email })
+  return await new SignJWT({ email, v: sessionVersion() })
     .setProtectedHeader({ alg: "HS256", typ: "JWT" })
     .setIssuedAt(now)
     .setExpirationTime(now + SESSION_DURATION_SECONDS)
@@ -95,6 +105,11 @@ export async function verifySession(
     });
     if (typeof payload.email !== "string") return null;
     if (typeof payload.iat !== "number" || typeof payload.exp !== "number") {
+      return null;
+    }
+    // Révocation : un token dont la version ne correspond plus est rejeté.
+    // (absence de claim `v` = tokens d'avant cette fonctionnalité → "1")
+    if ((typeof payload.v === "string" ? payload.v : "1") !== sessionVersion()) {
       return null;
     }
     return {
