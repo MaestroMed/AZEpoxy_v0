@@ -7,7 +7,7 @@ import {
   RAL_FAMILIES,
   type RALColor,
 } from "@/lib/ral-colors";
-import { getRalEditorial } from "@/lib/ral-editorial";
+import { getRalEditorial, isIndexableTeinte } from "@/lib/ral-editorial";
 import {
   PROJECTS,
   PROJECT_CATEGORIES,
@@ -73,6 +73,10 @@ export async function generateMetadata({
       quote ??
       `${color.code} — ${color.name}. Thermolaquage professionnel dans cette teinte, disponible sous 10 à 15 jours. Fiche complète : hex, pièces réalisées, teintes voisines.`,
     path: `/couleurs-ral/teinte/${toSlug(color.code)}`,
+    // Vague 0 anti-désindexation : seules les teintes à contenu/intention réels
+    // restent indexées. Les autres en noindex,follow (le jus interne circule
+    // toujours vers le nuancier et les money pages).
+    noindexFollow: !isIndexableTeinte(color.code),
   });
 }
 

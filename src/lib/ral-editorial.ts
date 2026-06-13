@@ -121,3 +121,34 @@ export const CURATED_RAL_COUNT = Object.keys(EDITORIAL).length;
 export const CURATED_RAL_CODES: readonly string[] = Object.freeze(
   Object.keys(EDITORIAL),
 );
+
+/**
+ * Teintes à intention de recherche réelle (couleurs phares plébiscitées sur
+ * les pièces : noirs, anthracites, blancs, graphites…). Union avec les teintes
+ * curatées → ensemble des fiches RAL qu'on garde INDEXÉES. Toutes les autres
+ * (~166) passent en noindex,follow et sortent du sitemap : ce sont des pages
+ * thin qui plombent la qualité moyenne du domaine et gaspillent le crawl
+ * budget d'un domaine jeune (politique anti-désindexation, Vague 0).
+ */
+const POPULAR_RAL_CODES: readonly string[] = [
+  "RAL 9005", "RAL 9011", "RAL 7016", "RAL 7021", "RAL 7024", "RAL 7022",
+  "RAL 7039", "RAL 7035", "RAL 9006", "RAL 9007", "RAL 9010", "RAL 9016",
+  "RAL 9003", "RAL 6005", "RAL 6009", "RAL 5010", "RAL 5013", "RAL 3020",
+  "RAL 3004", "RAL 8019", "RAL 8017", "RAL 8022", "RAL 1003", "RAL 1023",
+  "RAL 2004",
+];
+
+const INDEXABLE_RAL = new Set<string>([
+  ...CURATED_RAL_CODES,
+  ...POPULAR_RAL_CODES,
+]);
+
+/** Une fiche teinte RAL mérite-t-elle d'être indexée (contenu/intention réels) ? */
+export function isIndexableTeinte(code: string): boolean {
+  return INDEXABLE_RAL.has(code);
+}
+
+/** Codes RAL réellement indexés (curatés ∪ populaires) — pour le sitemap. */
+export const INDEXABLE_RAL_CODES: readonly string[] = Object.freeze([
+  ...INDEXABLE_RAL,
+]);

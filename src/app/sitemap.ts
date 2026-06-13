@@ -3,6 +3,7 @@ import { getVilles } from "@/lib/villes-data";
 import { allDeptHubSlugs } from "@/lib/villes/departments";
 import { getBlogArticles } from "@/lib/blog-data";
 import { RAL_COLORS } from "@/lib/ral-colors";
+import { isIndexableTeinte } from "@/lib/ral-editorial";
 import { getProjectSlug } from "@/lib/realisations-data";
 import { getProjects } from "@/lib/realisations-server";
 import { COMBOS } from "@/lib/combos-data";
@@ -72,13 +73,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  // Fiches teintes RAL (long-tail "thermolaquage RAL xxxx") — priorité basse
-  // pour que Google priorise les money pages, mais soumises pour couverture.
-  const ralPages: MetadataRoute.Sitemap = RAL_COLORS.map((c) => ({
+  // Fiches teintes RAL : SEULES les teintes à contenu/intention réels sont
+  // soumises (Vague 0 anti-désindexation). Les ~166 fiches thin sont en
+  // noindex,follow et exclues du sitemap → on ne demande à Google d'indexer
+  // que ce qui mérite de l'être, ce qui protège la qualité moyenne du domaine.
+  const ralPages: MetadataRoute.Sitemap = RAL_COLORS.filter((c) =>
+    isIndexableTeinte(c.code),
+  ).map((c) => ({
     url: `${BASE}/couleurs-ral/teinte/${c.code.replace(/^RAL\s*/i, "")}`,
     lastModified: now,
     changeFrequency: "yearly" as const,
-    priority: 0.3,
+    priority: 0.4,
   }));
 
   // Fiches réalisations (preuve sociale, images uniques).

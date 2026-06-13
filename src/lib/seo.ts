@@ -12,8 +12,12 @@ export interface BuildMetadataInput {
   image?: string;
   /** OG type. Default "website"; use "article" on blog posts. */
   type?: "website" | "article";
-  /** Set true on legal/utility pages we don't want indexed. */
+  /** Set true on legal/utility pages we don't want indexed (index:false, follow:false). */
   noindex?: boolean;
+  /** Pages thin volontairement désindexées MAIS qui doivent laisser circuler
+   *  le jus de lien interne (index:false, follow:true) — ex. teintes RAL
+   *  secondaires retirées de l'index pour ne pas plomber la qualité globale. */
+  noindexFollow?: boolean;
   /** Optional Article-specific fields, only honored when type === "article". */
   article?: {
     publishedTime?: string;
@@ -71,6 +75,8 @@ export function buildMetadata(input: BuildMetadataInput): Metadata {
 
   if (input.noindex) {
     meta.robots = { index: false, follow: false };
+  } else if (input.noindexFollow) {
+    meta.robots = { index: false, follow: true };
   }
 
   return meta;
