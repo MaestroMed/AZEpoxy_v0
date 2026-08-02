@@ -53,10 +53,12 @@ export default function ConversionTracking() {
       const href = link.getAttribute("href") ?? "";
       const source = resolveSource(link);
 
+      // Noms alignés sur ceux déjà en place sur azconstruction.fr : les sites
+      // restent comparables dans GA4 sans retraitement.
       if (href.startsWith("tel:")) {
-        trackEvent("contact_phone", { source });
+        trackEvent("phone_click", { source });
       } else if (href.startsWith("mailto:")) {
-        trackEvent("contact_email", { source });
+        trackEvent("email_click", { source });
       }
     };
 
@@ -64,7 +66,7 @@ export default function ConversionTracking() {
       const form = event.target;
       if (!(form instanceof HTMLFormElement)) return;
 
-      trackEvent("contact_form", {
+      trackEvent("form_submit", {
         source: resolveSource(form),
         form: form.getAttribute("name") || form.id || "sans-nom",
       });
