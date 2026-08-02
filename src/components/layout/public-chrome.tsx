@@ -15,6 +15,7 @@ import { CommandPalette } from "@/components/nuee/command-palette";
 import { ScrollToTop } from "@/components/nuee/scroll-to-top";
 import { EasterEgg } from "@/components/nuee/easter-egg";
 import GA4 from "@/components/analytics/ga4";
+import ConversionTracking from "@/components/analytics/conversion-tracking";
 
 /**
  * Public-site chrome — header, footer, persistent canvas, easter eggs,
@@ -45,6 +46,7 @@ export function PublicChrome({ children }: { children: React.ReactNode }) {
       </main>
       <Footer />
       <GA4 />
+      <ConversionTracking />
       <WhatsAppButton />
       <MobileStickyCta />
       <CookieConsent />
