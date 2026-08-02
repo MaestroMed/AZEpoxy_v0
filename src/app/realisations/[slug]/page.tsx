@@ -175,6 +175,10 @@ export default async function RealisationDetailPage({
               name: SITE.name,
               url: SITE.url,
             },
+            // Signalé manquant par la Search Console (rapport « Métadonnées
+            // d'image », 04/07/2026). Sans lui, Google Images n'affiche pas
+            // la mention de droits à côté de la photo.
+            copyrightNotice: `© ${SITE.name}`,
             license: `${SITE.url}/mentions-legales`,
             acquireLicensePage: `${SITE.url}/realisations`,
           }}
