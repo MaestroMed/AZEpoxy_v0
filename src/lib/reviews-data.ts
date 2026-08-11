@@ -9,8 +9,12 @@ export interface Review {
 
 /**
  * Avis externes synchronisés (Google/Trustpilot…). Aujourd'hui aucun flux
- * branché : renvoie un tableau vide → l'UI retombe sur les témoignages et le
- * JSON-LD omet AggregateRating. Les vrais avis saisis en admin transitent par
+ * branché : renvoie un tableau vide → les sections « Avis » de l'UI ne
+ * s'affichent pas. Ces avis sont destinés à l'AFFICHAGE sur les pages
+ * uniquement : ils ne doivent JAMAIS alimenter le JSON-LD (aggregateRating /
+ * Review), retiré volontairement du balisage — art. L.121-2 C. conso
+ * (pratique commerciale trompeuse) + politique Google sur les avis
+ * auto-attribués. Les témoignages saisis en admin transitent par
  * `getPublicTestimonials` (table testimonials), pas par ce module.
  */
 export async function getReviews(): Promise<Review[]> {

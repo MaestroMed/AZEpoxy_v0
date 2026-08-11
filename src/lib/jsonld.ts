@@ -1,11 +1,18 @@
 import { SITE } from "@/lib/utils";
-import { TESTIMONIALS } from "@/lib/testimonials-data";
-import type { Review } from "@/lib/reviews-data";
 
 /**
  * Typed JSON-LD builders. Every page that needs structured data should import
  * one of these helpers and feed the result through <JsonLd> (or a raw <script>
  * tag) instead of hand-writing schema.org objects inline.
+ *
+ * CONFORMITÉ — ce module n'émet volontairement AUCUN aggregateRating ni
+ * bloc Review. Une version antérieure dérivait une note (4,8/5, 10 avis)
+ * et des Review nominatifs depuis les témoignages codés en dur : c'est une
+ * pratique commerciale trompeuse (art. L.121-2 C. conso) et contraire aux
+ * consignes Google sur les avis auto-attribués (« self-serving reviews »,
+ * exclus des résultats enrichis pour LocalBusiness et exposant le site à
+ * une action manuelle). Ne réintroduire un balisage d'avis QUE lorsqu'un
+ * flux d'avis réels et vérifiables sera branché, après validation.
  */
 
 const BUSINESS_ID = `${SITE.url}#business`;
@@ -51,14 +58,6 @@ const BASE_BUSINESS = {
 interface LocalBusinessOptions {
   description?: string;
   areaServed?: Array<{ type?: string; name: string; containedIn?: string }>;
-  /** Pass `false` to omit the rating object (e.g. when no reviews are loaded). */
-  withAggregateRating?: boolean;
-  /** When provided, the AggregateRating is derived from these real reviews
-   *  instead of the hardcoded testimonials dataset. */
-  reviews?: Review[];
-  /** When true (default), inline up to 5 Review entries — Google
-   *  Search Console pénalise les AggregateRating sans Review attachés. */
-  withReviewList?: boolean;
 }
 
 export function localBusinessLd(options: LocalBusinessOptions = {}) {
@@ -68,27 +67,7 @@ export function localBusinessLd(options: LocalBusinessOptions = {}) {
       { type: "AdministrativeArea", name: "Île-de-France" },
       { type: "AdministrativeArea", name: "Val-d'Oise" },
     ],
-    withAggregateRating = true,
-    reviews,
-    withReviewList = true,
   } = options;
-
-  const rating = withAggregateRating
-    ? reviews?.length
-      ? aggregateRatingFromReviews(reviews)
-      : aggregateRatingFromTestimonials()
-    : undefined;
-
-  // Individual Review entries — Google strongly recommends linking
-  // AggregateRating to actual Review objects pour éviter le warning
-  // "AggregateRating without reviews" en Search Console. On limite à 5
-  // pour ne pas alourdir le markup.
-  const reviewList =
-    withReviewList && rating
-      ? reviews?.length
-        ? reviewsToSchema(reviews.slice(0, 5))
-        : testimonialsToSchema(5)
-      : undefined;
 
   return {
     "@context": "https://schema.org",
@@ -106,50 +85,7 @@ export function localBusinessLd(options: LocalBusinessOptions = {}) {
           }
         : {}),
     })),
-    ...(rating ? { aggregateRating: rating } : {}),
-    ...(reviewList && reviewList.length > 0 ? { review: reviewList } : {}),
   };
-}
-
-/* ── Review schema helpers ─────────────────────────────────────── */
-
-function reviewsToSchema(reviews: Review[]) {
-  return reviews
-    .filter((r) => r.author && r.rating)
-    .map((r) => ({
-      "@type": "Review",
-      author: { "@type": "Person", name: r.author },
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: r.rating,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      ...(r.body ? { reviewBody: r.body } : {}),
-      ...(r.publishedAt ? { datePublished: r.publishedAt } : {}),
-    }));
-}
-
-function testimonialsToSchema(limit: number) {
-  return TESTIMONIALS.slice(0, limit)
-    .filter((t) => t.name && t.rating)
-    .map((t) => ({
-      "@type": "Review",
-      author: {
-        "@type": "Person",
-        name: t.name,
-        ...(t.role || t.company
-          ? { jobTitle: [t.role, t.company].filter(Boolean).join(" — ") }
-          : {}),
-      },
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: t.rating,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      ...(t.quote ? { reviewBody: t.quote } : {}),
-    }));
 }
 
 export function websiteLd() {
@@ -279,57 +215,6 @@ export function faqPageLd(items: FaqPair[]) {
       name: it.question,
       acceptedAnswer: { "@type": "Answer", text: it.answer },
     })),
-  };
-}
-
-export function reviewLd(input: {
-  author: string;
-  body: string;
-  rating: number;
-  itemReviewed?: string;
-}) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Review",
-    author: { "@type": "Person", name: input.author },
-    reviewBody: input.body,
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: input.rating,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    itemReviewed: { "@id": BUSINESS_ID, name: input.itemReviewed ?? SITE.name },
-  };
-}
-
-/**
- * Aggregate rating computed from the local testimonials dataset. When real
- * Google reviews land in Phase 4 this should fall back to the synced data.
- */
-function aggregateRatingFromReviews(reviews: Review[]) {
-  if (!reviews.length) return undefined;
-  const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
-  const value = total / reviews.length;
-  return {
-    "@type": "AggregateRating",
-    ratingValue: Number(value.toFixed(2)),
-    bestRating: 5,
-    worstRating: 1,
-    reviewCount: reviews.length,
-  };
-}
-
-export function aggregateRatingFromTestimonials() {
-  if (!TESTIMONIALS.length) return undefined;
-  const total = TESTIMONIALS.reduce((sum, t) => sum + t.rating, 0);
-  const value = total / TESTIMONIALS.length;
-  return {
-    "@type": "AggregateRating",
-    ratingValue: Number(value.toFixed(2)),
-    bestRating: 5,
-    worstRating: 1,
-    reviewCount: TESTIMONIALS.length,
   };
 }
 

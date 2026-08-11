@@ -12,7 +12,6 @@ import {
   organizationLd,
   websiteLd,
 } from "@/lib/jsonld";
-import { getReviews } from "@/lib/reviews-data";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });
@@ -74,12 +73,11 @@ export const metadata: Metadata = {
   // Icons are auto-wired by Next.js from src/app/icon.svg + src/app/apple-icon.tsx
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const reviews = await getReviews();
   return (
     <html
       lang="fr"
@@ -87,7 +85,9 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground antialiased font-sans">
-        <JsonLd id="ld-business" data={localBusinessLd({ reviews })} />
+        {/* JSON-LD factuel uniquement (coordonnées, horaires, zone) —
+            aucun aggregateRating/Review : voir src/lib/jsonld.ts. */}
+        <JsonLd id="ld-business" data={localBusinessLd()} />
         <JsonLd id="ld-organization" data={organizationLd()} />
         <JsonLd id="ld-website" data={websiteLd()} />
         <ThemeProvider>
