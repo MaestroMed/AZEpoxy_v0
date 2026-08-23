@@ -57,6 +57,12 @@ export const MOBILE_NAV_GROUPS: MobileNavGroup[] = [
         image: "/images/services/finitions.webp",
         tagline: "Mat, satiné, texturé, mouchetés, effets architecturaux",
       },
+      {
+        label: "Prix & tarifs",
+        href: "/prix",
+        image: "/images/services/thermolaquage.webp",
+        tagline: "Grille tarifaire par type de pièce — devis gratuit sous 24 h",
+      },
     ],
   },
   {
