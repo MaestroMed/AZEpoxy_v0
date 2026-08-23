@@ -24,6 +24,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/services/thermolaquage`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/services/sablage`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/services/finitions`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // Page tarifs : plus fort gisement d'intention commerciale du site
+    // (cluster « prix / tarif / coût / au m² » en Search Console).
+    { url: `${BASE}/prix`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/couleurs-ral`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/configurateur`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/couleurs-ral/patina`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },

@@ -1,6 +1,23 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Compass } from "lucide-react";
 import { NotFoundSwarmBinding } from "@/components/nuee/not-found-swarm-binding";
+
+/**
+ * Sans ce bloc, la page 404 héritait du `robots: { index: true, follow: true }`
+ * du layout racine ET recevait le noindex automatique de Next : deux balises
+ * robots contradictoires dans le même <head>. Google retient la plus
+ * restrictive, mais on ne laisse pas une page servir deux directives opposées.
+ * Pas de `canonical` non plus : une 404 ne canonicalise vers rien.
+ */
+export const metadata: Metadata = {
+  title: "Page introuvable",
+  robots: { index: false, follow: false },
+  // Le layout racine pose un canonical vers l'accueil. Hérité tel quel sur la
+  // 404, il dit à Google « cette URL EST la page d'accueil » — l'URL morte se
+  // fait alors absorber au lieu d'être abandonnée. `null` retire la balise.
+  alternates: { canonical: null },
+};
 
 export default function NotFound() {
   return (

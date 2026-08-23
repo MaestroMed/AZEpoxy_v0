@@ -40,6 +40,39 @@ const nextConfig = {
     workerThreads: false,
     cpus: 2,
   },
+  // URL mortes encore positionnées dans Google. Search Console les a
+  // détectées en 404 le 15/08/2026 ; elles recevaient encore des
+  // impressions et des clics. Un 404 sur une URL classée, c'est un
+  // visiteur en intention d'achat perdu — d'où ces 301.
+  //
+  // Les redirects passent AVANT les rewrites dans Next : les deux combos
+  // supprimés sont interceptés ici et n'atteignent jamais
+  // /combos/[service]/[ville] (qui a dynamicParams = false → 404).
+  async redirects() {
+    return [
+      {
+        // Ancienne fiche tarif d'une page /prix qui n'existe plus dans ce
+        // dépôt (héritée d'une version antérieure du site).
+        source: "/prix/thermolaquage-escalier-metallique",
+        destination: "/prix",
+        permanent: true,
+      },
+      {
+        // Combo retiré de COMBOS. Montreuil existe toujours comme ville.
+        source: "/thermolaquage-portail-montreuil",
+        destination: "/thermolaquage-montreuil",
+        permanent: true,
+      },
+      {
+        // Combo retiré de COMBOS et Montigny-lès-Cormeilles n'est pas dans
+        // villes-data : on renvoie sur la spécialité, seule correspondance
+        // sémantique honnête.
+        source: "/thermolaquage-jantes-montigny-les-cormeilles",
+        destination: "/specialites/jantes",
+        permanent: true,
+      },
+    ];
+  },
   // `prefix-[param]` folder names aren't supported as dynamic routes
   // in App Router (Next 15). The villes pages live in /villes/[ville]
   // internally; we rewrite /thermolaquage-{slug} ↔ /villes/{slug}

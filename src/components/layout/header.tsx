@@ -22,6 +22,7 @@ const navGroups = [
       { label: "Thermolaquage poudre", href: "/services/thermolaquage" },
       { label: "Sablage & grenaillage", href: "/services/sablage" },
       { label: "Finitions spéciales", href: "/services/finitions" },
+      { label: "Prix & tarifs", href: "/prix" },
     ],
   },
   {
