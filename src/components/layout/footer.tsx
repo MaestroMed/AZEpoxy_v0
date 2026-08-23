@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Instagram, Mail, MapPin, Phone, ExternalLink } from "lucide-react";
+import { Instagram, Mail, MapPin, Phone, ArrowRight } from "lucide-react";
 import { SITE } from "@/lib/utils";
 import {
   DEPARTMENT_NAMES,
@@ -15,6 +15,7 @@ const cols = [
       { label: "Thermolaquage poudre", href: "/services/thermolaquage" },
       { label: "Sablage & grenaillage", href: "/services/sablage" },
       { label: "Finitions spéciales", href: "/services/finitions" },
+      { label: "Prix & tarifs", href: "/prix" },
     ],
   },
   {
@@ -274,27 +275,36 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Parent company link */}
+        {/* Groupe AZ — appartenance, sans lien sortant sitewide.
+            Ce bloc portait un lien externe vers azconstruction.fr avec la même
+            ancre exacte sur chaque page : ~758 liens sitewide en ancre unique
+            entre deux sites d'un même parc. C'est le seul motif du profil de
+            liens qu'un moteur peut lire comme un schéma de liens.
+            Le rattachement reste déclaré aux deux seuls endroits légitimes :
+              • `parentOrganization` dans le JSON-LD LocalBusiness (lu par
+                Google, sans transfert d'ancre) ;
+              • un lien éditorial contextuel unique sur /a-propos.
+            Le bloc pointe désormais en interne vers /a-propos, page qui a
+            justement besoin de signal d'exploration. */}
         <div className="mt-16 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">
               Groupe AZ
             </p>
             <p className="mt-1 text-sm text-white/80">
-              Besoin de métallerie sur mesure ? Portails, garde-corps,
-              escaliers, verrières — découvrez notre activité métallerie.
+              L&apos;atelier de thermolaquage du groupe AZ. Besoin de métallerie
+              sur mesure — portails, garde-corps, escaliers, verrières ? C&apos;est
+              l&apos;autre métier de la maison.
             </p>
           </div>
-          <a
-            href={SITE.parent.url}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/a-propos"
             data-magnetic
             className="inline-flex items-center gap-2 self-start rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-brand-orange hover:bg-brand-orange sm:self-center"
           >
-            Voir AZ Construction
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+            Qui sommes-nous
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
 
         {/* Villes desservies — super-mesh interne. Liste compacte des
