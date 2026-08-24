@@ -1,3 +1,77 @@
+/**
+ * Communes retirées du périmètre le 24/08/2026 → hub départemental.
+ *
+ * Critère de conservation : trajet ≤ 40 min depuis l'atelier de
+ * Bruyères-sur-Oise, OU au moins un clic sur 6 mois en Search Console.
+ * Ces 29 communes ne remplissaient ni l'un ni l'autre : 0 clic sur 6 mois
+ * et 42 à 90 min de route. Leur page ne servait aucun client réel et
+ * diluait la position moyenne du domaine.
+ *
+ * Le hub départemental est la destination honnête : même intention
+ * géographique, contenu réel, et la page reste utile au visiteur.
+ * Les arrondissements partent sur la page Paris, faute de hub 75.
+ */
+const VILLES_RETIREES = {
+  // → /thermolaquage-paris
+  "paris-15": "paris",
+  "paris-16": "paris",
+  "paris-17": "paris",
+  "paris-18": "paris",
+  "paris-19": "paris",
+  // → /thermolaquage-hauts-de-seine
+  "boulogne-billancourt": "hauts-de-seine",
+  "neuilly-sur-seine": "hauts-de-seine",
+  "levallois-perret": "hauts-de-seine",
+  "asnieres-sur-seine": "hauts-de-seine",
+  courbevoie: "hauts-de-seine",
+  "issy-les-moulineaux": "hauts-de-seine",
+  clichy: "hauts-de-seine",
+  "rueil-malmaison": "hauts-de-seine",
+  // → /thermolaquage-seine-saint-denis
+  aubervilliers: "seine-saint-denis",
+  bobigny: "seine-saint-denis",
+  pantin: "seine-saint-denis",
+  // → /thermolaquage-val-de-marne
+  creteil: "val-de-marne",
+  "champigny-sur-marne": "val-de-marne",
+  "ivry-sur-seine": "val-de-marne",
+  // → /thermolaquage-essonne
+  "corbeil-essonnes": "essonne",
+  massy: "essonne",
+  palaiseau: "essonne",
+  // → /thermolaquage-yvelines
+  versailles: "yvelines",
+  "saint-germain-en-laye": "yvelines",
+  "mantes-la-jolie": "yvelines",
+  "le-chesnay-rocquencourt": "yvelines",
+  // → /thermolaquage-seine-et-marne
+  meaux: "seine-et-marne",
+  melun: "seine-et-marne",
+  // → /thermolaquage-oise
+  senlis: "oise",
+};
+
+/**
+ * Combos service × commune hérités de la vague pSEO de juin-juillet 2026.
+ * Ces routes n'existent plus : elles répondaient 200 sur une page
+ * « Ville introuvable » (soft 404). On renvoie chaque famille sur la
+ * spécialité correspondante, qui traite le même besoin.
+ *
+ * `jantes-` et `portail-` sont volontairement absents : ces deux préfixes
+ * ont de vraies pages combo (COMBOS), et une redirection les tuerait —
+ * les redirects passent AVANT les rewrites dans Next.
+ * `jantes-moto-` doit rester ici : il serait sinon avalé par le rewrite
+ * `/thermolaquage-jantes-:ville`.
+ */
+const COMBOS_RETIRES = {
+  "jantes-moto": "moto",
+  ferronnerie: "portail",
+  "garde-corps": "portail",
+  "cloture-grille": "portail",
+  escalier: "portail",
+  "mobilier-jardin": "pieces",
+};
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -71,6 +145,21 @@ const nextConfig = {
         destination: "/specialites/jantes",
         permanent: true,
       },
+
+      // Familles de combos héritées de la vague pSEO — AVANT les communes,
+      // car `jantes-moto-:ville` doit gagner sur le rewrite jantes générique.
+      ...Object.entries(COMBOS_RETIRES).map(([prefixe, specialite]) => ({
+        source: `/thermolaquage-${prefixe}-:ville`,
+        destination: `/specialites/${specialite}`,
+        permanent: true,
+      })),
+
+      // Communes sorties du périmètre → hub départemental.
+      ...Object.entries(VILLES_RETIREES).map(([slug, hub]) => ({
+        source: `/thermolaquage-${slug}`,
+        destination: `/thermolaquage-${hub}`,
+        permanent: true,
+      })),
     ];
   },
   // `prefix-[param]` folder names aren't supported as dynamic routes

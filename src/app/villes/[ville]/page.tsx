@@ -109,10 +109,28 @@ export async function generateMetadata({
 /* -------------------------------------------------------------------------- */
 
 /**
- * 76 villes prerenderées au build, revalidation ISR 24h.
+ * Villes prerenderées au build, revalidation ISR 24h.
  * URL publique : `/thermolaquage-{slug}` (rewrite dans next.config.mjs).
  */
 export const revalidate = 86400;
+
+/**
+ * Sans cette ligne, `/thermolaquage-<n-importe-quoi>` répondait **200** avec
+ * une page « Ville introuvable », un canonical vers l'accueil et deux balises
+ * robots contradictoires. Un soft 404, et une surface infinie : Google pouvait
+ * découvrir un nombre illimité d'URL bidon, toutes en 200, toutes déclarées
+ * équivalentes à la page d'accueil. C'est exactement le profil qui fait passer
+ * un site en « Détectée, actuellement non indexée ».
+ *
+ * L'origine : `generateMetadata` renvoyait `{ title: "Ville introuvable" }`
+ * au lieu d'échouer, donc le <head> partait avec un statut 200 déjà écrit
+ * avant que `notFound()` ne soit atteint dans le composant.
+ *
+ * `dynamicParams = false` fait répondre 404 à tout slug absent de
+ * `generateStaticParams`, sans rien rendre — comme /combos/[service]/[ville],
+ * qui lui répondait déjà correctement.
+ */
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const villes = await getVilles();
