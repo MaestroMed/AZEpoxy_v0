@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
-  PROJECTS,
   PROJECT_CATEGORIES,
   type Project,
   type ProjectCategoryKey,
@@ -13,6 +12,7 @@ import {
   getRelatedProjects,
   catalogNumber,
 } from "@/lib/realisations-data";
+import { getProjects } from "@/lib/realisations-server";
 
 /** Editorial photographs per realisation id — local server-safe map. The
  * same data exists in `portfolio-section.tsx`, but we keep this duplicate
@@ -45,18 +45,30 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { CtaBand } from "@/components/ui/cta-band";
 
 /* ── Static params ────────────────────────────────────────────────── */
-export function generateStaticParams() {
-  return PROJECTS.map((p) => ({ slug: getProjectSlug(p) }));
+/**
+ * Même source que la page liste : `getProjects()` (base si présente, dataset
+ * statique sinon). Avant, cette page lisait `PROJECTS` — le dataset statique —
+ * alors que /realisations lisait la base : une réalisation publiée depuis
+ * l'admin apparaissait dans la liste et sa fiche n'existait pas.
+ */
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  return projects.map((p) => ({ slug: getProjectSlug(p) }));
 }
+
+/** Aligné sur la page liste : la fiche se rafraîchit au même rythme. */
+export const revalidate = 600;
 
 /**
  * Tout slug hors du portfolio répond 404, et non 200 sur une page « Pièce
- *  introuvable » canonicalisée vers l'accueil.
+ * introuvable » canonicalisée vers l'accueil.
  *
- * Sans effet de bord : cette page lit `PROJECTS` (le dataset statique), pas
- * `getProjects()`. Une réalisation ajoutée depuis l'admin apparaît dans la
- * liste mais n'a de toute façon jamais eu de page de détail — c'est un trou
- * préexistant, à traiter séparément.
+ * Contrepartie assumée : `generateStaticParams` ne tourne qu'au build, donc une
+ * réalisation publiée APRÈS le dernier déploiement n'aura sa fiche qu'au
+ * déploiement suivant. C'est le compromis inverse de l'ancien comportement, qui
+ * servait n'importe quelle URL en 200. Un hook de redéploiement à la
+ * publication lèverait la contrainte — à faire si l'admin sert vraiment à
+ * publier au fil de l'eau.
  */
 export const dynamicParams = false;
 
@@ -67,14 +79,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = getProjectBySlug(slug, await getProjects());
   // notFound() et non un titre de repli : un { title } laisse partir le <head>
   // avec un statut 200 déjà écrit, et la page « introuvable » se retrouve
   // canonicalisée vers l'accueil. Cf. /villes/[ville], même correctif.
-  //
-  // Ici on ne peut PAS passer par `dynamicParams = false` : les réalisations
-  // sont ajoutées depuis l'admin en cours de vie, elles n'existent donc pas
-  // toutes au moment du build.
   if (!project) notFound();
 
   return buildMetadata({
@@ -155,16 +163,19 @@ export default async function RealisationDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const projects = await getProjects();
+  const project = getProjectBySlug(slug, projects);
   if (!project) notFound();
 
-  const related = getRelatedProjects(project, 3);
+  const related = getRelatedProjects(project, 3, projects);
   const cat = categoryLabel(project.category);
   const num = catalogNumber(project);
   const primaryRal = project.colors[0];
   const primaryHex = primaryRal ? ralToHex(primaryRal) : undefined;
   const ref = internalReference(project);
-  const heroImage = PROJECT_IMAGES[project.id];
+  // `PROJECT_IMAGES` ne couvre que le portfolio statique (ids 1-16). Une
+  // réalisation venue de l'admin porte son visuel dans `project.image`.
+  const heroImage = PROJECT_IMAGES[project.id] ?? project.image;
   const relatedSpecialty = CATEGORY_TO_SPECIALTY[project.category];
 
   return (
@@ -277,7 +288,7 @@ export default async function RealisationDetailPage({
                   Catalogue
                 </span>
                 <span className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
-                  N°{num} / {String(PROJECTS.length).padStart(2, "0")}
+                  N°{num} / {String(projects.length).padStart(2, "0")}
                 </span>
               </div>
 
