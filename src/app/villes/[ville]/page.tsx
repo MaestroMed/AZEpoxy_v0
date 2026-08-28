@@ -83,8 +83,11 @@ export async function generateMetadata({
 
   // Ville case
   const ville = await getVilleBySlugAsync(slug);
+  // Injoignable tant que `dynamicParams = false` tient, mais on ne laisse pas
+  // le titre de repli en place : c'est lui qui, en renvoyant un objet valide,
+  // laissait partir le <head> avec un statut 200 déjà écrit.
   if (!ville) {
-    return { title: "Ville introuvable" };
+    notFound();
   }
 
   return buildMetadata({

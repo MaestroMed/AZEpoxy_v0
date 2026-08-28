@@ -49,6 +49,17 @@ export function generateStaticParams() {
   return PROJECTS.map((p) => ({ slug: getProjectSlug(p) }));
 }
 
+/**
+ * Tout slug hors du portfolio répond 404, et non 200 sur une page « Pièce
+ *  introuvable » canonicalisée vers l'accueil.
+ *
+ * Sans effet de bord : cette page lit `PROJECTS` (le dataset statique), pas
+ * `getProjects()`. Une réalisation ajoutée depuis l'admin apparaît dans la
+ * liste mais n'a de toute façon jamais eu de page de détail — c'est un trou
+ * préexistant, à traiter séparément.
+ */
+export const dynamicParams = false;
+
 /* ── Metadata ─────────────────────────────────────────────────────── */
 export async function generateMetadata({
   params,
@@ -57,7 +68,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
-  if (!project) return { title: "Pièce introuvable" };
+  // notFound() et non un titre de repli : un { title } laisse partir le <head>
+  // avec un statut 200 déjà écrit, et la page « introuvable » se retrouve
+  // canonicalisée vers l'accueil. Cf. /villes/[ville], même correctif.
+  //
+  // Ici on ne peut PAS passer par `dynamicParams = false` : les réalisations
+  // sont ajoutées depuis l'admin en cours de vie, elles n'existent donc pas
+  // toutes au moment du build.
+  if (!project) notFound();
 
   return buildMetadata({
     title: `${project.title} — Catalogue N°${catalogNumber(project)}`,

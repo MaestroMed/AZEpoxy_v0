@@ -118,8 +118,11 @@ export async function generateMetadata({
   const { specialty: slug } = await params;
   const specialty = await getSpecialtyBySlugAsync(slug);
 
+  // notFound() et non un titre de repli : un { title } laisse partir le <head>
+  // avec un statut 200 déjà écrit, et la page « introuvable » se retrouve
+  // canonicalisée vers l'accueil. Cf. /villes/[ville], même correctif.
   if (!specialty) {
-    return { title: "Spécialité introuvable" };
+    notFound();
   }
 
   // Le layout applique déjà le template "… | AZ Époxy" ; on retire un
@@ -143,6 +146,10 @@ export async function generateStaticParams() {
   const specialties = await getSpecialties();
   return specialties.map((s) => ({ specialty: s.slug }));
 }
+
+/** Tout slug hors des spécialités répond 404, et non 200 sur une page
+ *  « Spécialité introuvable » canonicalisée vers l'accueil. */
+export const dynamicParams = false;
 
 /* -------------------------------------------------------------------------- */
 /*  Page                                                                       */
