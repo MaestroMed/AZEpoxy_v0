@@ -233,6 +233,21 @@ export default async function HomePage() {
                   Un seul atelier.
                 </span>
               </h2>
+              {/* Lien éditorial vers /prix depuis la page la plus forte du site.
+                  Le pied de page était jusqu'ici le seul lien rendu côté serveur
+                  vers cette page — le menu d'en-tête n'affiche ses sous-éléments
+                  qu'au survol, donc côté client. */}
+              <p className="mt-5 text-brand-charcoal/75">
+                Tarifs publics, pièce par pièce : jantes dès 80 €, portail dès
+                25 €/m², cadre moto dès 200 €.{" "}
+                <Link
+                  href="/prix"
+                  className="font-semibold text-brand-orange underline-offset-4 hover:underline"
+                >
+                  Voir la grille tarifaire
+                </Link>
+                .
+              </p>
             </div>
           </ScrollReveal>
 
