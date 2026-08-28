@@ -57,6 +57,15 @@ export function generateStaticParams() {
   return RAL_COLORS.map((c) => ({ code: toSlug(c.code) }));
 }
 
+/**
+ * Sans cette ligne, `/couleurs-ral/teinte/<n-importe-quoi>` répondait 200 avec
+ * une page « Teinte introuvable » canonicalisée vers l'accueil : une surface de
+ * soft-404 illimitée de plus. `notFound()` dans `generateMetadata` ne suffit
+ * pas — le statut est déjà écrit quand il est atteint. Seul `dynamicParams`
+ * agit avant le rendu.
+ */
+export const dynamicParams = false;
+
 /* ── Metadata ─────────────────────────────────────────────────────── */
 export async function generateMetadata({
   params,
@@ -65,7 +74,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { code } = await params;
   const color = getRalBySlug(code);
-  if (!color) return { title: "Teinte introuvable" };
+  // notFound() et non un titre de repli : renvoyer { title } laissait partir
+  // le <head> avec un statut 200 déjà écrit. La page « introuvable » répondait
+  // donc 200, avec le canonical du layout — c'est-à-dire en se déclarant
+  // équivalente à la page d'accueil. Surface de soft-404 illimitée.
+  if (!color) notFound();
   const quote = getRalEditorial(color.code);
   return buildMetadata({
     title: `${color.code} — ${color.name}`,

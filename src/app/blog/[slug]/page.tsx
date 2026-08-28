@@ -20,6 +20,11 @@ export function generateStaticParams() {
   return BLOG_ARTICLES_FALLBACK.map((a) => ({ slug: a.slug }));
 }
 
+/** Tout slug hors du corpus répond 404, et non 200 sur une page « Article
+ *  introuvable » canonicalisée vers l'accueil. Les articles viennent d'un
+ *  dataset statique : rien n'est ajouté en cours de vie. */
+export const dynamicParams = false;
+
 export async function generateMetadata({
   params,
 }: {
@@ -27,7 +32,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const article = await getBlogArticleBySlug(slug);
-  if (!article) return { title: "Article introuvable" };
+  // notFound() et non un titre de repli : un { title } laisse partir le <head>
+  // avec un statut 200 déjà écrit, et la page « introuvable » se retrouve
+  // canonicalisée vers l'accueil. Cf. /villes/[ville], même correctif.
+  if (!article) notFound();
   return buildMetadata({
     title: article.title,
     description: article.description,

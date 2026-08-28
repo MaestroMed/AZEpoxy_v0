@@ -19,6 +19,10 @@ export function generateStaticParams() {
   return COLLECTIONS.map((c) => ({ collection: c.slug }));
 }
 
+/** Tout slug hors des 4 collections répond 404, et non 200 sur une page
+ *  « Collection introuvable » canonicalisée vers l'accueil. */
+export const dynamicParams = false;
+
 /* ── Dynamic metadata ─────────────────────────────────────────────── */
 export async function generateMetadata({
   params,
@@ -27,7 +31,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { collection: slug } = await params;
   const col = getCollectionBySlug(slug);
-  if (!col) return { title: "Collection introuvable" };
+  // notFound() et non un titre de repli : un { title } laisse partir le <head>
+  // avec un statut 200 déjà écrit, et la page « introuvable » se retrouve
+  // canonicalisée vers l'accueil. Cf. /villes/[ville], même correctif.
+  if (!col) notFound();
   return buildMetadata({
     title: `Collection ${col.name} — Finitions Premium`,
     description: col.description,
