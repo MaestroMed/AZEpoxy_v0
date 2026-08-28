@@ -7,6 +7,7 @@ import {
   createRealisation,
   updateRealisation,
   deleteRealisation,
+  getRealisation,
   createTestimonial,
   updateTestimonial,
   deleteTestimonial,
@@ -14,6 +15,29 @@ import {
 } from "@/lib/admin/content";
 import { requireAdmin } from "@/lib/admin/session";
 import { logActivity } from "@/lib/admin/activity";
+import {
+  declencherRedeploiement,
+  slugsImpactes,
+} from "@/lib/admin/deploy-hook";
+
+/**
+ * Déclenche un redéploiement et le trace dans le journal d'activité, pour que
+ * l'apparition d'un build dans Vercel soit explicable. Ne remonte jamais
+ * d'erreur : un hook injoignable ne doit pas faire échouer l'enregistrement.
+ */
+async function redeployerPourFiches(actor: string, motif: string) {
+  const resultat = await declencherRedeploiement();
+  if (resultat === "desactive") return;
+  await logActivity({
+    actor,
+    action: "deploy.trigger",
+    entityType: "realisation",
+    summary:
+      resultat === "declenche"
+        ? `Redéploiement déclenché — ${motif}`
+        : `Redéploiement en échec — ${motif}`,
+  });
+}
 
 /* ── Réalisations ──────────────────────────────────────────────── */
 
@@ -55,6 +79,10 @@ export async function saveRealisationAction(
     published: data.published,
     sortOrder: data.sortOrder,
   };
+  // L'état d'avant sert à savoir si l'ensemble des slugs publiés change —
+  // seul cas qui justifie un build. Lu AVANT l'écriture, forcément.
+  const avant = id ? await getRealisation(id) : null;
+
   if (id) {
     await updateRealisation(id, values);
     await logActivity({
@@ -74,12 +102,29 @@ export async function saveRealisationAction(
       summary: `Réalisation créée : ${data.title}`,
     });
   }
+
+  // La fiche publique est prérendue au build : sans redéploiement, une
+  // réalisation nouvellement publiée n'aurait pas d'URL. Les modifications de
+  // contenu, elles, remontent seules par l'ISR — on ne construit pas pour ça.
+  if (
+    slugsImpactes(
+      avant ? { title: avant.title, published: avant.published } : null,
+      { title: data.title, published: data.published },
+    )
+  ) {
+    await redeployerPourFiches(
+      admin.email,
+      id ? `fiche « ${data.title} »` : `nouvelle fiche « ${data.title} »`,
+    );
+  }
+
   revalidatePath("/admin/contenu/realisations");
   redirect("/admin/contenu/realisations");
 }
 
 export async function deleteRealisationAction(id: string) {
   const admin = await requireAdmin();
+  const avant = await getRealisation(id);
   await deleteRealisation(id);
   await logActivity({
     actor: admin.email,
@@ -88,6 +133,13 @@ export async function deleteRealisationAction(id: string) {
     entityId: id,
     summary: "Réalisation supprimée",
   });
+
+  // Une fiche supprimée dont l'URL reste prérendue continuerait de répondre
+  // 200 sur un contenu absent — exactement ce qu'on vient de fermer ailleurs.
+  if (avant?.published) {
+    await redeployerPourFiches(admin.email, `suppression « ${avant.title} »`);
+  }
+
   revalidatePath("/admin/contenu/realisations");
   redirect("/admin/contenu/realisations");
 }
