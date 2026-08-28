@@ -124,7 +124,7 @@ export const VILLES_FALLBACK: Ville[] = [
     neighborhoods: ["Cergy-Centre", "Cergy-le-Haut", "Cergy-Préfecture", "Cergy-Saint-Christophe", "Cergy-Village"],
     landmarks: ["Préfecture du Val-d'Oise", "Université CY", "Port fluvial", "Major"],
     industries: ["metallerie", "promotion", "architectes", "particuliers"],
-    nearbyVilles: ["pontoise", "saint-ouen-l-aumone", "eragny"],
+    nearbyVilles: ["pontoise", "saint-ouen-l-aumone", "eragny", "conflans-sainte-honorine"],
     customIntro:
       "Ville nouvelle dynamique avec son université, son quartier d'affaires Major et le port fluvial de Cergy-Pontoise, Cergy accueille de nombreux professionnels du bâtiment et de l'industrie. Nos services de thermolaquage répondent aux exigences des projets architecturaux du Grand Paris et des rénovations de garde-corps, portails et mobilier urbain dans l'agglomération.",
   },
@@ -141,7 +141,7 @@ export const VILLES_FALLBACK: Ville[] = [
     neighborhoods: ["Centre historique", "Les Cordeliers", "Hautils", "Marcouville"],
     landmarks: ["Cathédrale Saint-Maclou", "Musée Pissarro", "Centre Ancien classé"],
     industries: ["ferronnerie", "particuliers", "architectes", "renovation"],
-    nearbyVilles: ["cergy", "saint-ouen-l-aumone"],
+    nearbyVilles: ["cergy", "saint-ouen-l-aumone", "eragny", "conflans-sainte-honorine"],
     customIntro:
       "Préfecture du Val-d'Oise et cité d'art chargée d'histoire, Pontoise mêle patrimoine médiéval et développement urbain moderne. Les artisans ferronniers, les architectes du centre historique et les copropriétés de la ville font régulièrement appel au thermolaquage pour rénover rampes d'escalier, grilles ouvragées et menuiseries métalliques.",
   },
@@ -190,7 +190,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A15 puis RD311",
     landmarks: ["Lac d'Enghien", "Casino Barrière", "Villas Belle Époque"],
     industries: ["ferronnerie", "particuliers", "architectes"],
-    nearbyVilles: ["montmorency", "soisy-sous-montmorency"],
+    nearbyVilles: ["montmorency", "soisy-sous-montmorency", "eaubonne", "sannois"],
     customIntro:
       "Ville thermale et résidentielle prisée, Enghien-les-Bains se distingue par ses villas Belle Époque, son casino et les façades élégantes bordant le lac. Le thermolaquage haut de gamme y est recherché pour la restauration de ferronneries d'art, de balcons en fer forgé et de portails de prestige, avec une attention particulière aux finitions mates et satinées.",
   },
@@ -206,7 +206,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A15 puis RD311",
     landmarks: ["Collégiale Saint-Martin", "Forêt de Montmorency"],
     industries: ["ferronnerie", "particuliers", "architectes"],
-    nearbyVilles: ["enghien-les-bains", "soisy-sous-montmorency", "saint-brice-sous-foret"],
+    nearbyVilles: ["enghien-les-bains", "soisy-sous-montmorency", "saint-brice-sous-foret", "eaubonne"],
     customIntro:
       "Surplombant la plaine de France, Montmorency est une ville résidentielle de caractère, riche de demeures du XVIIIᵉ siècle et de vastes propriétés. Les portails domaniaux, les rampes de jardin et les balustrades de villas font appel à notre savoir-faire en thermolaquage poudre époxy pour résister à l'humidité de la forêt et aux variations saisonnières.",
   },
@@ -221,7 +221,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 12,
     access: "A115 puis RD191",
     industries: ["metallerie", "particuliers", "promotion"],
-    nearbyVilles: ["ermont"],
+    nearbyVilles: ["ermont", "franconville", "herblay", "eaubonne"],
     customIntro:
       "Très proche de notre atelier, Taverny est une ville pavillonnaire en croissance avec plusieurs zones d'activités, dont la base aérienne 921 et le centre-ville rénové. Les artisans métalliers locaux et les particuliers font appel à AZ Époxy pour le thermolaquage de portails, clôtures et mobilier extérieur, avec un service express compatible avec leurs cadences.",
   },
@@ -237,7 +237,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "RD922 direction L'Isle-Adam",
     landmarks: ["Forêt de L'Isle-Adam", "Plage", "Château de Conti"],
     industries: ["particuliers", "ferronnerie", "architectes"],
-    nearbyVilles: [],
+    nearbyVilles: ["persan", "beaumont-sur-oise", "taverny", "saint-ouen-l-aumone"],
     customIntro:
       "À 5 minutes de notre atelier, L'Isle-Adam est une ville prisée par les amateurs de patrimoine et de nature. Les propriétaires de villas bourgeoises, les architectes du centre-bourg et les hôteliers font appel à notre service rapide pour la rénovation de portails, balcons et mobilier de bord d'Oise.",
   },
@@ -252,7 +252,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 5,
     access: "RD922 nord",
     industries: ["industrie", "chaudronnerie", "metallerie"],
-    nearbyVilles: ["beaumont-sur-oise", "lisle-adam"],
+    nearbyVilles: ["beaumont-sur-oise", "lisle-adam", "domont", "taverny"],
     customIntro:
       "Ville voisine directe de Bruyères-sur-Oise, Persan abrite plusieurs zones industrielles et artisanales. Les ateliers de chaudronnerie, les serruriers et les PME industrielles de la vallée bénéficient d'un délai logistique réduit pour leurs traitements de surface — un service quasi sur-mesure avec dépôt rapide.",
   },
@@ -267,7 +267,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 5,
     access: "RD922 sud",
     industries: ["particuliers", "metallerie", "chaudronnerie"],
-    nearbyVilles: ["persan"],
+    nearbyVilles: ["persan", "lisle-adam", "domont", "taverny"],
   },
   {
     slug: "eaubonne",
@@ -280,7 +280,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 25,
     access: "A15 puis RD192",
     industries: ["particuliers", "metallerie", "ferronnerie"],
-    nearbyVilles: ["ermont", "soisy-sous-montmorency"],
+    nearbyVilles: ["ermont", "soisy-sous-montmorency", "sannois", "enghien-les-bains"],
   },
   {
     slug: "ermont",
@@ -293,7 +293,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 22,
     access: "A115 puis RD106",
     industries: ["particuliers", "metallerie", "promotion"],
-    nearbyVilles: ["eaubonne", "sannois", "franconville"],
+    nearbyVilles: ["eaubonne", "sannois", "franconville", "soisy-sous-montmorency"],
   },
   {
     slug: "franconville",
@@ -306,7 +306,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 20,
     access: "A115 puis RD106",
     industries: ["metallerie", "automobile", "particuliers"],
-    nearbyVilles: ["ermont", "sannois", "cormeilles-en-parisis"],
+    nearbyVilles: ["ermont", "sannois", "cormeilles-en-parisis", "eaubonne"],
   },
   {
     slug: "sannois",
@@ -345,7 +345,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 26,
     access: "A15 puis RD392",
     industries: ["particuliers", "metallerie", "promotion"],
-    nearbyVilles: ["argenteuil", "sannois", "bezons"],
+    nearbyVilles: ["argenteuil", "sannois", "bezons", "franconville"],
   },
   {
     slug: "saint-ouen-l-aumone",
@@ -358,7 +358,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 17,
     access: "A15 sortie Saint-Ouen-l'Aumône",
     industries: ["industrie", "chaudronnerie", "automobile"],
-    nearbyVilles: ["cergy", "pontoise", "eragny"],
+    nearbyVilles: ["cergy", "pontoise", "eragny", "herblay"],
     customIntro:
       "Bordée par l'Oise et tournée vers l'industrie, Saint-Ouen-l'Aumône concentre plusieurs zones d'activités stratégiques pour la logistique et la métallerie du nord-ouest francilien. Les chaudronniers, les ateliers automobiles et les industriels nous adressent leurs structures, châssis et pièces de série pour un thermolaquage technique en cabine 7 × 3 × 4 m.",
   },
@@ -386,7 +386,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 25,
     access: "A15 sortie Herblay",
     industries: ["particuliers", "metallerie", "automobile"],
-    nearbyVilles: ["conflans-sainte-honorine", "cormeilles-en-parisis"],
+    nearbyVilles: ["conflans-sainte-honorine", "cormeilles-en-parisis", "eragny", "saint-ouen-l-aumone"],
   },
   {
     slug: "gonesse",
@@ -412,7 +412,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 35,
     access: "A1 sortie Goussainville",
     industries: ["metallerie", "particuliers", "industrie"],
-    nearbyVilles: ["gonesse", "sarcelles", "villiers-le-bel"],
+    nearbyVilles: ["gonesse", "sarcelles", "villiers-le-bel", "garges-les-gonesse"],
   },
   {
     slug: "garges-les-gonesse",
@@ -425,7 +425,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 33,
     access: "A1 puis RD125",
     industries: ["renovation", "promotion", "metallerie"],
-    nearbyVilles: ["sarcelles", "gonesse", "villiers-le-bel"],
+    nearbyVilles: ["sarcelles", "gonesse", "villiers-le-bel", "saint-denis"],
   },
   {
     slug: "villiers-le-bel",
@@ -438,7 +438,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 31,
     access: "A1 sortie Villiers-le-Bel",
     industries: ["renovation", "promotion", "metallerie", "mobilier-urbain"],
-    nearbyVilles: ["sarcelles", "gonesse", "garges-les-gonesse"],
+    nearbyVilles: ["sarcelles", "gonesse", "garges-les-gonesse", "saint-brice-sous-foret"],
   },
   {
     slug: "domont",
@@ -451,7 +451,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 22,
     access: "RD301 puis RD125",
     industries: ["particuliers", "metallerie", "ferronnerie"],
-    nearbyVilles: ["montmorency", "saint-brice-sous-foret"],
+    nearbyVilles: ["montmorency", "saint-brice-sous-foret", "soisy-sous-montmorency", "eaubonne"],
   },
   {
     slug: "saint-brice-sous-foret",
@@ -491,7 +491,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A1 directe vers Porte de la Chapelle",
     landmarks: ["Boulevards des Maréchaux", "Périphérique", "Gare du Nord"],
     industries: ["ferronnerie", "architectes", "particuliers", "automobile", "moto"],
-    nearbyVilles: ["saint-denis"],
+    nearbyVilles: ["saint-denis", "vincennes", "montreuil", "vitry-sur-seine"],
     customIntro:
       "Capitale et ville la plus dense d'Europe, Paris concentre les ferronneries d'art, les architectes du patrimoine et une clientèle exigeante pour la rénovation des balcons haussmanniens, des grilles, des portails cochères et des pièces auto/moto premium. Notre service avec enlèvement et restitution couvre l'ensemble des arrondissements depuis Bruyères-sur-Oise via l'A1.",
   },
@@ -507,7 +507,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A15 puis A86",
     landmarks: ["La Défense", "Arena Paris La Défense", "Préfecture"],
     industries: ["industrie", "architectes", "metallerie", "promotion"],
-    nearbyVilles: [],
+    nearbyVilles: ["bezons", "houilles", "colombes", "sartrouville"],
     customIntro:
       "Préfecture des Hauts-de-Seine et porte d'entrée de La Défense, Nanterre conjugue grands chantiers tertiaires, université Paris-Nanterre et tissu industriel historique. Les bureaux d'études du quartier d'affaires, les chantiers de l'EOLE et les ateliers du quartier des Groues mobilisent un thermolaquage de précision pour les structures architecturales et les pièces industrielles.",
   },
@@ -522,7 +522,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 42,
     access: "A15 puis A86",
     industries: ["metallerie", "particuliers", "promotion"],
-    nearbyVilles: [],
+    nearbyVilles: ["bezons", "argenteuil", "nanterre", "houilles"],
   },
   {
     slug: "saint-denis",
@@ -536,7 +536,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A1 direct",
     landmarks: ["Basilique de Saint-Denis", "Stade de France", "La Plaine"],
     industries: ["industrie", "chaudronnerie", "renovation", "mobilier-urbain"],
-    nearbyVilles: [],
+    nearbyVilles: ["garges-les-gonesse", "enghien-les-bains", "drancy", "sarcelles"],
     customIntro:
       "Préfecture de Seine-Saint-Denis et capitale historique du nord parisien, Saint-Denis combine patrimoine royal, tissu industriel et grands chantiers du Grand Paris (Stade de France, Carrefour Pleyel, JO 2024). Le thermolaquage y trouve ses clients chez les chaudronniers de La Plaine, les bailleurs sociaux et les fabricants de mobilier urbain.",
   },
@@ -551,7 +551,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 58,
     access: "A1 puis A86",
     industries: ["metallerie", "ferronnerie", "particuliers", "architectes"],
-    nearbyVilles: ["vincennes"],
+    nearbyVilles: ["vincennes", "drancy", "paris", "saint-maur-des-fosses"],
   },
   {
     slug: "drancy",
@@ -564,7 +564,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 40,
     access: "A1 puis A3",
     industries: ["metallerie", "renovation", "particuliers"],
-    nearbyVilles: ["aulnay-sous-bois"],
+    nearbyVilles: ["aulnay-sous-bois", "garges-les-gonesse", "saint-denis", "montreuil"],
   },
   {
     slug: "aulnay-sous-bois",
@@ -577,7 +577,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 38,
     access: "A1 puis A104",
     industries: ["automobile", "industrie", "metallerie"],
-    nearbyVilles: ["drancy"],
+    nearbyVilles: ["drancy", "gonesse", "garges-les-gonesse", "goussainville"],
   },
   {
     slug: "vitry-sur-seine",
@@ -590,7 +590,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 62,
     access: "A1 puis A86",
     industries: ["industrie", "renovation", "metallerie"],
-    nearbyVilles: [],
+    nearbyVilles: ["vincennes", "saint-maur-des-fosses", "paris", "montreuil"],
   },
   {
     slug: "saint-maur-des-fosses",
@@ -603,7 +603,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 64,
     access: "A1 puis A4",
     industries: ["ferronnerie", "particuliers", "architectes"],
-    nearbyVilles: [],
+    nearbyVilles: ["vincennes", "vitry-sur-seine", "montreuil", "chelles"],
   },
   {
     slug: "vincennes",
@@ -617,7 +617,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A1 puis A86 puis A4",
     landmarks: ["Château de Vincennes", "Bois de Vincennes"],
     industries: ["ferronnerie", "architectes", "particuliers"],
-    nearbyVilles: ["montreuil"],
+    nearbyVilles: ["montreuil", "saint-maur-des-fosses", "paris", "vitry-sur-seine"],
   },
   {
     slug: "evry-courcouronnes",
@@ -631,7 +631,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A1 puis A86 puis A6",
     landmarks: ["Préfecture", "Génopole", "Cathédrale de la Résurrection"],
     industries: ["industrie", "architectes", "promotion"],
-    nearbyVilles: [],
+    nearbyVilles: ["savigny-sur-orge"],
     customIntro:
       "Préfecture de l'Essonne et ville nouvelle, Évry-Courcouronnes est un centre universitaire et technologique en développement. Le quartier d'affaires Évry Centre République, le Génopole et les zones d'activités du sud francilien font appel au thermolaquage pour des projets allant du mobilier de bureau à la signalétique industrielle en passant par les aménagements extérieurs.",
   },
@@ -646,7 +646,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 73,
     access: "A1 puis A86 puis A6",
     industries: ["particuliers", "metallerie", "promotion"],
-    nearbyVilles: [],
+    nearbyVilles: ["evry-courcouronnes", "vitry-sur-seine"],
   },
   {
     slug: "poissy",
@@ -660,7 +660,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A15 puis A14",
     landmarks: ["Usine PSA", "Collégiale Notre-Dame"],
     industries: ["automobile", "industrie", "metallerie"],
-    nearbyVilles: ["conflans-sainte-honorine"],
+    nearbyVilles: ["conflans-sainte-honorine", "sartrouville", "houilles", "eragny"],
   },
   {
     slug: "conflans-sainte-honorine",
@@ -674,7 +674,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A15 sortie Conflans",
     landmarks: ["Capitale de la batellerie", "Confluence Seine-Oise"],
     industries: ["chaudronnerie", "industrie", "metallerie"],
-    nearbyVilles: ["herblay", "cergy", "eragny"],
+    nearbyVilles: ["herblay", "cergy", "eragny", "pontoise"],
   },
   {
     slug: "sartrouville",
@@ -687,7 +687,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 34,
     access: "A15 sortie Sartrouville",
     industries: ["metallerie", "particuliers", "automobile"],
-    nearbyVilles: ["houilles"],
+    nearbyVilles: ["houilles", "bezons", "cormeilles-en-parisis", "nanterre"],
   },
   {
     slug: "houilles",
@@ -700,7 +700,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 36,
     access: "A15 puis A86",
     industries: ["particuliers", "metallerie", "promotion"],
-    nearbyVilles: ["sartrouville", "bezons", "argenteuil"],
+    nearbyVilles: ["sartrouville", "bezons", "argenteuil", "nanterre"],
   },
   {
     slug: "chelles",
@@ -713,7 +713,7 @@ export const VILLES_FALLBACK: Ville[] = [
     driveTimeMin: 55,
     access: "A1 puis A104",
     industries: ["metallerie", "promotion", "particuliers"],
-    nearbyVilles: [],
+    nearbyVilles: ["aulnay-sous-bois", "montreuil", "drancy", "saint-maur-des-fosses"],
   },
   {
     slug: "fontainebleau",
@@ -741,7 +741,7 @@ export const VILLES_FALLBACK: Ville[] = [
     access: "A1 puis RD1017",
     landmarks: ["Château de Chantilly", "Hippodrome", "Grandes Écuries"],
     industries: ["ferronnerie", "particuliers", "architectes"],
-    nearbyVilles: ["creil", "lisle-adam"],
+    nearbyVilles: ["creil", "lisle-adam", "beaumont-sur-oise"],
     customIntro:
       "Mondialement connue pour son château, ses écuries et son hippodrome, Chantilly est une ville d'exception où l'esthétique compte. Les propriétaires d'écuries, de manoirs et de résidences de prestige font appel au thermolaquage pour l'entretien de boxes équestres métalliques, de portails domaniaux et de mobilier extérieur haut de gamme.",
   },
