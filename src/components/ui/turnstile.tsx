@@ -3,7 +3,8 @@
 import Script from "next/script";
 import { useEffect, useId, useRef, useState } from "react";
 
-const TURNSTILE_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+const TURNSTILE_SRC =
+  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
 interface TurnstileWidgetProps {
   siteKey: string | undefined;
@@ -11,6 +12,12 @@ interface TurnstileWidgetProps {
   onToken: (token: string | null) => void;
   /** Optional label rendered above the widget; defaults hidden. */
   label?: string;
+  /**
+   * Incrémenter pour obtenir un nouveau token : un token Turnstile ne se
+   * vérifie qu'une fois, il faut donc réinitialiser le widget après chaque
+   * envoi refusé, sinon le deuxième essai échoue à coup sûr.
+   */
+  resetKey?: number;
 }
 
 interface TurnstileApi {
@@ -41,14 +48,14 @@ declare global {
  * dev environments aren't blocked — the server-side verify then short-circuits
  * with success + a `skipped` flag.
  */
-export function TurnstileWidget({ siteKey, onToken, label }: TurnstileWidgetProps) {
+export function TurnstileWidget({ siteKey, onToken, label, resetKey }: TurnstileWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [scriptReady, setScriptReady] = useState(false);
   const inputId = useId();
 
   useEffect(() => {
-    if (!siteKey || !scriptLoaded || !containerRef.current) return;
+    if (!siteKey || !scriptReady || !containerRef.current) return;
     const api = window.turnstile;
     if (!api) return;
 
@@ -68,7 +75,13 @@ export function TurnstileWidget({ siteKey, onToken, label }: TurnstileWidgetProp
         widgetIdRef.current = null;
       }
     };
-  }, [siteKey, scriptLoaded, onToken]);
+  }, [siteKey, scriptReady, onToken]);
+
+  useEffect(() => {
+    if (!resetKey || !widgetIdRef.current || !window.turnstile) return;
+    onToken(null);
+    window.turnstile.reset(widgetIdRef.current);
+  }, [resetKey, onToken]);
 
   if (!siteKey) return null;
 
@@ -79,10 +92,15 @@ export function TurnstileWidget({ siteKey, onToken, label }: TurnstileWidgetProp
           {label}
         </label>
       )}
+      {/* `onReady` et non `onLoad` : next/script n'appelle onLoad qu'au
+          premier chargement du script. Au remontage du widget (retour à
+          l'étape 4 du devis, navigation /contact → /devis), onLoad ne se
+          redéclenche pas : le widget ne s'affichait plus, aucun token ne
+          partait et le serveur refusait l'envoi. */}
       <Script
         src={TURNSTILE_SRC}
         strategy="lazyOnload"
-        onLoad={() => setScriptLoaded(true)}
+        onReady={() => setScriptReady(true)}
       />
       <div ref={containerRef} id={inputId} className="min-h-[65px]" />
     </div>

@@ -76,6 +76,24 @@ elles sont réécrites vers des dossiers dynamiques internes :
 rewrite ville générique, sinon `jantes-cergy` serait interprété comme un slug
 de ville inexistant. Premier match gagne.
 
+### Emails des formulaires (`src/lib/email.ts`)
+
+Chaque soumission (contact, devis) est d'abord **enregistrée en base**
+(`/admin/leads`), puis notifiée par email à `contact@azepoxy.fr` via Resend,
+avec un accusé de réception au visiteur. Tout passe par `sendEmail()`, qui lit
+la réponse de Resend : le SDK ne lève pas d'exception quand un envoi est
+refusé, il renvoie `{ error }`.
+
+- Notification refusée mais lead en base → le visiteur voit « Merci », le
+  motif est inscrit sur la fiche du lead et le tableau de bord admin alerte.
+- Notification refusée **et** base indisponible → erreur 500 : le visiteur
+  est invité à appeler plutôt que de croire sa demande partie.
+- Diagnostic en un clic : `/admin/settings` → « Envoyer un email de test »
+  affiche le message exact de Resend. Logs Vercel : filtrer sur `[email]`.
+
+Prérequis de prod : domaine `azepoxy.fr` vérifié dans Resend + `RESEND_FROM`
+défini (voir `.env.example`).
+
 ### Crons Vercel (`vercel.json`)
 
 - `/api/cron/qa-villes` — lundi 3h UTC : visite toutes les pages clés (villes,

@@ -10,6 +10,7 @@ import { estimateWizardPrice } from "@/lib/pricing-data";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { TurnstileWidget } from "@/components/ui/turnstile";
 import { track } from "@/lib/analytics/events";
+import { postLead } from "@/lib/lead-submit";
 import { getSwarm } from "@/lib/nuee/store";
 import { getSoundEngine } from "@/lib/nuee/sound";
 import {
@@ -84,6 +85,7 @@ export function DevisWizard() {
   const [errorMsg, setErrorMsg] = useState("");
   const [direction, setDirection] = useState(1);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileReset, setTurnstileReset] = useState(0);
   const [draftRestored, setDraftRestored] = useState(false);
   const submittedRef = useRef(false);
   const startedRef = useRef(false);
@@ -182,8 +184,16 @@ export function DevisWizard() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!data.consent) return;
-    setStatus("loading");
     setErrorMsg("");
+    // Sans token, le serveur refuserait l'envoi : on le dit tout de suite.
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatus("error");
+      setErrorMsg(
+        `Vérification anti-spam en cours. Réessayez dans quelques secondes ou appelez-nous au ${SITE.phone}.`
+      );
+      return;
+    }
+    setStatus("loading");
     try {
       const fd = new FormData();
       fd.append("name", data.name);
@@ -203,9 +213,7 @@ export function DevisWizard() {
       fd.append("message", msg);
       for (const photo of photos) fd.append("photos", photo);
       if (turnstileToken) fd.set("turnstileToken", turnstileToken);
-      const res = await fetch("/api/devis", { method: "POST", body: fd });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error);
+      await postLead("/api/devis", { body: fd });
       track("form_submit", { variant: "wizard", status: "ok" });
       submittedRef.current = true;
       clearDevisDraft();
@@ -227,6 +235,8 @@ export function DevisWizard() {
         reason: err instanceof Error ? err.message : "unknown",
       });
       setErrorMsg(err instanceof Error ? err.message : "Erreur. Appelez-nous au 09 71 35 74 96.");
+      // Le token a été consommé par la tentative : il en faut un neuf.
+      setTurnstileReset((n) => n + 1);
     }
   };
 
@@ -681,6 +691,7 @@ export function DevisWizard() {
                 <TurnstileWidget
                   siteKey={TURNSTILE_SITE_KEY}
                   onToken={handleTurnstile}
+                  resetKey={turnstileReset}
                 />
 
                 {status === "error" && (
