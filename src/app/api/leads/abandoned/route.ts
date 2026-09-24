@@ -105,7 +105,8 @@ async function sendRecoveryEmail(
           <p style="color:#333;line-height:1.6">
             Nous avons vu que vous aviez commencé une demande de devis sur azepoxy.fr
             ${data.projectType ? `pour <strong>${escapeHtml(data.projectType)}</strong>` : ""}.
-            Votre progression a été sauvegardée&nbsp;: vous pouvez la reprendre en un clic.
+            Le lien ci-dessous rouvre le formulaire avec votre type de projet et
+            votre couleur déjà choisis&nbsp;: il ne reste que quelques champs.
           </p>
           <p style="margin:24px 0;text-align:center">
             <a href="${devisUrl}" style="background:#E85D2C;color:white;text-decoration:none;padding:12px 24px;border-radius:999px;font-weight:600;display:inline-block">
@@ -113,9 +114,13 @@ async function sendRecoveryEmail(
             </a>
           </p>
           <p style="color:#333;line-height:1.6">
-            Une question&nbsp;? Appelez-nous au <strong>${SITE.phone}</strong> (lun-ven 8h-18h), nous répondons sous 1h.
+            Une question&nbsp;? Appelez-nous au <strong>${SITE.phone}</strong> (lun-ven 8h-18h).
           </p>
           <p style="color:#666;font-size:14px;margin-top:24px">L'équipe AZ Époxy</p>
+          <p style="color:#999;font-size:12px;margin-top:16px">
+            Ce rappel est unique. Pour ne plus rien recevoir de notre part,
+            répondez simplement «&nbsp;STOP&nbsp;» à cet email.
+          </p>
         </div>
       </div>
     `,
@@ -185,7 +190,7 @@ export async function POST(request: NextRequest) {
       phone: payload.data.phone,
       projectType: payload.data.projectType,
       ralCode: payload.data.ralCode,
-      ip: extractIp(request),
+      // Pas d'IP : celle de cette requête est celle de QStash, pas du prospect.
       extra: {
         step: payload.step,
         updatedAt: payload.updatedAt,
