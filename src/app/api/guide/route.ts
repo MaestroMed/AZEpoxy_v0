@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 import { renderRalGuide } from "@/lib/pdf/guide-ral";
 import { extractIp, ratelimit } from "@/lib/ratelimit";
 import { verifyTurnstile } from "@/lib/turnstile";
@@ -43,8 +43,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const name = body.name?.slice(0, 200)?.trim() ?? "";
-  const email = body.email?.slice(0, 320)?.trim() ?? "";
+  const text = (v: unknown, max: number) =>
+    typeof v === "string" ? v.slice(0, max).trim() : "";
+  const name = text(body.name, 200);
+  const email = text(body.email, 320);
 
   if (body.website) {
     // Honeypot — pretend success so bots don't learn
@@ -69,14 +71,18 @@ export async function POST(request: NextRequest) {
   try {
     const pdf = await renderRalGuide({ customerName: name });
 
-    // Fire-and-forget lead write.
-    void fanoutLead({
-      source: "guide",
-      name,
-      email,
-      phone: body.phone?.slice(0, 64),
-      ip,
-    });
+    // Écriture du lead après la réponse. `after` garde la fonction en vie
+    // jusqu'au bout : un `void promise` peut être coupé par Vercel dès que
+    // la réponse est partie, et le lead avec.
+    after(() =>
+      fanoutLead({
+        source: "guide",
+        name,
+        email,
+        phone: text(body.phone, 64),
+        ip,
+      })
+    );
 
     return new NextResponse(new Uint8Array(pdf), {
       status: 200,

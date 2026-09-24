@@ -25,6 +25,8 @@ export async function GET(request: NextRequest) {
     integrations: {
       database: Boolean(process.env.DATABASE_URL),
       resend: Boolean(process.env.RESEND_API_KEY),
+      // false = bac à sable Resend : aucun email ne part vers les clients.
+      resendFrom: Boolean(process.env.RESEND_FROM?.trim()),
       upstash: Boolean(
         process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
       ),
