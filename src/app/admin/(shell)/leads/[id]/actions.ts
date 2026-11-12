@@ -1,10 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { getDb, leads, leadEvents, type LeadStatus } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin/session";
+import { logActivity } from "@/lib/admin/activity";
 
 const StatusChangeInput = z.object({
   leadId: z.string().uuid(),
@@ -105,4 +107,49 @@ export async function addNoteAction(formData: FormData): Promise<ActionResult> {
     console.error("[addNoteAction] failed", err);
     return { ok: false, error: "Erreur serveur" };
   }
+}
+
+/* ─── Delete lead ─────────────────────────────────────────────────── */
+
+const DeleteInput = z.object({ leadId: z.string().uuid() });
+
+/**
+ * Suppression définitive d'un lead (demande de test, doublon, droit à
+ * l'effacement). L'historique part avec lui (cascade) ; un devis rattaché
+ * est conservé, simplement détaché (lead_id passe à null). Le journal
+ * d'activité garde la trace de qui a supprimé quoi, sans coordonnées.
+ */
+export async function deleteLeadAction(
+  formData: FormData,
+): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  const parsed = DeleteInput.safeParse({ leadId: formData.get("leadId") });
+  if (!parsed.success) {
+    return { ok: false, error: "Requête invalide" };
+  }
+  const { leadId } = parsed.data;
+
+  try {
+    const [deleted] = await getDb()
+      .delete(leads)
+      .where(eq(leads.id, leadId))
+      .returning({ name: leads.name, source: leads.source });
+
+    if (!deleted) return { ok: false, error: "Lead introuvable" };
+
+    await logActivity({
+      actor: admin.email,
+      action: "lead.delete",
+      entityType: "lead",
+      entityId: leadId,
+      summary: `Lead supprimé — ${deleted.name || "sans nom"} (${deleted.source})`,
+    });
+  } catch (err) {
+    console.error("[deleteLeadAction] failed", err);
+    return { ok: false, error: "Erreur serveur" };
+  }
+
+  revalidatePath("/admin/leads");
+  revalidatePath("/admin");
+  redirect("/admin/leads");
 }
