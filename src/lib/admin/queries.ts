@@ -1,5 +1,5 @@
 import "server-only";
-import { desc, eq, gte, sql } from "drizzle-orm";
+import { and, desc, eq, gte, sql } from "drizzle-orm";
 import {
   getDb,
   leads,
@@ -143,6 +143,24 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     last7Days,
     recent: recentRows,
   };
+}
+
+/**
+ * Leads des `days` derniers jours dont l'email de notification n'est pas
+ * parti (cf. recordLeadEmailFailure) : alimente l'alerte du tableau de bord.
+ */
+export async function countLeadsWithEmailFailure(days = 30): Promise<number> {
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  const [row] = await getDb()
+    .select({ count: sql<number>`count(*)::int` })
+    .from(leads)
+    .where(
+      and(
+        gte(leads.createdAt, since),
+        sql`${leads.extra} ->> 'notificationEmail' is not null`,
+      ),
+    );
+  return row?.count ?? 0;
 }
 
 /* ─── Leads list (with optional filters) ──────────────────────────── */

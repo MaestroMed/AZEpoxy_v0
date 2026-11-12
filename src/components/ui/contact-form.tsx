@@ -6,6 +6,7 @@ import { Check, Loader2 } from "lucide-react";
 import { PhotoUpload } from "@/components/ui/photo-upload";
 import { TurnstileWidget } from "@/components/ui/turnstile";
 import { track } from "@/lib/analytics/events";
+import { postLead } from "@/lib/lead-submit";
 import { getSwarm } from "@/lib/nuee/store";
 import { getSoundEngine } from "@/lib/nuee/sound";
 
@@ -30,6 +31,7 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileReset, setTurnstileReset] = useState(0);
   const formStartTracked = useRef(false);
 
   // Stable callback so the Turnstile widget effect doesn't re-run every render.
@@ -39,9 +41,18 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus("loading");
     setErrorMsg("");
 
+    // Sans token, le serveur refuserait l'envoi : on le dit tout de suite.
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatus("error");
+      setErrorMsg(
+        "Vérification anti-spam en cours. Réessayez dans quelques secondes ou appelez-nous au 09 71 35 74 96."
+      );
+      return;
+    }
+
+    setStatus("loading");
     const form = e.currentTarget;
 
     try {
@@ -52,21 +63,16 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
           formData.append("photos", photo);
         }
         if (turnstileToken) formData.set("turnstileToken", turnstileToken);
-        const res = await fetch("/api/devis", { method: "POST", body: formData });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Erreur lors de l'envoi.");
+        await postLead("/api/devis", { body: formData });
       } else {
         // Contact: send as JSON
         const formData = new FormData(form);
         const body = Object.fromEntries(formData.entries());
         if (turnstileToken) body.turnstileToken = turnstileToken;
-        const res = await fetch("/api/contact", {
-          method: "POST",
+        await postLead("/api/contact", {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Erreur lors de l'envoi.");
       }
       track("form_submit", { variant, status: "ok" });
       setStatus("success");
@@ -80,11 +86,17 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
       }
     } catch (err) {
       setStatus("error");
+      track("form_error", {
+        variant,
+        reason: err instanceof Error ? err.message : "unknown",
+      });
       setErrorMsg(
         err instanceof Error
           ? err.message
           : "Erreur lors de l'envoi. Appelez-nous au 09 71 35 74 96."
       );
+      // Le token a été consommé par la tentative : il en faut un neuf.
+      setTurnstileReset((n) => n + 1);
     }
   };
 
@@ -111,7 +123,10 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    // method="post" : si le visiteur envoie avant l'hydratation, le repli
+    // natif ne met pas son nom, son email et son message dans l'URL (et donc
+    // dans les logs et l'historique), comme le ferait le GET par défaut.
+    <form method="post" onSubmit={handleSubmit} className="space-y-5">
       {/* Honeypot — invisible to users, catches bots */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <input type="text" name="website" tabIndex={-1} autoComplete="off" />
@@ -278,7 +293,11 @@ export function ContactForm({ variant = "simple" }: ContactFormProps) {
       </div>
 
       {/* Turnstile (no-ops when site key missing) */}
-      <TurnstileWidget siteKey={TURNSTILE_SITE_KEY} onToken={handleTurnstile} />
+      <TurnstileWidget
+        siteKey={TURNSTILE_SITE_KEY}
+        onToken={handleTurnstile}
+        resetKey={turnstileReset}
+      />
 
       {/* Error — polish award-tier (icon + heading + body + retry hint). */}
       {status === "error" && (

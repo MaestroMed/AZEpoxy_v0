@@ -108,7 +108,13 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
               <Field label="Type de projet" value={lead.projectType ?? "—"} />
               <Field
                 label="Couleur RAL"
-                value={lead.ralCode ? `RAL ${lead.ralCode}` : "—"}
+                value={
+                  lead.ralCode
+                    ? /^RAL\b/i.test(lead.ralCode)
+                      ? lead.ralCode
+                      : `RAL ${lead.ralCode}`
+                    : "—"
+                }
                 mono={Boolean(lead.ralCode)}
               />
             </dl>

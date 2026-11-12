@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Inbox } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, Inbox } from "lucide-react";
 import {
   Card,
   PageHeader,
@@ -9,11 +9,17 @@ import {
 } from "@/components/admin/primitives";
 import { SevenDayChart } from "@/components/admin/seven-day-chart";
 import { SourceBreakdown } from "@/components/admin/source-breakdown";
-import { getDashboardStats } from "@/lib/admin/queries";
+import {
+  countLeadsWithEmailFailure,
+  getDashboardStats,
+} from "@/lib/admin/queries";
 import { formatRelativeFr } from "@/lib/admin/format";
 
 export default async function AdminDashboardPage() {
-  const stats = await getDashboardStats();
+  const [stats, emailFailures] = await Promise.all([
+    getDashboardStats(),
+    countLeadsWithEmailFailure(),
+  ]);
 
   // Empty state — first run, no leads yet
   if (stats.total === 0) {
@@ -42,6 +48,29 @@ export default async function AdminDashboardPage() {
       />
 
       <div className="space-y-6 px-8 py-7">
+        {emailFailures > 0 && (
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-2xl border border-amber-400/25 bg-amber-400/[0.08] px-5 py-4 text-sm text-amber-100"
+          >
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+            <p className="leading-relaxed">
+              <strong>
+                {emailFailures} {emailFailures === 1 ? "demande" : "demandes"}{" "}
+                des 30 derniers jours
+              </strong>{" "}
+              {emailFailures === 1 ? "n'a" : "n'ont"} pas pu être
+              {emailFailures === 1 ? " notifiée" : " notifiées"} par email : elles
+              ne sont visibles qu&apos;ici. Le motif exact figure sur chaque
+              fiche ; le bouton de test des{" "}
+              <Link href="/admin/settings" className="font-semibold underline">
+                Paramètres
+              </Link>{" "}
+              indique si l&apos;envoi fonctionne à nouveau.
+            </p>
+          </div>
+        )}
+
         {/* Stats row */}
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
           <StatCard

@@ -2,14 +2,22 @@
 
 import { useState, useCallback, useRef, type DragEvent, type ChangeEvent } from "react";
 import { Upload, X, ImageIcon } from "lucide-react";
+import { SITE } from "@/lib/utils";
 
 interface PhotoUploadProps {
   files: File[];
   onChange: (files: File[]) => void;
 }
 
-const MAX_FILES = 10;
+// Aligné sur MAX_PHOTOS de /api/devis : au-delà, le serveur les ignorait.
+const MAX_FILES = 8;
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+/**
+ * Poids total après compression. Vercel refuse tout corps de requête
+ * au-delà de 4,5 Mo (413) avant même d'atteindre la route : on garde de la
+ * marge pour les autres champs du formulaire.
+ */
+const MAX_TOTAL_BYTES = 4 * 1024 * 1024;
 const ACCEPTED = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
 
 async function compressImage(file: File): Promise<File> {
@@ -18,8 +26,11 @@ async function compressImage(file: File): Promise<File> {
 
   return new Promise((resolve) => {
     const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
     img.onload = () => {
-      const maxDim = 2000;
+      URL.revokeObjectURL(objectUrl);
+      // 1600 px suffisent pour juger l'état d'une pièce (~300 Ko par photo).
+      const maxDim = 1600;
       let { width, height } = img;
       if (width > maxDim || height > maxDim) {
         const ratio = Math.min(maxDim / width, maxDim / height);
@@ -33,18 +44,21 @@ async function compressImage(file: File): Promise<File> {
       ctx.drawImage(img, 0, 0, width, height);
       canvas.toBlob(
         (blob) => {
-          if (blob) {
+          if (blob && blob.size < file.size) {
             resolve(new File([blob], file.name, { type: "image/jpeg" }));
           } else {
             resolve(file);
           }
         },
         "image/jpeg",
-        0.8
+        0.75
       );
     };
-    img.onerror = () => resolve(file);
-    img.src = URL.createObjectURL(file);
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(file);
+    };
+    img.src = objectUrl;
   });
 }
 
@@ -58,6 +72,7 @@ export function PhotoUpload({ files, onChange }: PhotoUploadProps) {
       setError(null);
       const arr = Array.from(incoming);
       const valid: File[] = [];
+      let total = files.reduce((sum, f) => sum + f.size, 0);
 
       for (const f of arr) {
         if (!ACCEPTED.includes(f.type) && !f.name.toLowerCase().endsWith(".heic")) {
@@ -69,6 +84,13 @@ export function PhotoUpload({ files, onChange }: PhotoUploadProps) {
           continue;
         }
         const compressed = await compressImage(f);
+        if (total + compressed.size > MAX_TOTAL_BYTES) {
+          setError(
+            `Poids maximal atteint (4 Mo au total). Envoyez les autres photos à ${SITE.email}.`
+          );
+          continue;
+        }
+        total += compressed.size;
         valid.push(compressed);
       }
 

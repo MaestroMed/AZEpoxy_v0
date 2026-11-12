@@ -92,8 +92,15 @@ export async function ratelimit(
 ): Promise<LimitResult> {
   const upstashLimiter = getUpstashLimiter(prefix, limit, window);
   if (upstashLimiter) {
-    const r = await upstashLimiter.limit(identifier);
-    return { success: r.success, remaining: r.remaining, reset: r.reset };
+    try {
+      const r = await upstashLimiter.limit(identifier);
+      return { success: r.success, remaining: r.remaining, reset: r.reset };
+    } catch (err) {
+      // Redis injoignable : on laisse passer plutôt que de perdre un lead,
+      // le fallback mémoire garde un minimum de protection.
+      console.error("[ratelimit] Upstash indisponible, fallback mémoire", err);
+      return inMemoryLimit(`${prefix}:${identifier}`, limit, window);
+    }
   }
   // Fail-loud : en production le fallback mémoire est quasi inopérant
   // (reset à chaque cold start). On le signale sans jamais bloquer.

@@ -1,5 +1,7 @@
 import { Card, PageHeader } from "@/components/admin/primitives";
+import { EmailTestButton } from "@/components/admin/email-test-button";
 import { getCurrentAdmin } from "@/lib/admin/session";
+import { LEAD_INBOX, emailFrom, isSandboxSender } from "@/lib/email";
 import { CheckCircle2, Database, Mail, Webhook, XCircle } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -117,6 +119,39 @@ export default async function AdminSettingsPage() {
               );
             })}
           </ul>
+        </Card>
+
+        <Card title="Emails des formulaires">
+          <div className="space-y-4 px-5 py-4">
+            <dl className="grid grid-cols-1 gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
+              <div>
+                <dt className="text-[11px] uppercase tracking-[0.16em] text-white/35">
+                  Expéditeur
+                </dt>
+                <dd className="mt-1 break-all font-mono text-white/85">
+                  {emailFrom()}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[11px] uppercase tracking-[0.16em] text-white/35">
+                  Destinataire des demandes
+                </dt>
+                <dd className="mt-1 break-all font-mono text-white/85">
+                  {LEAD_INBOX}
+                </dd>
+              </div>
+            </dl>
+            {isSandboxSender() && (
+              <p className="rounded-lg border border-amber-400/25 bg-amber-400/[0.08] px-3 py-2 text-[13px] leading-relaxed text-amber-100">
+                Expéditeur de test Resend : il n&apos;envoie qu&apos;à
+                l&apos;adresse du propriétaire du compte Resend, et jamais aux
+                clients. Vérifier le domaine azepoxy.fr dans Resend, puis
+                définir <code>RESEND_FROM</code> (ex. « AZ Époxy
+                &lt;contact@azepoxy.fr&gt; ») dans Vercel et redéployer.
+              </p>
+            )}
+            <EmailTestButton />
+          </div>
         </Card>
 
         <Card title="À propos">
