@@ -20,6 +20,7 @@ import { getLeadById } from "@/lib/admin/queries";
 import { formatDateTimeFr, formatRelativeFr } from "@/lib/admin/format";
 import { StatusPicker } from "./status-picker";
 import { NoteForm } from "./note-form";
+import { DeleteLeadButton } from "./delete-lead-button";
 import type { LeadEvent } from "@/lib/db";
 
 interface LeadDetailPageProps {
@@ -213,6 +214,13 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
                   </p>
                 </div>
               )}
+            </div>
+          </Card>
+
+          {/* Suppression */}
+          <Card>
+            <div className="px-5 py-4">
+              <DeleteLeadButton leadId={lead.id} />
             </div>
           </Card>
         </div>
